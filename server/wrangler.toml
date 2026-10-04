@@ -9,8 +9,8 @@ compatibility_flags = ["nodejs_compat"]
 [vars]
 MODEL = "claude-opus-5-5"
 EFFORT = "medium"
-LIMIT_PER_CODE = "30"
-LIMIT_TOTAL = "200"
+LIMIT_PER_CODE = "10"
+LIMIT_TOTAL = "50"
 
 # Счётчики лимитов. id появится после: npx wrangler kv namespace create USAGE
 [[kv_namespaces]]
