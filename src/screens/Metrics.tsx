@@ -14,13 +14,14 @@ import { Icon } from '../components/Icon';
 import { Confirm, ProgressBar, SectionLabel, Sheet, TopBar } from '../components/ui';
 
 type Info = ReturnType<ReturnType<typeof useWorld>['metricInfo']>;
+export type MetricInfo = Info;
 
 export const metricToasts = (m: Metric, r: { record: boolean; milestone: unknown }, value: number, reps?: number) => {
   if (r.record) toast({ kind: 'achievement', title: 'Новый рекорд!', sub: `${m.title} ${fmtNum(value)} ${m.unit}${reps ? ` × ${reps}` : ''} · +${RECORD_XP} XP` });
   if (r.milestone) toast({ kind: 'achievement', title: 'Рубеж взят!', sub: `${m.title} · +${MILESTONE_XP} XP` });
 };
 
-function Sparkline({ info }: { info: Info }) {
+export function Sparkline({ info }: { info: Info }) {
   const vals = info.values.slice(-8);
   if (vals.length < 2) return <span class="spark-empty" />;
   const min = Math.min(...vals.map((v) => v.value));
@@ -99,7 +100,7 @@ export function Metrics() {
   );
 }
 
-function MilestoneCard({ info, link = false }: { info: Info; link?: boolean }) {
+export function MilestoneCard({ info, link = false }: { info: Info; link?: boolean }) {
   const ms = info.milestone!;
   const m = info.metric;
   const repsAt = ms.mode === 'repsAt';

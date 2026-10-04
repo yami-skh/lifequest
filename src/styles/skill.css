@@ -54,3 +54,38 @@
 .goal-form { margin-top: 6px; }
 
 
+
+/* навык 0.6: шапка, тренировка, сворачиваемые блоки, меню ⋯ */
+.skill-title { --c: var(--gold); display: flex; align-items: center; gap: 14px; }
+.skill-lvl { font-family: var(--display); font-weight: 700; font-size: 18px; }
+.skill-name { font-size: 22px; }
+.focus-star { display: inline-flex; align-items: center; justify-content: center; gap: 4px; min-width: 44px; min-height: 44px; padding: 0 8px; border: 0; border-radius: 22px; background: transparent; color: var(--gold); font-size: 12px; font-weight: 800; }
+.focus-star.on { min-height: 32px; margin: 6px 0; background: var(--gold-bg); }
+.focus-star.on svg path { fill: currentColor; }
+.workout-card { display: flex; flex-direction: column; gap: 12px; padding: 14px; border-radius: 18px; background: var(--surface); color: var(--fg); }
+.workout-label { font-size: 12px; font-weight: 800; letter-spacing: 0.6px; text-transform: uppercase; color: #FF8A5B; }
+.set-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.set-chip { padding: 8px 12px; border-radius: 12px; background: var(--surface-2); font-family: var(--display); font-size: 15px; font-weight: 700; }
+.set-chip small { font-size: 11px; color: var(--muted); }
+.set-chip.best { background: var(--gold-bg); border: 1px solid var(--gold); }
+.workout-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.workout-record { font-weight: 800; font-size: 15px; color: var(--gold); }
+.next-goals { --c: var(--gold); display: flex; flex-direction: column; gap: 6px; padding: 14px; border-radius: 18px; background: var(--surface); }
+.next-goals-label { font-size: 12px; font-weight: 800; letter-spacing: 0.6px; text-transform: uppercase; color: var(--c); margin-bottom: 4px; }
+.next-goals > .link { align-self: flex-start; }
+.skill-cta { flex-direction: column; gap: 1px; min-height: 58px; }
+.skill-cta-main { display: inline-flex; align-items: center; gap: 8px; font-size: 16px; }
+.skill-cta-sub { font-size: 12px; font-weight: 700; opacity: 0.7; }
+.fold-list { display: flex; flex-direction: column; border-radius: 18px; background: var(--surface); overflow: hidden; }
+.fold + .fold { border-top: 1px solid var(--surface-2); }
+.fold-head { width: 100%; display: flex; align-items: center; gap: 12px; min-height: 52px; padding: 0 14px; background: none; border: 0; color: var(--fg); text-align: left; }
+.fold-head svg { color: var(--muted-2); flex-shrink: 0; }
+.fold-title { flex: 1; font-weight: 700; font-size: 14.5px; }
+.fold-body { padding: 4px 14px 16px; }
+.menu-list { display: flex; flex-direction: column; border-radius: 16px; background: var(--surface-2); overflow: hidden; }
+.menu-row { display: flex; align-items: center; gap: 12px; min-height: 56px; padding: 6px 14px; background: none; border: 0; color: var(--fg); text-align: left; width: 100%; }
+.menu-row + .menu-row { border-top: 1px solid var(--surface-3); }
+.menu-row > svg { color: var(--muted-2); flex-shrink: 0; }
+.menu-row-icon { color: var(--muted); display: flex; }
+.menu-row-icon.gold { color: var(--gold); }
+.menu-row-text { flex: 1; display: flex; flex-direction: column; min-width: 0; }

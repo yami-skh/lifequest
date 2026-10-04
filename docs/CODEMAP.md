@@ -30,8 +30,8 @@
 
 ## src/data
 
-- **changelog.ts** (84) — Что нового в версиях — для пользователя, простыми словами. Новые версии — сверху.
-  *ChangeKind:4, *Change:5, *Release:6, *CHANGELOG:8, *SEEN_BEFORE_CHANGELOG:83
+- **changelog.ts** (89) — Что нового в версиях — для пользователя, простыми словами. Новые версии — сверху.
+  *ChangeKind:4, *Change:5, *Release:6, *CHANGELOG:8, *SEEN_BEFORE_CHANGELOG:88
 
 ## src/db
 
@@ -92,22 +92,22 @@
   *Achievements:6
 - **Backup.tsx** (193) — «Ещё» → «Резервная копия». Макет: холст, страница «Резервная копия».
   *Backup:14, agoText:144, *BackupReminder:152
-- **Changelog.tsx** (105) — «Что нового»: окно один раз после обновления и история версий в «Ещё». Макет: холст, страница «Что нового».
-  KIND:11, ORDER:16, fmtDate:18, changesWord:19, *WhatsNew:22, ChangeRow:60, *Changelog:70, ReleaseCard:83
+- **Changelog.tsx** (107) — «Что нового»: окно один раз после обновления и история версий в «Ещё». Макет: холст, страница «Что нового».
+  KIND:11, ORDER:16, fmtDate:18, changesWord:19, *WhatsNew:22, ChangeRow:60, *Changelog:70, ReleaseCard:85
 - **Character.tsx** (147) — Главный экран — всё важное примерно в один экран. Макет: холст, страница «Упрощение», экран 1.
   *Character:11, WEEK_SHORT:76, TodayCard:79, *plural:140
-- **EntrySheet.tsx** (281) — «＋ Запись» — главный сценарий, цель 15 секунд. Макет: холст, страница «Упрощение», экраны 2–3.
-  *EntryPreset:17, LAST_TYPE:19, loadType:20, PhotoPreview:29, *EntrySheet:39, .setType:59, .choosePrimary:97, .addSecondary:106, .onFiles:113, .save:124
+- **EntrySheet.tsx** (283) — «＋ Запись» — главный сценарий, цель 15 секунд. Макет: холст, страница «Упрощение», экраны 2–3.
+  *EntryPreset:18, LAST_TYPE:20, loadType:21, PhotoPreview:30, *EntrySheet:40, .setType:60, .choosePrimary:98, .addSecondary:107, .onFiles:114, .save:125
 - **Journal.tsx** (45)
   *Journal:7
-- **Metrics.tsx** (483) — Замеры и рубежи. Макет: холст, страница «Замеры и рубежи». ARCHITECTURE.md §8.
-  Info:16, *metricToasts:18, Sparkline:23, deltaText:39, *Metrics:45, MilestoneCard:102, Chart:139, *MetricDetail:178, *usesSets:248, *lastSetsOf:251, *recordHintFor:259, *BigNumber:269, PhotoThumb:286, AddValueSheet:296, MilestoneSheet:350, bestRepsAtOf:423, NewMetricSheet:429, *SkillMetrics:466
+- **Metrics.tsx** (484) — Замеры и рубежи. Макет: холст, страница «Замеры и рубежи». ARCHITECTURE.md §8.
+  Info:16, *MetricInfo:17, *metricToasts:19, *Sparkline:24, deltaText:40, *Metrics:46, *MilestoneCard:103, Chart:140, *MetricDetail:179, *usesSets:249, *lastSetsOf:252, *recordHintFor:260, *BigNumber:270, PhotoThumb:287, AddValueSheet:297, MilestoneSheet:351, bestRepsAtOf:424, NewMetricSheet:430, *SkillMetrics:467
 - **More.tsx** (76)
   SOON:9, *More:18
 - **Quests.tsx** (447) — Квесты. Макет: холст, страница «Квесты». ARCHITECTURE.md §6.
   KIND_TITLE:14, daysToMonday:16, *QuestCard:22, WeeklyRow:43, *Quests:64, *QuestDetail:148, stepKindLabel:228, DraftKind:232, NewQuestSheet:234, StepBuilder:313, *QuestsBlock:412
-- **Skill.tsx** (304)
-  Tab:18, TABS:20, *stagesToast:22, *Skill:25, GoalRow:147, Goals:160, Notes:239, GalleryItem:279, FullPhoto:284, Gallery:294
+- **Skill.tsx** (430)
+  *stagesToast:21, Fold:24, word:25, *Skill:29, .toggle:59, .onFocus:61, FoldRow:187, WorkoutCard:201, SkillMenu:236, GoalRow:273, Goals:286, Notes:365, GalleryItem:405, FullPhoto:410, Gallery:420
 - **Tree.tsx** (288)
   Editor:12, loadExpanded:17, *Tree:25, .toggle:36, .skillCount:54, .skillsIn:57, .menuBtn:60, .renderChildren:66, .renderNode:76, KIND_LABEL:214, NodeEditor:216
 
@@ -129,7 +129,7 @@
   резервная копия:1, «скоро» в «Ещё»:21, достижения:28, что нового:40
 - **quests.css** (34) — квесты
   квесты:1
-- **skill.css** (57) — навык
-  навык:1, навык: фокус, требования, ступени:21
+- **skill.css** (92) — навык
+  навык:1, навык: фокус, требования, ступени:21, навык 0.6: шапка, тренировка, сворачиваемые блоки, меню ⋯:58
 - **tree.css** (86) — дерево
   дерево:1, дерево: направления-карточки, ветви-линии, навыки-узлы:20, вложенные ветки — короткий отступ, линия идёт от ромбика:38, туман: навык ещё не исследован:64, ржавчина: 60+ дней без записей:68

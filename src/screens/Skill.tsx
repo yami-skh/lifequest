@@ -1,30 +1,35 @@
 import { useState } from 'preact/hooks';
 import { useWorld } from '../db/world';
 import type { Goal } from '../db/db';
-import { addGoal, addNote, deleteGoal, deleteNote, toggleFocus, toggleGoal, toggleNoteStudied } from '../db/actions';
+import { addGoal, addNote, deleteGoal, deleteNote, fmtNum, renameNode, toggleFocus, toggleGoal, toggleNoteStudied } from '../db/actions';
 import type { GoalKind } from '../engine/progress';
 import { humanDate } from '../engine/dates';
 import { STAGE_BONUS, stageName } from '../engine/stages';
 import { toast } from '../lib/toast';
 import { Icon } from '../components/Icon';
-import { Check, LevelBadge, ProgressBar, TopBar } from '../components/ui';
+import type { ComponentChildren } from 'preact';
+import { Check, ProgressBar, Ring, Sheet, TopBar } from '../components/ui';
+import { fmtInput } from '../components/NumPad';
+import { bestSet } from '../engine/metrics';
 import { EntryCard } from '../components/EntryCard';
 import { RequirementsSheet } from '../components/RequirementsSheet';
-import { SkillMetrics } from './Metrics';
+import { MilestoneCard, SkillMetrics, Sparkline, lastSetsOf, usesSets, type MetricInfo } from './Metrics';
 import { usePhotoUrl } from '../lib/photo';
 import type { EntryPreset } from './EntrySheet';
 import { useBackClose } from '../lib/backButton';
 
-type Tab = 'goals' | 'exp' | 'notes' | 'gallery';
-// Короткие подписи: четыре вкладки должны влезать в строку на телефоне.
-const TABS: [Tab, string][] = [['goals', 'Цели'], ['exp', 'Опыт'], ['notes', 'Заметки'], ['gallery', 'Фото']];
-
 export const stagesToast = (names: string[]) =>
   names.forEach((n) => toast({ kind: 'achievement', title: `Ступень «${n}» пройдена`, sub: `+${STAGE_BONUS} XP` }));
 
+type Fold = 'goals' | 'history' | 'notes';
+const word = (n: number, one: string, few: string, many: string) =>
+  n % 10 === 1 && n % 100 !== 11 ? one : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? few : many;
+
+/** Страница навыка. Макет: холст, страница «Навык проще» (тренировочный / обычный / меню ⋯). */
 export function Skill({ id, onAdd }: { id: string; onAdd: (p: EntryPreset) => void }) {
   const w = useWorld();
-  const [tab, setTab] = useState<Tab>('goals');
+  const [fold, setFold] = useState<Fold | null>(null);
+  const [menu, setMenu] = useState(false);
   const [reqOpen, setReqOpen] = useState(false);
   const node = w.nodeById.get(id);
   if (!node) {
@@ -36,45 +41,63 @@ export function Skill({ id, onAdd }: { id: string; onAdd: (p: EntryPreset) => vo
     );
   }
   const area = w.areaOf(id);
+  const color = area?.color ?? 'var(--gold)';
   const lv = w.skillLevelOf(id);
   const prog = w.skillProgressOf(id);
   const reqs = w.requirementsOf(node);
-  const unlocks = w.unlocksOf(id);
   const errors = w.openErrorsBySkill.get(id) ?? [];
   const goals = w.goalsBySkill.get(id) ?? [];
   const entries = w.entriesBySkill.get(id) ?? [];
   const stages = w.stagesOfSkill(id);
   const cur = w.currentStageOf(id);
   const rust = w.rustDays(id);
+  const metric = w.metricsOfSkill(id)[0];
+  const info = metric ? w.metricInfo(metric) : undefined;
+  const workout = !!metric && usesSets(metric);
+  const photoIds = entries.flatMap((e) => e.photoIds);
+  const notesCount = w.notes.filter((n) => n.skillId === id).length;
+  const toggle = (f: Fold) => setFold(fold === f ? null : f);
 
   const onFocus = async () => {
     const ok = await toggleFocus(id);
     if (!ok) toast({ kind: 'info', title: 'В фокусе уже 3 навыка', sub: 'Сними фокус с одного из них' });
   };
 
+  const goalsMeta = cur ? `ступень ${cur.stage} · ${cur.done} из ${cur.goals.length}` : goals.length ? 'все пройдены' : 'добавить';
+  const notesMeta = [photoIds.length ? `${photoIds.length} фото` : '', notesCount ? `${notesCount} ${word(notesCount, 'заметка', 'заметки', 'заметок')}` : ''].filter(Boolean).join(' · ') || 'пусто';
+
   return (
     <div class="page">
-      <TopBar crumbs={w.pathOf(id).slice(0, -1).map((n) => n.title).join(' › ')} />
-
-      <div class="stack-12">
-        <div class="skill-head">
-          <div class="stack-8">
-            <h1 class="display">{node.title}</h1>
-            <button type="button" class={node.focus ? 'focus-btn on' : 'focus-btn'} onClick={onFocus} aria-pressed={!!node.focus}>
-              <Icon name="star" size={16} stroke={2.2} />
-              {node.focus ? 'В фокусе · ×1.2' : 'В фокус'}
+      <TopBar
+        crumbs={w.pathOf(id).slice(0, -1).map((n) => n.title).join(' › ')}
+        right={
+          <>
+            <button type="button" class={node.focus ? 'focus-star on' : 'focus-star'} onClick={onFocus} aria-pressed={!!node.focus} aria-label={node.focus ? 'Убрать из фокуса' : 'В фокус'}>
+              <Icon name="star" size={node.focus ? 16 : 22} stroke={2.2} />
+              {node.focus && <span>×1.2</span>}
             </button>
-          </div>
-          <LevelBadge level={lv.level} name={lv.name} pct={lv.pct} left={lv.left} />
-        </div>
-        <ProgressBar pct={prog?.pct ?? 0} color={area?.color} height={12} />
-        <div class="spread small strong">
-          <span>{prog ? `${Math.round(prog.pct)}%` : 'Нет целей'}</span>
-          <span class="muted">
-            {prog ? `${cur ? `ступень ${cur.stage} из ${stages.length} · ` : ''}${prog.done} из ${prog.total} целей` : 'добавь цели, чтобы появилась полоска'}
-          </span>
-        </div>
+            <button type="button" class="icon-btn" aria-label="Настройки навыка" onClick={() => setMenu(true)}><Icon name="dots" size={22} stroke={3} /></button>
+          </>
+        }
+      />
+
+      <div class="skill-title" style={{ '--c': color }}>
+        <Ring pct={lv.pct} size={56} stroke={5} color="var(--c)"><span class="skill-lvl">{lv.level}</span></Ring>
+        <span class="stack-4">
+          <h1 class="display skill-name">{node.title}</h1>
+          <span class="muted small">{lv.name}{lv.level >= 10 ? '' : ` · до ${lv.level + 1} ур. ещё ${lv.left} XP`}</span>
+        </span>
       </div>
+
+      {!workout && (
+        <div class="stack-8">
+          <ProgressBar pct={prog?.pct ?? 0} color={area?.color} height={10} />
+          <div class="spread small strong">
+            <span>{prog ? `${Math.round(prog.pct)}%` : 'Нет целей'}</span>
+            <span class="muted">{prog ? `${cur ? `ступень ${cur.stage} из ${stages.length} · ` : ''}${prog.done} из ${prog.total} целей` : 'добавь цели, чтобы появилась полоска'}</span>
+          </div>
+        </div>
+      )}
 
       {rust !== null && (
         <div class="notice">
@@ -86,27 +109,22 @@ export function Skill({ id, onAdd }: { id: string; onAdd: (p: EntryPreset) => vo
         </div>
       )}
 
-      <div class="req-card">
-        <div class="spread">
-          <span class="section-label">Требования</span>
-          <button type="button" class="link small" onClick={() => setReqOpen(true)}>Настроить</button>
-        </div>
-        {reqs.length === 0 ? (
-          <span class="small fg-2">Открыт сразу</span>
-        ) : (
-          reqs.map((r) => (
+      {reqs.length > 0 && (
+        <div class="req-card">
+          <div class="spread">
+            <span class="section-label">Требования</span>
+            <button type="button" class="link small" onClick={() => setReqOpen(true)}>Настроить</button>
+          </div>
+          {reqs.map((r) => (
             <a class="req-line" href={`#/skill/${r.node.id}`} key={r.index}>
               <Check done={r.met} />
               <span>{r.node.title} — {r.need}</span>
               {!r.met && <span class="muted small">сейчас {r.have}</span>}
             </a>
-          ))
-        )}
-        {reqs.some((r) => !r.met) && <span class="muted small">Записывать опыт можно и до открытия.</span>}
-        {unlocks.length > 0 && <span class="small fg-2">Сам открывает: <b>{unlocks.map((u) => u.title).join(', ')}</b></span>}
-      </div>
-
-      <SkillMetrics skillId={id} />
+          ))}
+          {reqs.some((r) => !r.met) && <span class="muted small">Записывать опыт можно и до открытия.</span>}
+        </div>
+      )}
 
       {errors.map((e) => (
         <div class="notice error" key={e.id}>
@@ -119,28 +137,136 @@ export function Skill({ id, onAdd }: { id: string; onAdd: (p: EntryPreset) => vo
         </div>
       ))}
 
-      <button type="button" class="btn primary" onClick={() => onAdd({ skillId: id })}>
-        <Icon name="plus" size={20} stroke={2.6} /> Записать опыт
+      {workout && info && <WorkoutCard info={info} />}
+      {workout && info?.milestone && <MilestoneCard info={info} link />}
+
+      {!workout && (
+        <section class="next-goals" style={{ '--c': color }}>
+          <span class="next-goals-label">{cur ? `Следующие цели · ступень ${cur.stage}` : 'Цели'}</span>
+          {cur?.goals.filter((g) => !g.done).slice(0, 2).map((g) => <GoalRow g={g} editing={false} key={g.id} />)}
+          {!cur && <span class="muted small">{goals.length ? 'Все цели пройдены — добавь новую ступень.' : 'Целей пока нет. Добавь, что хочешь узнать и что сделать руками.'}</span>}
+          <button type="button" class="link small" onClick={() => toggle('goals')} aria-expanded={fold === 'goals'}>
+            {fold === 'goals' ? 'Свернуть' : goals.length ? `Все цели (${goals.length}) →` : 'Добавить цель →'}
+          </button>
+          {fold === 'goals' && <Goals skillId={id} goals={goals} />}
+        </section>
+      )}
+      {!workout && metric && <SkillMetrics skillId={id} />}
+
+      <button type="button" class="btn primary skill-cta" onClick={() => onAdd(workout ? { skillId: id, workout: true } : { skillId: id })}>
+        <span class="skill-cta-main"><Icon name="plus" size={20} stroke={2.6} />{workout ? 'Записать тренировку' : 'Записать опыт'}</span>
+        {workout && info?.last && <span class="skill-cta-sub">подставим подходы прошлого раза</span>}
       </button>
 
-      <div class="segmented four" role="tablist">
-        {TABS.map(([t, label]) => (
-          <button type="button" role="tab" aria-selected={tab === t} key={t} class={tab === t ? 'on' : ''} onClick={() => setTab(t)}>{label}</button>
-        ))}
+      <div class="fold-list">
+        {workout && (
+          <FoldRow title="Цели и ступени" meta={goalsMeta} open={fold === 'goals'} onToggle={() => toggle('goals')}>
+            <Goals skillId={id} goals={goals} />
+          </FoldRow>
+        )}
+        <FoldRow title="История" meta={`${entries.length} ${workout ? word(entries.length, 'тренировка', 'тренировки', 'тренировок') : word(entries.length, 'запись', 'записи', 'записей')}`} open={fold === 'history'} onToggle={() => toggle('history')}>
+          <div class="stack-10">
+            <div class="muted small">{lv.xp} XP за всё время</div>
+            {entries.length === 0 ? <p class="muted">Пока нет записей по этому навыку.</p> : entries.map((e) => <EntryCard entry={e} key={e.id} />)}
+          </div>
+        </FoldRow>
+        <FoldRow title="Заметки и фото" meta={notesMeta} open={fold === 'notes'} onToggle={() => toggle('notes')}>
+          <div class="stack-12">
+            <Notes skillId={id} />
+            {photoIds.length > 0 && <Gallery photoIds={photoIds} />}
+          </div>
+        </FoldRow>
       </div>
 
-      {tab === 'goals' && <Goals skillId={id} goals={goals} />}
-      {tab === 'exp' && (
-        <div class="stack-10">
-          <div class="muted small">{lv.xp} XP · {entries.length} {entries.length === 1 ? 'запись' : 'записей'}</div>
-          {entries.length === 0 ? <p class="muted">Пока нет записей по этому навыку.</p> : entries.map((e) => <EntryCard entry={e} key={e.id} />)}
-        </div>
-      )}
-      {tab === 'notes' && <Notes skillId={id} />}
-      {tab === 'gallery' && <Gallery photoIds={entries.flatMap((e) => e.photoIds)} />}
-
+      {menu && <SkillMenu id={id} onFocus={onFocus} onReq={() => { setMenu(false); setReqOpen(true); }} onClose={() => setMenu(false)} />}
       {reqOpen && <RequirementsSheet node={node} onClose={() => setReqOpen(false)} />}
     </div>
+  );
+}
+
+function FoldRow({ title, meta, open, onToggle, children }: { title: string; meta: string; open: boolean; onToggle: () => void; children: ComponentChildren }) {
+  return (
+    <section class={open ? 'fold open' : 'fold'}>
+      <button type="button" class="fold-head" onClick={onToggle} aria-expanded={open}>
+        <span class="fold-title">{title}</span>
+        <span class="muted small">{meta}</span>
+        <Icon name={open ? 'down' : 'right'} size={16} stroke={2.4} />
+      </button>
+      {open && <div class="fold-body">{children}</div>}
+    </section>
+  );
+}
+
+/** Прошлая тренировка: подходы, рекорд, мини-график. Нажатие — на страницу замера. */
+function WorkoutCard({ info }: { info: MetricInfo }) {
+  const m = info.metric;
+  const sets = lastSetsOf(info);
+  if (!info.last || !sets) {
+    return (
+      <a class="workout-card" href={`#/metrics/${m.id}`}>
+        <span class="workout-label">Подходы</span>
+        <span class="muted small">Пока пусто — запиши первую тренировку, и здесь появятся подходы и рекорд.</span>
+      </a>
+    );
+  }
+  const top = bestSet(sets);
+  const best = info.best;
+  return (
+    <a class="workout-card" href={`#/metrics/${m.id}`}>
+      <span class="spread"><span class="workout-label">Прошлая тренировка</span><span class="muted small">{humanDate(info.last.date).toLowerCase()}</span></span>
+      <span class="set-chips">
+        {sets.map((s, i) => (
+          <span class={s === top ? 'set-chip best' : 'set-chip'} key={i}>
+            {s.w !== undefined ? <>{fmtInput(s.w)} <small>{m.unit}</small> × {s.r > 0 ? s.r : '—'}</> : <>{s.r} <small>{m.unit}</small></>}
+          </span>
+        ))}
+      </span>
+      <span class="workout-foot">
+        <span class="stack-4">
+          <span class="muted small">рекорд</span>
+          <span class="workout-record">{best ? `${fmtNum(best.value)} ${m.unit}${best.reps ? ` × ${best.reps}` : ''} · ${humanDate(best.date).toLowerCase()}` : '—'}</span>
+        </span>
+        <span style={{ '--c': '#FF8A5B' }}><Sparkline info={info} /></span>
+      </span>
+    </a>
+  );
+}
+
+/** Меню ⋯: фокус, требования, замер, переименовать. */
+function SkillMenu({ id, onFocus, onReq, onClose }: { id: string; onFocus: () => void; onReq: () => void; onClose: () => void }) {
+  const w = useWorld();
+  const node = w.nodeById.get(id)!;
+  const [name, setName] = useState(node.title);
+  const reqs = w.requirementsOf(node);
+  const unlocks = w.unlocksOf(id);
+  const metric = w.metricsOfSkill(id)[0];
+  const reqText = [reqs.length ? `${reqs.filter((r) => r.met).length} из ${reqs.length} выполнено` : 'открыт сразу', unlocks.length ? `открывает: ${unlocks.map((u) => u.title).join(', ')}` : ''].filter(Boolean).join(' · ');
+  return (
+    <Sheet open onClose={onClose} title={node.title}>
+      <div class="menu-list">
+        <button type="button" class="menu-row" onClick={onFocus} aria-pressed={!!node.focus}>
+          <span class="menu-row-icon gold"><Icon name="star" size={20} stroke={2.2} /></span>
+          <span class="menu-row-text"><span class="strong">В фокус</span><span class="muted small">×1.2 XP, до трёх навыков</span></span>
+          <span class={node.focus ? 'switch on' : 'switch'}><span /></span>
+        </button>
+        <button type="button" class="menu-row" onClick={onReq}>
+          <span class="menu-row-icon"><Icon name="lock" size={20} /></span>
+          <span class="menu-row-text"><span class="strong">Требования</span><span class="muted small">{reqText}</span></span>
+          <Icon name="right" size={16} stroke={2.4} />
+        </button>
+        {metric && (
+          <a class="menu-row" href={`#/metrics/${metric.id}`} onClick={onClose}>
+            <span class="menu-row-icon"><Icon name="chart" size={20} /></span>
+            <span class="menu-row-text"><span class="strong">Замер «{metric.title}»</span><span class="muted small">график, вся история, рубеж</span></span>
+            <Icon name="right" size={16} stroke={2.4} />
+          </a>
+        )}
+      </div>
+      <form class="input-row" onSubmit={async (e) => { e.preventDefault(); if (name.trim()) { await renameNode(id, name); onClose(); } }}>
+        <input id="skill-name" class="input" value={name} onInput={(e) => setName(e.currentTarget.value)} aria-label="Название навыка" />
+        <button type="submit" class="btn ghost" disabled={!name.trim() || name.trim() === node.title}>Переименовать</button>
+      </form>
+    </Sheet>
   );
 }
 

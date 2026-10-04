@@ -14,7 +14,8 @@ import { SetsEditor } from '../components/SetsEditor';
 import { stagesToast } from './Skill';
 import { BigNumber, lastSetsOf, metricToasts, recordHintFor, usesSets } from './Metrics';
 
-export interface EntryPreset { skillId?: string; fixesEntryId?: string }
+/** workout: открыто кнопкой «Записать тренировку» — тип «Тренировка», подставленные подходы сохраняются как есть. */
+export interface EntryPreset { skillId?: string; fixesEntryId?: string; workout?: boolean }
 
 const LAST_TYPE = 'lq.lastType';
 const loadType = (): EntryType => {
@@ -38,7 +39,7 @@ function PhotoPreview({ photo, onRemove }: { photo: PhotoDraft; onRemove: () => 
 
 export function EntrySheet({ preset, onClose }: { preset: EntryPreset; onClose: () => void }) {
   const w = useWorld();
-  const [type, setTypeState] = useState<EntryType>(loadType);
+  const [type, setTypeState] = useState<EntryType>(() => (preset.workout ? 'workout' : loadType()));
   const [text, setText] = useState('');
   const [difficulty, setDifficulty] = useState<Difficulty>(1);
   const [skillIds, setSkillIds] = useState<string[]>(preset.skillId ? [preset.skillId] : []);
@@ -76,7 +77,7 @@ export function EntrySheet({ preset, onClose }: { preset: EntryPreset; onClose: 
   const mInfo = metric ? w.metricInfo(metric) : undefined;
   const lastSets = mInfo ? lastSetsOf(mInfo) : undefined;
   const curSets = sets ?? (lastSets ? lastSets.map((x) => ({ ...x })) : metric?.hasReps ? [{ w: undefined, r: 0 }] : [{ r: 0 }]);
-  const setsTouched = sets !== null;
+  const setsTouched = sets !== null || (!!preset.workout && !!lastSets);
   const hint = mInfo && (setsTouched || single !== null) ? recordHintFor(mInfo, curSets, single) : null;
 
   const preview = useMemo(() => {
@@ -201,6 +202,7 @@ export function EntrySheet({ preset, onClose }: { preset: EntryPreset; onClose: 
               {hint && <div class="record-hint"><Icon name="star" size={16} stroke={2.2} />{hint}</div>}
             </>
           )}
+          {preset.workout && sets === null && lastSets && <span class="muted small">Как в прошлый раз — поправь, если было иначе. Не нужны — убери «✕».</span>}
           {!setsTouched && single === null && <span class="muted small">Подставлено как в прошлый раз — нажми на число, чтобы поправить. Не трогал — сохранится только запись.</span>}
         </div>
       )}
