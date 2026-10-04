@@ -6,6 +6,7 @@ import { bestStreak, currentStreak } from './dates';
 import { assignStages, currentStage, stagesOf } from './stages';
 import { bestRepsAt, bestSet, bestValue, forecastDate, isRecord, milestoneProgress, reached, valueFromSets } from './metrics';
 import { countProgress, weekStart } from './quests';
+import { cmpVersion, unseenReleases } from './version';
 
 describe('xp', () => {
   it('рамен из документа: практика, тяжело, впервые, с фото = 132', () => {
@@ -170,5 +171,18 @@ describe('streak', () => {
   });
   it('лучшая серия', () => {
     expect(bestStreak(['2026-09-30', '2026-10-01', '2026-10-03', '2026-10-04', '2026-10-05'])).toBe(3);
+  });
+});
+
+describe('версии', () => {
+  it('сравнение', () => {
+    expect(cmpVersion('0.5.1', '0.5.0')).toBeGreaterThan(0);
+    expect(cmpVersion('0.10.0', '0.9.9')).toBeGreaterThan(0);
+    expect(cmpVersion('1.0.0', '1.0.0')).toBe(0);
+  });
+  it('что показать после обновления', () => {
+    const list = [{ version: '0.7.0' }, { version: '0.6.0' }, { version: '0.5.1' }, { version: '0.5.0' }];
+    expect(unseenReleases(list, '0.5.0', '0.6.0').map((r) => r.version)).toEqual(['0.6.0', '0.5.1']);
+    expect(unseenReleases(list, '0.6.0', '0.6.0')).toEqual([]);
   });
 });

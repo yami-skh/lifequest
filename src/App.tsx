@@ -11,6 +11,7 @@ import { Tree } from './screens/Tree';
 import { Skill } from './screens/Skill';
 import { Journal } from './screens/Journal';
 import { More } from './screens/More';
+import { Changelog, WhatsNew } from './screens/Changelog';
 import { Achievements } from './screens/Achievements';
 import { Backup } from './screens/Backup';
 import { QuestDetail, Quests } from './screens/Quests';
@@ -42,6 +43,7 @@ export function App() {
   else if (screen === 'skill' && param) page = <Skill id={param} onAdd={openEntry} key={param} />;
   else if (screen === 'journal') page = <Journal />;
   else if (screen === 'more') page = <More />;
+  else if (screen === 'changelog') page = <Changelog />;
   else if (screen === 'achievements') page = <Achievements />;
   else if (screen === 'backup') page = <Backup />;
   else if (screen === 'quests' && param) page = <QuestDetail id={param} key={param} />;
@@ -50,7 +52,7 @@ export function App() {
   else if (screen === 'metrics') page = <Metrics />;
   else page = <Character onAdd={() => openEntry()} />;
 
-  const tab = screen === 'tree' || screen === 'skill' ? 'tree' : screen === 'quests' ? 'quests' : ['more', 'achievements', 'backup', 'metrics', 'journal'].includes(screen) ? 'more' : 'home';
+  const tab = screen === 'tree' || screen === 'skill' ? 'tree' : screen === 'quests' ? 'quests' : ['more', 'achievements', 'backup', 'metrics', 'journal', 'changelog'].includes(screen) ? 'more' : 'home';
 
   return (
     <WorldContext.Provider value={derived}>
@@ -65,6 +67,7 @@ export function App() {
         <a href="#/more" class={tab === 'more' ? 'on' : ''} aria-current={tab === 'more' ? 'page' : undefined}><Icon name="menu" size={24} /><span>Ещё</span></a>
       </nav>
       {entry && <EntrySheet preset={entry} onClose={() => setEntry(null)} />}
+      <WhatsNew />
       <Toasts />
     </WorldContext.Provider>
   );

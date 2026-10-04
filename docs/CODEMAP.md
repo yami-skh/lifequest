@@ -6,8 +6,8 @@
 
 ## src
 
-- **App.tsx** (126)
-  *App:22, useGameEvents:74, Toasts:108
+- **App.tsx** (129)
+  *App:23, useGameEvents:77, Toasts:111
 
 ## src/components
 
@@ -28,12 +28,17 @@
 - **ui.tsx** (127)
   *ProgressBar:8, *LevelBadge:16, *Ring:27, *AreaTile:48, *TopBar:57, *Sheet:72, *Confirm:99, *SectionLabel:113, *Check:122, *pctText:126
 
+## src/data
+
+- **changelog.ts** (84) — Что нового в версиях — для пользователя, простыми словами. Новые версии — сверху.
+  *ChangeKind:4, *Change:5, *Release:6, *CHANGELOG:8, *SEEN_BEFORE_CHANGELOG:83
+
 ## src/db
 
-- **actions.ts** (366) — Все изменения данных.
-  *PhotoDraft:10, *EntryDraft:12, *primaryHistory:26, *saveEntry:33, *deleteEntry:80, *toggleGoal:92, *addGoal:99, *awardStages:108, *toggleFocus:132, *setRequirements:140, *deleteGoal:142, *addNode:146, *renameNode:158, *deleteNode:161, *addNote:179, *toggleNoteStudied:183, *deleteNote:188, *setName:192, *unlockAchievements:194, *resetAll:199, *createQuest:206, *toggleCustomStep:212, *abandonQuest:220, *deleteQuest:221, *completeQuest:224, *maintainQuests:238, *toggleWeeklyTemplate:263, *addMetric:278, *deleteMetric:283, bonus:292, *addMetricValue:303, *deleteMetricValue:345, *setMilestone:355, *removeMilestone:362, *fmtNum:365
-- **db.ts** (236) — Хранилище на устройстве. ARCHITECTURE.md §11.
-  *NodeKind:7, *Profile:9, *Requirement:23, *Node:25, *Goal:43, *Entry:55, *EntrySkill:72, *Photo:74, *Unlocked:76, *Note:78, *QuestKind:90, *CountRule:92, *QuestStep:102, *Quest:109, *Metric:128, *MetricValue:139, *Milestone:153, *AREA_ICON_BY_TITLE:168, *AREA_ICONS:172, LifeQuestDB:174, *db:227, *uid:230, *nowIso:235
+- **actions.ts** (367) — Все изменения данных.
+  *PhotoDraft:10, *EntryDraft:12, *primaryHistory:26, *saveEntry:33, *deleteEntry:80, *toggleGoal:92, *addGoal:99, *awardStages:108, *toggleFocus:132, *setRequirements:140, *deleteGoal:142, *addNode:146, *renameNode:158, *deleteNode:161, *addNote:179, *toggleNoteStudied:183, *deleteNote:188, *setSeenVersion:192, *setName:193, *unlockAchievements:195, *resetAll:200, *createQuest:207, *toggleCustomStep:213, *abandonQuest:221, *deleteQuest:222, *completeQuest:225, *maintainQuests:239, *toggleWeeklyTemplate:264, *addMetric:279, *deleteMetric:284, bonus:293, *addMetricValue:304, *deleteMetricValue:346, *setMilestone:356, *removeMilestone:363, *fmtNum:366
+- **db.ts** (238) — Хранилище на устройстве. ARCHITECTURE.md §11.
+  *NodeKind:7, *Profile:9, *Requirement:25, *Node:27, *Goal:45, *Entry:57, *EntrySkill:74, *Photo:76, *Unlocked:78, *Note:80, *QuestKind:92, *CountRule:94, *QuestStep:104, *Quest:111, *Metric:130, *MetricValue:141, *Milestone:155, *AREA_ICON_BY_TITLE:170, *AREA_ICONS:174, LifeQuestDB:176, *db:229, *uid:232, *nowIso:237
 - **seed.ts** (150) — Стартовый набор. ARCHITECTURE.md §13.
   G:7, SeedNode:8, t:17, p:18, *AREA_COLORS:20, TREE:22, *seedIfEmpty:71, STARTER_VERSION:110, STARTER_METRICS:112, *ensureStarter:121
 - **world.ts** (412) — Всё состояние разом и производные значения. Данных у одного человека немного,
@@ -45,7 +50,7 @@
   *Stats:3, *AchievementIcon:27, *AchievementDef:32, flag:44, *ACHIEVEMENTS:46, *evaluateAchievements:71
 - **dates.ts** (55) — Даты храним как локальные YYYY-MM-DD.
   *localDate:3, *addDays:10, *daysBetween:16, MONTHS:22, *humanDate:24, *currentStreak:32, *bestStreak:43
-- **engine.test.ts** (175)
+- **engine.test.ts** (189)
 - **levels.ts** (44) — Уровни персонажа и навыков. ARCHITECTURE.md §4.3–4.4.
   *xpToNext:3, *characterLevel:5, *SKILL_LEVELS:17, *skillLevel:31
 - **metrics.ts** (88) — Замеры, рекорды, прогноз рубежа. ARCHITECTURE.md §8.
@@ -56,6 +61,8 @@
   *QUEST_STEP_XP:4, *weekStart:7, *WeeklyTemplate:13, *WEEKLY_TEMPLATES:21, *EntryFacts:27, *countProgress:30
 - **stages.ts** (51) — Ступени целей навыка. ARCHITECTURE.md §16, идея 2.
   *STAGE_NAMES:4, *stageName:5, *STAGE_BONUS:7, *StagedGoal:9, *StageInfo:11, *stagesOf:21, *currentStage:34, *assignStages:40
+- **version.ts** (17) — Сравнение версий «0.5.1» и выбор того, что показать в «Что нового».
+  *cmpVersion:3, *unseenReleases:14
 - **xp.ts** (87) — Начисление XP за запись журнала. ARCHITECTURE.md §4.1–4.2.
   *EntryType:4, *Difficulty:5, *ENTRY_TYPES:7, *ENTRY_TYPE_LABEL:16, *BASE_XP:21, *DIFFICULTIES:25, *REPEAT_FREE_PER_DAY:32, *SECONDARY_SHARE:34, *XpContext:36, *RUST_DAYS:52, *XpFactor:54, *calcXp:56, *secondaryXp:71, *xpContextFromHistory:74
 
@@ -85,6 +92,8 @@
   *Achievements:6
 - **Backup.tsx** (193) — «Ещё» → «Резервная копия». Макет: холст, страница «Резервная копия».
   *Backup:14, agoText:144, *BackupReminder:152
+- **Changelog.tsx** (105) — «Что нового»: окно один раз после обновления и история версий в «Ещё». Макет: холст, страница «Что нового».
+  KIND:11, ORDER:16, fmtDate:18, changesWord:19, *WhatsNew:22, ChangeRow:60, *Changelog:70, ReleaseCard:83
 - **Character.tsx** (147) — Главный экран — всё важное примерно в один экран. Макет: холст, страница «Упрощение», экран 1.
   *Character:11, WEEK_SHORT:76, TodayCard:79, *plural:140
 - **EntrySheet.tsx** (281) — «＋ Запись» — главный сценарий, цель 15 секунд. Макет: холст, страница «Упрощение», экраны 2–3.
@@ -93,7 +102,7 @@
   *Journal:7
 - **Metrics.tsx** (483) — Замеры и рубежи. Макет: холст, страница «Замеры и рубежи». ARCHITECTURE.md §8.
   Info:16, *metricToasts:18, Sparkline:23, deltaText:39, *Metrics:45, MilestoneCard:102, Chart:139, *MetricDetail:178, *usesSets:248, *lastSetsOf:251, *recordHintFor:259, *BigNumber:269, PhotoThumb:286, AddValueSheet:296, MilestoneSheet:350, bestRepsAtOf:423, NewMetricSheet:429, *SkillMetrics:466
-- **More.tsx** (75)
+- **More.tsx** (76)
   SOON:9, *More:18
 - **Quests.tsx** (447) — Квесты. Макет: холст, страница «Квесты». ARCHITECTURE.md §6.
   KIND_TITLE:14, daysToMonday:16, *QuestCard:22, WeeklyRow:43, *Quests:64, *QuestDetail:148, stepKindLabel:228, DraftKind:232, NewQuestSheet:234, StepBuilder:313, *QuestsBlock:412
@@ -116,8 +125,8 @@
   Порядок важен: база → общие компоненты → экраны.:1
 - **metrics.css** (35) — замеры
   замеры:1
-- **more.css** (39) — резервная копия
-  резервная копия:1, «скоро» в «Ещё»:21, достижения:28
+- **more.css** (59) — резервная копия
+  резервная копия:1, «скоро» в «Ещё»:21, достижения:28, что нового:40
 - **quests.css** (34) — квесты
   квесты:1
 - **skill.css** (57) — навык

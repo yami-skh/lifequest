@@ -36,3 +36,23 @@
 .hidden-ach { min-height: 72px; flex-direction: row; align-items: center; justify-content: center; gap: 10px; border: 1px dashed var(--line-2); color: var(--muted-2); font-weight: 700; font-size: 13px; }
 .q { font-family: var(--display); font-size: 22px; color: #4A5160; }
 
+
+/* что нового */
+.whatsnew-sub { margin-top: -8px; }
+.wn-group { --k: var(--gold); }
+.wn-group.fix, .wn-row.fix { --k: var(--green-fg); }
+.wn-group.better, .wn-row.better { --k: #7AA7FF; }
+.wn-label { font-size: 12px; font-weight: 800; letter-spacing: 0.6px; text-transform: uppercase; color: var(--k); }
+.wn-row { --k: var(--gold); display: flex; gap: 12px; padding: 12px 14px; border-radius: 14px; background: var(--surface-2); }
+.wn-icon { color: var(--k); flex-shrink: 0; margin-top: 1px; }
+.wn-mark { display: inline-block; width: 16px; font-weight: 800; color: var(--gold); }
+.wn-mark.fix { color: var(--green-fg); }
+.wn-mark.better { color: #7AA7FF; }
+.wn-legend { display: flex; justify-content: center; gap: 14px; }
+.release { border-radius: 18px; background: var(--surface); padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+.release.current { border: 1px solid var(--gold); }
+.release-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; background: none; border: 0; padding: 0; color: var(--fg); text-align: left; min-height: 44px; }
+.release-head svg { color: var(--muted); flex-shrink: 0; }
+.release-name { font-family: var(--display); font-size: 16px; font-weight: 700; }
+.release-now { font-size: 12px; font-weight: 800; color: var(--on-gold); background: var(--gold); padding: 3px 8px; border-radius: 99px; }
+.release-item { display: flex; gap: 8px; font-size: 14px; }

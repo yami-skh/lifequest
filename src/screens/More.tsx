@@ -31,6 +31,7 @@ export function More() {
         <a class="menu-item" href="#/achievements"><Icon name="trophy" />Достижения<span class="menu-meta">{done}</span></a>
         <a class="menu-item" href="#/quests"><Icon name="sword" />Квесты<span class="menu-meta">{w.quests.filter((q) => q.status === 'active').length}</span></a>
         <a class="menu-item" href="#/metrics"><Icon name="chart" />Замеры и рубежи<span class="menu-meta">{w.metrics.length}</span></a>
+        <a class="menu-item" href="#/changelog"><Icon name="star" />Что нового<span class="menu-meta">{__APP_VERSION__}</span></a>
         <a class="menu-item" href="#/backup"><Icon name="shield" />Резервная копия<span class="menu-meta">{w.profile?.lastBackupAt ? '' : 'не было'}</span></a>
       </div>
 

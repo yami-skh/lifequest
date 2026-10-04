@@ -18,6 +18,8 @@ export interface Profile {
   weeklyOff?: string[];
   /** Какой стартовый набор уже добавлен (замеры, стартовый квест). */
   starterVersion?: number;
+  /** До какой версии пользователь видел «Что нового». */
+  seenVersion?: string;
 }
 
 export interface Requirement { nodeId: string; minProgress?: number; minLevel?: number }
