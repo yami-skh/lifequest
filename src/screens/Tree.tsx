@@ -6,7 +6,8 @@ import { AREA_COLORS } from '../db/seed';
 import { AREA_ICONS } from '../db/db';
 import { go } from '../lib/router';
 import { Icon } from '../components/Icon';
-import { Confirm, Sheet, pctText } from '../components/ui';
+import { AreaTile, Confirm, Ring, Sheet, pctText } from '../components/ui';
+import { plural } from './Character';
 
 type Editor =
   | { mode: 'menu'; node: Node }
@@ -49,57 +50,95 @@ export function Tree({ focusId }: { focusId?: string }) {
     return q ? w.nodes.filter((n) => n.title.toLowerCase().includes(q)) : null;
   }, [query, w.nodes]);
 
-  const renderNode = (n: Node, depth: number) => {
+  /** Сколько навыков внутри узла. */
+  const skillCount = (n: Node): number =>
+    n.kind === 'skill' ? 1 : (w.children.get(n.id) ?? []).reduce((acc, k) => acc + skillCount(k), 0);
+
+  const menuBtn = (n: Node) => (
+    <button type="button" class="icon-btn" aria-label={`Действия: ${n.title}`} onClick={() => setEditor({ mode: 'menu', node: n })}>
+      <Icon name="dots" size={22} stroke={3} />
+    </button>
+  );
+
+  const renderChildren = (n: Node) => (
+    <div class="t-rail">
+      {(w.children.get(n.id) ?? []).map(renderNode)}
+      <div class="t-item t-add">
+        <button type="button" class="link small" onClick={() => setEditor({ mode: 'add', parent: n, kind: 'skill' })}>+ навык</button>
+        <button type="button" class="link small" onClick={() => setEditor({ mode: 'add', parent: n, kind: 'branch' })}>+ ветка</button>
+      </div>
+    </div>
+  );
+
+  const renderNode = (n: Node) => {
     const p = w.progress.get(n.id);
-    const kids = w.children.get(n.id) ?? [];
     const open = expanded.has(n.id);
-    const locks = n.kind === 'skill' ? w.lockReasons(n) : [];
-    const area = w.areaOf(n.id);
 
     if (n.kind === 'skill') {
       const lv = w.skillLevelOf(n.id);
+      const locks = w.lockReasons(n);
+      const fresh = lv.xp === 0;
       return (
-        <div class="tree-skill-wrap" key={n.id} style={{ marginLeft: `${depth * 16}px` }}>
-          <a class={locks.length ? 'tree-skill locked' : 'tree-skill'} href={`#/skill/${n.id}`}>
-            <span class="spread">
-              <span class="tree-skill-title">
-                {locks.length > 0 && <Icon name="lock" size={16} />}
-                {n.title}
+        <div class={`t-item t-skill${locks.length ? ' locked' : ''}${fresh ? ' fresh' : ''}`} key={n.id}>
+          <a class="t-skill-card" href={`#/skill/${n.id}`}>
+            <Ring pct={lv.pct} size={40} stroke={3.5} color="var(--c)">
+              {locks.length ? <Icon name="lock" size={16} /> : <span class="t-lvl">{lv.level}</span>}
+            </Ring>
+            <span class="t-skill-body">
+              <span class="t-skill-top">
+                <span class="t-skill-title">{n.title}</span>
+                <span class="t-skill-pct">{pctText(p)}</span>
               </span>
-              <span class="tree-skill-meta">
-                <span class="lvl-chip">ур. {lv.level}</span>
-                <span class="strong">{pctText(p)}</span>
-              </span>
+              {p !== null && p !== undefined && <span class="mini-bar"><span style={{ width: `${p}%`, background: 'var(--c)' }} /></span>}
+              {locks.length > 0 ? (
+                locks.map((l) => <span class="t-sub" key={l.node.id}>Откроется: {l.node.title} {l.need} (сейчас {l.have})</span>)
+              ) : (
+                <span class="t-sub">{fresh ? 'ещё не начат' : `${lv.name} · ${lv.xp} XP`}</span>
+              )}
             </span>
-            {p !== null && p !== undefined && <span class="mini-bar"><span style={{ width: `${p}%`, background: area?.color }} /></span>}
-            {locks.map((l) => <span class="muted small" key={l.node.id}>Откроется: {l.node.title} — {l.need} (сейчас {l.have})</span>)}
           </a>
-          <button type="button" class="icon-btn" aria-label={`Действия: ${n.title}`} onClick={() => setEditor({ mode: 'menu', node: n })}><Icon name="dots" size={22} stroke={3} /></button>
+          {menuBtn(n)}
         </div>
       );
     }
 
-    return (
-      <div key={n.id}>
-        <div class="tree-row" style={{ paddingLeft: `${depth * 16}px` }}>
-          <button type="button" class="tree-toggle" onClick={() => toggle(n.id)} aria-expanded={open}>
-            <Icon name={open ? 'down' : 'right'} size={16} stroke={2.4} />
-            {n.kind === 'area' && <span class="dot" style={{ background: n.color }} />}
-            <span class={n.kind === 'area' ? 'tree-title area' : 'tree-title'}>{n.title}</span>
-            <span class="muted small strong">{p === null || p === undefined ? (kids.length ? '—' : 'пусто') : pctText(p)}</span>
-          </button>
-          <button type="button" class="icon-btn" aria-label={`Действия: ${n.title}`} onClick={() => setEditor({ mode: 'menu', node: n })}><Icon name="dots" size={22} stroke={3} /></button>
-        </div>
-        {open && (
-          <div class="tree-children">
-            {kids.map((k) => renderNode(k, depth + 1))}
-            <div class="tree-add" style={{ paddingLeft: `${(depth + 1) * 16}px` }}>
-              <button type="button" class="link small" onClick={() => setEditor({ mode: 'add', parent: n, kind: 'skill' })}>+ навык</button>
-              <button type="button" class="link small" onClick={() => setEditor({ mode: 'add', parent: n, kind: 'branch' })}>+ ветка</button>
-            </div>
+    if (n.kind === 'branch') {
+      const count = skillCount(n);
+      return (
+        <div class="t-item t-branch" key={n.id}>
+          <div class="t-branch-row">
+            <button type="button" class="t-branch-btn" onClick={() => toggle(n.id)} aria-expanded={open}>
+              <span class={open ? 't-diamond open' : 't-diamond'} />
+              <span class="t-branch-title">{n.title}</span>
+              <span class="t-sub">{count ? `${pctText(p)} · ${count} нав.` : 'пусто'}</span>
+              <Icon name={open ? 'down' : 'right'} size={16} stroke={2.4} />
+            </button>
+            {menuBtn(n)}
           </div>
-        )}
-      </div>
+          {open && renderChildren(n)}
+        </div>
+      );
+    }
+
+    const count = skillCount(n);
+    const xp = w.xpByNode.get(n.id) ?? 0;
+    return (
+      <section class={open ? 't-area open' : 't-area'} key={n.id} style={{ '--c': n.color ?? 'var(--muted)' }}>
+        <div class="t-area-head">
+          <button type="button" class="t-area-btn" onClick={() => toggle(n.id)} aria-expanded={open}>
+            <AreaTile node={n} size={44} />
+            <span class="t-area-text">
+              <span class="t-area-title">{n.title}</span>
+              <span class="t-sub">{count} {plural(count, 'навык', 'навыка', 'навыков')} · {xp} XP</span>
+            </span>
+            <Ring pct={p ?? 0} size={46} stroke={4} color="var(--c)">
+              <span class="t-ring-pct">{p === null || p === undefined ? '—' : `${Math.round(p)}%`}</span>
+            </Ring>
+          </button>
+          {menuBtn(n)}
+        </div>
+        {open && renderChildren(n)}
+      </section>
     );
   };
 
@@ -134,7 +173,7 @@ export function Tree({ focusId }: { focusId?: string }) {
           {found.length === 0 && <p class="muted">Ничего не нашлось.</p>}
         </div>
       ) : (
-        <div class="tree">{w.areas.map((a) => renderNode(a, 0))}</div>
+        <div class="t-tree">{w.areas.map(renderNode)}</div>
       )}
 
       <NodeEditor editor={editor} onClose={() => setEditor(null)} onDelete={(n) => { setEditor(null); setToDelete(n); }} onAdded={(parentId) => {

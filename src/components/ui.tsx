@@ -22,6 +22,28 @@ export function LevelBadge({ level, name, pct, left }: { level: number; name: st
   );
 }
 
+/** Кольцо прогресса с подписью в центре. */
+export function Ring({ pct, size = 44, stroke = 4, color = 'var(--gold)', children }: {
+  pct: number; size?: number; stroke?: number; color?: string; children?: ComponentChildren;
+}) {
+  const r = (size - stroke) / 2;
+  const c = 2 * Math.PI * r;
+  const v = Math.max(0, Math.min(100, pct));
+  const mid = size / 2;
+  return (
+    <span class="ring" style={{ width: `${size}px`, height: `${size}px` }}>
+      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} aria-hidden="true">
+        <circle cx={mid} cy={mid} r={r} fill="none" stroke="var(--line)" stroke-width={stroke} />
+        {v > 0 && (
+          <circle cx={mid} cy={mid} r={r} fill="none" stroke={color} stroke-width={stroke} stroke-linecap="round"
+            stroke-dasharray={`${(c * v) / 100} ${c}`} transform={`rotate(-90 ${mid} ${mid})`} />
+        )}
+      </svg>
+      <span class="ring-label">{children}</span>
+    </span>
+  );
+}
+
 export function AreaTile({ node, size = 40 }: { node: Node | undefined; size?: number }) {
   const color = node?.color ?? 'var(--muted)';
   return (
