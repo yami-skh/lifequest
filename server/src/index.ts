@@ -103,7 +103,8 @@ export default {
     const origin = req.headers.get('Origin');
     if (req.method === 'OPTIONS') return new Response(null, { status: 204, headers: cors(origin) });
     const url = new URL(req.url);
-    const codes = (env.INVITE_CODES ?? '').split(',').map((c) => c.trim()).filter(Boolean);
+    // Терпимо к тому, как вставили секрет: кавычки, пробелы, переносы, невидимые символы.
+    const codes = (env.INVITE_CODES ?? '').replace(/[﻿​"'`]/g, '').split(/[,;\s]+/).filter(Boolean);
 
     if (req.method === 'GET' && url.pathname === '/quota') {
       const code = url.searchParams.get('code') ?? '';

@@ -39,7 +39,7 @@ RPG-трекер саморазвития для брата пользовате
 - `server/` — Cloudflare Worker (отдельный package.json): `POST /goals`, `GET /quota`. Claude Opus 5.5 (переменная `MODEL`), structured outputs, `fallbacks: "default"`. Коды доступа и ключ — секреты Cloudflare (`npx wrangler secret put ANTHROPIC_API_KEY` / `INVITE_CODES`), лимит 10/день на код, неудачные запросы возвращаются в лимит.
 - Приложение: `src/lib/ai.ts` (адрес `AI_URL`), `components/AiGoals.tsx`, код — `profile.aiCode` (Настройки). Без кода кнопки нет.
 - Проверка интерфейса без Claude: заглушка на :8788 + `.env.local` с `VITE_AI_URL=http://localhost:8788`.
-- Статус: код готов и проверен на заглушке; ждёт `wrangler login`, KV `USAGE` и секретов от пользователя, потом — вписать адрес в `AI_URL` и выпустить.
+- Сервер развёрнут: https://lifequest-ai.lifequest-ai.workers.dev (аккаунт Cloudflare пользователя). Секреты пользователь вводит через буфер: `Get-Clipboard | npx.cmd wrangler secret put ИМЯ` (интерактивный ввод в PowerShell сохраняет 1 символ). Первый настоящий запрос — 7 с, ответ хороший.
 
 ## Как работать экономно
 

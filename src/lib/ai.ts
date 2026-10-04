@@ -3,7 +3,7 @@
 import type { GoalKind } from '../engine/progress';
 
 /** Адрес сервера. Для проверки с локальным сервером: VITE_AI_URL=http://localhost:8787 npm run dev. */
-export const AI_URL = (import.meta.env.VITE_AI_URL as string | undefined) || 'https://lifequest-ai.REPLACE.workers.dev';
+export const AI_URL = (import.meta.env.VITE_AI_URL as string | undefined) || 'https://lifequest-ai.lifequest-ai.workers.dev';
 
 export interface AiGoal { title: string; kind: GoalKind }
 export interface AiStage { stage: number; goals: AiGoal[] }
