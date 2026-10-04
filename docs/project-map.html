@@ -110,10 +110,10 @@ section { display: flex; flex-direction: column; gap: 20px; }
 </header>
 
 <div class="status">
-  <div class="stat"><span>Версия</span><b>0.3.0</b></div>
+  <div class="stat"><span>Версия</span><b>0.4.0</b></div>
   <div class="stat"><span>Где работает</span><b>Сайт + APK</b></div>
   <div class="stat"><span>Ждём от брата</span><b>Проверку APK на телефоне</b></div>
-  <div class="stat"><span>Следующий шаг</span><b>Квесты</b></div>
+  <div class="stat"><span>Следующий шаг</span><b>Обкатка у брата</b></div>
 </div>
 
 <section>
@@ -148,8 +148,8 @@ section { display: flex; flex-direction: column; gap: 20px; }
         <div class="mod"><b>Журнал</b><span>лента записей, фильтры, ошибки</span></div>
         <div class="mod"><b>Достижения</b><span>полученные, в процессе, скрытые</span></div>
         <div class="mod"><b>Резервная копия</b><span>.zip, восстановление, напоминание</span></div>
-        <div class="mod"><b>Квесты</b><span>шаг 6 — следующий</span></div>
-        <div class="mod"><b>Замеры и рубежи</b><span>шаг 7</span></div>
+        <div class="mod"><b>Квесты</b><span>недельные, основные, побочные; шаги закрываются сами</span></div>
+        <div class="mod"><b>Замеры и рубежи</b><span>графики, рекорды +50, рубежи +200, прогноз по темпу</span></div>
       </div>
     </div>
 
@@ -163,6 +163,8 @@ section { display: flex; flex-direction: column; gap: 20px; }
         <div class="mod"><b>Требования</b><span>прогресс % или уровень другого навыка</span></div>
         <div class="mod"><b>Подсказки</b><span>почти уровень, лучшая цель, скоро откроется, ржавчина</span></div>
         <div class="mod"><b>Достижения</b><span>22 штуки, 4 скрытых</span></div>
+        <div class="mod"><b>Квесты</b><span>недельные шаблоны, счётчики записей</span></div>
+        <div class="mod"><b>Замеры</b><span>рекорд по весу и повторам, прогноз регрессией</span></div>
         <div class="mod"><b>Серии</b><span>дни подряд с записью</span></div>
       </div>
     </div>
@@ -174,7 +176,7 @@ section { display: flex; flex-direction: column; gap: 20px; }
         <div class="mod"><b>Entry, EntrySkill</b><span>записи, бонусы за ступени, XP по навыкам</span></div>
         <div class="mod"><b>Photo</b><span>фото и превью как Blob</span></div>
         <div class="mod"><b>Unlocked, Note</b><span>полученные достижения, заметки и ссылки</span></div>
-        <div class="mod"><b>Quest, Metric, Milestone</b><span>появятся на шагах 6–7</span></div>
+        <div class="mod"><b>Quest, Metric, Milestone</b><span>квесты, замеры, значения, рубежи</span></div>
       </div>
     </div>
 
@@ -229,17 +231,17 @@ section { display: flex; flex-direction: column; gap: 20px; }
   </div>
 
   <div class="phase">
-    <div class="phase-head"><h3>v1.0 · рабочее приложение</h3><span class="chip now">В работе · 6 из 9</span></div>
+    <div class="phase-head"><h3>v1.0 · рабочее приложение</h3><span class="chip now">В работе · 8 из 9</span></div>
     <ol class="track">
       <li class="step done"><span class="node-mark">✓</span><div class="step-body"><div class="step-title">Каркас PWA</div><p>Vite, Preact, TypeScript, манифест, service worker, нижняя навигация, тёмная тема.</p></div></li>
       <li class="step done"><span class="node-mark">✓</span><div class="step-body"><div class="step-title">База и движок</div><p>Таблицы Dexie с миграциями, стартовый набор из 5 направлений, формулы XP, уровней и прогресса с тестами.</p></div></li>
       <li class="step done"><span class="node-mark">✓</span><div class="step-body"><div class="step-title">＋ Запись и журнал</div><p>Шторка записи, выбор навыков, сложность, исход ✅/❌, исправление ошибок, предпросмотр XP, лента журнала.</p></div></li>
       <li class="step done"><span class="node-mark">✓</span><div class="step-body"><div class="step-title">Персонаж, дерево, навык</div><p>Главный экран, новое дерево с ветвями-линиями и кольцами уровня, страница навыка, достижения.</p></div></li>
       <li class="step done"><span class="node-mark">✓</span><div class="step-body"><div class="step-title">Фото</div><p>Камера, сжатие, превью, галерея навыка. На реальном телефоне ещё не проверено.</p></div></li>
-      <li class="step now"><span class="node-mark">6</span><div class="step-body"><div class="step-title">Квесты <span class="chip now">Следующий</span></div><p>Задания с шагами и наградой, еженедельные квесты по шаблону, стартовый «Обустрой персонажа». Ступени навыков — готовая основа: «пройди ступень Базовый в Рамене».</p><p class="touch">игровая часть целиком</p></div></li>
-      <li class="step"><span class="node-mark">7</span><div class="step-body"><div class="step-title">Замеры и рубежи</div><p>Вес, жим, подтягивания, сон: графики, личные рекорды +50 XP, рубежи «жим 80 кг» с прогнозом по темпу.</p><p class="touch">трекер тренировок и веса</p></div></li>
+      <li class="step done"><span class="node-mark">✓</span><div class="step-body"><div class="step-title">Квесты</div><p>Основные и побочные квесты с шагами (ступень, цель, счётчик, свой шаг), три недельных квеста, стартовый «Обустрой персонажа». Шаги закрываются сами, награда приходит в журнал.</p></div></li>
+      <li class="step done"><span class="node-mark">✓</span><div class="step-body"><div class="step-title">Замеры и рубежи</div><p>Вес, жим, подтягивания, отжимания, сон: графики, рекорды +50 XP, рубежи +200 XP с прогнозом по темпу, замер прямо в записи тренировки.</p></div></li>
       <li class="step done"><span class="node-mark">✓</span><div class="step-body"><div class="step-title">Резервная копия</div><p>Экспорт в .zip с фото через «Поделиться», восстановление с подтверждением, напоминание раз в неделю.</p></div></li>
-      <li class="step now"><span class="node-mark">9</span><div class="step-body"><div class="step-title">Запуск и обкатка <span class="chip now">Идёт</span></div><p>Сайт опубликован. APK 0.3.0 собран. Нужно: брат ставит APK, проверяет камеру, «Поделиться» и перенос данных; 1–2 недели пользуется, потом правим цифры.</p><p class="touch">v1.0 у mildyan в руках</p></div></li>
+      <li class="step now"><span class="node-mark">9</span><div class="step-body"><div class="step-title">Запуск и обкатка <span class="chip now">Идёт</span></div><p>Сайт опубликован. APK 0.4.0 собран. Нужно: брат ставит APK, проверяет камеру, «Поделиться» и перенос данных; 1–2 недели пользуется, потом правим цифры.</p><p class="touch">v1.0 у mildyan в руках</p></div></li>
     </ol>
   </div>
 
@@ -255,7 +257,7 @@ section { display: flex; flex-direction: column; gap: 20px; }
     <ol class="track">
       <li class="step done"><span class="node-mark">✓</span><div class="step-body"><div class="step-title">Фокус, ступени, требования</div><p>До 3 навыков в фокусе ×1.2 XP; цели по ступеням с бонусом +100 XP; настройка «открывается после…».</p></div></li>
       <li class="step done"><span class="node-mark">✓</span><div class="step-body"><div class="step-title">«Ближайшее», ржавчина, туман</div><p>Подсказки на главном; 60 дней без записей — паутина и «возвращение» +50%; неисследованные навыки тусклые.</p></div></li>
-      <li class="step"><span class="node-mark">11</span><div class="step-body"><div class="step-title">Дерево-граф «созвездие»</div><p>Одобрено. Сначала макет.</p></div></li>
+      <li class="step"><span class="node-mark">11</span><div class="step-body"><div class="step-title">Дерево-граф «созвездие»</div><p>Одобрено. Сначала макет. В приложении уже виден в «Ещё → Скоро».</p></div></li>
       <li class="step"><span class="node-mark">10</span><div class="step-body"><div class="step-title">AI-генерация целей</div><p>Одобрено. Нужно решить, как подключать AI: ключ API в настройках или маленький сервер-посредник.</p></div></li>
       <li class="step"><span class="node-mark">9</span><div class="step-body"><div class="step-title">Шаблоны веток</div><p>Ждём от брата список: гитара, вождение, первая помощь, английский, монтаж, шахматы…</p></div></li>
     </ol>

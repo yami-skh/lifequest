@@ -6,6 +6,7 @@ import { currentSummary, exportBackup, readBackup, restoreBackup, type BackupSum
 import { daysBetween, humanDate, localDate } from '../engine/dates';
 import { toast } from '../lib/toast';
 import { go } from '../lib/router';
+import { ensureStarter } from '../db/seed';
 import { Icon } from '../components/Icon';
 import { Sheet, TopBar } from '../components/ui';
 import { plural } from './Character';
@@ -53,6 +54,8 @@ export function Backup() {
     setBusy(true);
     try {
       await restoreBackup(parsed);
+      // Копия старой версии без замеров и квестов — добавим стартовые.
+      await ensureStarter();
       setParsed(null);
       toast({ kind: 'info', title: 'Данные восстановлены' });
       go('');

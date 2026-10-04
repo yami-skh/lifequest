@@ -13,6 +13,10 @@ import { Journal } from './screens/Journal';
 import { More } from './screens/More';
 import { Achievements } from './screens/Achievements';
 import { Backup } from './screens/Backup';
+import { QuestDetail, Quests } from './screens/Quests';
+import { MetricDetail, Metrics } from './screens/Metrics';
+import { completeQuest, maintainQuests } from './db/actions';
+import { localDate } from './engine/dates';
 import { EntrySheet, type EntryPreset } from './screens/EntrySheet';
 
 export function App() {
@@ -40,9 +44,13 @@ export function App() {
   else if (screen === 'more') page = <More />;
   else if (screen === 'achievements') page = <Achievements />;
   else if (screen === 'backup') page = <Backup />;
+  else if (screen === 'quests' && param) page = <QuestDetail id={param} key={param} />;
+  else if (screen === 'quests') page = <Quests />;
+  else if (screen === 'metrics' && param) page = <MetricDetail id={param} key={param} />;
+  else if (screen === 'metrics') page = <Metrics />;
   else page = <Character onAdd={() => openEntry()} />;
 
-  const tab = screen === 'tree' || screen === 'skill' ? 'tree' : screen === 'journal' ? 'journal' : screen === 'more' || screen === 'achievements' || screen === 'backup' ? 'more' : 'home';
+  const tab = screen === 'tree' || screen === 'skill' ? 'tree' : screen === 'journal' ? 'journal' : ['more', 'achievements', 'backup', 'quests', 'metrics'].includes(screen) ? 'more' : 'home';
 
   return (
     <WorldContext.Provider value={derived}>
@@ -65,12 +73,28 @@ export function App() {
 /** Новый уровень, новые достижения: всплывашки и запись в базу. */
 function useGameEvents(w: ReturnType<typeof derive> | null) {
   const prevLevel = useRef<number | null>(null);
+  // Недельные квесты и просрочка: при запуске и при смене дня.
+  const day = useRef('');
+  useEffect(() => {
+    const today = localDate();
+    if (w && day.current !== today) {
+      day.current = today;
+      maintainQuests();
+    }
+  }, [w]);
   useEffect(() => {
     if (!w) return;
     if (prevLevel.current !== null && w.level.level > prevLevel.current) {
       toast({ kind: 'level', title: `Уровень ${w.level.level}!`, sub: 'Персонаж стал сильнее' });
     }
     prevLevel.current = w.level.level;
+
+    // Квесты: все шаги выполнены → награда и всплывашка.
+    for (const q of w.quests) {
+      if (q.status === 'active' && w.questProgress(q).complete) {
+        completeQuest(q.id).then((done) => done && toast({ kind: 'achievement', title: 'Квест выполнен!', sub: `«${done.title}» · +${done.rewardXp} XP` }));
+      }
+    }
 
     const have = new Set(w.unlocked.map((u) => u.achievementId));
     const fresh = evaluateAchievements(w.stats()).filter((a) => a.done && !have.has(a.def.id));

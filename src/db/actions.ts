@@ -1,5 +1,7 @@
 // Все изменения данных.
-import { db, nowIso, uid, type Entry, type Node, type NodeKind, type Requirement } from './db';
+import { db, nowIso, uid, type Entry, type Metric, type Milestone, type Node, type NodeKind, type Quest, type Requirement } from './db';
+import { WEEKLY_TEMPLATES, weekStart } from '../engine/quests';
+import { MILESTONE_XP, RECORD_XP, isRecord, reached } from '../engine/metrics';
 import { STAGE_BONUS, stagesOf } from '../engine/stages';
 import { calcXp, secondaryXp, xpContextFromHistory, type Difficulty, type EntryType } from '../engine/xp';
 import { localDate } from '../engine/dates';
@@ -198,3 +200,156 @@ export async function resetAll() {
   await db.delete();
   location.reload();
 }
+
+// --- квесты (§6) ---
+
+export async function createQuest(q: Omit<Quest, 'id' | 'createdAt' | 'status' | 'since'> & { since?: string }) {
+  const quest: Quest = { ...q, id: uid(), status: 'active', since: q.since ?? localDate(), createdAt: nowIso() };
+  await db.quests.add(quest);
+  return quest;
+}
+
+export async function toggleCustomStep(questId: string, stepId: string) {
+  const q = await db.quests.get(questId);
+  if (!q || q.status !== 'active') return;
+  await db.quests.update(questId, {
+    steps: q.steps.map((s) => (s.id === stepId && s.kind === 'custom' ? { ...s, done: !s.done } : s)),
+  });
+}
+
+export const abandonQuest = (id: string) => db.quests.update(id, { status: 'abandoned', completedAt: nowIso() });
+export const deleteQuest = (id: string) => db.quests.delete(id);
+
+/** Закрывает квест и начисляет награду: навыку первого шага, иначе — персонажу напрямую. */
+export async function completeQuest(id: string) {
+  return db.transaction('rw', [db.quests, db.entries, db.entrySkills], async () => {
+    const q = await db.quests.get(id);
+    if (!q || q.status !== 'active') return null;
+    const createdAt = nowIso();
+    // Награда — навыку первого шага, где навык указан (в т.ч. в счётчике); иначе персонажу.
+    const skillId = q.steps.map((s) => ('skillId' in s ? s.skillId : s.kind === 'count' ? s.rule.skillId : undefined)).find(Boolean);
+    await bonus(skillId, `Квест «${q.title}» выполнен`, q.rewardXp, createdAt);
+    await db.quests.update(id, { status: 'done', completedAt: createdAt });
+    return q;
+  });
+}
+
+/** Недельные квесты на текущую неделю; прошлые незавершённые и просроченные — в «провалены». */
+export async function maintainQuests() {
+  const today = localDate();
+  const week = weekStart(today);
+  const profile = await db.profile.get('me');
+  const off = new Set(profile?.weeklyOff ?? []);
+  await db.transaction('rw', [db.quests], async () => {
+    const active = await db.quests.where('status').equals('active').toArray();
+    for (const q of active) {
+      if ((q.kind === 'weekly' && q.week !== week) || (q.deadline && q.deadline < today)) {
+        await db.quests.update(q.id, { status: 'failed', completedAt: nowIso() });
+      }
+    }
+    const thisWeek = await db.quests.where('week').equals(week).toArray();
+    for (const t of WEEKLY_TEMPLATES) {
+      if (off.has(t.id) || thisWeek.some((q) => q.template === t.id)) continue;
+      await db.quests.add({
+        id: uid(), title: t.title, kind: 'weekly', rewardXp: t.reward, since: week, week, template: t.id,
+        status: 'active', createdAt: nowIso(),
+        steps: [{ id: uid(), kind: 'count', title: t.hint, rule: t.rule }],
+      });
+    }
+  });
+}
+
+/** Включает или выключает недельный шаблон; выключенный квест этой недели убирается. */
+export async function toggleWeeklyTemplate(id: string) {
+  const p = await db.profile.get('me');
+  const off = new Set(p?.weeklyOff ?? []);
+  if (off.has(id)) off.delete(id);
+  else {
+    off.add(id);
+    const q = (await db.quests.where('week').equals(weekStart(localDate())).toArray()).find((x) => x.template === id && x.status === 'active');
+    if (q) await db.quests.delete(q.id);
+  }
+  await db.profile.update('me', { weeklyOff: [...off] });
+  await maintainQuests();
+}
+
+// --- замеры и рубежи (§8) ---
+
+export async function addMetric(m: Omit<Metric, 'id' | 'createdAt' | 'order'>) {
+  const order = await db.metrics.count();
+  await db.metrics.add({ ...m, id: uid(), order, createdAt: nowIso() });
+}
+
+export async function deleteMetric(id: string) {
+  await db.transaction('rw', [db.metrics, db.metricValues, db.milestones], async () => {
+    await db.metricValues.where('metricId').equals(id).delete();
+    await db.milestones.where('metricId').equals(id).delete();
+    await db.metrics.delete(id);
+  });
+}
+
+/** Бонусная запись: XP навыку или, если навыка нет, персонажу напрямую. */
+async function bonus(skillId: string | undefined, text: string, xp: number, createdAt: string) {
+  const entry: Entry = { id: uid(), date: localDate(), type: 'bonus', text, difficulty: 1, closedGoalIds: [], outcome: 'ok', photoIds: [], createdAt };
+  if (!skillId) entry.rewardXp = xp;
+  await db.entries.add(entry);
+  if (skillId) await db.entrySkills.add({ entryId: entry.id, skillId, role: 'primary', xp });
+}
+
+/**
+ * Новое значение замера. Рекорд → +50 XP навыку; взятый рубеж → +200 XP.
+ * Возвращает, что произошло, для всплывашек.
+ */
+export async function addMetricValue(metricId: string, v: { value: number; reps?: number; note?: string; date?: string; photos?: PhotoDraft[] }) {
+  return db.transaction('rw', [db.metrics, db.metricValues, db.milestones, db.entries, db.entrySkills, db.photos], async () => {
+    const m = await db.metrics.get(metricId);
+    if (!m) return { record: false, milestone: null as Milestone | null };
+    const prev = await db.metricValues.where('metricId').equals(metricId).toArray();
+    const createdAt = nowIso();
+    const record = isRecord(prev, v, m.better);
+    const photoIds: string[] = [];
+    for (const p of v.photos ?? []) {
+      const id = uid();
+      await db.photos.add({ id, ...p, createdAt });
+      photoIds.push(id);
+    }
+    await db.metricValues.add({
+      id: uid(), metricId, date: v.date ?? localDate(), value: v.value, reps: v.reps, note: v.note?.trim() || undefined,
+      photoIds, record, createdAt,
+    });
+    const shown = `${fmtNum(v.value)} ${m.unit}${v.reps ? ` × ${v.reps}` : ''}`;
+    if (record) await bonus(m.skillId, `Рекорд: ${m.title} ${shown}`, RECORD_XP, createdAt);
+    let milestone: Milestone | null = null;
+    const active = await db.milestones.where('metricId').equals(metricId).filter((x) => x.status === 'active').toArray();
+    for (const ms of active) {
+      if (reached(v.value, ms.target, m.better)) {
+        await db.milestones.update(ms.id, { status: 'done', doneAt: createdAt });
+        await bonus(m.skillId, `Рубеж взят: ${m.title} ${fmtNum(ms.target)} ${m.unit}`, MILESTONE_XP, createdAt);
+        milestone = ms;
+      }
+    }
+    return { record, milestone };
+  });
+}
+
+export async function deleteMetricValue(id: string) {
+  await db.transaction('rw', [db.metricValues, db.photos], async () => {
+    const v = await db.metricValues.get(id);
+    if (!v) return;
+    await db.photos.bulkDelete(v.photoIds);
+    await db.metricValues.delete(id);
+  });
+}
+
+/** Ставит рубеж (заменяет активный). */
+export async function setMilestone(metricId: string, start: number, target: number, deadline?: string) {
+  await db.transaction('rw', [db.milestones], async () => {
+    await db.milestones.where('metricId').equals(metricId).filter((x) => x.status === 'active').delete();
+    await db.milestones.add({ id: uid(), metricId, start, target, deadline, status: 'active', createdAt: nowIso() });
+  });
+}
+
+export const removeMilestone = (id: string) => db.milestones.delete(id);
+
+/** 74.2 → «74,2», 62 → «62». */
+export const fmtNum = (n: number) => (Math.round(n * 10) / 10).toString().replace('.', ',');

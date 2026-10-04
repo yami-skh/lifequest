@@ -1,7 +1,9 @@
 // «＋ Запись» — главный сценарий, цель 15 секунд. ARCHITECTURE.md §10.
 import { useMemo, useRef, useState } from 'preact/hooks';
 import { useWorld } from '../db/world';
-import { saveEntry, type PhotoDraft } from '../db/actions';
+import { addMetricValue, saveEntry, type PhotoDraft } from '../db/actions';
+import { isRecord, RECORD_XP } from '../engine/metrics';
+import { metricToasts, ValueInput } from './Metrics';
 import { calcXp, DIFFICULTIES, ENTRY_TYPES, secondaryXp, xpContextFromHistory, type Difficulty, type EntryType } from '../engine/xp';
 import { localDate, humanDate } from '../engine/dates';
 import { compressPhoto, useBlobUrl } from '../lib/photo';
@@ -33,6 +35,8 @@ export function EntrySheet({ preset, onClose }: { preset: EntryPreset; onClose: 
   const [failNote, setFailNote] = useState('');
   const [fixesId, setFixesId] = useState<string | undefined>(preset.fixesEntryId);
   const [photos, setPhotos] = useState<PhotoDraft[]>([]);
+  const [mValue, setMValue] = useState<number | null>(null);
+  const [mReps, setMReps] = useState<number | null>(null);
   const [picking, setPicking] = useState(false);
   const [query, setQuery] = useState('');
   const [busy, setBusy] = useState(false);
@@ -87,6 +91,11 @@ export function EntrySheet({ preset, onClose }: { preset: EntryPreset; onClose: 
     if (fileRef.current) fileRef.current.value = '';
   };
 
+  // Замер основного навыка: показываем при тренировке и практике (§8).
+  const metric = primaryId && (type === 'workout' || type === 'practice') ? w.metricsOfSkill(primaryId)[0] : undefined;
+  const mInfo = metric ? w.metricInfo(metric) : undefined;
+  const mRecord = !!(metric && mInfo && mValue !== null && isRecord(mInfo.values, { value: mValue, reps: mReps ?? undefined }, metric.better));
+
   const save = async () => {
     if (!primaryId || busy) return;
     setBusy(true);
@@ -105,6 +114,10 @@ export function EntrySheet({ preset, onClose }: { preset: EntryPreset; onClose: 
       });
       toast({ kind: 'xp', title: `+${xp} XP`, sub: primary?.title });
       stagesToast(stages);
+      if (metric && mValue !== null) {
+        const r = await addMetricValue(metric.id, { value: mValue, reps: mReps ?? undefined });
+        metricToasts(metric, r, mValue, mReps ?? undefined);
+      }
       onClose();
     } catch (e) {
       console.error(e);
@@ -194,6 +207,17 @@ export function EntrySheet({ preset, onClose }: { preset: EntryPreset; onClose: 
         </label>
       )}
 
+      {metric && mInfo && (
+        <div class="metric-in-entry">
+          <div class="spread">
+            <span class="section-label metric-label">Замер · {metric.title}</span>
+            {mInfo.last && <span class="muted small strong">прошлое {String(mInfo.last.value).replace('.', ',')}{mInfo.last.reps ? ` × ${mInfo.last.reps}` : ''}</span>}
+          </div>
+          <ValueInput metric={metric} value={mValue} setValue={setMValue} reps={mReps} setReps={setMReps} compact />
+          <span class="muted small">Можно оставить пустым — тогда сохранится только запись.</span>
+        </div>
+      )}
+
       {outcome === 'ok' && openErrors.length > 0 && (
         <div class="stack-8">
           <SectionLabel>Исправляет ошибку? ×1.5 XP</SectionLabel>
@@ -227,8 +251,9 @@ export function EntrySheet({ preset, onClose }: { preset: EntryPreset; onClose: 
           <span class="muted small">
             {preview ? [String(preview.base), ...preview.factors.map((f) => `×${f.mult} ${f.label}`)].join(' ') : 'Выбери навык, чтобы увидеть XP'}
             {preview && skillIds.length > 1 && ` · сопутствующим по +${secondaryXp(preview.xp)}`}
+            {mRecord && ` · рекорд +${RECORD_XP}`}
           </span>
-          <span class="xp-big">{preview ? `+${preview.xp} XP` : ''}</span>
+          <span class="xp-big">{preview ? `+${preview.xp + (mRecord ? RECORD_XP : 0)} XP` : ''}</span>
         </div>
         <button type="button" class="btn primary" disabled={!primaryId || busy} onClick={save}>
           {primaryId ? 'Сохранить' : 'Выбери навык'}

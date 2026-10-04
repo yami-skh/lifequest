@@ -14,6 +14,10 @@ export interface Profile {
   lastBackupAt?: string;
   /** Напоминать о копии раз в неделю; по умолчанию да. */
   backupReminder?: boolean;
+  /** Какие недельные шаблоны выключены. */
+  weeklyOff?: string[];
+  /** Какой стартовый набор уже добавлен (замеры, стартовый квест). */
+  starterVersion?: number;
 }
 
 export interface Requirement { nodeId: string; minProgress?: number; minLevel?: number }
@@ -60,6 +64,8 @@ export interface Entry {
   failNote?: string;
   fixesEntryId?: string;
   photoIds: string[];
+  /** XP бонуса, не привязанного к навыку (квест без навыка). */
+  rewardXp?: number;
   createdAt: string;
 }
 
@@ -79,6 +85,80 @@ export interface Note {
   createdAt: string;
 }
 
+// --- квесты (§6) ---
+
+export type QuestKind = 'main' | 'side' | 'weekly';
+
+export interface CountRule {
+  target: number;
+  type?: EntryType;
+  skillId?: string;
+  areaId?: string;
+  withPhoto?: boolean;
+  /** Считать разные направления, а не записи. */
+  distinctAreas?: boolean;
+}
+
+export type QuestStep =
+  | { id: string; kind: 'stage'; title: string; skillId: string; stage: number }
+  | { id: string; kind: 'goal'; title: string; skillId: string; goalId: string }
+  | { id: string; kind: 'count'; title: string; rule: CountRule }
+  | { id: string; kind: 'auto'; title: string; key: 'focus' | 'backup' | 'goal' }
+  | { id: string; kind: 'custom'; title: string; done?: boolean };
+
+export interface Quest {
+  id: string;
+  title: string;
+  kind: QuestKind;
+  steps: QuestStep[];
+  rewardXp: number;
+  /** С какой даты считаются записи для шагов-счётчиков. */
+  since: string;
+  deadline?: string;
+  status: 'active' | 'done' | 'failed' | 'abandoned';
+  /** Неделя недельного квеста, YYYY-MM-DD понедельника. */
+  week?: string;
+  template?: string;
+  createdAt: string;
+  completedAt?: string;
+}
+
+// --- замеры и рубежи (§8) ---
+
+export interface Metric {
+  id: string;
+  title: string;
+  unit: string;
+  better: 'up' | 'down';
+  skillId?: string;
+  hasReps?: boolean;
+  order: number;
+  createdAt: string;
+}
+
+export interface MetricValue {
+  id: string;
+  metricId: string;
+  date: string;
+  value: number;
+  reps?: number;
+  note?: string;
+  photoIds: string[];
+  record?: boolean;
+  createdAt: string;
+}
+
+export interface Milestone {
+  id: string;
+  metricId: string;
+  start: number;
+  target: number;
+  deadline?: string;
+  status: 'active' | 'done';
+  createdAt: string;
+  doneAt?: string;
+}
+
 export const AREA_ICON_BY_TITLE: Record<string, string> = {
   Интеллект: 'bulb', Тело: 'dumbbell', Практика: 'tools', Творчество: 'brush', Технологии: 'monitor',
 };
@@ -94,6 +174,10 @@ class LifeQuestDB extends Dexie {
   photos!: Table<Photo, string>;
   unlocked!: Table<Unlocked, string>;
   notes!: Table<Note, string>;
+  quests!: Table<Quest, string>;
+  metrics!: Table<Metric, string>;
+  metricValues!: Table<MetricValue, string>;
+  milestones!: Table<Milestone, string>;
 
   constructor() {
     super('lifequest');
@@ -123,6 +207,13 @@ class LifeQuestDB extends Dexie {
         const stages = assignStages(list);
         await Promise.all(list.map((g, i) => (g.stage ? null : tx.table('goals').update(g.id, { stage: stages[i] }))));
       }
+    });
+    // v4: квесты, замеры, рубежи. Стартовое содержимое добавляет ensureStarter() в seed.ts.
+    this.version(4).stores({
+      quests: 'id, status, kind, week',
+      metrics: 'id, skillId',
+      metricValues: 'id, metricId, date',
+      milestones: 'id, metricId, status',
     });
   }
 }

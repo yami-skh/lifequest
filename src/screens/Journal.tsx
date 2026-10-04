@@ -35,7 +35,7 @@ export function Journal() {
       {groups.length === 0 && <p class="muted">Записей пока нет. Нажми ＋ внизу, чтобы добавить первую.</p>}
       {groups.map(([date, entries]) => (
         <section class="stack-10" key={date}>
-          <SectionLabel right={<span class="muted small strong">+{entries.reduce((s, e) => s + (w.skillsOfEntry.get(e.id)?.find((x) => x.role === 'primary')?.xp ?? 0), 0)} XP</span>}>{humanDate(date)}</SectionLabel>
+          <SectionLabel right={<span class="muted small strong">+{entries.reduce((s, e) => s + (w.skillsOfEntry.get(e.id)?.find((x) => x.role === 'primary')?.xp ?? e.rewardXp ?? 0), 0)} XP</span>}>{humanDate(date)}</SectionLabel>
           {entries.map((e) => <EntryCard entry={e} key={e.id} showDate={false} />)}
         </section>
       ))}

@@ -5,6 +5,7 @@ import { EntryCard } from '../components/EntryCard';
 import { InstallCard } from '../components/InstallCard';
 import { FocusBlock, HintsBlock } from '../components/FocusAndHints';
 import { BackupReminder } from './Backup';
+import { QuestsBlock } from './Quests';
 
 export function Character({ onAdd }: { onAdd: () => void }) {
   const w = useWorld();
@@ -49,6 +50,8 @@ export function Character({ onAdd }: { onAdd: () => void }) {
       <InstallCard />
 
       <FocusBlock />
+
+      <QuestsBlock />
 
       <HintsBlock />
 

@@ -2,7 +2,9 @@
 // поэтому проще держать их в памяти целиком и считать на лету (ARCHITECTURE.md §11).
 import { createContext } from 'preact';
 import { useContext } from 'preact/hooks';
-import { db, type Entry, type EntrySkill, type Goal, type Node, type Note, type Profile, type Unlocked } from './db';
+import { db, type Entry, type EntrySkill, type Goal, type Metric, type MetricValue, type Milestone, type Node, type Note, type Profile, type Quest, type QuestStep, type Unlocked } from './db';
+import { countProgress, type EntryFacts } from '../engine/quests';
+import { bestValue, forecastDate, milestoneProgress } from '../engine/metrics';
 import { computeProgress, skillProgress } from '../engine/progress';
 import { currentStage, stagesOf } from '../engine/stages';
 import { RUST_DAYS } from '../engine/xp';
@@ -19,10 +21,14 @@ export interface World {
   entrySkills: EntrySkill[];
   notes: Note[];
   unlocked: Unlocked[];
+  quests: Quest[];
+  metrics: Metric[];
+  metricValues: MetricValue[];
+  milestones: Milestone[];
 }
 
 export async function loadWorld(): Promise<World> {
-  const [profile, nodes, goals, entries, entrySkills, notes, unlocked] = await Promise.all([
+  const [profile, nodes, goals, entries, entrySkills, notes, unlocked, quests, metrics, metricValues, milestones] = await Promise.all([
     db.profile.get('me'),
     db.nodes.toArray(),
     db.goals.toArray(),
@@ -30,8 +36,12 @@ export async function loadWorld(): Promise<World> {
     db.entrySkills.toArray(),
     db.notes.toArray(),
     db.unlocked.toArray(),
+    db.quests.toArray(),
+    db.metrics.toArray().then((list) => list.sort((a, b) => a.order - b.order)),
+    db.metricValues.toArray(),
+    db.milestones.toArray(),
   ]);
-  return { profile, nodes, goals, entries, entrySkills, notes, unlocked };
+  return { profile, nodes, goals, entries, entrySkills, notes, unlocked, quests, metrics, metricValues, milestones };
 }
 
 export interface LockReason {
@@ -85,6 +95,9 @@ export function derive(w: World) {
   }
   for (const list of entriesBySkill.values()) list.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
   for (const list of skillsOfEntry.values()) list.sort((a, b) => (a.role === 'primary' ? -1 : 1) - (b.role === 'primary' ? -1 : 1));
+
+  // Бонусы без навыка (квест без навыка) идут прямо персонажу.
+  for (const e of w.entries) totalXp += e.rewardXp ?? 0;
 
   const primaryOf = (entryId: string) => skillsOfEntry.get(entryId)?.find((s) => s.role === 'primary')?.skillId;
 
@@ -192,6 +205,71 @@ export function derive(w: World) {
     | { kind: 'unlock'; node: Node; reason: LockReason }
     | { kind: 'rust'; node: Node; days: number };
 
+  // --- квесты ---
+
+  const entryFacts: EntryFacts[] = w.entries.map((e) => {
+    const ids = (skillsOfEntry.get(e.id) ?? []).map((s) => s.skillId);
+    return {
+      date: e.date, type: e.type, hasPhoto: e.photoIds.length > 0, skillIds: ids,
+      primaryId: primaryOf(e.id),
+      areaIds: [...new Set(ids.map((id) => areaOf(id)?.id).filter((x): x is string => !!x))],
+    };
+  });
+
+  type StepState = { step: QuestStep; done: boolean; have?: number; target?: number; detail?: string };
+
+  const stepState = (q: Quest, step: QuestStep): StepState => {
+    switch (step.kind) {
+      case 'custom':
+        return { step, done: !!step.done };
+      case 'goal': {
+        const g = w.goals.find((x) => x.id === step.goalId);
+        return { step, done: !!g?.done, detail: nodeById.get(step.skillId)?.title };
+      }
+      case 'stage': {
+        const st = stagesOfSkill(step.skillId).find((s) => s.stage === step.stage);
+        return { step, done: !!st?.complete, have: st?.done, target: st?.goals.length, detail: nodeById.get(step.skillId)?.title };
+      }
+      case 'count': {
+        const c = countProgress(step.rule, entryFacts, q.since);
+        const areaNames = c.areas.map((a) => nodeById.get(a)?.title).filter(Boolean).join(', ');
+        return { step, done: c.done, have: c.have, target: c.target, detail: step.rule.distinctAreas && areaNames ? `было: ${areaNames}` : undefined };
+      }
+      case 'auto':
+        if (step.key === 'focus') return { step, done: skills.some((s) => s.focus) };
+        if (step.key === 'goal') return { step, done: w.goals.some((g) => g.done) };
+        return { step, done: !!w.profile?.lastBackupAt };
+    }
+  };
+
+  const questProgress = (q: Quest) => {
+    const steps = q.steps.map((s) => stepState(q, s));
+    const done = steps.filter((s) => s.done).length;
+    // Для квеста из одного счётчика (недельные) прогресс — по счётчику, а не по шагам.
+    const single = steps.length === 1 && steps[0].target ? steps[0] : null;
+    return {
+      steps, done, total: steps.length, complete: done === steps.length,
+      pct: single ? ((single.have ?? 0) / (single.target ?? 1)) * 100 : (done / Math.max(1, steps.length)) * 100,
+      next: steps.find((s) => !s.done),
+    };
+  };
+
+  // --- замеры ---
+
+  const metricInfo = (m: Metric) => {
+    const values = w.metricValues.filter((v) => v.metricId === m.id).sort((a, b) => a.date.localeCompare(b.date) || a.createdAt.localeCompare(b.createdAt));
+    const last = values.at(-1);
+    const best = bestValue(values, m.better);
+    const monthAgo = values.filter((v) => daysBetween(v.date, today) >= 30).at(-1) ?? values[0];
+    const delta = last && monthAgo && last !== monthAgo ? last.value - monthAgo.value : null;
+    const milestone = w.milestones.find((x) => x.metricId === m.id && x.status === 'active');
+    return {
+      metric: m, values, last, best, delta, milestone,
+      milestonePct: milestone && last ? milestoneProgress(milestone.start, last.value, milestone.target) * 100 : 0,
+      forecast: milestone ? forecastDate(values, milestone.target, today) : null,
+    };
+  };
+
   const hints = (): Hint[] => {
     const out: Hint[] = [];
 
@@ -257,7 +335,7 @@ export function derive(w: World) {
     }
     const hourOf = (e: Entry) => new Date(e.createdAt).getHours();
     return {
-      entries: w.entries.length,
+      entries: w.entries.filter((e) => e.type !== 'bonus').length,
       photoEntries: w.entries.filter((e) => e.photoIds.length > 0).length,
       bestStreak: bestStreak(dates),
       areasWithEntries: areasWithEntries.size,
@@ -265,12 +343,12 @@ export function derive(w: World) {
       practiceXp,
       goalsDone: w.goals.filter((g) => g.done).length,
       skills: skills.length,
-      questsDone: 0,
+      questsDone: w.quests.filter((q) => q.status === 'done').length,
       maxSkillLevel: Math.max(0, ...skills.map((s) => skillLevelOf(s.id).level)),
-      records: 0,
+      records: w.metricValues.filter((v) => v.record).length,
       level: level.level,
       fixedErrors: fixedIds.size,
-      milestonesDone: 0,
+      milestonesDone: w.milestones.filter((m) => m.status === 'done').length,
       teachEntries: w.entries.filter((e) => e.type === 'teach').length,
       nightEntries: w.entries.filter((e) => hourOf(e) < 4).length,
       earlyEntries: w.entries.filter((e) => hourOf(e) >= 4 && hourOf(e) < 7).length,
@@ -311,6 +389,9 @@ export function derive(w: World) {
     focusSkills,
     unlocksOf,
     hints,
+    questProgress,
+    metricInfo,
+    metricsOfSkill: (id: string) => w.metrics.filter((m) => m.skillId === id),
     stats,
   };
 }

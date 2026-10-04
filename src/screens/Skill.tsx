@@ -10,6 +10,7 @@ import { Icon } from '../components/Icon';
 import { Check, LevelBadge, ProgressBar, TopBar } from '../components/ui';
 import { EntryCard } from '../components/EntryCard';
 import { RequirementsSheet } from '../components/RequirementsSheet';
+import { SkillMetrics } from './Metrics';
 import { usePhotoUrl } from '../lib/photo';
 import type { EntryPreset } from './EntrySheet';
 
@@ -103,6 +104,8 @@ export function Skill({ id, onAdd }: { id: string; onAdd: (p: EntryPreset) => vo
         {reqs.some((r) => !r.met) && <span class="muted small">Записывать опыт можно и до открытия.</span>}
         {unlocks.length > 0 && <span class="small fg-2">Сам открывает: <b>{unlocks.map((u) => u.title).join(', ')}</b></span>}
       </div>
+
+      <SkillMetrics skillId={id} />
 
       {errors.map((e) => (
         <div class="notice error" key={e.id}>

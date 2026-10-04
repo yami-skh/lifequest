@@ -4,6 +4,8 @@ import { characterLevel, skillLevel } from './levels';
 import { computeProgress, skillProgress } from './progress';
 import { bestStreak, currentStreak } from './dates';
 import { assignStages, currentStage, stagesOf } from './stages';
+import { bestValue, forecastDate, isRecord, milestoneProgress, reached } from './metrics';
+import { countProgress, weekStart } from './quests';
 
 describe('xp', () => {
   it('рамен из документа: практика, тяжело, впервые, с фото = 132', () => {
@@ -57,6 +59,46 @@ describe('фокус, возвращение, ступени', () => {
     const k = (kind: 'theory' | 'practice') => ({ kind });
     expect(assignStages([k('theory'), k('theory'), k('practice'), k('practice'), k('practice')])).toEqual([1, 1, 2, 2, 3]);
     expect(assignStages([k('practice'), k('practice')])).toEqual([1, 2]);
+  });
+});
+
+describe('замеры', () => {
+  const v = (date: string, value: number, reps?: number) => ({ date, value, reps });
+  it('первое значение — не рекорд; дальше рекорд по весу, а при равном весе — по повторам', () => {
+    expect(isRecord([], { value: 60 }, 'up')).toBe(false);
+    expect(isRecord([v('2026-10-01', 60, 6)], { value: 62, reps: 5 }, 'up')).toBe(true);
+    expect(isRecord([v('2026-10-01', 60, 6)], { value: 60, reps: 8 }, 'up')).toBe(true);
+    expect(isRecord([v('2026-10-01', 60, 6)], { value: 60, reps: 6 }, 'up')).toBe(false);
+  });
+  it('для «лучше меньше» рекорд — новое минимальное', () => {
+    expect(isRecord([v('2026-10-01', 75)], { value: 74.2 }, 'down')).toBe(true);
+    expect(bestValue([v('a', 75), v('b', 74), v('c', 76)], 'down')?.value).toBe(74);
+  });
+  it('рубеж: достигнут и доля пути', () => {
+    expect(reached(80, 80, 'up')).toBe(true);
+    expect(reached(74, 73, 'down')).toBe(false);
+    expect(milestoneProgress(50, 62, 80)).toBeCloseTo(0.4);
+    expect(milestoneProgress(76, 74, 72)).toBeCloseTo(0.5);
+  });
+  it('прогноз: +2 кг в неделю от 62 до 80 — через 9 недель', () => {
+    const vals = [v('2026-09-06', 56), v('2026-09-13', 58), v('2026-09-20', 60), v('2026-09-27', 62)];
+    expect(forecastDate(vals, 80, '2026-10-04')).toBe('2026-11-29');
+    expect(forecastDate(vals.slice(0, 2), 80, '2026-10-04')).toBeNull();
+    expect(forecastDate(vals, 40, '2026-10-04')).toBeNull();
+  });
+});
+
+describe('квесты', () => {
+  it('понедельник недели', () => {
+    expect(weekStart('2026-10-04')).toBe('2026-09-28'); // воскресенье
+    expect(weekStart('2026-10-05')).toBe('2026-10-05'); // понедельник
+  });
+  it('счётчики записей', () => {
+    const e = (date: string, type: string, areas: string[], photo = false) => ({ date, type, hasPhoto: photo, skillIds: ['s'], areaIds: areas });
+    const list = [e('2026-09-30', 'workout', ['body']), e('2026-10-01', 'workout', ['body']), e('2026-09-20', 'workout', ['body']), e('2026-10-02', 'practice', ['prac'], true), e('2026-10-02', 'bonus', ['x'])];
+    expect(countProgress({ target: 3, type: 'workout' }, list, '2026-09-28')).toMatchObject({ have: 2, done: false });
+    expect(countProgress({ target: 1, type: 'practice', withPhoto: true }, list, '2026-09-28').done).toBe(true);
+    expect(countProgress({ target: 3, distinctAreas: true }, list, '2026-09-28').have).toBe(2);
   });
 });
 

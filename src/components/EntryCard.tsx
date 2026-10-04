@@ -29,6 +29,8 @@ export function EntryCard({ entry, showDate = true }: { entry: Entry; showDate?:
       <button type="button" class="entry-main" onClick={() => setOpen(!open)} aria-expanded={open}>
         {entry.photoIds[0] ? (
           <Thumb id={entry.photoIds[0]} />
+        ) : entry.type === 'bonus' ? (
+          <span class="entry-icon bonus"><Icon name="trophy" size={22} stroke={2.2} /></span>
         ) : entry.outcome === 'fail' ? (
           <span class="entry-icon fail"><Icon name="x" size={22} stroke={2.4} /></span>
         ) : (
@@ -42,7 +44,7 @@ export function EntryCard({ entry, showDate = true }: { entry: Entry; showDate?:
             {entry.outcome === 'fail' && ' · ошибка'}
           </span>
         </span>
-        <span class="entry-xp">+{primary?.xp ?? 0}</span>
+        <span class="entry-xp">+{primary?.xp ?? entry.rewardXp ?? 0}</span>
       </button>
       {open && (
         <div class="entry-details">

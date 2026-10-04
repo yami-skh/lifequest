@@ -3,7 +3,7 @@ import JSZip from 'jszip';
 import { Capacitor } from '@capacitor/core';
 import { Directory, Filesystem } from '@capacitor/filesystem';
 import { Share } from '@capacitor/share';
-import { db, nowIso, type Entry, type EntrySkill, type Goal, type Node, type Note, type Photo, type Profile, type Unlocked } from '../db/db';
+import { db, nowIso, type Entry, type EntrySkill, type Goal, type Metric, type MetricValue, type Milestone, type Node, type Note, type Photo, type Profile, type Quest, type Unlocked } from '../db/db';
 import { characterLevel } from '../engine/levels';
 import { localDate } from '../engine/dates';
 
@@ -21,6 +21,11 @@ interface BackupData {
   unlocked: Unlocked[];
   notes: Note[];
   photos: Omit<Photo, 'blob' | 'thumb'>[];
+  // с версии 0.4 (в старых копиях полей нет)
+  quests?: Quest[];
+  metrics?: Metric[];
+  metricValues?: MetricValue[];
+  milestones?: Milestone[];
 }
 
 export interface BackupSummary { level: number; entries: number; photos: number; date?: string }
@@ -38,15 +43,16 @@ export async function currentSummary(): Promise<BackupSummary> {
 }
 
 async function buildZip() {
-  const [profile, nodes, goals, entries, entrySkills, unlocked, notes, photos] = await Promise.all([
+  const [profile, nodes, goals, entries, entrySkills, unlocked, notes, photos, quests, metrics, metricValues, milestones] = await Promise.all([
     db.profile.get('me'), db.nodes.toArray(), db.goals.toArray(), db.entries.toArray(),
     db.entrySkills.toArray(), db.unlocked.toArray(), db.notes.toArray(), db.photos.toArray(),
+    db.quests.toArray(), db.metrics.toArray(), db.metricValues.toArray(), db.milestones.toArray(),
   ]);
   const exportedAt = nowIso();
   const data: BackupData = {
     app: 'lifequest', format: FORMAT, exportedAt,
     profile: profile ? { ...profile, lastBackupAt: exportedAt } : profile,
-    nodes, goals, entries, entrySkills, unlocked, notes,
+    nodes, goals, entries, entrySkills, unlocked, notes, quests, metrics, metricValues, milestones,
     photos: photos.map(({ blob: _b, thumb: _t, ...meta }) => meta),
   };
   const zip = new JSZip();
@@ -145,7 +151,7 @@ export async function restoreBackup({ data, zip }: ParsedBackup) {
     const [b, t] = await Promise.all([main.async('blob'), thumb.async('blob')]);
     photos.push({ ...meta, blob: new Blob([b], { type: 'image/jpeg' }), thumb: new Blob([t], { type: 'image/jpeg' }) });
   }
-  const tables = [db.profile, db.nodes, db.goals, db.entries, db.entrySkills, db.unlocked, db.notes, db.photos];
+  const tables = [db.profile, db.nodes, db.goals, db.entries, db.entrySkills, db.unlocked, db.notes, db.photos, db.quests, db.metrics, db.metricValues, db.milestones];
   await db.transaction('rw', tables, async () => {
     await Promise.all(tables.map((t) => t.clear()));
     if (data.profile) await db.profile.add({ ...data.profile, lastBackupAt: data.exportedAt });
@@ -156,5 +162,9 @@ export async function restoreBackup({ data, zip }: ParsedBackup) {
     await db.unlocked.bulkAdd(data.unlocked);
     await db.notes.bulkAdd(data.notes);
     await db.photos.bulkAdd(photos);
+    await db.quests.bulkAdd(data.quests ?? []);
+    await db.metrics.bulkAdd(data.metrics ?? []);
+    await db.metricValues.bulkAdd(data.metricValues ?? []);
+    await db.milestones.bulkAdd(data.milestones ?? []);
   });
 }
