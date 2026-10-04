@@ -20,7 +20,7 @@ export function More() {
         <a class="menu-item" href="#/achievements"><Icon name="trophy" />Достижения<span class="menu-meta">{done}</span></a>
         <div class="menu-item disabled"><Icon name="sword" />Квесты<span class="menu-meta">скоро</span></div>
         <div class="menu-item disabled"><Icon name="chart" />Замеры и рубежи<span class="menu-meta">скоро</span></div>
-        <div class="menu-item disabled"><Icon name="download" />Резервная копия<span class="menu-meta">скоро</span></div>
+        <a class="menu-item" href="#/backup"><Icon name="shield" />Резервная копия<span class="menu-meta">{w.profile?.lastBackupAt ? '' : 'не было'}</span></a>
       </div>
 
       <section class="stack-8">
@@ -33,11 +33,11 @@ export function More() {
 
       <section class="stack-8">
         <SectionLabel>Данные</SectionLabel>
-        <p class="muted small">Всё хранится только на этом устройстве. Резервная копия появится на следующем шаге разработки.</p>
+        <p class="muted small">Всё хранится только на этом устройстве. Сохраняй резервную копию, чтобы не потерять записи.</p>
         <button type="button" class="btn ghost danger-text" onClick={() => setConfirmReset(true)}>Стереть все данные</button>
       </section>
 
-      <p class="muted small center">LifeQuest · прототип 0.1</p>
+      <p class="muted small center">LifeQuest · версия {__APP_VERSION__}</p>
 
       <Confirm
         open={confirmReset}

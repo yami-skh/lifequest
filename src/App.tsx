@@ -12,6 +12,7 @@ import { Skill } from './screens/Skill';
 import { Journal } from './screens/Journal';
 import { More } from './screens/More';
 import { Achievements } from './screens/Achievements';
+import { Backup } from './screens/Backup';
 import { EntrySheet, type EntryPreset } from './screens/EntrySheet';
 
 export function App() {
@@ -38,9 +39,10 @@ export function App() {
   else if (screen === 'journal') page = <Journal />;
   else if (screen === 'more') page = <More />;
   else if (screen === 'achievements') page = <Achievements />;
+  else if (screen === 'backup') page = <Backup />;
   else page = <Character onAdd={() => openEntry()} />;
 
-  const tab = screen === 'tree' || screen === 'skill' ? 'tree' : screen === 'journal' ? 'journal' : screen === 'more' || screen === 'achievements' ? 'more' : 'home';
+  const tab = screen === 'tree' || screen === 'skill' ? 'tree' : screen === 'journal' ? 'journal' : screen === 'more' || screen === 'achievements' || screen === 'backup' ? 'more' : 'home';
 
   return (
     <WorldContext.Provider value={derived}>

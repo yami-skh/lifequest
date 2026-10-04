@@ -6,7 +6,15 @@ import { assignStages } from '../engine/stages';
 
 export type NodeKind = 'area' | 'branch' | 'skill';
 
-export interface Profile { id: 'me'; name: string; createdAt: string; lastBackupAt?: string }
+export interface Profile {
+  id: 'me';
+  name: string;
+  createdAt: string;
+  /** Когда последний раз сохраняли резервную копию (ISO). */
+  lastBackupAt?: string;
+  /** Напоминать о копии раз в неделю; по умолчанию да. */
+  backupReminder?: boolean;
+}
 
 export interface Requirement { nodeId: string; minProgress?: number; minLevel?: number }
 

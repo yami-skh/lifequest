@@ -4,6 +4,7 @@ import { AreaTile, ProgressBar, SectionLabel, pctText } from '../components/ui';
 import { EntryCard } from '../components/EntryCard';
 import { InstallCard } from '../components/InstallCard';
 import { FocusBlock, HintsBlock } from '../components/FocusAndHints';
+import { BackupReminder } from './Backup';
 
 export function Character({ onAdd }: { onAdd: () => void }) {
   const w = useWorld();
@@ -42,6 +43,8 @@ export function Character({ onAdd }: { onAdd: () => void }) {
           <span>всего {w.totalXp} XP</span>
         </div>
       </section>
+
+      <BackupReminder />
 
       <InstallCard />
 
