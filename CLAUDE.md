@@ -9,6 +9,7 @@ RPG-трекер саморазвития для брата пользовате
 | Где код, какая функция на какой строке | [docs/CODEMAP.md](docs/CODEMAP.md) → Read с `offset`/`limit` только нужного куска |
 | Механика, формулы | [ARCHITECTURE.md](ARCHITECTURE.md) — оглавление → один файл из `docs/arch/` |
 | Что сделано, что дальше | раздел «Статус» ниже; роудмап — `docs/project-map.html` |
+| Заметки и пожелания, не взятые в работу | [docs/BACKLOG.md](docs/BACKLOG.md) |
 | Макеты экранов | `design/project/*.dc.html` (локальная копия холста) |
 
 Модель данных: истина — `src/db/db.ts`, а не `docs/arch/07-data-model.md`.
