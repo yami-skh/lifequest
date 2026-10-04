@@ -13,6 +13,7 @@ import { RequirementsSheet } from '../components/RequirementsSheet';
 import { SkillMetrics } from './Metrics';
 import { usePhotoUrl } from '../lib/photo';
 import type { EntryPreset } from './EntrySheet';
+import { useBackClose } from '../lib/backButton';
 
 type Tab = 'goals' | 'exp' | 'notes' | 'gallery';
 // Короткие подписи: четыре вкладки должны влезать в строку на телефоне.
@@ -281,6 +282,7 @@ function GalleryItem({ id, onOpen }: { id: string; onOpen: () => void }) {
 }
 
 function FullPhoto({ id, onClose }: { id: string; onClose: () => void }) {
+  useBackClose(true, onClose);
   const url = usePhotoUrl(id, 'full');
   return (
     <div class="lightbox" onClick={onClose} role="dialog" aria-label="Фото">

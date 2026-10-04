@@ -2,6 +2,7 @@
 // Макет: холст, страница «Упрощение», экран 3.
 import { useEffect, useState } from 'preact/hooks';
 import { Icon } from './Icon';
+import { useBackClose } from '../lib/backButton';
 
 export interface NumPadProps {
   label: string;
@@ -23,6 +24,7 @@ export const fmtInput = (n: number) => (Math.round(n * 10) / 10).toString().repl
 export function NumPad({ label, value, onChange, step, decimal = false, doneLabel = 'Готово', onDone, onClose }: NumPadProps) {
   // Первая цифра заменяет подставленное значение (как в калькуляторе), дальше — дописывается.
   const [fresh, setFresh] = useState(true);
+  useBackClose(true, onClose);
   useEffect(() => setFresh(true), [label]);
 
   const type = (k: string) => {

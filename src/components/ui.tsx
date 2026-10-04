@@ -3,6 +3,7 @@ import { useEffect } from 'preact/hooks';
 import { Icon } from './Icon';
 import { back } from '../lib/router';
 import type { Node } from '../db/db';
+import { useBackClose } from '../lib/backButton';
 
 export function ProgressBar({ pct, color = 'var(--green)', height = 8 }: { pct: number; color?: string; height?: number }) {
   return (
@@ -69,6 +70,7 @@ export function TopBar({ title, crumbs, right }: { title?: string; crumbs?: stri
 }
 
 export function Sheet({ open, onClose, title, children }: { open: boolean; onClose: () => void; title: string; children: ComponentChildren }) {
+  useBackClose(open, onClose);
   useEffect(() => {
     if (!open) return;
     const prev = document.body.style.overflow;

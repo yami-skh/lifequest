@@ -19,14 +19,14 @@
   PATHS:3, *IconName:64, *Icon:66
 - **InstallCard.tsx** (46)
   HIDE_KEY:6, *InstallCard:9
-- **NumPad.tsx** (77) — Крупная цифровая клавиатура для весов, повторов и целей.
-  *NumPadProps:6, parse:20, *fmtInput:21, *NumPad:23, *numFrom:73
+- **NumPad.tsx** (79) — Крупная цифровая клавиатура для весов, повторов и целей.
+  *NumPadProps:7, parse:21, *fmtInput:22, *NumPad:24, *numFrom:75
 - **RequirementsSheet.tsx** (123) — Настройка требований навыка. ARCHITECTURE.md §16, идея 4.
   PRESETS:9, *RequirementsSheet:11
 - **SetsEditor.tsx** (106) — Тренировка подходами: «вес × повторы», + подход, «как в прошлый раз».
   Field:9, *setsText:11, *SetsEditor:13
-- **ui.tsx** (125)
-  *ProgressBar:7, *LevelBadge:15, *Ring:26, *AreaTile:47, *TopBar:56, *Sheet:71, *Confirm:97, *SectionLabel:111, *Check:120, *pctText:124
+- **ui.tsx** (127)
+  *ProgressBar:8, *LevelBadge:16, *Ring:27, *AreaTile:48, *TopBar:57, *Sheet:72, *Confirm:99, *SectionLabel:113, *Check:122, *pctText:126
 
 ## src/db
 
@@ -61,6 +61,8 @@
 
 ## src/lib
 
+- **backButton.ts** (60) — Системная кнопка «Назад» в APK: закрывает верхнее открытое (клавиатура, шторка, фото),
+  stack:9, *useBackClose:12, EXIT_MS:26, exitArmedAt:27, *closeTop:30, *handleBack:37, *initBackButton:49
 - **backup.ts** (171) — Резервная копия: всё в один .zip — data.json + фото. ARCHITECTURE.md §12.
   FORMAT:10, BackupData:12, *BackupSummary:31, summarize:33, *currentSummary:40, buildZip:45, toBase64:69, *exportBackup:81, download:111, *ParsedBackup:121, *readBackup:124, *restoreBackup:145
 - **install.ts** (52) — Установка PWA: ловим событие beforeinstallprompt от Chrome и показываем свою кнопку.
@@ -74,8 +76,8 @@
 
 ## src
 
-- **main.tsx** (19)
-  start:8
+- **main.tsx** (21)
+  start:9
 
 ## src/screens
 
@@ -95,8 +97,8 @@
   SOON:9, *More:18
 - **Quests.tsx** (447) — Квесты. Макет: холст, страница «Квесты». ARCHITECTURE.md §6.
   KIND_TITLE:14, daysToMonday:16, *QuestCard:22, WeeklyRow:43, *Quests:64, *QuestDetail:148, stepKindLabel:228, DraftKind:232, NewQuestSheet:234, StepBuilder:313, *QuestsBlock:412
-- **Skill.tsx** (302)
-  Tab:17, TABS:19, *stagesToast:21, *Skill:24, GoalRow:146, Goals:159, Notes:238, GalleryItem:278, FullPhoto:283, Gallery:292
+- **Skill.tsx** (304)
+  Tab:18, TABS:20, *stagesToast:22, *Skill:25, GoalRow:147, Goals:160, Notes:239, GalleryItem:279, FullPhoto:284, Gallery:294
 - **Tree.tsx** (288)
   Editor:12, loadExpanded:17, *Tree:25, .toggle:36, .skillCount:54, .skillsIn:57, .menuBtn:60, .renderChildren:66, .renderNode:76, KIND_LABEL:214, NodeEditor:216
 
