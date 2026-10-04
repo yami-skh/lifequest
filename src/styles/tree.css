@@ -10,7 +10,7 @@
 .tree-add { display: flex; gap: 18px; padding-bottom: 6px; }
 .tree-skill-wrap { display: flex; align-items: center; gap: 2px; }
 .tree-skill { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px; padding: 10px 12px; border-radius: 12px; background: var(--surface); border: 1px solid var(--line); }
-.tree-skill.locked { background: #13151B; border-style: dashed; border-color: var(--line-2); }
+.tree-skill.locked { background: var(--fog); border-style: dashed; border-color: var(--line-2); }
 .tree-skill-title { display: flex; align-items: center; gap: 6px; font-weight: 700; min-width: 0; overflow-wrap: anywhere; }
 .tree-skill.locked .tree-skill-title { color: var(--muted); }
 .tree-skill-meta { display: flex; align-items: center; gap: 8px; font-size: 13px; flex-shrink: 0; }
@@ -62,12 +62,12 @@
 .t-skill-title svg path { fill: currentColor; }
 .t-skill.focus .t-skill-card { border-color: var(--gold); }
 /* туман: навык ещё не исследован */
-.t-skill.fog .t-skill-card { background: #13151B; border-color: var(--surface-2); opacity: 0.78; }
+.t-skill.fog .t-skill-card { background: var(--fog); border-color: var(--surface-2); opacity: 0.78; }
 .t-skill.fog .t-skill-title { color: var(--fg-2); }
 .t-lvl.muted { color: var(--muted-2); }
 /* ржавчина: 60+ дней без записей */
 .t-skill-card { position: relative; }
-.t-skill.rusty .t-skill-card { background: #1A1C22; border-color: #3A3F49; filter: saturate(0.35); }
+.t-skill.rusty .t-skill-card { background: var(--fog); border-color: var(--line-2); filter: saturate(0.35); }
 .t-skill.rusty .t-skill-title { color: var(--fg-2); }
 .t-web { position: absolute; top: -4px; right: -4px; color: var(--muted-2); opacity: 0.7; pointer-events: none; }
 .t-skill.locked .t-skill-card { background: transparent; border-style: dashed; border-color: var(--line-2); }

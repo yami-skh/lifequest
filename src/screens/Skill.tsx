@@ -17,6 +17,7 @@ import { MilestoneCard, SkillMetrics, Sparkline, lastSetsOf, usesSets, type Metr
 import { usePhotoUrl } from '../lib/photo';
 import type { EntryPreset } from './EntrySheet';
 import { useBackClose } from '../lib/backButton';
+import { ac } from '../lib/theme';
 
 export const stagesToast = (names: string[]) =>
   names.forEach((n) => toast({ kind: 'achievement', title: `Ступень «${n}» пройдена`, sub: `+${STAGE_BONUS} XP` }));
@@ -41,7 +42,7 @@ export function Skill({ id, onAdd }: { id: string; onAdd: (p: EntryPreset) => vo
     );
   }
   const area = w.areaOf(id);
-  const color = area?.color ?? 'var(--gold)';
+  const color = ac(area?.color) ?? 'var(--gold)';
   const lv = w.skillLevelOf(id);
   const prog = w.skillProgressOf(id);
   const reqs = w.requirementsOf(node);
@@ -91,7 +92,7 @@ export function Skill({ id, onAdd }: { id: string; onAdd: (p: EntryPreset) => vo
 
       {!workout && (
         <div class="stack-8">
-          <ProgressBar pct={prog?.pct ?? 0} color={area?.color} height={10} />
+          <ProgressBar pct={prog?.pct ?? 0} color={ac(area?.color)} height={10} />
           <div class="spread small strong">
             <span>{prog ? `${Math.round(prog.pct)}%` : 'Нет целей'}</span>
             <span class="muted">{prog ? `${cur ? `ступень ${cur.stage} из ${stages.length} · ` : ''}${prog.done} из ${prog.total} целей` : 'добавь цели, чтобы появилась полоска'}</span>
@@ -226,7 +227,7 @@ function WorkoutCard({ info }: { info: MetricInfo }) {
           <span class="muted small">рекорд</span>
           <span class="workout-record">{best ? `${fmtNum(best.value)} ${m.unit}${best.reps ? ` × ${best.reps}` : ''} · ${humanDate(best.date).toLowerCase()}` : '—'}</span>
         </span>
-        <span style={{ '--c': '#FF8A5B' }}><Sparkline info={info} /></span>
+        <span style={{ '--c': 'var(--orange)' }}><Sparkline info={info} /></span>
       </span>
     </a>
   );

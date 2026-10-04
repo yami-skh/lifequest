@@ -2,6 +2,7 @@
 import { useWorld } from '../db/world';
 import { Icon } from './Icon';
 import { Ring, SectionLabel } from './ui';
+import { ac } from '../lib/theme';
 
 export function FocusBlock() {
   const w = useWorld();
@@ -15,7 +16,7 @@ export function FocusBlock() {
         <div class="focus-grid">
           {list.map((n) => {
             const lv = w.skillLevelOf(n.id);
-            const color = w.areaOf(n.id)?.color;
+            const color = ac(w.areaOf(n.id)?.color);
             const fresh = !w.explored(n.id);
             return (
               <a class="focus-card" href={`#/skill/${n.id}`} key={n.id} style={{ '--c': color }}>

@@ -4,6 +4,7 @@ import { Icon } from './Icon';
 import { back } from '../lib/router';
 import type { Node } from '../db/db';
 import { useBackClose } from '../lib/backButton';
+import { ac } from '../lib/theme';
 
 export function ProgressBar({ pct, color = 'var(--green)', height = 8 }: { pct: number; color?: string; height?: number }) {
   return (
@@ -46,7 +47,7 @@ export function Ring({ pct, size = 44, stroke = 4, color = 'var(--gold)', childr
 }
 
 export function AreaTile({ node, size = 40 }: { node: Node | undefined; size?: number }) {
-  const color = node?.color ?? 'var(--muted)';
+  const color = ac(node?.color) ?? 'var(--muted)';
   return (
     <span class="area-tile" style={{ width: `${size}px`, height: `${size}px`, color, background: `color-mix(in srgb, ${color} 16%, transparent)` }}>
       {node?.icon ? <Icon name={node.icon} size={Math.round(size * 0.55)} /> : node?.title.slice(0, 1) ?? '?'}

@@ -5,10 +5,13 @@ import { Capacitor } from '@capacitor/core';
 import { registerSW } from 'virtual:pwa-register';
 import { initBackButton } from './lib/backButton';
 import { initUpdates } from './lib/update';
+import { initTheme } from './lib/theme';
 // Шрифты внутри сборки: APK и сайт без интернета выглядят как в макете.
 import '@fontsource-variable/manrope';
 import '@fontsource-variable/unbounded';
 import './styles/index.css';
+
+initTheme();
 
 async function start() {
   await seedIfEmpty();

@@ -5,9 +5,9 @@
 .topbar-title { font-family: var(--display); font-size: 20px; font-weight: 700; }
 .skill-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap; }
 .level-badge { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; padding: 8px 12px; border-radius: 12px; background: var(--gold-bg); min-width: 140px; }
-.level-badge .bar { background: #4A3B1C; }
+.level-badge .bar { background: var(--gold-line); }
 .level-badge-title { font-size: 13px; color: var(--gold); font-weight: 800; }
-.level-badge-sub { font-size: 11px; color: #C9B48A; font-weight: 600; }
+.level-badge-sub { font-size: 11px; color: var(--gold-soft); font-weight: 600; }
 .notice { display: flex; gap: 12px; padding: 14px; border-radius: 14px; background: var(--surface); border: 1px dashed var(--line-2); color: var(--fg-2); }
 .notice a { color: var(--gold); }
 .notice.error { background: var(--red-bg); border: 1px solid rgba(255, 122, 122, 0.35); }
@@ -63,7 +63,7 @@
 .focus-star.on { min-height: 32px; margin: 6px 0; background: var(--gold-bg); }
 .focus-star.on svg path { fill: currentColor; }
 .workout-card { display: flex; flex-direction: column; gap: 12px; padding: 14px; border-radius: 18px; background: var(--surface); color: var(--fg); }
-.workout-label { font-size: 12px; font-weight: 800; letter-spacing: 0.6px; text-transform: uppercase; color: #FF8A5B; }
+.workout-label { font-size: 12px; font-weight: 800; letter-spacing: 0.6px; text-transform: uppercase; color: var(--orange); }
 .set-chips { display: flex; flex-wrap: wrap; gap: 8px; }
 .set-chip { padding: 8px 12px; border-radius: 12px; background: var(--surface-2); font-family: var(--display); font-size: 15px; font-weight: 700; }
 .set-chip small { font-size: 11px; color: var(--muted); }

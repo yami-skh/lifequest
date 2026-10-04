@@ -8,6 +8,7 @@ import { go } from '../lib/router';
 import { Icon } from '../components/Icon';
 import { AreaTile, Confirm, Ring, Sheet, pctText } from '../components/ui';
 import { plural } from './Character';
+import { ac } from '../lib/theme';
 
 type Editor =
   | { mode: 'menu'; node: Node }
@@ -139,7 +140,7 @@ export function Tree({ focusId }: { focusId?: string }) {
     const count = skillCount(n);
     const explored = skillsIn(n).filter((s) => w.explored(s.id)).length;
     return (
-      <section class={open ? 't-area open' : 't-area'} key={n.id} style={{ '--c': n.color ?? 'var(--muted)' }}>
+      <section class={open ? 't-area open' : 't-area'} key={n.id} style={{ '--c': ac(n.color) ?? 'var(--muted)' }}>
         <div class="t-area-head">
           <button type="button" class="t-area-btn" onClick={() => toggle(n.id)} aria-expanded={open}>
             <AreaTile node={n} size={44} />

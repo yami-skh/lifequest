@@ -12,6 +12,7 @@ import { toast } from '../lib/toast';
 import { go } from '../lib/router';
 import { Icon } from '../components/Icon';
 import { Confirm, ProgressBar, SectionLabel, Sheet, TopBar } from '../components/ui';
+import { ac } from '../lib/theme';
 
 type Info = ReturnType<ReturnType<typeof useWorld>['metricInfo']>;
 export type MetricInfo = Info;
@@ -71,7 +72,7 @@ export function Metrics() {
           <SectionLabel>{title}</SectionLabel>
           {list.map((i) => {
             const d = deltaText(i);
-            const color = i.metric.skillId ? w.areaOf(i.metric.skillId)?.color : undefined;
+            const color = i.metric.skillId ? ac(w.areaOf(i.metric.skillId)?.color) : undefined;
             if (!i.last) {
               return (
                 <div class="metric-row empty" key={i.metric.id}>
@@ -81,7 +82,7 @@ export function Metrics() {
               );
             }
             return (
-              <a class="metric-row" href={`#/metrics/${i.metric.id}`} key={i.metric.id} style={{ '--c': color ?? '#FF8A5B' }}>
+              <a class="metric-row" href={`#/metrics/${i.metric.id}`} key={i.metric.id} style={{ '--c': color ?? 'var(--orange)' }}>
                 <span class="metric-name"><span class="strong">{i.metric.title}</span><span class="muted small">{humanDate(i.last.date)}{i.last.record ? ' · рекорд' : i.metric.better === 'down' ? ' · лучше меньше' : ''}</span></span>
                 <Sparkline info={i} />
                 <span class="metric-val">
@@ -113,7 +114,7 @@ export function MilestoneCard({ info, link = false }: { info: Info; link?: boole
         <span class="ms-title"><Icon name="target" size={18} stroke={2.2} />Рубеж: {m.title.toLowerCase()} {goal}</span>
         <span class="muted small strong">{ms.start === undefined ? '' : `${Math.round(info.milestonePct)}%`}</span>
       </span>
-      <ProgressBar pct={info.milestonePct} color="#FF8A5B" height={8} />
+      <ProgressBar pct={info.milestonePct} color="var(--orange)" height={8} />
       {ms.start === undefined ? (
         <span class="small muted">старт возьмётся из первого значения</span>
       ) : (
@@ -163,12 +164,12 @@ function Chart({ info }: { info: Info }) {
         ))}
         {target !== undefined && (
           <g>
-            <line x1={L} x2={W - R} y1={y(target)} y2={y(target)} stroke="#FF8A5B" stroke-width="1.5" stroke-dasharray="6 5" />
-            <text x={W - R} y={y(target) - 6} text-anchor="end" fill="#FF8A5B" font-size="11" font-weight="700">рубеж {fmtNum(target)}</text>
+            <line x1={L} x2={W - R} y1={y(target)} y2={y(target)} stroke="var(--orange)" stroke-width="1.5" stroke-dasharray="6 5" />
+            <text x={W - R} y={y(target) - 6} text-anchor="end" fill="var(--orange)" font-size="11" font-weight="700">рубеж {fmtNum(target)}</text>
           </g>
         )}
-        {vals.length > 1 && <polyline points={vals.map((v, i) => `${x(i)},${y(v.value)}`).join(' ')} fill="none" stroke="#FF8A5B" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" />}
-        {vals.map((v, i) => <circle key={v.id} cx={x(i)} cy={y(v.value)} r={v.record ? 5 : 3.5} fill={v.record ? 'var(--gold)' : '#FF8A5B'} stroke={v.record ? 'var(--surface)' : 'none'} stroke-width="2" />)}
+        {vals.length > 1 && <polyline points={vals.map((v, i) => `${x(i)},${y(v.value)}`).join(' ')} fill="none" stroke="var(--orange)" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" />}
+        {vals.map((v, i) => <circle key={v.id} cx={x(i)} cy={y(v.value)} r={v.record ? 5 : 3.5} fill={v.record ? 'var(--gold)' : 'var(--orange)'} stroke={v.record ? 'var(--surface)' : 'none'} stroke-width="2" />)}
         <text x={x(0)} y={H - 6} text-anchor="start" fill="var(--muted-2)" font-size="10">{humanDate(vals[0].date)}</text>
         {vals.length > 1 && <text x={x(vals.length - 1)} y={H - 6} text-anchor="end" fill="var(--muted-2)" font-size="10">{humanDate(vals[vals.length - 1].date)}</text>}
       </svg>

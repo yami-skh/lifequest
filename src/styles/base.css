@@ -17,11 +17,70 @@
   --red: #FF7A7A;
   --red-bg: rgba(240, 96, 96, 0.1);
   --on-gold: #14161C;
+  --line-3: #4A5160;
+  --input: #0F1116;
+  --fog: #13151B;
+  --gold-bg-2: #1D1A12;
+  --gold-line: #5A4720;
+  --gold-soft: #C9B48A;
+  --red-soft: #FF9C9C;
+  --orange: #FF8A5B;
+  --orange-bg: rgba(255, 138, 91, 0.08);
+  --orange-line: rgba(255, 138, 91, 0.4);
+  --orange-bg-2: #2A1E14;
+  --blue: #7AA7FF;
+  --blue-bg: rgba(122, 167, 255, 0.15);
+  --nav-bg: #151821;
   --display: 'Unbounded Variable', 'Unbounded', 'Segoe UI', system-ui, sans-serif;
   --body: 'Manrope Variable', 'Manrope', 'Segoe UI', system-ui, sans-serif;
   --nav-h: 76px;
   --safe-b: env(safe-area-inset-bottom, 0px);
   color-scheme: dark;
+}
+
+/* Светлая тема (макет: холст, «Настройки и обновления»). Соответствие цветов — tools/light_palette.py. */
+:root[data-theme='light'] {
+  --bg: #F4F2ED;
+  --surface: #FFFFFF;
+  --surface-2: #EFECE6;
+  --surface-3: #E3DFD7;
+  --line: #E3DFD7;
+  --line-2: #CFC9BE;
+  --line-3: #B5AEA2;
+  --fg: #1B1D23;
+  --fg-2: #3A3F4A;
+  --muted: #626877;
+  --muted-2: #7C8290;
+  --gold: #A86A08;
+  --gold-bg: #FBF0DA;
+  --gold-bg-2: #FBF0DA;
+  --gold-line: #E2C27D;
+  --gold-soft: #7A5A1E;
+  --green: #1E9E73;
+  --green-fg: #137A57;
+  --red: #C93A3A;
+  --red-bg: rgba(201, 58, 58, 0.08);
+  --red-soft: #B23A3A;
+  --on-gold: #FFFFFF;
+  --input: #F7F5F1;
+  --fog: #ECE9E3;
+  --orange: #D9561F;
+  --orange-bg: rgba(217, 86, 31, 0.08);
+  --orange-line: rgba(217, 86, 31, 0.4);
+  --orange-bg-2: #FCEBDD;
+  --blue: #2F66D0;
+  --blue-bg: rgba(47, 102, 208, 0.12);
+  --nav-bg: #FFFFFF;
+  /* цвета направлений (src/db/seed.ts AREA_COLORS) — темнее, чтобы читались на белом */
+  --a-7AA7FF: #2F66D0;
+  --a-FF8A5B: #D9561F;
+  --a-4CC9A0: #1E9E73;
+  --a-E08AE8: #A93DB5;
+  --a-B9A4FF: #6B4FD8;
+  --a-F2C94C: #A8820A;
+  --a-5BC0EB: #1F87B5;
+  --a-FF7A9C: #D23F68;
+  color-scheme: light;
 }
 
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -72,7 +131,7 @@ main { padding-bottom: calc(var(--nav-h) + var(--safe-b) + 24px); }
 
 
 /* нижняя панель */
-.bottom-nav { position: fixed; left: 0; right: 0; bottom: 0; z-index: 30; height: calc(var(--nav-h) + var(--safe-b)); padding-bottom: var(--safe-b); background: #151821; border-top: 1px solid var(--line); display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); align-items: start; }
+.bottom-nav { position: fixed; left: 0; right: 0; bottom: 0; z-index: 30; height: calc(var(--nav-h) + var(--safe-b)); padding-bottom: var(--safe-b); background: var(--nav-bg); border-top: 1px solid var(--line); display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); align-items: start; }
 .bottom-nav a { display: flex; flex-direction: column; align-items: center; gap: 4px; padding-top: 12px; min-height: 60px; font-size: 11px; font-weight: 600; color: var(--muted-2); }
 .bottom-nav a.on { color: var(--gold); font-weight: 700; }
 .fab { background: none; border: 0; padding: 0; display: flex; justify-content: center; }
@@ -83,7 +142,7 @@ main { padding-bottom: calc(var(--nav-h) + var(--safe-b) + 24px); }
 .toasts { position: fixed; left: 0; right: 0; top: calc(env(safe-area-inset-top, 0px) + 12px); z-index: 70; display: flex; flex-direction: column; align-items: center; gap: 8px; pointer-events: none; padding: 0 16px; }
 .toast { display: flex; align-items: center; gap: 10px; padding: 12px 18px; border-radius: 16px; background: var(--surface-3); border: 1px solid var(--line-2); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); animation: drop 0.25s ease; max-width: 100%; }
 .toast.xp { background: var(--gold); color: var(--on-gold); border-color: var(--gold); }
-.toast.level, .toast.achievement { background: #1D1A12; border-color: var(--gold); color: var(--gold); }
+.toast.level, .toast.achievement { background: var(--gold-bg-2); border-color: var(--gold); color: var(--gold); }
 .toast-text { display: flex; flex-direction: column; }
 .toast-title { font-family: var(--display); font-weight: 700; font-size: 17px; }
 .toast-sub { font-size: 12.5px; font-weight: 700; opacity: 0.85; }

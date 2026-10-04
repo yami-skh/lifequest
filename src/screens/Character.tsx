@@ -5,8 +5,10 @@ import { AreaTile, ProgressBar, Ring, SectionLabel, pctText } from '../component
 import { EntryCard } from '../components/EntryCard';
 import { InstallCard } from '../components/InstallCard';
 import { BackupReminder } from './Backup';
+import { UpdateCard } from './Settings';
 import { weekStart } from '../engine/quests';
 import { localDate } from '../engine/dates';
+import { ac } from '../lib/theme';
 
 export function Character({ onAdd }: { onAdd: () => void }) {
   const w = useWorld();
@@ -33,8 +35,8 @@ export function Character({ onAdd }: { onAdd: () => void }) {
         </div>
       </header>
 
-      {/* Один баннер за раз: сначала «Установи», потом напоминание о копии. */}
-      <InstallCard fallback={<BackupReminder />} />
+      {/* Один баннер за раз: обновление, потом «Установи», потом напоминание о копии. */}
+      <UpdateCard fallback={<InstallCard fallback={<BackupReminder />} />} />
 
       <TodayCard onAdd={onAdd} />
 
@@ -44,12 +46,12 @@ export function Character({ onAdd }: { onAdd: () => void }) {
           {w.areas.map((a) => {
             const p = w.progress.get(a.id);
             return (
-              <a class="area-cell" href={`#/tree/${a.id}`} key={a.id} style={{ '--c': a.color ?? 'var(--muted)' }}>
+              <a class="area-cell" href={`#/tree/${a.id}`} key={a.id} style={{ '--c': ac(a.color) ?? 'var(--muted)' }}>
                 <span class="spread area-cell-top">
                   <span class="area-cell-name">{a.icon ? <Icon name={a.icon} size={16} stroke={2.2} /> : <AreaTile node={a} size={16} />}{a.title}</span>
                   <span class="muted">{pctText(p)}</span>
                 </span>
-                <ProgressBar pct={p ?? 0} color={a.color} height={5} />
+                <ProgressBar pct={p ?? 0} color={ac(a.color)} height={5} />
               </a>
             );
           })}
@@ -101,7 +103,7 @@ function TodayCard({ onAdd }: { onAdd: () => void }) {
             const lv = w.skillLevelOf(n.id);
             const fresh = !w.explored(n.id);
             return (
-              <a class="focus-pill" href={`#/skill/${n.id}`} key={n.id} style={{ '--c': w.areaOf(n.id)?.color ?? 'var(--gold)' }}>
+              <a class="focus-pill" href={`#/skill/${n.id}`} key={n.id} style={{ '--c': ac(w.areaOf(n.id)?.color) ?? 'var(--gold)' }}>
                 <Ring pct={fresh ? 0 : lv.pct} size={28} stroke={3} color="var(--c)"><span class="pill-lvl">{fresh ? 0 : lv.level}</span></Ring>
                 <span class="pill-title">{n.title}</span>
               </a>

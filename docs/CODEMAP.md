@@ -6,15 +6,15 @@
 
 ## src
 
-- **App.tsx** (129)
-  *App:23, useGameEvents:77, Toasts:111
+- **App.tsx** (131)
+  *App:24, useGameEvents:79, Toasts:113
 
 ## src/components
 
 - **EntryCard.tsx** (83)
   Thumb:12, *EntryCard:17
-- **FocusAndHints.tsx** (78) — Главный экран: «В фокусе» и «Ближайшее». ARCHITECTURE.md §16, идеи 1 и 5.
-  *FocusBlock:6, *HintsBlock:36
+- **FocusAndHints.tsx** (79) — Главный экран: «В фокусе» и «Ближайшее». ARCHITECTURE.md §16, идеи 1 и 5.
+  *FocusBlock:7, *HintsBlock:37
 - **Icon.tsx** (73) — Контурные иконки 24×24, цвет берут из currentColor.
   PATHS:3, *IconName:64, *Icon:66
 - **InstallCard.tsx** (46)
@@ -25,13 +25,13 @@
   PRESETS:9, *RequirementsSheet:11
 - **SetsEditor.tsx** (106) — Тренировка подходами: «вес × повторы», + подход, «как в прошлый раз».
   Field:9, *setsText:11, *SetsEditor:13
-- **ui.tsx** (127)
-  *ProgressBar:8, *LevelBadge:16, *Ring:27, *AreaTile:48, *TopBar:57, *Sheet:72, *Confirm:99, *SectionLabel:113, *Check:122, *pctText:126
+- **ui.tsx** (128)
+  *ProgressBar:9, *LevelBadge:17, *Ring:28, *AreaTile:49, *TopBar:58, *Sheet:73, *Confirm:100, *SectionLabel:114, *Check:123, *pctText:127
 
 ## src/data
 
-- **changelog.ts** (89) — Что нового в версиях — для пользователя, простыми словами. Новые версии — сверху.
-  *ChangeKind:4, *Change:5, *Release:6, *CHANGELOG:8, *SEEN_BEFORE_CHANGELOG:88
+- **changelog.ts** (100) — Что нового в версиях — для пользователя, простыми словами. Новые версии — сверху.
+  *ChangeKind:4, *Change:5, *Release:6, *CHANGELOG:8, *SEEN_BEFORE_CHANGELOG:99
 
 ## src/db
 
@@ -78,6 +78,8 @@
   decode:5, resize:21, *compressPhoto:34, *usePhotoUrl:42, *useBlobUrl:62
 - **router.ts** (27) — Простой роутер на hash: работает на GitHub Pages без настройки сервера.
   parse:4, *useRoute:6, *go:19, *back:23
+- **theme.ts** (51) — Тема оформления: «как в системе» (по умолчанию), тёмная или светлая. Выбор — на устройстве (localStorage),
+  *ThemePref:5, KEY:6, media:7, listeners:8, *getThemePref:10, apply:19, *setThemePref:25, *initTheme:35, *useThemePref:40, *ac:50
 - **toast.ts** (66) — Всплывашки: XP, новый уровень, достижения.
   *ToastKind:5, *Toast:6, MERGE_MS:9, LIFETIME:10, RANK:11, toasts:13, nextId:14, lastGame:15, timers:16, listeners:17, emit:18, schedule:20, *toast:29, *useToasts:56
 - **update.ts** (107) — Автообновление APK. Сайт обновляется сам (service worker), здесь — только приложение.
@@ -85,8 +87,8 @@
 
 ## src
 
-- **main.tsx** (26)
-  start:13
+- **main.tsx** (29)
+  start:16
 
 ## src/screens
 
@@ -96,27 +98,29 @@
   *Backup:14, agoText:144, *BackupReminder:152
 - **Changelog.tsx** (107) — «Что нового»: окно один раз после обновления и история версий в «Ещё». Макет: холст, страница «Что нового».
   KIND:11, ORDER:16, fmtDate:18, changesWord:19, *WhatsNew:22, ChangeRow:60, *Changelog:70, ReleaseCard:85
-- **Character.tsx** (147) — Главный экран — всё важное примерно в один экран. Макет: холст, страница «Упрощение», экран 1.
-  *Character:11, WEEK_SHORT:76, TodayCard:79, *plural:140
+- **Character.tsx** (149) — Главный экран — всё важное примерно в один экран. Макет: холст, страница «Упрощение», экран 1.
+  *Character:13, WEEK_SHORT:78, TodayCard:81, *plural:142
 - **EntrySheet.tsx** (283) — «＋ Запись» — главный сценарий, цель 15 секунд. Макет: холст, страница «Упрощение», экраны 2–3.
   *EntryPreset:18, LAST_TYPE:20, loadType:21, PhotoPreview:30, *EntrySheet:40, .setType:60, .choosePrimary:98, .addSecondary:107, .onFiles:114, .save:125
 - **Journal.tsx** (45)
   *Journal:7
-- **Metrics.tsx** (484) — Замеры и рубежи. Макет: холст, страница «Замеры и рубежи». ARCHITECTURE.md §8.
-  Info:16, *MetricInfo:17, *metricToasts:19, *Sparkline:24, deltaText:40, *Metrics:46, *MilestoneCard:103, Chart:140, *MetricDetail:179, *usesSets:249, *lastSetsOf:252, *recordHintFor:260, *BigNumber:270, PhotoThumb:287, AddValueSheet:297, MilestoneSheet:351, bestRepsAtOf:424, NewMetricSheet:430, *SkillMetrics:467
-- **More.tsx** (76)
-  SOON:9, *More:18
+- **Metrics.tsx** (485) — Замеры и рубежи. Макет: холст, страница «Замеры и рубежи». ARCHITECTURE.md §8.
+  Info:17, *MetricInfo:18, *metricToasts:20, *Sparkline:25, deltaText:41, *Metrics:47, *MilestoneCard:104, Chart:141, *MetricDetail:180, *usesSets:250, *lastSetsOf:253, *recordHintFor:261, *BigNumber:271, PhotoThumb:288, AddValueSheet:298, MilestoneSheet:352, bestRepsAtOf:425, NewMetricSheet:431, *SkillMetrics:468
+- **More.tsx** (51)
+  SOON:7, *More:16
 - **Quests.tsx** (447) — Квесты. Макет: холст, страница «Квесты». ARCHITECTURE.md §6.
   KIND_TITLE:14, daysToMonday:16, *QuestCard:22, WeeklyRow:43, *Quests:64, *QuestDetail:148, stepKindLabel:228, DraftKind:232, NewQuestSheet:234, StepBuilder:313, *QuestsBlock:412
-- **Skill.tsx** (430)
-  *stagesToast:21, Fold:24, word:25, *Skill:29, .toggle:59, .onFocus:61, FoldRow:187, WorkoutCard:201, SkillMenu:236, GoalRow:273, Goals:286, Notes:365, GalleryItem:405, FullPhoto:410, Gallery:420
-- **Tree.tsx** (288)
-  Editor:12, loadExpanded:17, *Tree:25, .toggle:36, .skillCount:54, .skillsIn:57, .menuBtn:60, .renderChildren:66, .renderNode:76, KIND_LABEL:214, NodeEditor:216
+- **Settings.tsx** (162) — Настройки: персонаж, тема, недельные квесты, резервная копия, о приложении, стереть данные.
+  THEMES:16, Toggle:22, Group:31, *Settings:40, AboutRow:111, hiddenThisSession:130, *UpdateCard:131
+- **Skill.tsx** (431)
+  *stagesToast:22, Fold:25, word:26, *Skill:30, .toggle:60, .onFocus:62, FoldRow:188, WorkoutCard:202, SkillMenu:237, GoalRow:274, Goals:287, Notes:366, GalleryItem:406, FullPhoto:411, Gallery:421
+- **Tree.tsx** (289)
+  Editor:13, loadExpanded:18, *Tree:26, .toggle:37, .skillCount:55, .skillsIn:58, .menuBtn:61, .renderChildren:67, .renderNode:77, KIND_LABEL:215, NodeEditor:217
 
 ## src/styles
 
-- **base.css** (96) — Тёмная тема по макету: золото = XP, у направлений свои цвета.
-  Тёмная тема по макету: золото = XP, у направлений свои цвета.:1, текст:43, раскладка:54, полоски:67, нижняя панель:74, всплывашки:82
+- **base.css** (155) — Тёмная тема по макету: золото = XP, у направлений свои цвета.
+  Тёмная тема по макету: золото = XP, у направлений свои цвета.:1, Светлая тема (макет: холст, «Настройки и обновления»). Соответствие цветов — tools/light_palette.py.:41, текст:102, раскладка:113, полоски:126, нижняя панель:133, всплывашки:141
 - **common.css** (90) — записи
   записи:1, чипы:16, кнопки:26, поля:43, фото:53, шторка:65
 - **entry.css** (50) — шторка записи (0.5)
@@ -127,8 +131,8 @@
   Порядок важен: база → общие компоненты → экраны.:1
 - **metrics.css** (35) — замеры
   замеры:1
-- **more.css** (59) — резервная копия
-  резервная копия:1, «скоро» в «Ещё»:21, достижения:28, что нового:40
+- **more.css** (78) — резервная копия
+  резервная копия:1, «скоро» в «Ещё»:21, достижения:28, что нового:40, настройки, тема, обновление (0.7):60
 - **quests.css** (34) — квесты
   квесты:1
 - **skill.css** (92) — навык

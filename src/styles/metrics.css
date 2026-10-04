@@ -1,8 +1,8 @@
 /* замеры */
-.ms-card { display: flex; flex-direction: column; gap: 8px; padding: 14px; border-radius: 16px; background: var(--surface); border: 1px solid #FF8A5B; }
+.ms-card { display: flex; flex-direction: column; gap: 8px; padding: 14px; border-radius: 16px; background: var(--surface); border: 1px solid var(--orange); }
 .ms-title { display: flex; align-items: center; gap: 8px; font-weight: 800; }
-.ms-title svg { color: #FF8A5B; }
-.metric-row { --c: #FF8A5B; display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 14px; background: var(--surface); min-height: 60px; }
+.ms-title svg { color: var(--orange); }
+.metric-row { --c: var(--orange); display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 14px; background: var(--surface); min-height: 60px; }
 .metric-row.empty { border: 1px dashed var(--line-2); background: transparent; }
 .metric-name { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
 .metric-val { display: flex; flex-direction: column; align-items: flex-end; min-width: 76px; }
@@ -24,11 +24,11 @@
 .value-input:focus { outline: none; border-bottom: 2px solid var(--gold); }
 .center-chips { justify-content: center; }
 .reps-label { align-self: center; }
-.compare.target { background: rgba(255, 138, 91, 0.1); border: 1px solid #FF8A5B; }
-.photo-btn { min-height: 48px; border-radius: 14px; border: 1px dashed #4A5160; background: transparent; color: var(--fg-2); display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 700; }
+.compare.target { background: var(--orange-bg); border: 1px solid var(--orange); }
+.photo-btn { min-height: 48px; border-radius: 14px; border: 1px dashed var(--line-3); background: transparent; color: var(--fg-2); display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 700; }
 .record-hint { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 14px; background: var(--gold-bg); color: var(--gold); font-weight: 800; font-size: 14px; }
-.metric-in-entry { display: flex; flex-direction: column; gap: 10px; padding: 14px; border-radius: 16px; background: rgba(255, 138, 91, 0.08); border: 1px solid rgba(255, 138, 91, 0.4); }
-.metric-label { color: #FF8A5B; }
+.metric-in-entry { display: flex; flex-direction: column; gap: 10px; padding: 14px; border-radius: 16px; background: var(--orange-bg); border: 1px solid var(--orange-line); }
+.metric-label { color: var(--orange); }
 .skill-metric { display: flex; align-items: center; gap: 10px; min-height: 48px; padding: 0 14px; border-radius: 14px; background: var(--surface); }
-.skill-metric svg { color: #FF8A5B; flex-shrink: 0; }
+.skill-metric svg { color: var(--orange); flex-shrink: 0; }
 .skill-metric .muted { margin-left: auto; }
