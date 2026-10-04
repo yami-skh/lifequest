@@ -51,7 +51,9 @@ PWA, в первую очередь под телефон. Данные хран
 
 ## Код
 
-- `npm run dev` — сервер разработки (с `--host`, доступен с телефона в той же Wi-Fi сети), `npm test` — тесты движка, `npm run build` — сборка в `dist/`.
+- `npm run dev` — сервер разработки, `npm test` — тесты движка, `npm run build` — сборка в `dist/`.
+- Опубликовано: https://yami-skh.github.io/lifequest/ (репозиторий github.com/yami-skh/lifequest, публичный). Выкладка: `npm run deploy` — тесты, сборка, force-push `dist/` в ветку `gh-pages`. GitHub Actions не используется: у токена gh нет scope `workflow`.
+- Телефон брата не в одной сети с ПК — проверять на телефоне только через опубликованную версию.
 - `src/engine/` — чистые функции (XP, уровни, прогресс, даты, достижения), тесты в `engine.test.ts`.
 - `src/db/` — Dexie-схема (`db.ts`), стартовый набор (`seed.ts`), все изменения (`actions.ts`), загрузка и производные значения (`world.ts`, контекст `useWorld()`).
 - `src/screens/`, `src/components/` — экраны и общие компоненты. Роутер на hash (`src/lib/router.ts`).
