@@ -7,6 +7,22 @@ export interface Release { version: string; date: string; title?: string; change
 
 export const CHANGELOG: Release[] = [
   {
+    version: '0.8.1',
+    date: '2026-10-05',
+    changes: [
+      { kind: 'better', title: 'AI-помощник убран из «Скоро» — он уже работает' },
+    ],
+  },
+  {
+    version: '0.8.0',
+    date: '2026-10-05',
+    title: 'AI-помощник целей',
+    changes: [
+      { kind: 'new', title: 'Цели от Claude', sub: 'На странице навыка — «Предложить цели»: Claude предложит цели по ступеням, нужные отмечаешь галочками.' },
+      { kind: 'new', title: 'AI-помощник в настройках', sub: 'Включается кодом доступа. Отправляются только название навыка, путь, уровень и цели — записи и фото нет.' },
+    ],
+  },
+  {
     version: '0.7.3',
     date: '2026-10-05',
     changes: [

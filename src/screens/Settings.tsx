@@ -205,7 +205,7 @@ function AiBlock() {
           <span class="input ai-dots">••••••••</span>
         )}
         {editing
-          ? <button type="submit" class="btn ghost">{draft.trim() ? 'Сохранить' : 'Убрать'}</button>
+          ? <button type="submit" class="btn ghost" disabled={!draft.trim() && !saved}>{draft.trim() || !saved ? 'Сохранить' : 'Убрать'}</button>
           : <button type="button" class="btn ghost" onClick={() => { setEditing(true); setDraft(saved); }}>Изменить</button>}
       </form>
       {status && <span class={status.ok ? 'small ok-text ai-status' : 'small danger-text ai-status'}>{status.text}</span>}
