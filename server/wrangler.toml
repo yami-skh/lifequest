@@ -1,0 +1,18 @@
+# Сервер-посредник LifeQuest AI. Развёртывание: npm run deploy (после npx wrangler login).
+# Секреты (не в файле!): npx wrangler secret put ANTHROPIC_API_KEY, npx wrangler secret put INVITE_CODES
+name = "lifequest-ai"
+main = "src/index.ts"
+compatibility_date = "2026-09-01"
+compatibility_flags = ["nodejs_compat"]
+# Логи запросов Cloudflare не включаем: содержимое запросов нигде не сохраняется.
+
+[vars]
+MODEL = "claude-opus-5-5"
+EFFORT = "medium"
+LIMIT_PER_CODE = "30"
+LIMIT_TOTAL = "200"
+
+# Счётчики лимитов. id появится после: npx wrangler kv namespace create USAGE
+[[kv_namespaces]]
+binding = "USAGE"
+id = "REPLACE_AFTER_KV_CREATE"
