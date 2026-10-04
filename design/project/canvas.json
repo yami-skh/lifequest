@@ -358,6 +358,33 @@
       "w": 390,
       "x": 450,
       "y": 0
+    },
+    "SkillWorkout.dc.html": {
+      "h": 844,
+      "page": "skillsimple",
+      "radius": 28,
+      "title": "Тренировочный навык",
+      "w": 390,
+      "x": 0,
+      "y": 0
+    },
+    "SkillPlain.dc.html": {
+      "h": 844,
+      "page": "skillsimple",
+      "radius": 28,
+      "title": "Обычный навык",
+      "w": 390,
+      "x": 450,
+      "y": 0
+    },
+    "SkillMenu.dc.html": {
+      "h": 844,
+      "page": "skillsimple",
+      "radius": 28,
+      "title": "Меню ⋯",
+      "w": 390,
+      "x": 900,
+      "y": 0
     }
   },
   "createdOnFiles": {
@@ -367,7 +394,7 @@
   "designSystems": [],
   "launch": {
     "view": "canvas",
-    "page": "whatsnew"
+    "page": "skillsimple"
   },
   "notes": {
     "atelierTitle": {
@@ -457,6 +484,14 @@
       "text": "Что нового: окно после обновления и история версий",
       "x": 0,
       "y": -260
+    },
+    "skillsimpleTitle": {
+      "kind": "title1",
+      "maxW": 1720,
+      "page": "skillsimple",
+      "text": "Страница навыка: проще (тренировка, обычный, меню ⋯)",
+      "x": 0,
+      "y": -260
     }
   },
   "order": [
@@ -498,7 +533,10 @@
     "SimpleSets.dc.html",
     "SimpleMilestone.dc.html",
     "WhatsNew.dc.html",
-    "Changelog.dc.html"
+    "Changelog.dc.html",
+    "SkillWorkout.dc.html",
+    "SkillPlain.dc.html",
+    "SkillMenu.dc.html"
   ],
   "pages": [
     {
@@ -536,6 +574,10 @@
     {
       "id": "whatsnew",
       "name": "Что нового"
+    },
+    {
+      "id": "skillsimple",
+      "name": "Навык проще"
     }
   ],
   "title": "LifeQuest — макет"
