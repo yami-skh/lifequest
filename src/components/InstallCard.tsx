@@ -1,10 +1,12 @@
+import type { ComponentChildren } from 'preact';
 import { useState } from 'preact/hooks';
 import { isIos, useInstall } from '../lib/install';
 import { Icon } from './Icon';
 
 const HIDE_KEY = 'lq.installHidden';
 
-export function InstallCard() {
+/** Карточка установки; если она не нужна — показывается fallback (один баннер за раз). */
+export function InstallCard({ fallback }: { fallback?: ComponentChildren }) {
   const { installed, canPrompt, install } = useInstall();
   const [hidden, setHidden] = useState(() => {
     try {
@@ -13,7 +15,7 @@ export function InstallCard() {
       return false;
     }
   });
-  if (installed || hidden) return null;
+  if (installed || hidden) return <>{fallback}</>;
 
   const hide = () => {
     setHidden(true);

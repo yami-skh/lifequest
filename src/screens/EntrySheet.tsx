@@ -1,18 +1,30 @@
-// «＋ Запись» — главный сценарий, цель 15 секунд. ARCHITECTURE.md §10.
+// «＋ Запись» — главный сценарий, цель 15 секунд. Макет: холст, страница «Упрощение», экраны 2–3.
+// Сверху только обязательное (тип, навык, текст); остальное — в «Подробнее».
 import { useMemo, useRef, useState } from 'preact/hooks';
 import { useWorld } from '../db/world';
 import { addMetricValue, saveEntry, type PhotoDraft } from '../db/actions';
-import { isRecord, RECORD_XP } from '../engine/metrics';
-import { metricToasts, ValueInput } from './Metrics';
 import { calcXp, DIFFICULTIES, ENTRY_TYPES, secondaryXp, xpContextFromHistory, type Difficulty, type EntryType } from '../engine/xp';
 import { localDate, humanDate } from '../engine/dates';
+import { bestSet, RECORD_XP, type WorkSet } from '../engine/metrics';
 import { compressPhoto, useBlobUrl } from '../lib/photo';
 import { toast } from '../lib/toast';
 import { Icon } from '../components/Icon';
 import { Check, SectionLabel, Sheet } from '../components/ui';
+import { SetsEditor } from '../components/SetsEditor';
 import { stagesToast } from './Skill';
+import { BigNumber, lastSetsOf, metricToasts, recordHintFor, usesSets } from './Metrics';
 
 export interface EntryPreset { skillId?: string; fixesEntryId?: string }
+
+const LAST_TYPE = 'lq.lastType';
+const loadType = (): EntryType => {
+  try {
+    const t = localStorage.getItem(LAST_TYPE) as EntryType | null;
+    return t && ENTRY_TYPES.some((x) => x.id === t) ? t : 'practice';
+  } catch {
+    return 'practice';
+  }
+};
 
 function PhotoPreview({ photo, onRemove }: { photo: PhotoDraft; onRemove: () => void }) {
   const url = useBlobUrl(photo.thumb);
@@ -26,7 +38,7 @@ function PhotoPreview({ photo, onRemove }: { photo: PhotoDraft; onRemove: () => 
 
 export function EntrySheet({ preset, onClose }: { preset: EntryPreset; onClose: () => void }) {
   const w = useWorld();
-  const [type, setType] = useState<EntryType>('practice');
+  const [type, setTypeState] = useState<EntryType>(loadType);
   const [text, setText] = useState('');
   const [difficulty, setDifficulty] = useState<Difficulty>(1);
   const [skillIds, setSkillIds] = useState<string[]>(preset.skillId ? [preset.skillId] : []);
@@ -35,55 +47,73 @@ export function EntrySheet({ preset, onClose }: { preset: EntryPreset; onClose: 
   const [failNote, setFailNote] = useState('');
   const [fixesId, setFixesId] = useState<string | undefined>(preset.fixesEntryId);
   const [photos, setPhotos] = useState<PhotoDraft[]>([]);
-  const [mValue, setMValue] = useState<number | null>(null);
-  const [mReps, setMReps] = useState<number | null>(null);
-  const [picking, setPicking] = useState(false);
+  const [picking, setPicking] = useState<'primary' | 'secondary' | null>(null);
   const [query, setQuery] = useState('');
+  const [more, setMore] = useState(!!preset.fixesEntryId);
+  const [why, setWhy] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [sets, setSets] = useState<WorkSet[] | null>(null);
+  const [single, setSingle] = useState<number | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
+
+  const setType = (t: EntryType) => {
+    setTypeState(t);
+    try {
+      localStorage.setItem(LAST_TYPE, t);
+    } catch {
+      /* не критично */
+    }
+  };
 
   const primaryId = skillIds[0];
   const primary = primaryId ? w.nodeById.get(primaryId) : undefined;
-  const openGoals = primaryId ? w.openGoalsOf(primaryId) : [];
+  const cur = primaryId ? w.currentStageOf(primaryId) : undefined;
+  const stageGoals = cur ? cur.goals.filter((g) => !g.done) : [];
   const openErrors = primaryId ? w.openErrorsBySkill.get(primaryId) ?? [] : [];
+
+  // Замер навыка — только в тренировке (§8).
+  const metric = primaryId && type === 'workout' ? w.metricsOfSkill(primaryId)[0] : undefined;
+  const mInfo = metric ? w.metricInfo(metric) : undefined;
+  const lastSets = mInfo ? lastSetsOf(mInfo) : undefined;
+  const curSets = sets ?? (lastSets ? lastSets.map((x) => ({ ...x })) : metric?.hasReps ? [{ w: undefined, r: 0 }] : [{ r: 0 }]);
+  const setsTouched = sets !== null;
+  const hint = mInfo && (setsTouched || single !== null) ? recordHintFor(mInfo, curSets, single) : null;
 
   const preview = useMemo(() => {
     if (!primaryId) return null;
     const history = w.entries.filter((e) => e.type !== 'bonus' && w.primaryOf(e.id) === primaryId).map((e) => ({ type: e.type, date: e.date }));
     const ctx = xpContextFromHistory(history, { type, difficulty, hasPhoto: photos.length > 0, fixesError: outcome === 'ok' && !!fixesId, isFocus: !!primary?.focus }, localDate());
     return calcXp(ctx);
-  }, [w, primaryId, type, difficulty, photos.length, outcome, fixesId]);
+  }, [w, primaryId, type, difficulty, photos.length, outcome, fixesId, primary]);
+  const total = preview ? preview.xp + (hint ? RECORD_XP : 0) : 0;
 
+  const suggestions = [...w.focusSkills, ...w.recentSkills.filter((s) => !s.focus)].filter((s) => !skillIds.includes(s.id)).slice(0, 5);
   const results = useMemo(() => {
     const q = query.trim().toLowerCase();
     const list = q ? w.skills.filter((s) => s.title.toLowerCase().includes(q)) : w.skills;
     return list.filter((s) => !skillIds.includes(s.id)).slice(0, 30);
   }, [query, w.skills, skillIds]);
 
-  const addSkill = (id: string) => {
-    setSkillIds((ids) => (ids.includes(id) || ids.length >= 5 ? ids : [...ids, id]));
-    setPicking(false);
-    setQuery('');
-  };
-  const removeSkill = (id: string) => {
-    setSkillIds((ids) => ids.filter((x) => x !== id));
-    if (id === primaryId) {
-      setCloseGoals([]);
-      setFixesId(undefined);
-    }
-  };
-  const makePrimary = (id: string) => {
-    setSkillIds((ids) => [id, ...ids.filter((x) => x !== id)]);
+  const choosePrimary = (id: string) => {
+    setSkillIds([id, ...skillIds.slice(1).filter((x) => x !== id)]);
     setCloseGoals([]);
     setFixesId(undefined);
+    setSets(null);
+    setSingle(null);
+    setPicking(null);
+    setQuery('');
+  };
+  const addSecondary = (id: string) => {
+    if (!primaryId) return choosePrimary(id);
+    setSkillIds((ids) => (ids.includes(id) || ids.length >= 5 ? ids : [...ids, id]));
+    setPicking(null);
+    setQuery('');
   };
 
   const onFiles = async (files: FileList | null) => {
     if (!files) return;
-    const room = 4 - photos.length;
-    const list = [...files].slice(0, room);
     try {
-      const done = await Promise.all(list.map(compressPhoto));
+      const done = await Promise.all([...files].slice(0, 4 - photos.length).map(compressPhoto));
       setPhotos((p) => [...p, ...done].slice(0, 4));
     } catch {
       toast({ kind: 'info', title: 'Не получилось открыть фото', sub: 'Попробуй другой снимок' });
@@ -91,32 +121,23 @@ export function EntrySheet({ preset, onClose }: { preset: EntryPreset; onClose: 
     if (fileRef.current) fileRef.current.value = '';
   };
 
-  // Замер основного навыка: показываем при тренировке и практике (§8).
-  const metric = primaryId && (type === 'workout' || type === 'practice') ? w.metricsOfSkill(primaryId)[0] : undefined;
-  const mInfo = metric ? w.metricInfo(metric) : undefined;
-  const mRecord = !!(metric && mInfo && mValue !== null && isRecord(mInfo.values, { value: mValue, reps: mReps ?? undefined }, metric.better));
-
   const save = async () => {
     if (!primaryId || busy) return;
     setBusy(true);
     try {
       const { xp, stages } = await saveEntry({
-        type,
-        text,
-        difficulty,
-        primaryId,
-        secondaryIds: skillIds.slice(1),
-        closeGoalIds: closeGoals,
-        outcome,
-        failNote,
-        fixesEntryId: outcome === 'ok' ? fixesId : undefined,
-        photos,
+        type, text, difficulty, primaryId, secondaryIds: skillIds.slice(1), closeGoalIds: closeGoals,
+        outcome, failNote, fixesEntryId: outcome === 'ok' ? fixesId : undefined, photos,
       });
       toast({ kind: 'xp', title: `+${xp} XP`, sub: primary?.title });
       stagesToast(stages);
-      if (metric && mValue !== null) {
-        const r = await addMetricValue(metric.id, { value: mValue, reps: mReps ?? undefined });
-        metricToasts(metric, r, mValue, mReps ?? undefined);
+      if (metric && mInfo) {
+        const withSets = usesSets(metric);
+        if (withSets ? setsTouched && bestSet(curSets) : single !== null) {
+          const r = await addMetricValue(metric.id, withSets ? { sets: curSets } : { value: single! });
+          const b = bestSet(curSets);
+          metricToasts(metric, r, withSets ? (metric.hasReps ? b?.w ?? 0 : b?.r ?? 0) : single!, withSets && metric.hasReps ? b?.r : undefined);
+        }
       }
       onClose();
     } catch (e) {
@@ -126,57 +147,32 @@ export function EntrySheet({ preset, onClose }: { preset: EntryPreset; onClose: 
     }
   };
 
+  const diffLabel = DIFFICULTIES.find((d) => d.id === difficulty)!.label.toLowerCase();
+  const summary = [diffLabel, outcome === 'ok' ? 'получилось' : 'не получилось', skillIds.length > 1 ? `${skillIds.length} навыка` : null, fixesId ? 'исправляет ошибку' : null].filter(Boolean).join(' · ');
+
   return (
     <Sheet open onClose={onClose} title="Новая запись">
-      <div class="grid-3">
+      <div class="type-row" role="radiogroup" aria-label="Тип записи">
         {ENTRY_TYPES.map((t) => (
-          <button type="button" key={t.id} class={type === t.id ? 'pick on' : 'pick'} onClick={() => setType(t.id)}>{t.label}</button>
+          <button type="button" key={t.id} role="radio" aria-checked={type === t.id} class={type === t.id ? 'chip big primary' : 'chip big'} onClick={() => setType(t.id)}>{t.label}</button>
         ))}
       </div>
 
-      <label class="field">
-        <span class="field-label">Что сделал</span>
-        <textarea id="entry-text" rows={2} placeholder="Например: приготовил рамен с нуля" value={text} onInput={(e) => setText(e.currentTarget.value)} />
-      </label>
-
-      <div class="photo-row">
-        {photos.length < 4 && (
-          <button type="button" class="photo-add" aria-label="Добавить фото" onClick={() => fileRef.current?.click()}>
-            <Icon name="camera" size={26} />
-          </button>
-        )}
-        {photos.map((p, i) => <PhotoPreview key={i} photo={p} onRemove={() => setPhotos((ps) => ps.filter((_, j) => j !== i))} />)}
-        <input ref={fileRef} id="entry-photo" type="file" accept="image/*" capture="environment" multiple hidden onChange={(e) => onFiles(e.currentTarget.files)} />
-      </div>
-
       <div class="stack-8">
-        <SectionLabel>Навыки</SectionLabel>
+        <SectionLabel>Навык</SectionLabel>
         <div class="chips">
-          {skillIds.map((id, i) => (
-            <span key={id} class={i === 0 ? 'chip big primary' : 'chip big'}>
-              <button type="button" class="chip-btn" onClick={() => i > 0 && makePrimary(id)} title={i > 0 ? 'Сделать основным' : undefined}>
-                {w.nodeById.get(id)?.title} · {i === 0 ? 'основной' : '50%'}
-              </button>
-              <button type="button" class="chip-x" aria-label="Убрать навык" onClick={() => removeSkill(id)}><Icon name="x" size={14} stroke={3} /></button>
-            </span>
+          {primary && <span class="chip big primary">{primary.focus && <Icon name="star" size={14} stroke={2.4} />}{primary.title}</span>}
+          {!picking && suggestions.map((s) => (
+            <button type="button" key={s.id} class="chip big" onClick={() => choosePrimary(s.id)}>{s.focus && <Icon name="star" size={14} stroke={2.4} />}{s.title}</button>
           ))}
-          {skillIds.length < 5 && (
-            <button type="button" class="chip big dashed" onClick={() => setPicking(!picking)}>+ навык</button>
-          )}
+          <button type="button" class="chip big dashed" onClick={() => setPicking(picking ? null : 'primary')}>{picking ? 'закрыть' : 'поиск…'}</button>
         </div>
-        {skillIds.length === 0 && !picking && (w.recentSkills.length > 0 || w.focusSkills.length > 0) && (
-          <div class="chips">
-            {[...w.focusSkills, ...w.recentSkills.filter((s) => !s.focus)].slice(0, 6).map((s) => (
-              <button type="button" key={s.id} class="chip big" onClick={() => addSkill(s.id)}>{s.focus && <Icon name="star" size={14} stroke={2.4} />}{s.title}</button>
-            ))}
-          </div>
-        )}
         {picking && (
           <div class="picker">
             <input id="skill-search" class="input" placeholder="Найти навык" value={query} onInput={(e) => setQuery(e.currentTarget.value)} autoFocus />
             <div class="picker-list">
               {results.map((s) => (
-                <button type="button" key={s.id} class="picker-item" onClick={() => addSkill(s.id)}>
+                <button type="button" key={s.id} class="picker-item" onClick={() => (picking === 'primary' ? choosePrimary(s.id) : addSecondary(s.id))}>
                   <span>{s.title}</span>
                   <span class="muted small">{w.pathOf(s.id).slice(0, -1).map((n) => n.title).join(' › ')}</span>
                 </button>
@@ -187,77 +183,97 @@ export function EntrySheet({ preset, onClose }: { preset: EntryPreset; onClose: 
         )}
       </div>
 
-      <div class="stack-8">
-        <SectionLabel>Сложность</SectionLabel>
-        <div class="segmented">
-          {DIFFICULTIES.map((d) => (
-            <button type="button" key={d.id} class={difficulty === d.id ? 'on' : ''} onClick={() => setDifficulty(d.id)}>{d.label}</button>
-          ))}
-        </div>
+      <div class="text-row">
+        <input id="entry-text" class="input" placeholder={type === 'workout' ? 'Что делал (необязательно)' : 'Что сделал'} value={text} onInput={(e) => setText(e.currentTarget.value)} />
+        <button type="button" class="text-cam" aria-label="Добавить фото" onClick={() => fileRef.current?.click()}><Icon name="camera" size={22} /></button>
+        <input ref={fileRef} id="entry-photo" type="file" accept="image/*" capture="environment" multiple hidden onChange={(e) => onFiles(e.currentTarget.files)} />
       </div>
-
-      <div class="row-2">
-        <button type="button" class={outcome === 'ok' ? 'pick ok on' : 'pick'} onClick={() => setOutcome('ok')}>Получилось</button>
-        <button type="button" class={outcome === 'fail' ? 'pick fail on' : 'pick'} onClick={() => setOutcome('fail')}>Не получилось</button>
-      </div>
-      {outcome === 'fail' && (
-        <label class="field">
-          <span class="field-label">Что пошло не так</span>
-          <input id="fail-note" class="input" placeholder="Например: бульон получился мутным" value={failNote} onInput={(e) => setFailNote(e.currentTarget.value)} />
-        </label>
-      )}
+      {photos.length > 0 && <div class="photo-row">{photos.map((p, i) => <PhotoPreview key={i} photo={p} onRemove={() => setPhotos((ps) => ps.filter((_, j) => j !== i))} />)}</div>}
 
       {metric && mInfo && (
         <div class="metric-in-entry">
-          <div class="spread">
-            <span class="section-label metric-label">Замер · {metric.title}</span>
-            {mInfo.last && <span class="muted small strong">прошлое {String(mInfo.last.value).replace('.', ',')}{mInfo.last.reps ? ` × ${mInfo.last.reps}` : ''}</span>}
-          </div>
-          <ValueInput metric={metric} value={mValue} setValue={setMValue} reps={mReps} setReps={setMReps} compact />
-          <span class="muted small">Можно оставить пустым — тогда сохранится только запись.</span>
+          {usesSets(metric) ? (
+            <SetsEditor metric={metric} sets={curSets} setSets={(s) => setSets(s)} lastSets={lastSets} recordHint={hint} />
+          ) : (
+            <>
+              <span class="section-label metric-label">Замер · {metric.title}</span>
+              <BigNumber metric={metric} value={single} setValue={setSingle} placeholder={mInfo.last?.value} />
+              {hint && <div class="record-hint"><Icon name="star" size={16} stroke={2.2} />{hint}</div>}
+            </>
+          )}
+          {!setsTouched && single === null && <span class="muted small">Подставлено как в прошлый раз — нажми на число, чтобы поправить. Не трогал — сохранится только запись.</span>}
         </div>
       )}
 
-      {outcome === 'ok' && openErrors.length > 0 && (
-        <div class="stack-8">
-          <SectionLabel>Исправляет ошибку? ×1.5 XP</SectionLabel>
-          {openErrors.map((e) => (
-            <button type="button" key={e.id} class="goal-row" onClick={() => setFixesId(fixesId === e.id ? undefined : e.id)}>
-              <Check done={fixesId === e.id} />
-              <span>{e.failNote || e.text} <span class="muted small">· {humanDate(e.date)}</span></span>
-            </button>
-          ))}
-        </div>
-      )}
-
-      {outcome === 'ok' && openGoals.length > 0 && (
-        <div class="stack-8">
-          <SectionLabel>Закрыть цели навыка</SectionLabel>
-          {openGoals.map((g) => {
+      {outcome === 'ok' && cur && stageGoals.length > 0 && (
+        <div class="stack-4">
+          <SectionLabel>Закрыть цель? · ступень «{cur.name}»</SectionLabel>
+          {stageGoals.map((g) => {
             const on = closeGoals.includes(g.id);
             return (
-              <button type="button" key={g.id} class="goal-row" onClick={() => setCloseGoals(on ? closeGoals.filter((x) => x !== g.id) : [...closeGoals, g.id])}>
-                <Check done={on} />
-                <span>{g.title}</span>
-                <span class="goal-kind">{g.kind === 'practice' ? 'практика' : 'теория'}</span>
+              <button type="button" key={g.id} class={on ? 'goal-row' : 'goal-row open'} onClick={() => setCloseGoals(on ? closeGoals.filter((x) => x !== g.id) : [...closeGoals, g.id])}>
+                <Check done={on} /><span>{g.title}</span>
               </button>
             );
           })}
         </div>
       )}
 
-      <div class="save-zone">
-        <div class="xp-preview">
-          <span class="muted small">
-            {preview ? [String(preview.base), ...preview.factors.map((f) => `×${f.mult} ${f.label}`)].join(' ') : 'Выбери навык, чтобы увидеть XP'}
-            {preview && skillIds.length > 1 && ` · сопутствующим по +${secondaryXp(preview.xp)}`}
-            {mRecord && ` · рекорд +${RECORD_XP}`}
-          </span>
-          <span class="xp-big">{preview ? `+${preview.xp + (mRecord ? RECORD_XP : 0)} XP` : ''}</span>
-        </div>
-        <button type="button" class="btn primary" disabled={!primaryId || busy} onClick={save}>
-          {primaryId ? 'Сохранить' : 'Выбери навык'}
+      <div class="more-box">
+        <button type="button" class="more-head" onClick={() => setMore(!more)} aria-expanded={more}>
+          <span class="stack-4"><span class="strong">Подробнее</span><span class="muted small">{summary}</span></span>
+          <Icon name={more ? 'up' : 'down'} size={18} stroke={2.4} />
         </button>
+        {more && (
+          <div class="more-body">
+            <span class="field-label">Сложность</span>
+            <div class="segmented">
+              {DIFFICULTIES.map((d) => <button type="button" key={d.id} class={difficulty === d.id ? 'on' : ''} onClick={() => setDifficulty(d.id)}>{d.label}</button>)}
+            </div>
+            <div class="row-2">
+              <button type="button" class={outcome === 'ok' ? 'pick ok on' : 'pick'} onClick={() => setOutcome('ok')}>Получилось</button>
+              <button type="button" class={outcome === 'fail' ? 'pick fail on' : 'pick'} onClick={() => setOutcome('fail')}>Не получилось</button>
+            </div>
+            {outcome === 'fail' && <input id="fail-note" class="input" placeholder="Что пошло не так" value={failNote} onInput={(e) => setFailNote(e.currentTarget.value)} />}
+            {outcome === 'ok' && openErrors.length > 0 && (
+              <div class="stack-4">
+                <span class="field-label">Исправляет ошибку? ×1.5 XP</span>
+                {openErrors.map((e) => (
+                  <button type="button" key={e.id} class="goal-row" onClick={() => setFixesId(fixesId === e.id ? undefined : e.id)}>
+                    <Check done={fixesId === e.id} /><span>{e.failNote || e.text} <span class="muted small">· {humanDate(e.date)}</span></span>
+                  </button>
+                ))}
+              </div>
+            )}
+            <span class="field-label">Сопутствующие навыки · по 50%</span>
+            <div class="chips">
+              {skillIds.slice(1).map((id) => (
+                <span key={id} class="chip big"><span class="chip-btn">{w.nodeById.get(id)?.title}</span>
+                  <button type="button" class="chip-x" aria-label="Убрать навык" onClick={() => setSkillIds(skillIds.filter((x) => x !== id))}><Icon name="x" size={14} stroke={3} /></button>
+                </span>
+              ))}
+              {primaryId && skillIds.length < 5 && <button type="button" class="chip big dashed" onClick={() => setPicking('secondary')}>+ навык</button>}
+            </div>
+          </div>
+        )}
+      </div>
+
+      <div class="save-zone">
+        {why && preview && (
+          <span class="muted small why-text">
+            {[`база ${preview.base}`, ...preview.factors.map((f) => `×${f.mult} ${f.label}`)].join(' ')}
+            {skillIds.length > 1 && ` · сопутствующим по +${secondaryXp(preview.xp)}`}
+            {hint && ` · рекорд +${RECORD_XP}`}
+          </span>
+        )}
+        <div class="save-row">
+          {preview && (
+            <button type="button" class="xp-why" onClick={() => setWhy(!why)} aria-expanded={why}>
+              <span class="xp-big">+{total}</span><span class="why-link">почему?</span>
+            </button>
+          )}
+          <button type="button" class="btn primary save-btn" disabled={!primaryId || busy} onClick={save}>{primaryId ? 'Сохранить' : 'Выбери навык'}</button>
+        </div>
       </div>
     </Sheet>
   );

@@ -6,6 +6,39 @@ export const MILESTONE_XP = 200;
 
 export interface ValueLike { date: string; value: number; reps?: number }
 
+/** Один подход: вес (если есть) и повторы. */
+export interface WorkSet { w?: number; r: number }
+
+/**
+ * Лучший подход: тяжелее — лучше, при равном весе — больше повторов.
+ * Без веса (подтягивания) — просто больше повторов.
+ */
+export function bestSet(sets: WorkSet[]): WorkSet | undefined {
+  let best: WorkSet | undefined;
+  for (const s of sets) {
+    if (!(s.r > 0)) continue;
+    if (!best || (s.w ?? 0) > (best.w ?? 0) || ((s.w ?? 0) === (best.w ?? 0) && s.r > best.r)) best = s;
+  }
+  return best;
+}
+
+/** Значение замера из подходов: для весовых — вес лучшего подхода и его повторы, для «раз» — повторы. */
+export function valueFromSets(sets: WorkSet[], weighted: boolean): { value: number; reps?: number } | null {
+  const b = bestSet(sets);
+  if (!b) return null;
+  return weighted ? { value: b.w ?? 0, reps: b.r } : { value: b.r };
+}
+
+/** Больше всего повторов с весом не меньше atWeight — для рубежа «60 кг на 10 раз». */
+export function bestRepsAt(values: { sets?: WorkSet[]; value: number; reps?: number }[], atWeight: number) {
+  let best = 0;
+  for (const v of values) {
+    const sets = v.sets?.length ? v.sets : [{ w: v.value, r: v.reps ?? 0 }];
+    for (const s of sets) if ((s.w ?? 0) >= atWeight && s.r > best) best = s.r;
+  }
+  return best;
+}
+
 /** Лучшее значение: для «больше» — максимум (при равенстве больше повторов), для «меньше» — минимум. */
 export function bestValue<V extends ValueLike>(values: V[], better: 'up' | 'down'): V | undefined {
   let best: V | undefined;

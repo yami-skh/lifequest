@@ -2,7 +2,7 @@ import { useState } from 'preact/hooks';
 import { useWorld } from '../db/world';
 import { humanDate } from '../engine/dates';
 import { EntryCard } from '../components/EntryCard';
-import { SectionLabel } from '../components/ui';
+import { SectionLabel, TopBar } from '../components/ui';
 
 export function Journal() {
   const w = useWorld();
@@ -24,7 +24,7 @@ export function Journal() {
 
   return (
     <div class="page">
-      <h1 class="display small-display">Журнал</h1>
+      <TopBar title="Журнал" />
       <div class="chips scroll-x">
         <button type="button" class={!area && !onlyFails ? 'chip big primary' : 'chip big'} onClick={() => { setArea(null); setOnlyFails(false); }}>Все</button>
         {w.areas.map((a) => (

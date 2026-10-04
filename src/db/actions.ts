@@ -1,7 +1,7 @@
 // Все изменения данных.
 import { db, nowIso, uid, type Entry, type Metric, type Milestone, type Node, type NodeKind, type Quest, type Requirement } from './db';
 import { WEEKLY_TEMPLATES, weekStart } from '../engine/quests';
-import { MILESTONE_XP, RECORD_XP, isRecord, reached } from '../engine/metrics';
+import { MILESTONE_XP, RECORD_XP, bestRepsAt, isRecord, reached, valueFromSets, type WorkSet } from '../engine/metrics';
 import { STAGE_BONUS, stagesOf } from '../engine/stages';
 import { calcXp, secondaryXp, xpContextFromHistory, type Difficulty, type EntryType } from '../engine/xp';
 import { localDate } from '../engine/dates';
@@ -300,10 +300,14 @@ async function bonus(skillId: string | undefined, text: string, xp: number, crea
  * Новое значение замера. Рекорд → +50 XP навыку; взятый рубеж → +200 XP.
  * Возвращает, что произошло, для всплывашек.
  */
-export async function addMetricValue(metricId: string, v: { value: number; reps?: number; note?: string; date?: string; photos?: PhotoDraft[] }) {
+export async function addMetricValue(metricId: string, input: { value?: number; reps?: number; sets?: WorkSet[]; note?: string; date?: string; photos?: PhotoDraft[] }) {
   return db.transaction('rw', [db.metrics, db.metricValues, db.milestones, db.entries, db.entrySkills, db.photos], async () => {
     const m = await db.metrics.get(metricId);
     if (!m) return { record: false, milestone: null as Milestone | null };
+    // Подходы → значение лучшего подхода (вес и его повторы, или повторы для «раз»).
+    const sets = input.sets?.filter((s) => s.r > 0);
+    const fromSets = sets?.length ? valueFromSets(sets, !!m.hasReps) : null;
+    const v = { ...input, value: fromSets?.value ?? input.value ?? 0, reps: fromSets ? fromSets.reps : input.reps };
     const prev = await db.metricValues.where('metricId').equals(metricId).toArray();
     const createdAt = nowIso();
     const record = isRecord(prev, v, m.better);
@@ -314,17 +318,23 @@ export async function addMetricValue(metricId: string, v: { value: number; reps?
       photoIds.push(id);
     }
     await db.metricValues.add({
-      id: uid(), metricId, date: v.date ?? localDate(), value: v.value, reps: v.reps, note: v.note?.trim() || undefined,
-      photoIds, record, createdAt,
+      id: uid(), metricId, date: v.date ?? localDate(), value: v.value, reps: v.reps, sets: sets?.length ? sets : undefined,
+      note: v.note?.trim() || undefined, photoIds, record, createdAt,
     });
     const shown = `${fmtNum(v.value)} ${m.unit}${v.reps ? ` × ${v.reps}` : ''}`;
     if (record) await bonus(m.skillId, `Рекорд: ${m.title} ${shown}`, RECORD_XP, createdAt);
     let milestone: Milestone | null = null;
     const active = await db.milestones.where('metricId').equals(metricId).filter((x) => x.status === 'active').toArray();
+    const all = [...prev, { value: v.value, reps: v.reps, sets }];
     for (const ms of active) {
-      if (reached(v.value, ms.target, m.better)) {
+      const current = ms.mode === 'repsAt' ? bestRepsAt(all, ms.atWeight ?? 0) : v.value;
+      // Рубеж поставлен без значений — первое значение становится стартом.
+      if (ms.start === undefined) await db.milestones.update(ms.id, { start: current });
+      const done = ms.mode === 'repsAt' ? current >= ms.target : reached(v.value, ms.target, m.better);
+      if (done) {
         await db.milestones.update(ms.id, { status: 'done', doneAt: createdAt });
-        await bonus(m.skillId, `Рубеж взят: ${m.title} ${fmtNum(ms.target)} ${m.unit}`, MILESTONE_XP, createdAt);
+        const what = ms.mode === 'repsAt' ? `${fmtNum(ms.atWeight ?? 0)} ${m.unit} × ${ms.target}` : `${fmtNum(ms.target)} ${m.unit}`;
+        await bonus(m.skillId, `Рубеж взят: ${m.title} ${what}`, MILESTONE_XP, createdAt);
         milestone = ms;
       }
     }
@@ -341,11 +351,11 @@ export async function deleteMetricValue(id: string) {
   });
 }
 
-/** Ставит рубеж (заменяет активный). */
-export async function setMilestone(metricId: string, start: number, target: number, deadline?: string) {
+/** Ставит рубеж (заменяет активный). start не задан — возьмётся из первого значения. */
+export async function setMilestone(metricId: string, ms: { mode: 'value' | 'repsAt'; target: number; atWeight?: number; start?: number; deadline?: string }) {
   await db.transaction('rw', [db.milestones], async () => {
     await db.milestones.where('metricId').equals(metricId).filter((x) => x.status === 'active').delete();
-    await db.milestones.add({ id: uid(), metricId, start, target, deadline, status: 'active', createdAt: nowIso() });
+    await db.milestones.add({ id: uid(), metricId, ...ms, status: 'active', createdAt: nowIso() });
   });
 }
 

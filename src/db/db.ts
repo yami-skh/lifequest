@@ -142,6 +142,8 @@ export interface MetricValue {
   date: string;
   value: number;
   reps?: number;
+  /** Подходы тренировки (с 0.5). value/reps — лучший подход. */
+  sets?: { w?: number; r: number }[];
   note?: string;
   photoIds: string[];
   record?: boolean;
@@ -151,7 +153,11 @@ export interface MetricValue {
 export interface Milestone {
   id: string;
   metricId: string;
-  start: number;
+  /** «value» — цель по значению (вес, раз); «repsAt» — столько повторов с весом atWeight. */
+  mode?: 'value' | 'repsAt';
+  atWeight?: number;
+  /** Старт; если не задан — возьмётся из первого значения после постановки. */
+  start?: number;
   target: number;
   deadline?: string;
   status: 'active' | 'done';

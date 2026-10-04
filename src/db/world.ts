@@ -4,7 +4,7 @@ import { createContext } from 'preact';
 import { useContext } from 'preact/hooks';
 import { db, type Entry, type EntrySkill, type Goal, type Metric, type MetricValue, type Milestone, type Node, type Note, type Profile, type Quest, type QuestStep, type Unlocked } from './db';
 import { countProgress, type EntryFacts } from '../engine/quests';
-import { bestValue, forecastDate, milestoneProgress } from '../engine/metrics';
+import { bestRepsAt, bestValue, forecastDate, milestoneProgress } from '../engine/metrics';
 import { computeProgress, skillProgress } from '../engine/progress';
 import { currentStage, stagesOf } from '../engine/stages';
 import { RUST_DAYS } from '../engine/xp';
@@ -263,10 +263,14 @@ export function derive(w: World) {
     const monthAgo = values.filter((v) => daysBetween(v.date, today) >= 30).at(-1) ?? values[0];
     const delta = last && monthAgo && last !== monthAgo ? last.value - monthAgo.value : null;
     const milestone = w.milestones.find((x) => x.metricId === m.id && x.status === 'active');
+    const repsAt = milestone?.mode === 'repsAt';
+    // Текущее значение для рубежа: вес/раз последнего значения или лучшие повторы с нужным весом.
+    const msCurrent = milestone ? (repsAt ? bestRepsAt(values, milestone.atWeight ?? 0) : last?.value) : undefined;
     return {
-      metric: m, values, last, best, delta, milestone,
-      milestonePct: milestone && last ? milestoneProgress(milestone.start, last.value, milestone.target) * 100 : 0,
-      forecast: milestone ? forecastDate(values, milestone.target, today) : null,
+      metric: m, values, last, best, delta, milestone, msCurrent,
+      milestonePct: milestone && msCurrent !== undefined && milestone.start !== undefined
+        ? milestoneProgress(milestone.start, msCurrent, milestone.target) * 100 : 0,
+      forecast: milestone && !repsAt ? forecastDate(values, milestone.target, today) : null,
     };
   };
 

@@ -1,22 +1,56 @@
 // Всплывашки: XP, новый уровень, достижения.
+// События, пришедшие почти одновременно (запись → рекорд → ступень → уровень), склеиваются в одну.
 import { useEffect, useState } from 'preact/hooks';
 
-export interface Toast { id: number; kind: 'xp' | 'level' | 'achievement' | 'info'; title: string; sub?: string }
+export type ToastKind = 'xp' | 'level' | 'achievement' | 'info';
+export interface Toast { id: number; kind: ToastKind; title: string; sub?: string; lines: string[] }
+
+/** Окно, в котором события считаются «одновременными». */
+const MERGE_MS = 1500;
+const LIFETIME: Record<ToastKind, number> = { xp: 2600, info: 3000, level: 4000, achievement: 4000 };
+const RANK: Record<ToastKind, number> = { info: 0, xp: 1, achievement: 2, level: 3 };
 
 let toasts: Toast[] = [];
 let nextId = 1;
+let lastGame: { id: number; at: number } | null = null;
+const timers = new Map<number, ReturnType<typeof setTimeout>>();
 const listeners = new Set<(t: Toast[]) => void>();
 const emit = () => listeners.forEach((l) => l(toasts));
 
-export function toast(t: Omit<Toast, 'id'>) {
-  const item = { ...t, id: nextId++ };
-  toasts = [...toasts, item];
-  emit();
-  if (t.kind !== 'info') navigator.vibrate?.(t.kind === 'xp' ? 30 : [40, 60, 40]);
-  setTimeout(() => {
-    toasts = toasts.filter((x) => x.id !== item.id);
+const schedule = (id: number, ms: number) => {
+  clearTimeout(timers.get(id));
+  timers.set(id, setTimeout(() => {
+    toasts = toasts.filter((x) => x.id !== id);
+    timers.delete(id);
     emit();
-  }, t.kind === 'xp' ? 2600 : 4000);
+  }, ms));
+};
+
+export function toast(t: { kind: ToastKind; title: string; sub?: string }) {
+  const now = Date.now();
+  const game = t.kind !== 'info';
+  const target = game && lastGame && now - lastGame.at < MERGE_MS ? toasts.find((x) => x.id === lastGame!.id) : undefined;
+
+  if (target) {
+    // Дописываем строкой; карточка становится «важнее», если пришёл уровень или достижение.
+    target.lines = [...target.lines, t.sub ? `${t.title} · ${t.sub}` : t.title];
+    if (RANK[t.kind] > RANK[target.kind]) target.kind = t.kind;
+    toasts = [...toasts];
+    lastGame = { id: target.id, at: now };
+    schedule(target.id, LIFETIME[target.kind] + 1000);
+    navigator.vibrate?.([40, 60, 40]);
+    emit();
+    return;
+  }
+
+  const item: Toast = { ...t, id: nextId++, lines: [] };
+  toasts = [...toasts, item];
+  if (game) {
+    lastGame = { id: item.id, at: now };
+    navigator.vibrate?.(t.kind === 'xp' ? 30 : [40, 60, 40]);
+  }
+  schedule(item.id, LIFETIME[t.kind]);
+  emit();
 }
 
 export function useToasts() {

@@ -50,7 +50,7 @@ export function App() {
   else if (screen === 'metrics') page = <Metrics />;
   else page = <Character onAdd={() => openEntry()} />;
 
-  const tab = screen === 'tree' || screen === 'skill' ? 'tree' : screen === 'journal' ? 'journal' : ['more', 'achievements', 'backup', 'quests', 'metrics'].includes(screen) ? 'more' : 'home';
+  const tab = screen === 'tree' || screen === 'skill' ? 'tree' : screen === 'quests' ? 'quests' : ['more', 'achievements', 'backup', 'metrics', 'journal'].includes(screen) ? 'more' : 'home';
 
   return (
     <WorldContext.Provider value={derived}>
@@ -61,7 +61,7 @@ export function App() {
         <button type="button" class="fab" aria-label="Новая запись" onClick={() => openEntry(screen === 'skill' && param ? { skillId: param } : {})}>
           <span><Icon name="plus" size={28} stroke={2.6} /></span>
         </button>
-        <a href="#/journal" class={tab === 'journal' ? 'on' : ''} aria-current={tab === 'journal' ? 'page' : undefined}><Icon name="journal" size={24} /><span>Журнал</span></a>
+        <a href="#/quests" class={tab === 'quests' ? 'on' : ''} aria-current={tab === 'quests' ? 'page' : undefined}><Icon name="sword" size={24} /><span>Квесты</span></a>
         <a href="#/more" class={tab === 'more' ? 'on' : ''} aria-current={tab === 'more' ? 'page' : undefined}><Icon name="menu" size={24} /><span>Ещё</span></a>
       </nav>
       {entry && <EntrySheet preset={entry} onClose={() => setEntry(null)} />}
@@ -116,6 +116,7 @@ function Toasts() {
           <div class="toast-text">
             <span class="toast-title">{t.title}</span>
             {t.sub && <span class="toast-sub">{t.sub}</span>}
+            {t.lines.map((l, i) => <span class="toast-line" key={i}>{l}</span>)}
           </div>
         </div>
       ))}

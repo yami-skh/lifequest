@@ -4,7 +4,9 @@ import { useWorld } from '../db/world';
 import type { Metric } from '../db/db';
 import { addMetric, addMetricValue, deleteMetric, deleteMetricValue, fmtNum, removeMilestone, setMilestone, type PhotoDraft } from '../db/actions';
 import { addDays, humanDate, localDate } from '../engine/dates';
-import { isRecord, MILESTONE_XP, RECORD_XP } from '../engine/metrics';
+import { bestSet, isRecord, MILESTONE_XP, RECORD_XP, valueFromSets, type WorkSet } from '../engine/metrics';
+import { NumPad, fmtInput, numFrom } from '../components/NumPad';
+import { SetsEditor, setsText } from '../components/SetsEditor';
 import { compressPhoto, useBlobUrl } from '../lib/photo';
 import { toast } from '../lib/toast';
 import { go } from '../lib/router';
@@ -100,20 +102,34 @@ export function Metrics() {
 function MilestoneCard({ info, link = false }: { info: Info; link?: boolean }) {
   const ms = info.milestone!;
   const m = info.metric;
+  const repsAt = ms.mode === 'repsAt';
+  const goal = repsAt ? `${fmtNum(ms.atWeight ?? 0)} ${m.unit} × ${ms.target}` : `${fmtNum(ms.target)} ${m.unit}`;
   const late = ms.deadline && info.forecast && info.forecast > ms.deadline;
+  const cur = info.msCurrent;
   const body = (
     <>
       <span class="spread">
-        <span class="ms-title"><Icon name="target" size={18} stroke={2.2} />Рубеж: {m.title.toLowerCase()} {fmtNum(ms.target)} {m.unit}</span>
-        <span class="muted small strong">{Math.round(info.milestonePct)}%</span>
+        <span class="ms-title"><Icon name="target" size={18} stroke={2.2} />Рубеж: {m.title.toLowerCase()} {goal}</span>
+        <span class="muted small strong">{ms.start === undefined ? '' : `${Math.round(info.milestonePct)}%`}</span>
       </span>
       <ProgressBar pct={info.milestonePct} color="#FF8A5B" height={8} />
-      <span class="spread small muted strong"><span>старт {fmtNum(ms.start)}</span><span class="fg-2">сейчас {info.last ? fmtNum(info.last.value) : '—'}</span><span>цель {fmtNum(ms.target)}</span></span>
-      <span class={late ? 'small danger-text' : info.forecast ? 'small ok-text' : 'small muted'}>
-        {info.forecast
-          ? `по темпу ${late ? 'не успеваешь — ' : 'успеешь '}к ${humanDate(info.forecast)}${ms.deadline ? ` · срок ${humanDate(ms.deadline)}` : ''}`
-          : `прогноз появится после 3 значений за 6 недель${ms.deadline ? ` · срок ${humanDate(ms.deadline)}` : ''}`}
-      </span>
+      {ms.start === undefined ? (
+        <span class="small muted">старт возьмётся из первого значения</span>
+      ) : (
+        <span class="spread small muted strong">
+          <span>старт {fmtNum(ms.start)}{repsAt ? ' повт' : ''}</span>
+          <span class="fg-2">сейчас {cur !== undefined ? fmtNum(cur) : '—'}{repsAt ? ' повт' : ''}</span>
+          <span>цель {repsAt ? `${ms.target} повт` : fmtNum(ms.target)}</span>
+        </span>
+      )}
+      {!repsAt && (
+        <span class={late ? 'small danger-text' : info.forecast ? 'small ok-text' : 'small muted'}>
+          {info.forecast
+            ? `по темпу ${late ? 'не успеваешь — ' : 'успеешь '}к ${humanDate(info.forecast)}${ms.deadline ? ` · срок ${humanDate(ms.deadline)}` : ''}`
+            : `прогноз появится после 3 значений за 6 недель${ms.deadline ? ` · срок ${humanDate(ms.deadline)}` : ''}`}
+        </span>
+      )}
+      {repsAt && ms.deadline && <span class="small muted">срок {humanDate(ms.deadline)}</span>}
     </>
   );
   return link ? <a class="ms-card" href={`#/metrics/${m.id}`}>{body}</a> : <div class="ms-card">{body}</div>;
@@ -123,7 +139,8 @@ function MilestoneCard({ info, link = false }: { info: Info; link?: boolean }) {
 function Chart({ info }: { info: Info }) {
   const vals = info.values.slice(-20);
   if (vals.length === 0) return <p class="muted small">Внеси первое значение — появится график.</p>;
-  const target = info.milestone?.target;
+  // Рубеж по повторам на графике веса не рисуем — другая шкала.
+  const target = info.milestone?.mode === 'repsAt' ? undefined : info.milestone?.target;
   const ys = vals.map((v) => v.value).concat(target !== undefined ? [target] : []);
   let min = Math.min(...ys);
   let max = Math.max(...ys);
@@ -207,7 +224,7 @@ export function MetricDetail({ id }: { id: string }) {
         {[...info.values].reverse().map((v) => (
           <div class="history-row" key={v.id}>
             <span class="muted">{humanDate(v.date)}</span>
-            <span class="strong">{fmtNum(v.value)} {m.unit}{v.reps ? ` × ${v.reps} повт.` : ''}</span>
+            <span class="strong">{v.sets && v.sets.length > 1 ? setsText(v.sets) : `${fmtNum(v.value)} ${m.unit}${v.reps ? ` × ${v.reps} повт.` : ''}`}</span>
             <span class="history-end">
               {v.record && <span class="record-tag">РЕКОРД</span>}
               <button type="button" class="icon-btn" aria-label="Удалить значение" onClick={() => deleteMetricValue(v.id)}><Icon name="trash" size={16} /></button>
@@ -227,39 +244,42 @@ export function MetricDetail({ id }: { id: string }) {
   );
 }
 
-/** Поле значения с −/+ и быстрыми кнопками. Используется и в шторке записи. */
-export function ValueInput({ metric, value, setValue, reps, setReps, compact = false }: {
-  metric: Metric; value: number | null; setValue: (v: number | null) => void; reps: number | null; setReps: (r: number | null) => void; compact?: boolean;
-}) {
-  const w = useWorld();
-  const info = w.metricInfo(metric);
-  const step = metric.unit === 'кг' && metric.hasReps ? 2.5 : metric.unit === 'ч' || metric.unit === 'кг' ? 0.5 : 1;
-  const base = value ?? info.last?.value ?? 0;
+/** Замер вводится подходами (силовые и «раз»), остальные — одним числом. */
+export const usesSets = (m: Metric) => !!m.hasReps || m.unit === 'раз';
+
+/** Подходы последнего значения — для «как в прошлый раз». */
+export const lastSetsOf = (info: Info): WorkSet[] | undefined => {
+  const l = info.last;
+  if (!l) return undefined;
+  if (l.sets?.length) return l.sets;
+  return info.metric.hasReps ? [{ w: l.value, r: l.reps ?? 0 }] : [{ r: l.value }];
+};
+
+/** Будет ли рекорд, и текст подсказки. */
+export function recordHintFor(info: Info, sets: WorkSet[], single: number | null) {
+  const m = info.metric;
+  const v = usesSets(m) ? valueFromSets(sets, !!m.hasReps) : single !== null ? { value: single } : null;
+  if (!v || !isRecord(info.values, v, m.better)) return null;
+  const b = bestSet(sets);
+  const what = usesSets(m) ? (m.hasReps ? `${fmtInput(b?.w ?? 0)} × ${b?.r}` : `${b?.r} ${m.unit}`) : `${fmtInput(v.value)} ${m.unit}`;
+  return `${usesSets(m) && sets.length > 1 ? 'Лучший подход' : 'Это'} ${what} — рекорд, +${RECORD_XP} XP`;
+}
+
+/** Одно крупное число с клавиатурой — для веса, сна и т.п. */
+export function BigNumber({ metric, value, setValue, placeholder }: { metric: Metric; value: number | null; setValue: (n: number | null) => void; placeholder?: number }) {
+  const [open, setOpen] = useState(false);
+  const [draft, setDraft] = useState('');
   return (
-    <div class="stack-8">
-      <div class="stepper">
-        <button type="button" class="btn ghost square" aria-label="Меньше" onClick={() => setValue(Math.max(0, Math.round((base - step) * 10) / 10))}>−</button>
-        <input id={`val-${metric.id}`} class={compact ? 'value-input compact' : 'value-input'} inputMode="decimal" placeholder={info.last ? fmtNum(info.last.value) : '0'}
-          value={value === null ? '' : fmtNum(value)} aria-label={`${metric.title}, ${metric.unit}`}
-          onInput={(e) => { const n = parseFloat(e.currentTarget.value.replace(',', '.')); setValue(Number.isFinite(n) ? n : null); }} />
-        <button type="button" class="btn ghost square" aria-label="Больше" onClick={() => setValue(Math.round((base + step) * 10) / 10)}>+</button>
-      </div>
-      {!compact && info.last && (
-        <div class="chips center-chips">
-          <button type="button" class="chip big" onClick={() => setValue(Math.round((info.last!.value - step) * 10) / 10)}>−{fmtNum(step)}</button>
-          <button type="button" class="chip big" onClick={() => { setValue(info.last!.value); if (info.last!.reps) setReps(info.last!.reps); }}>как в прошлый раз</button>
-          <button type="button" class="chip big" onClick={() => setValue(Math.round((info.last!.value + step) * 10) / 10)}>+{fmtNum(step)}</button>
-        </div>
+    <>
+      <button type="button" class="big-number" onClick={() => { setDraft(value !== null ? fmtInput(value) : placeholder !== undefined ? fmtInput(placeholder) : ''); setOpen(true); }}>
+        <span class={value === null ? 'big-number-val muted' : 'big-number-val'}>{value !== null ? fmtInput(value) : placeholder !== undefined ? fmtInput(placeholder) : '—'}</span>
+        <span class="muted strong">{metric.unit}</span>
+      </button>
+      {open && (
+        <NumPad label={`${metric.title}, ${metric.unit}`} value={draft} onChange={setDraft} step={metric.unit === 'ч' ? 0.5 : metric.unit === 'кг' ? 0.5 : 1}
+          decimal onDone={() => { setValue(numFrom(draft)); setOpen(false); }} onClose={() => { setValue(numFrom(draft)); setOpen(false); }} />
       )}
-      {metric.hasReps && (
-        <div class="chips">
-          <span class="muted small strong reps-label">повторы:</span>
-          {[3, 5, 6, 8, 10, 12].map((r) => (
-            <button type="button" key={r} class={reps === r ? 'chip big primary' : 'chip big'} onClick={() => setReps(reps === r ? null : r)}>{r}</button>
-          ))}
-        </div>
-      )}
-    </div>
+    </>
   );
 }
 
@@ -276,29 +296,39 @@ function PhotoThumb({ p, onRemove }: { p: PhotoDraft; onRemove: () => void }) {
 function AddValueSheet({ metric, onClose }: { metric: Metric; onClose: () => void }) {
   const w = useWorld();
   const info = w.metricInfo(metric);
-  const [value, setValue] = useState<number | null>(null);
-  const [reps, setReps] = useState<number | null>(null);
+  const last = lastSetsOf(info);
+  const [sets, setSets] = useState<WorkSet[]>(() => (last ? last.map((x) => ({ ...x })) : [metric.hasReps ? { w: undefined, r: 0 } : { r: 0 }]));
+  const [single, setSingle] = useState<number | null>(null);
   const [date, setDate] = useState(localDate());
   const [note, setNote] = useState('');
   const [photos, setPhotos] = useState<PhotoDraft[]>([]);
   const [busy, setBusy] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
-  const record = value !== null && isRecord(info.values, { value, reps: reps ?? undefined }, metric.better);
+  const withSets = usesSets(metric);
+  const ready = withSets ? !!bestSet(sets) : single !== null;
+  const hint = recordHintFor(info, sets, single);
 
   const save = async () => {
-    if (value === null || busy) return;
+    if (!ready || busy) return;
     setBusy(true);
-    const r = await addMetricValue(metric.id, { value, reps: reps ?? undefined, note, date, photos });
-    metricToasts(metric, r, value, reps ?? undefined);
-    if (!r.record && !r.milestone) toast({ kind: 'info', title: 'Значение сохранено' });
+    const r = await addMetricValue(metric.id, withSets ? { sets, note, date, photos } : { value: single!, note, date, photos });
+    const shown = withSets ? valueFromSets(sets, !!metric.hasReps)! : { value: single! };
+    metricToasts(metric, r, shown.value, shown.reps);
+    if (!r.record && !r.milestone) toast({ kind: 'info', title: 'Сохранено' });
     onClose();
   };
 
   return (
     <Sheet open onClose={onClose} title={metric.title}>
-      <span class="muted small">{info.last ? `прошлое: ${fmtNum(info.last.value)} ${metric.unit}${info.last.reps ? ` × ${info.last.reps}` : ''} · рекорд ${fmtNum(info.best!.value)}` : 'первое значение — точка отсчёта'}</span>
-      <span class="field-label">{metric.title}, {metric.unit}</span>
-      <ValueInput metric={metric} value={value} setValue={setValue} reps={reps} setReps={setReps} />
+      {withSets ? (
+        <SetsEditor metric={metric} sets={sets} setSets={setSets} lastSets={last} recordHint={hint} />
+      ) : (
+        <>
+          <span class="muted small">{info.last ? `прошлое: ${fmtNum(info.last.value)} ${metric.unit} · лучшее ${fmtNum(info.best!.value)}` : 'первое значение — точка отсчёта'}</span>
+          <BigNumber metric={metric} value={single} setValue={setSingle} placeholder={info.last?.value} />
+          {hint && <div class="record-hint"><Icon name="star" size={18} stroke={2.2} />{hint}</div>}
+        </>
+      )}
       <div class="grid-2">
         <select id="value-date" class="input" value={date} onChange={(e) => setDate(e.currentTarget.value)} aria-label="Дата">
           {[0, 1, 2, 3, 4, 5, 6].map((d) => { const v = addDays(localDate(), -d); return <option value={v} key={v}>{humanDate(v)}</option>; })}
@@ -310,53 +340,91 @@ function AddValueSheet({ metric, onClose }: { metric: Metric; onClose: () => voi
         }} />
       </div>
       {photos.length > 0 && <div class="photo-row">{photos.map((p, i) => <PhotoThumb p={p} key={i} onRemove={() => setPhotos(photos.filter((_, j) => j !== i))} />)}</div>}
-      <input id="value-note" class="input" placeholder="Заметка: например, «с паузой внизу»" value={note} onInput={(e) => setNote(e.currentTarget.value)} />
-      {record && <div class="record-hint"><Icon name="star" size={18} stroke={2.2} />Это новый рекорд: +{RECORD_XP} XP{metric.skillId ? ` в «${w.nodeById.get(metric.skillId)?.title}»` : ''}</div>}
-      <button type="button" class="btn primary" disabled={value === null || busy} onClick={save}>{value === null ? 'Введи значение' : 'Сохранить'}</button>
+      <input id="value-note" class="input" placeholder="Заметка (необязательно)" value={note} onInput={(e) => setNote(e.currentTarget.value)} />
+      <button type="button" class="btn primary" disabled={!ready || busy} onClick={save}>{ready ? 'Сохранить' : withSets ? 'Введи повторы' : 'Введи значение'}</button>
     </Sheet>
   );
 }
 
+/** Рубеж: по значению («жим 80 кг», «15 подтягиваний») или «N кг на M раз». Макет: «Упрощение», экран 4. */
 function MilestoneSheet({ info, onClose }: { info: Info; onClose: () => void }) {
   const m = info.metric;
-  const current = info.last?.value ?? 0;
-  const step = m.unit === 'кг' ? 5 : m.unit === 'ч' ? 0.5 : 5;
-  const presets = [1, 2, 3, 4].map((k) => Math.round((m.better === 'up' ? current + step * k : current - step * k) * 10) / 10).filter((v) => v > 0);
-  const [target, setTarget] = useState<number>(info.milestone?.target ?? presets[1] ?? current);
+  const canRepsAt = !!m.hasReps;
+  const [mode, setMode] = useState<'value' | 'repsAt'>(info.milestone?.mode ?? 'value');
+  const best = info.best;
+  const bestW = best?.value ?? 0;
+  const bestR = best?.reps ?? 0;
+  const base = mode === 'repsAt' ? bestR : bestW;
+  const step = mode === 'repsAt' ? 2 : m.unit === 'кг' ? 5 : m.unit === 'ч' ? 0.5 : 5;
+  const [target, setTarget] = useState<number | null>(info.milestone?.target ?? null);
+  const [atWeight, setAtWeight] = useState<number | null>(info.milestone?.atWeight ?? (bestW || null));
   const [term, setTerm] = useState<'none' | '30' | '90'>('none');
-  const deadline = term === 'none' ? undefined : addDays(localDate(), Number(term));
-  const forecast = info.forecast ?? null;
+  const [pad, setPad] = useState<null | 'target' | 'at'>(null);
+  const [draft, setDraft] = useState('');
+  const up = m.better === 'up' || mode === 'repsAt';
+  const presets = [1, 2, 4].map((k) => Math.round((up ? base + step * k : base - step * k) * 10) / 10).filter((v) => v > 0);
+  const round = up ? Math.ceil((base + step) / 10) * 10 : Math.floor((base - step) / 10) * 10;
+  if (round > 0 && !presets.includes(round)) presets.push(round);
+
+  const switchMode = (md: 'value' | 'repsAt') => { setMode(md); setTarget(null); };
+  const save = async () => {
+    if (target === null) return;
+    const start = mode === 'repsAt' ? (info.values.length ? info.msCurrent ?? undefined : undefined) : info.last?.value;
+    await setMilestone(m.id, {
+      mode, target, atWeight: mode === 'repsAt' ? atWeight ?? 0 : undefined,
+      start: mode === 'repsAt' ? (best ? bestRepsAtOf(info, atWeight ?? 0) : undefined) : start,
+      deadline: term === 'none' ? undefined : addDays(localDate(), Number(term)),
+    });
+    onClose();
+  };
 
   return (
-    <Sheet open onClose={onClose} title={info.milestone ? 'Изменить рубеж' : 'Новый рубеж'}>
-      <div class="row-2">
-        <div class="compare"><span class="section-label">Сейчас</span><span class="compare-lvl">{info.last ? `${fmtNum(current)} ${m.unit}` : '—'}</span><span class="muted small">старт рубежа</span></div>
-        <div class="compare target"><span class="section-label">Цель</span>
-          <input id="ms-target" class="value-input compact" inputMode="decimal" value={fmtNum(target)} aria-label="Цель"
-            onInput={(e) => { const n = parseFloat(e.currentTarget.value.replace(',', '.')); if (Number.isFinite(n)) setTarget(n); }} />
-          <span class="muted small">{m.better === 'up' ? '+' : '−'}{fmtNum(Math.abs(target - current))} {m.unit}</span>
+    <Sheet open onClose={onClose} title={`Рубеж · ${m.title}`}>
+      <span class="muted small">{best ? `лучшее сейчас: ${fmtNum(bestW)} ${m.unit}${bestR ? ` × ${bestR}` : ''}` : 'значений ещё нет — старт возьмётся из первого'}</span>
+      {canRepsAt && (
+        <div class="segmented two-line">
+          <button type="button" class={mode === 'value' ? 'on' : ''} onClick={() => switchMode('value')}><span>Вес</span><span class="seg-sub">«{m.title.toLowerCase()} 80 {m.unit}»</span></button>
+          <button type="button" class={mode === 'repsAt' ? 'on' : ''} onClick={() => switchMode('repsAt')}><span>Повторы</span><span class="seg-sub">«60 {m.unit} на 10 раз»</span></button>
         </div>
-      </div>
-      <div class="chips">{presets.map((p) => <button type="button" key={p} class={target === p ? 'chip big primary' : 'chip big'} onClick={() => setTarget(p)}>{fmtNum(p)}</button>)}</div>
-      <span class="field-label">Срок · необязательно</span>
+      )}
+      {mode === 'repsAt' && (
+        <button type="button" class="at-weight" onClick={() => { setDraft(atWeight !== null ? fmtInput(atWeight) : ''); setPad('at'); }}>
+          с весом <b>{atWeight !== null ? fmtInput(atWeight) : '—'} {m.unit}</b> <span class="muted small">изменить</span>
+        </button>
+      )}
+      <button type="button" class="ms-target" onClick={() => { setDraft(target !== null ? fmtInput(target) : ''); setPad('target'); }}>
+        <span class="section-label ms-target-label">Цель</span>
+        <span class="ms-target-num">{target !== null ? fmtInput(target) : '—'} <span class="muted">{mode === 'repsAt' ? 'повт' : m.unit}</span></span>
+        <span class="muted small">нажми на число, чтобы ввести своё</span>
+      </button>
+      {base > 0 && (
+        <div class="chips">
+          {presets.map((p) => <button type="button" key={p} class={target === p ? 'chip big primary' : 'chip big'} onClick={() => setTarget(p)}>{fmtInput(p)}</button>)}
+        </div>
+      )}
       <div class="segmented">
-        <button type="button" class={term === 'none' ? 'on' : ''} onClick={() => setTerm('none')}>нет</button>
+        <button type="button" class={term === 'none' ? 'on' : ''} onClick={() => setTerm('none')}>без срока</button>
         <button type="button" class={term === '30' ? 'on' : ''} onClick={() => setTerm('30')}>1 мес</button>
         <button type="button" class={term === '90' ? 'on' : ''} onClick={() => setTerm('90')}>3 мес</button>
       </div>
-      {info.values.length >= 3 && (
-        <div class="notice small">
-          <span>{forecast && info.milestone?.target === target ? `По твоему темпу — примерно к ${humanDate(forecast)}.` : 'Прогноз по темпу появится на экране замера после сохранения.'}</span>
-        </div>
-      )}
-      <span class="muted small"><Icon name="star" size={14} /> Взятый рубеж: +{MILESTONE_XP} XP{m.skillId ? ' навыку' : ''} и достижение</span>
-      <button type="button" class="btn primary" disabled={!info.last || target === current} onClick={async () => { await setMilestone(m.id, current, target, deadline); onClose(); }}>
-        {!info.last ? 'Сначала внеси значение' : 'Поставить рубеж'}
-      </button>
+      <span class="muted small center">Взятый рубеж: +{MILESTONE_XP} XP{m.skillId ? ' навыку' : ''}</span>
+      <button type="button" class="btn primary" disabled={target === null || (mode === 'repsAt' && !atWeight)} onClick={save}>{target === null ? 'Выбери цель' : 'Поставить рубеж'}</button>
       {info.milestone && <button type="button" class="link small danger-text" onClick={async () => { await removeMilestone(info.milestone!.id); onClose(); }}>Убрать рубеж</button>}
+      {pad && (
+        <NumPad label={pad === 'at' ? `Вес, ${m.unit}` : mode === 'repsAt' ? 'Цель, повторы' : `Цель, ${m.unit}`} value={draft} onChange={setDraft}
+          step={pad === 'at' ? 2.5 : step} decimal={pad === 'at' || mode !== 'repsAt'}
+          onDone={() => { const n = numFrom(draft); if (pad === 'at') setAtWeight(n); else setTarget(n); setPad(null); }}
+          onClose={() => { const n = numFrom(draft); if (pad === 'at') setAtWeight(n); else setTarget(n); setPad(null); }} />
+      )}
     </Sheet>
   );
 }
+
+const bestRepsAtOf = (info: Info, w: number) => {
+  let best = 0;
+  for (const v of info.values) for (const s of v.sets?.length ? v.sets : [{ w: v.value, r: v.reps ?? 0 }]) if ((s.w ?? 0) >= w && s.r > best) best = s.r;
+  return best;
+};
 
 function NewMetricSheet({ onClose }: { onClose: () => void }) {
   const w = useWorld();
@@ -405,7 +473,7 @@ export function SkillMetrics({ skillId }: { skillId: string }) {
         <a class="skill-metric" href={`#/metrics/${i.metric.id}`} key={i.metric.id}>
           <Icon name="chart" size={18} />
           <span class="strong">{i.metric.title}</span>
-          <span class="muted small">{i.last ? `${fmtNum(i.last.value)} ${i.metric.unit}${i.milestone ? ` · рубеж ${fmtNum(i.milestone.target)}` : ''}` : 'нет значений'}</span>
+          <span class="muted small">{i.last ? `${fmtNum(i.last.value)} ${i.metric.unit}${i.milestone ? ` · рубеж ${i.milestone.mode === 'repsAt' ? `${fmtNum(i.milestone.atWeight ?? 0)}×${i.milestone.target}` : fmtNum(i.milestone.target)}` : ''}` : 'нет значений'}</span>
         </a>
       ))}
     </div>

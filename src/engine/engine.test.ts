@@ -4,7 +4,7 @@ import { characterLevel, skillLevel } from './levels';
 import { computeProgress, skillProgress } from './progress';
 import { bestStreak, currentStreak } from './dates';
 import { assignStages, currentStage, stagesOf } from './stages';
-import { bestValue, forecastDate, isRecord, milestoneProgress, reached } from './metrics';
+import { bestRepsAt, bestSet, bestValue, forecastDate, isRecord, milestoneProgress, reached, valueFromSets } from './metrics';
 import { countProgress, weekStart } from './quests';
 
 describe('xp', () => {
@@ -85,6 +85,22 @@ describe('замеры', () => {
     expect(forecastDate(vals, 80, '2026-10-04')).toBe('2026-11-29');
     expect(forecastDate(vals.slice(0, 2), 80, '2026-10-04')).toBeNull();
     expect(forecastDate(vals, 40, '2026-10-04')).toBeNull();
+  });
+});
+
+describe('подходы', () => {
+  it('лучший подход: тяжелее, при равном весе — больше повторов', () => {
+    expect(bestSet([{ w: 60, r: 8 }, { w: 62.5, r: 6 }, { w: 62.5, r: 5 }])).toEqual({ w: 62.5, r: 6 });
+    expect(bestSet([{ r: 8 }, { r: 10 }, { r: 9 }])).toEqual({ r: 10 });
+    expect(bestSet([{ w: 60, r: 0 }])).toBeUndefined();
+  });
+  it('значение из подходов', () => {
+    expect(valueFromSets([{ w: 60, r: 8 }, { w: 62.5, r: 6 }], true)).toEqual({ value: 62.5, reps: 6 });
+    expect(valueFromSets([{ r: 8 }, { r: 10 }], false)).toEqual({ value: 10 });
+  });
+  it('рубеж «60 кг на 10 раз»: лучшие повторы с весом не меньше 60', () => {
+    const vals = [{ value: 62.5, reps: 6, sets: [{ w: 60, r: 8 }, { w: 62.5, r: 6 }] }, { value: 55, reps: 12 }];
+    expect(bestRepsAt(vals, 60)).toBe(8);
   });
 });
 
