@@ -1,5 +1,6 @@
 // Установка PWA: ловим событие beforeinstallprompt от Chrome и показываем свою кнопку.
 import { useEffect, useState } from 'preact/hooks';
+import { Capacitor } from '@capacitor/core';
 
 interface InstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -21,6 +22,7 @@ addEventListener('appinstalled', () => {
 });
 
 export const isStandalone = () =>
+  Capacitor.isNativePlatform() ||
   matchMedia('(display-mode: standalone)').matches || (navigator as Navigator & { standalone?: boolean }).standalone === true;
 
 export const isIos = () => /iphone|ipad|ipod/i.test(navigator.userAgent);

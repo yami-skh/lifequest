@@ -55,6 +55,8 @@ PWA, в первую очередь под телефон. Данные хран
 - `npm run dev` — сервер разработки, `npm test` — тесты движка, `npm run build` — сборка в `dist/`.
 - Опубликовано: https://yami-skh.github.io/lifequest/ (репозиторий github.com/yami-skh/lifequest, публичный). Выкладка: `npm run deploy` — тесты, сборка, force-push `dist/` в ветку `gh-pages`. GitHub Actions не используется: у токена gh нет scope `workflow`.
 - Телефон брата не в одной сети с ПК — проверять на телефоне только через опубликованную версию.
+- **APK (Capacitor 8):** `npm run apk` → `D:/Android/release/LifeQuest-<version>.apk`. Перед новой версией поднять `version` в package.json (versionCode = major·10000+minor·100+patch, должен расти). Инструменты на D: JDK `D:/Android/jdk`, SDK `D:/Android/sdk`, кэш Gradle `D:/Android/gradle`. Ключ подписи `D:/Android/keys/lifequest.jks` + пароль в `keystore.properties` рядом — **не терять**, без него обновления не встанут поверх. В APK service worker не регистрируется (`Capacitor.isNativePlatform()`).
+- У APK своё хранилище: данные из браузерной версии переносятся только через резервную копию (экспорт/импорт, §15 шаг 8).
 - `src/engine/` — чистые функции (XP, уровни, прогресс, даты, достижения), тесты в `engine.test.ts`.
 - `src/db/` — Dexie-схема (`db.ts`), стартовый набор (`seed.ts`), все изменения (`actions.ts`), загрузка и производные значения (`world.ts`, контекст `useWorld()`).
 - `src/screens/`, `src/components/` — экраны и общие компоненты. Роутер на hash (`src/lib/router.ts`).

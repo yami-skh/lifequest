@@ -9,6 +9,8 @@ export default defineConfig({
     preact(),
     VitePWA({
       registerType: 'autoUpdate',
+      // Регистрируем сами в main.tsx: в APK service worker не нужен.
+      injectRegister: false,
       includeAssets: ['icon.svg', 'apple-touch-icon.png'],
       manifest: {
         id: './',

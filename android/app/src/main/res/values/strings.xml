@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">LifeQuest</string>
+    <string name="title_activity_main">LifeQuest</string>
+    <string name="package_name">io.github.yamiskh.lifequest</string>
+    <string name="custom_url_scheme">io.github.yamiskh.lifequest</string>
+</resources>
