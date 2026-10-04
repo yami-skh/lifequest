@@ -26,7 +26,7 @@ export function AreaTile({ node, size = 40 }: { node: Node | undefined; size?: n
   const color = node?.color ?? 'var(--muted)';
   return (
     <span class="area-tile" style={{ width: `${size}px`, height: `${size}px`, color, background: `color-mix(in srgb, ${color} 16%, transparent)` }}>
-      {node?.title.slice(0, 1) ?? '?'}
+      {node?.icon ? <Icon name={node.icon} size={Math.round(size * 0.55)} /> : node?.title.slice(0, 1) ?? '?'}
     </span>
   );
 }

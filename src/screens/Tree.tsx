@@ -3,6 +3,7 @@ import { useWorld } from '../db/world';
 import type { Node, NodeKind } from '../db/db';
 import { addNode, deleteNode, renameNode } from '../db/actions';
 import { AREA_COLORS } from '../db/seed';
+import { AREA_ICONS } from '../db/db';
 import { go } from '../lib/router';
 import { Icon } from '../components/Icon';
 import { Confirm, Sheet, pctText } from '../components/ui';
@@ -163,6 +164,7 @@ function NodeEditor({ editor, onClose, onDelete, onAdded, setEditor }: {
 }) {
   const [title, setTitle] = useState('');
   const [color, setColor] = useState(AREA_COLORS[0]);
+  const [icon, setIcon] = useState(AREA_ICONS[0]);
 
   if (!editor) return null;
 
@@ -191,7 +193,7 @@ function NodeEditor({ editor, onClose, onDelete, onAdded, setEditor }: {
     if (!title.trim()) return;
     if (editor.mode === 'rename') await renameNode(editor.node.id, title);
     else {
-      await addNode(editor.parent?.id ?? null, editor.kind, title, editor.kind === 'area' ? color : undefined);
+      await addNode(editor.parent?.id ?? null, editor.kind, title, editor.kind === 'area' ? color : undefined, editor.kind === 'area' ? icon : undefined);
       onAdded(editor.parent?.id ?? null);
     }
     setTitle('');
@@ -207,6 +209,15 @@ function NodeEditor({ editor, onClose, onDelete, onAdded, setEditor }: {
           <div class="colors" role="radiogroup" aria-label="Цвет направления">
             {AREA_COLORS.map((c) => (
               <button type="button" key={c} role="radio" aria-checked={color === c} aria-label={c} class={color === c ? 'color on' : 'color'} style={{ background: c }} onClick={() => setColor(c)} />
+            ))}
+          </div>
+        )}
+        {!isRename && editor.kind === 'area' && (
+          <div class="icons" role="radiogroup" aria-label="Иконка направления">
+            {AREA_ICONS.map((ic) => (
+              <button type="button" key={ic} role="radio" aria-checked={icon === ic} aria-label={ic} class={icon === ic ? 'icon-pick on' : 'icon-pick'} style={{ color }} onClick={() => setIcon(ic)}>
+                <Icon name={ic} size={22} />
+              </button>
             ))}
           </div>
         )}

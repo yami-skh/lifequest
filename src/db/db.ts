@@ -16,6 +16,8 @@ export interface Node {
   title: string;
   /** Цвет направления (только у area). */
   color?: string;
+  /** Иконка направления (только у area), имя из Icon.tsx. */
+  icon?: string;
   order: number;
   requires?: Requirement[];
   createdAt: string;
@@ -62,6 +64,12 @@ export interface Note {
   createdAt: string;
 }
 
+export const AREA_ICON_BY_TITLE: Record<string, string> = {
+  Интеллект: 'bulb', Тело: 'dumbbell', Практика: 'tools', Творчество: 'brush', Технологии: 'monitor',
+};
+
+export const AREA_ICONS = ['bulb', 'dumbbell', 'tools', 'brush', 'monitor', 'heart', 'music', 'globe', 'leaf', 'code', 'chef', 'coin', 'book', 'compass', 'star'];
+
 class LifeQuestDB extends Dexie {
   profile!: Table<Profile, string>;
   nodes!: Table<Node, string>;
@@ -84,6 +92,12 @@ class LifeQuestDB extends Dexie {
       unlocked: 'achievementId',
       notes: 'id, skillId',
     });
+    // v2: иконки у стартовых направлений, созданных до их появления.
+    this.version(2).stores({}).upgrade((tx) =>
+      tx.table<Node, string>('nodes').where('kind').equals('area').modify((n) => {
+        if (!n.icon && AREA_ICON_BY_TITLE[n.title]) n.icon = AREA_ICON_BY_TITLE[n.title];
+      }),
+    );
   }
 }
 

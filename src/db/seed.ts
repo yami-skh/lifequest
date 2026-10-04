@@ -1,5 +1,5 @@
 // Стартовый набор. ARCHITECTURE.md §13.
-import { db, nowIso, uid, type Goal, type Node } from './db';
+import { AREA_ICON_BY_TITLE, db, nowIso, uid, type Goal, type Node } from './db';
 import type { GoalKind } from '../engine/progress';
 
 type G = [GoalKind, string];
@@ -79,6 +79,7 @@ export async function seedIfEmpty() {
       const kind = parentId === null ? 'area' : s.goals ? 'skill' : 'branch';
       const node: Node = { id: uid(), parentId, kind, title: s.title, order, createdAt };
       if (s.color) node.color = s.color;
+      if (kind === 'area' && AREA_ICON_BY_TITLE[s.title]) node.icon = AREA_ICON_BY_TITLE[s.title];
       nodes.push(node);
       byTitle.set(s.title, node.id);
       if (s.requires) pending.push([node, s.requires]);

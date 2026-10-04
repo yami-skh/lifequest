@@ -97,13 +97,14 @@ export const deleteGoal = (id: string) => db.goals.delete(id);
 
 // --- дерево ---
 
-export async function addNode(parentId: string | null, kind: NodeKind, title: string, color?: string) {
+export async function addNode(parentId: string | null, kind: NodeKind, title: string, color?: string, icon?: string) {
   // null не попадает в индекс Dexie, поэтому направления считаем по kind.
   const count = parentId
     ? await db.nodes.where('parentId').equals(parentId).count()
     : await db.nodes.where('kind').equals('area').count();
   const node: Node = { id: uid(), parentId, kind, title: title.trim(), order: count, createdAt: nowIso() };
   if (color) node.color = color;
+  if (icon) node.icon = icon;
   await db.nodes.add(node);
   return node;
 }

@@ -200,6 +200,9 @@ textarea { resize: vertical; line-height: 1.4; }
 .colors { display: flex; flex-wrap: wrap; gap: 10px; }
 .color { width: 40px; height: 40px; border-radius: 20px; border: 3px solid transparent; }
 .color.on { border-color: var(--fg); }
+.icons { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
+.icon-pick { height: 48px; border-radius: 12px; border: 2px solid transparent; background: var(--surface-2); display: flex; align-items: center; justify-content: center; }
+.icon-pick.on { border-color: currentColor; }
 
 /* навык */
 .topbar { display: flex; align-items: center; gap: 4px; margin: -8px 0 -8px -12px; }
