@@ -451,9 +451,9 @@
     },
     "AiPreview.dc.html": {
       "h": 844,
-      "page": "ai",
+      "page": "aicopy",
       "radius": 28,
-      "title": "Предложенные цели",
+      "title": "Предложенные цели (как раньше)",
       "w": 390,
       "x": 900,
       "y": 0
@@ -466,6 +466,33 @@
       "w": 390,
       "x": 1350,
       "y": 0
+    },
+    "AiCopy.dc.html": {
+      "h": 844,
+      "page": "aicopy",
+      "radius": 28,
+      "title": "Шаги: скопировать → открыть → вставить",
+      "w": 390,
+      "x": 0,
+      "y": 0
+    },
+    "AiPaste.dc.html": {
+      "h": 844,
+      "page": "aicopy",
+      "radius": 28,
+      "title": "Если ответ не тот",
+      "w": 390,
+      "x": 450,
+      "y": 0
+    },
+    "AiSettingsAny.dc.html": {
+      "h": 400,
+      "page": "aicopy",
+      "radius": 28,
+      "title": "Настройки",
+      "w": 390,
+      "x": 1350,
+      "y": 0
     }
   },
   "createdOnFiles": {
@@ -475,7 +502,7 @@
   "designSystems": [],
   "launch": {
     "view": "canvas",
-    "page": "ai"
+    "page": "aicopy"
   },
   "notes": {
     "atelierTitle": {
@@ -589,6 +616,14 @@
       "text": "AI-помощник целей: кнопка, запрос, предпросмотр, код доступа",
       "x": 0,
       "y": -260
+    },
+    "aicopyTitle": {
+      "kind": "title1",
+      "maxW": 1720,
+      "page": "aicopy",
+      "text": "AI-помощник через копирование: подходит любая нейросеть",
+      "x": 0,
+      "y": -260
     }
   },
   "order": [
@@ -642,7 +677,10 @@
     "AiSkill.dc.html",
     "AiAsk.dc.html",
     "AiPreview.dc.html",
-    "AiSettings.dc.html"
+    "AiSettings.dc.html",
+    "AiCopy.dc.html",
+    "AiPaste.dc.html",
+    "AiSettingsAny.dc.html"
   ],
   "pages": [
     {
@@ -692,6 +730,10 @@
     {
       "id": "ai",
       "name": "AI-помощник целей"
+    },
+    {
+      "id": "aicopy",
+      "name": "AI: любая нейросеть"
     }
   ],
   "title": "LifeQuest — макет"
