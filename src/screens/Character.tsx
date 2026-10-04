@@ -2,6 +2,7 @@ import { useWorld } from '../db/world';
 import { Icon } from '../components/Icon';
 import { AreaTile, ProgressBar, SectionLabel, pctText } from '../components/ui';
 import { EntryCard } from '../components/EntryCard';
+import { InstallCard } from '../components/InstallCard';
 
 export function Character({ onAdd }: { onAdd: () => void }) {
   const w = useWorld();
@@ -40,6 +41,8 @@ export function Character({ onAdd }: { onAdd: () => void }) {
           <span>всего {w.totalXp} XP</span>
         </div>
       </section>
+
+      <InstallCard />
 
       <section class="stack-10">
         <SectionLabel>Направления</SectionLabel>

@@ -70,6 +70,10 @@ main { padding-bottom: calc(var(--nav-h) + var(--safe-b) + 24px); }
 .mini-bar { display: block; height: 5px; border-radius: 3px; background: var(--line); overflow: hidden; }
 .mini-bar > span { display: block; height: 100%; border-radius: 3px; }
 
+/* установка */
+.install { display: flex; flex-direction: column; gap: 10px; border-color: var(--gold); }
+.install .icon-btn { margin: -10px -10px -10px 0; }
+
 /* персонаж */
 .char-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
 .streak { display: flex; align-items: center; gap: 6px; padding: 8px 12px; border-radius: 99px; background: var(--surface-2); color: var(--muted); font-weight: 800; font-size: 14px; white-space: nowrap; }

@@ -11,6 +11,7 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['icon.svg', 'apple-touch-icon.png'],
       manifest: {
+        id: './',
         name: 'LifeQuest',
         short_name: 'LifeQuest',
         description: 'Прокачка себя как RPG-персонажа',
