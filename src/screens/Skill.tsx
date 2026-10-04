@@ -13,6 +13,7 @@ import { fmtInput } from '../components/NumPad';
 import { bestSet } from '../engine/metrics';
 import { EntryCard } from '../components/EntryCard';
 import { RequirementsSheet } from '../components/RequirementsSheet';
+import { AiGoalsButton } from '../components/AiGoals';
 import { MilestoneCard, SkillMetrics, Sparkline, lastSetsOf, usesSets, type MetricInfo } from './Metrics';
 import { usePhotoUrl } from '../lib/photo';
 import type { EntryPreset } from './EntrySheet';
@@ -146,9 +147,12 @@ export function Skill({ id, onAdd }: { id: string; onAdd: (p: EntryPreset) => vo
           <span class="next-goals-label">{cur ? `Следующие цели · ступень ${cur.stage}` : 'Цели'}</span>
           {cur?.goals.filter((g) => !g.done).slice(0, 2).map((g) => <GoalRow g={g} editing={false} key={g.id} />)}
           {!cur && <span class="muted small">{goals.length ? 'Все цели пройдены — добавь новую ступень.' : 'Целей пока нет. Добавь, что хочешь узнать и что сделать руками.'}</span>}
-          <button type="button" class="link small" onClick={() => toggle('goals')} aria-expanded={fold === 'goals'}>
-            {fold === 'goals' ? 'Свернуть' : goals.length ? `Все цели (${goals.length}) →` : 'Добавить цель →'}
-          </button>
+          <div class="spread">
+            <button type="button" class="link small" onClick={() => toggle('goals')} aria-expanded={fold === 'goals'}>
+              {fold === 'goals' ? 'Свернуть' : goals.length ? `Все цели (${goals.length}) →` : 'Добавить цель →'}
+            </button>
+            <AiGoalsButton skillId={id} />
+          </div>
           {fold === 'goals' && <Goals skillId={id} goals={goals} />}
         </section>
       )}
@@ -162,6 +166,7 @@ export function Skill({ id, onAdd }: { id: string; onAdd: (p: EntryPreset) => vo
       <div class="fold-list">
         {workout && (
           <FoldRow title="Цели и ступени" meta={goalsMeta} open={fold === 'goals'} onToggle={() => toggle('goals')}>
+            <div class="ai-row"><AiGoalsButton skillId={id} /></div>
             <Goals skillId={id} goals={goals} />
           </FoldRow>
         )}

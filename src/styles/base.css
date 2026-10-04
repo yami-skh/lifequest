@@ -31,6 +31,9 @@
   --blue: #7AA7FF;
   --blue-bg: rgba(122, 167, 255, 0.15);
   --nav-bg: #151821;
+  --ai: #B9A4FF;
+  --ai-bg: #241F3A;
+  --ai-fg: #D9CFFF;
   --display: 'Unbounded Variable', 'Unbounded', 'Segoe UI', system-ui, sans-serif;
   --body: 'Manrope Variable', 'Manrope', 'Segoe UI', system-ui, sans-serif;
   --nav-h: 76px;
@@ -71,6 +74,9 @@
   --blue: #2F66D0;
   --blue-bg: rgba(47, 102, 208, 0.12);
   --nav-bg: #FFFFFF;
+  --ai: #6B4FD8;
+  --ai-bg: #EEE9FF;
+  --ai-fg: #3E2C8F;
   /* цвета направлений (src/db/seed.ts AREA_COLORS) — темнее, чтобы читались на белом */
   --a-7AA7FF: #2F66D0;
   --a-FF8A5B: #D9561F;

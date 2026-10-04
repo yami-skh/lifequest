@@ -11,12 +11,14 @@
 
 ## src/components
 
+- **AiGoals.tsx** (137) — «Предложить цели» — кнопка на навыке и шторка: запрос → ожидание → предпросмотр с галочками.
+  WISHES:12, *AiGoalsButton:15, Phase:27, AiGoalsSheet:29
 - **EntryCard.tsx** (83)
   Thumb:12, *EntryCard:17
 - **FocusAndHints.tsx** (79) — Главный экран: «В фокусе» и «Ближайшее». ARCHITECTURE.md §16, идеи 1 и 5.
   *FocusBlock:7, *HintsBlock:37
-- **Icon.tsx** (73) — Контурные иконки 24×24, цвет берут из currentColor.
-  PATHS:3, *IconName:64, *Icon:66
+- **Icon.tsx** (74) — Контурные иконки 24×24, цвет берут из currentColor.
+  PATHS:3, *IconName:65, *Icon:67
 - **InstallCard.tsx** (46)
   HIDE_KEY:6, *InstallCard:9
 - **NumPad.tsx** (79) — Крупная цифровая клавиатура для весов, повторов и целей.
@@ -30,15 +32,15 @@
 
 ## src/data
 
-- **changelog.ts** (114) — Что нового в версиях — для пользователя, простыми словами. Новые версии — сверху.
-  *ChangeKind:4, *Change:5, *Release:6, *CHANGELOG:8, *SEEN_BEFORE_CHANGELOG:113
+- **changelog.ts** (121) — Что нового в версиях — для пользователя, простыми словами. Новые версии — сверху.
+  *ChangeKind:4, *Change:5, *Release:6, *CHANGELOG:8, *SEEN_BEFORE_CHANGELOG:120
 
 ## src/db
 
-- **actions.ts** (367) — Все изменения данных.
-  *PhotoDraft:10, *EntryDraft:12, *primaryHistory:26, *saveEntry:33, *deleteEntry:80, *toggleGoal:92, *addGoal:99, *awardStages:108, *toggleFocus:132, *setRequirements:140, *deleteGoal:142, *addNode:146, *renameNode:158, *deleteNode:161, *addNote:179, *toggleNoteStudied:183, *deleteNote:188, *setSeenVersion:192, *setName:193, *unlockAchievements:195, *resetAll:200, *createQuest:207, *toggleCustomStep:213, *abandonQuest:221, *deleteQuest:222, *completeQuest:225, *maintainQuests:239, *toggleWeeklyTemplate:264, *addMetric:279, *deleteMetric:284, bonus:293, *addMetricValue:304, *deleteMetricValue:346, *setMilestone:356, *removeMilestone:363, *fmtNum:366
-- **db.ts** (238) — Хранилище на устройстве. ARCHITECTURE.md §11.
-  *NodeKind:7, *Profile:9, *Requirement:25, *Node:27, *Goal:45, *Entry:57, *EntrySkill:74, *Photo:76, *Unlocked:78, *Note:80, *QuestKind:92, *CountRule:94, *QuestStep:104, *Quest:111, *Metric:130, *MetricValue:141, *Milestone:155, *AREA_ICON_BY_TITLE:170, *AREA_ICONS:174, LifeQuestDB:176, *db:229, *uid:232, *nowIso:237
+- **actions.ts** (368) — Все изменения данных.
+  *PhotoDraft:10, *EntryDraft:12, *primaryHistory:26, *saveEntry:33, *deleteEntry:80, *toggleGoal:92, *addGoal:99, *awardStages:108, *toggleFocus:132, *setRequirements:140, *deleteGoal:142, *addNode:146, *renameNode:158, *deleteNode:161, *addNote:179, *toggleNoteStudied:183, *deleteNote:188, *setAiCode:192, *setSeenVersion:193, *setName:194, *unlockAchievements:196, *resetAll:201, *createQuest:208, *toggleCustomStep:214, *abandonQuest:222, *deleteQuest:223, *completeQuest:226, *maintainQuests:240, *toggleWeeklyTemplate:265, *addMetric:280, *deleteMetric:285, bonus:294, *addMetricValue:305, *deleteMetricValue:347, *setMilestone:357, *removeMilestone:364, *fmtNum:367
+- **db.ts** (240) — Хранилище на устройстве. ARCHITECTURE.md §11.
+  *NodeKind:7, *Profile:9, *Requirement:27, *Node:29, *Goal:47, *Entry:59, *EntrySkill:76, *Photo:78, *Unlocked:80, *Note:82, *QuestKind:94, *CountRule:96, *QuestStep:106, *Quest:113, *Metric:132, *MetricValue:143, *Milestone:157, *AREA_ICON_BY_TITLE:172, *AREA_ICONS:176, LifeQuestDB:178, *db:231, *uid:234, *nowIso:239
 - **seed.ts** (150) — Стартовый набор. ARCHITECTURE.md §13.
   G:7, SeedNode:8, t:17, p:18, *AREA_COLORS:20, TREE:22, *seedIfEmpty:71, STARTER_VERSION:110, STARTER_METRICS:112, *ensureStarter:121
 - **world.ts** (412) — Всё состояние разом и производные значения. Данных у одного человека немного,
@@ -68,6 +70,8 @@
 
 ## src/lib
 
+- **ai.ts** (41) — AI-помощник целей: запросы к серверу-посреднику (server/, Cloudflare Worker). Ключ Claude — только на сервере.
+  *AI_URL:6, *AiGoal:8, *AiStage:9, *AiGoalsAnswer:10, *AiSkillInput:11, *AiError:19, call:25, *askGoals:37, *fetchQuota:40
 - **backButton.ts** (60) — Системная кнопка «Назад» в APK: закрывает верхнее открытое (клавиатура, шторка, фото),
   stack:9, *useBackClose:12, EXIT_MS:26, exitArmedAt:27, *closeTop:30, *handleBack:37, *initBackButton:49
 - **backup.ts** (171) — Резервная копия: всё в один .zip — data.json + фото. ARCHITECTURE.md §12.
@@ -110,17 +114,17 @@
   SOON:7, *More:16
 - **Quests.tsx** (447) — Квесты. Макет: холст, страница «Квесты». ARCHITECTURE.md §6.
   KIND_TITLE:14, daysToMonday:16, *QuestCard:22, WeeklyRow:43, *Quests:64, *QuestDetail:148, stepKindLabel:228, DraftKind:232, NewQuestSheet:234, StepBuilder:313, *QuestsBlock:412
-- **Settings.tsx** (162) — Настройки: персонаж, тема, недельные квесты, резервная копия, о приложении, стереть данные.
-  THEMES:16, Toggle:22, Group:31, *Settings:40, AboutRow:111, hiddenThisSession:130, *UpdateCard:131
-- **Skill.tsx** (431)
-  *stagesToast:22, Fold:25, word:26, *Skill:30, .toggle:60, .onFocus:62, FoldRow:188, WorkoutCard:202, SkillMenu:237, GoalRow:274, Goals:287, Notes:366, GalleryItem:406, FullPhoto:411, Gallery:421
+- **Settings.tsx** (216) — Настройки: персонаж, тема, недельные квесты, резервная копия, о приложении, стереть данные.
+  THEMES:17, Toggle:23, Group:32, *Settings:41, AboutRow:116, hiddenThisSession:135, *UpdateCard:136, AiBlock:169
+- **Skill.tsx** (436)
+  *stagesToast:23, Fold:26, word:27, *Skill:31, .toggle:61, .onFocus:63, FoldRow:193, WorkoutCard:207, SkillMenu:242, GoalRow:279, Goals:292, Notes:371, GalleryItem:411, FullPhoto:416, Gallery:426
 - **Tree.tsx** (289)
   Editor:13, loadExpanded:18, *Tree:26, .toggle:37, .skillCount:55, .skillsIn:58, .menuBtn:61, .renderChildren:67, .renderNode:77, KIND_LABEL:215, NodeEditor:217
 
 ## src/styles
 
-- **base.css** (155) — Тёмная тема по макету: золото = XP, у направлений свои цвета.
-  Тёмная тема по макету: золото = XP, у направлений свои цвета.:1, Светлая тема (макет: холст, «Настройки и обновления»). Соответствие цветов — tools/light_palette.py.:41, текст:102, раскладка:113, полоски:126, нижняя панель:133, всплывашки:141
+- **base.css** (161) — Тёмная тема по макету: золото = XP, у направлений свои цвета.
+  Тёмная тема по макету: золото = XP, у направлений свои цвета.:1, Светлая тема (макет: холст, «Настройки и обновления»). Соответствие цветов — tools/light_palette.py.:44, текст:108, раскладка:119, полоски:132, нижняя панель:139, всплывашки:147
 - **common.css** (90) — записи
   записи:1, чипы:16, кнопки:26, поля:43, фото:53, шторка:65
 - **entry.css** (50) — шторка записи (0.5)
@@ -135,7 +139,7 @@
   резервная копия:1, «скоро» в «Ещё»:21, достижения:28, что нового:40, настройки, тема, обновление (0.7):60
 - **quests.css** (34) — квесты
   квесты:1
-- **skill.css** (92) — навык
-  навык:1, навык: фокус, требования, ступени:21, навык 0.6: шапка, тренировка, сворачиваемые блоки, меню ⋯:58
+- **skill.css** (115) — навык
+  навык:1, навык: фокус, требования, ступени:21, навык 0.6: шапка, тренировка, сворачиваемые блоки, меню ⋯:58, AI-помощник целей:93
 - **tree.css** (86) — дерево
   дерево:1, дерево: направления-карточки, ветви-линии, навыки-узлы:20, вложенные ветки — короткий отступ, линия идёт от ромбика:38, туман: навык ещё не исследован:64, ржавчина: 60+ дней без записей:68

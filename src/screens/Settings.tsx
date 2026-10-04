@@ -5,7 +5,8 @@ import { useState } from 'preact/hooks';
 import { Capacitor } from '@capacitor/core';
 import { useWorld } from '../db/world';
 import { db } from '../db/db';
-import { resetAll, setName, toggleWeeklyTemplate } from '../db/actions';
+import { resetAll, setAiCode, setName, toggleWeeklyTemplate } from '../db/actions';
+import { AiError, fetchQuota } from '../lib/ai';
 import { WEEKLY_TEMPLATES } from '../engine/quests';
 import { humanDate } from '../engine/dates';
 import { type ThemePref, setThemePref, useThemePref } from '../lib/theme';
@@ -80,6 +81,10 @@ export function Settings() {
           <Toggle on={reminder} title="Напоминать раз в неделю" sub={p?.lastBackupAt ? `последняя копия: ${humanDate(p.lastBackupAt.slice(0, 10)).toLowerCase()}` : 'копий ещё не было'} onClick={() => db.profile.update('me', { backupReminder: !reminder })} />
           <a class="menu-row" href="#/backup"><span class="menu-row-text"><span class="strong">Сделать копию или восстановить</span></span><Icon name="right" size={16} stroke={2.4} /></a>
         </div>
+      </Group>
+
+      <Group label="AI-помощник">
+        <AiBlock />
       </Group>
 
       <Group label="Звуки и напоминания">
@@ -157,5 +162,54 @@ export function UpdateCard({ fallback }: { fallback?: ComponentChildren }) {
         <button type="button" class="link small muted" onClick={() => { hiddenThisSession = true; setHidden(true); }}>позже</button>
       </span>
     </section>
+  );
+}
+
+/** Код доступа к AI-помощнику: сохранить → проверить на сервере. */
+function AiBlock() {
+  const w = useWorld();
+  const saved = w.profile?.aiCode ?? '';
+  const [draft, setDraft] = useState(saved);
+  const [editing, setEditing] = useState(!saved);
+  const [status, setStatus] = useState<{ ok: boolean; text: string } | null>(null);
+
+  const save = async () => {
+    const code = draft.trim();
+    if (!code) {
+      await setAiCode('');
+      setStatus(null);
+      return;
+    }
+    setStatus({ ok: true, text: 'проверяю…' });
+    try {
+      const q = await fetchQuota(code);
+      await setAiCode(code);
+      setEditing(false);
+      setStatus({ ok: true, text: `подключено · сегодня осталось ${q.remaining}` });
+    } catch (e) {
+      setStatus({ ok: false, text: e instanceof AiError ? e.message : 'Не удалось проверить код' });
+    }
+  };
+
+  return (
+    <div class="menu-list ai-box">
+      <div class="menu-row">
+        <span class="ai-icon"><Icon name="spark" size={18} /></span>
+        <span class="menu-row-text"><span class="strong">Цели от Claude</span><span class="muted small">Кнопка «Предложить цели» на странице навыка. Нужен код доступа.</span></span>
+        {saved && !editing && <span class="small ok-text">подключено</span>}
+      </div>
+      <form class="input-row ai-code" onSubmit={(e) => { e.preventDefault(); save(); }}>
+        {editing ? (
+          <input id="ai-code" class="input" type="password" autoComplete="off" placeholder="Код доступа" value={draft} onInput={(e) => setDraft(e.currentTarget.value)} aria-label="Код доступа к AI-помощнику" />
+        ) : (
+          <span class="input ai-dots">••••••••</span>
+        )}
+        {editing
+          ? <button type="submit" class="btn ghost">{draft.trim() ? 'Сохранить' : 'Убрать'}</button>
+          : <button type="button" class="btn ghost" onClick={() => { setEditing(true); setDraft(saved); }}>Изменить</button>}
+      </form>
+      {status && <span class={status.ok ? 'small ok-text ai-status' : 'small danger-text ai-status'}>{status.text}</span>}
+      {!saved && <span class="muted small ai-status">Без кода кнопки нет — приложение работает как раньше.</span>}
+    </div>
   );
 }

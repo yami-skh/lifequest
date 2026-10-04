@@ -189,6 +189,7 @@ export const deleteNote = (id: string) => db.notes.delete(id);
 
 // --- профиль ---
 
+export const setAiCode = (code: string) => db.profile.update('me', { aiCode: code.trim() || undefined });
 export const setSeenVersion = (v: string) => db.profile.update('me', { seenVersion: v });
 export const setName = (name: string) => db.profile.update('me', { name: name.trim() || 'mildyan' });
 

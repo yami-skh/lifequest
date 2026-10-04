@@ -20,6 +20,8 @@ export interface Profile {
   starterVersion?: number;
   /** До какой версии пользователь видел «Что нового». */
   seenVersion?: string;
+  /** Код доступа к AI-помощнику (server/). Без кода кнопки «Предложить цели» нет. */
+  aiCode?: string;
 }
 
 export interface Requirement { nodeId: string; minProgress?: number; minLevel?: number }
