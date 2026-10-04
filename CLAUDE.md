@@ -34,6 +34,13 @@ RPG-трекер саморазвития для брата пользовате
 - Нативный (новый плагин Capacitor, правка `android/`, `capacitor.config.ts`): ещё и `nativeVersion` = `version` в package.json → `npm run apk` → `npm run release` (APK в GitHub Releases) → `deploy`. У брата появится карточка «Доступна версия» и APK поставится из приложения.
 - После выпуска: обновить «Статус» и `docs/project-map.html`, переопубликовать карту.
 
+## AI-помощник (server/)
+
+- `server/` — Cloudflare Worker (отдельный package.json): `POST /goals`, `GET /quota`. Claude Opus 5.5 (переменная `MODEL`), structured outputs, `fallbacks: "default"`. Коды доступа и ключ — секреты Cloudflare (`npx wrangler secret put ANTHROPIC_API_KEY` / `INVITE_CODES`), лимит 10/день на код, неудачные запросы возвращаются в лимит.
+- Приложение: `src/lib/ai.ts` (адрес `AI_URL`), `components/AiGoals.tsx`, код — `profile.aiCode` (Настройки). Без кода кнопки нет.
+- Проверка интерфейса без Claude: заглушка на :8788 + `.env.local` с `VITE_AI_URL=http://localhost:8788`.
+- Статус: код готов и проверен на заглушке; ждёт `wrangler login`, KV `USAGE` и секретов от пользователя, потом — вписать адрес в `AI_URL` и выпустить.
+
 ## Как работать экономно
 
 - Код: CODEMAP → кусок файла. Стили разбиты по экранам: `src/styles/<экран>.css` (порядок подключения в `index.css` важен).
