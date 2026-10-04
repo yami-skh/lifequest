@@ -30,8 +30,8 @@
 
 ## src/data
 
-- **changelog.ts** (100) — Что нового в версиях — для пользователя, простыми словами. Новые версии — сверху.
-  *ChangeKind:4, *Change:5, *Release:6, *CHANGELOG:8, *SEEN_BEFORE_CHANGELOG:99
+- **changelog.ts** (114) — Что нового в версиях — для пользователя, простыми словами. Новые версии — сверху.
+  *ChangeKind:4, *Change:5, *Release:6, *CHANGELOG:8, *SEEN_BEFORE_CHANGELOG:113
 
 ## src/db
 
@@ -82,8 +82,8 @@
   *ThemePref:5, KEY:6, media:7, listeners:8, *getThemePref:10, apply:19, *setThemePref:25, *initTheme:35, *useThemePref:40, *ac:50
 - **toast.ts** (66) — Всплывашки: XP, новый уровень, достижения.
   *ToastKind:5, *Toast:6, MERGE_MS:9, LIFETIME:10, RANK:11, toasts:13, nextId:14, lastGame:15, timers:16, listeners:17, emit:18, schedule:20, *toast:29, *useToasts:56
-- **update.ts** (107) — Автообновление APK. Сайт обновляется сам (service worker), здесь — только приложение.
-  *SITE:14, *Remote:15, *UpdateState:17, state:26, listeners:27, setState:28, *useUpdate:33, fetchRemote:42, *checkForUpdate:52, *installApk:72, *initUpdates:94
+- **update.ts** (115) — Автообновление APK. Сайт обновляется сам (service worker), здесь — только приложение.
+  *SITE:15, *Remote:16, *UpdateState:18, state:27, listeners:28, setState:29, *useUpdate:34, fetchRemote:43, *checkForUpdate:53, *installApk:80, *initUpdates:102
 
 ## src
 

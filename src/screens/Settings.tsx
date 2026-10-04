@@ -121,7 +121,7 @@ function AboutRow() {
   return (
     <div class="menu-row">
       <span class="menu-row-text"><span class="strong">Версия {__APP_VERSION__}</span><span class={u.kind === 'latest' || !native ? 'small ok-text' : 'muted small'}>{sub}</span></span>
-      {native && <button type="button" class="link small" onClick={() => checkForUpdate()} disabled={u.kind === 'checking' || u.kind === 'downloading'}>Проверить</button>}
+      {native && <button type="button" class="link small" onClick={() => checkForUpdate(true)} disabled={u.kind === 'checking' || u.kind === 'downloading'}>Проверить</button>}
     </div>
   );
 }

@@ -1,5 +1,5 @@
 // Автообновление APK. Сайт обновляется сам (service worker), здесь — только приложение.
-// version.json на GitHub Pages: { version, native, bundle, apk } — пишет scripts/deploy.mjs.
+// version.json на GitHub Pages: { version, native, bundle, checksum, apk } — пишет scripts/deploy.mjs.
 //  - веб-часть новее, а APK подходит → тихо качаем bundle, включится при сворачивании/перезапуске;
 //  - нужен новый APK (появились нативные плагины) → карточка «Доступна версия» (useUpdate).
 import { useEffect, useState } from 'preact/hooks';
@@ -10,9 +10,10 @@ import { Directory, Filesystem } from '@capacitor/filesystem';
 import { FileTransfer } from '@capacitor/file-transfer';
 import { FileOpener } from '@capawesome-team/capacitor-file-opener';
 import { cmpVersion } from '../engine/version';
+import { toast } from './toast';
 
 export const SITE = 'https://yami-skh.github.io/lifequest/';
-export interface Remote { version: string; native: string; bundle: string; apk: string }
+export interface Remote { version: string; native: string; bundle: string; checksum: string; apk: string }
 
 export type UpdateState =
   | { kind: 'idle' }
@@ -48,20 +49,27 @@ async function fetchRemote(): Promise<Remote | null> {
   }
 }
 
-/** Проверка обновлений. В браузере ничего не делает. */
-export async function checkForUpdate() {
+/** Проверка обновлений. В браузере ничего не делает. manual — нажали «Проверить»: сказать, что нашли. */
+export async function checkForUpdate(manual = false) {
   if (!Capacitor.isNativePlatform()) return;
   if (state.kind === 'checking' || state.kind === 'downloading') return;
   setState({ kind: 'checking' });
   const remote = await fetchRemote();
-  if (!remote) return setState({ kind: 'idle' });
+  if (!remote) {
+    if (manual) toast({ kind: 'info', title: 'Не удалось проверить', sub: 'Нет интернета?' });
+    return setState({ kind: 'idle' });
+  }
   const apk = (await App.getInfo()).version;
   if (cmpVersion(remote.native, apk) > 0) return setState({ kind: 'apk', remote });
-  if (cmpVersion(remote.version, __APP_VERSION__) <= 0) return setState({ kind: 'latest' });
+  if (cmpVersion(remote.version, __APP_VERSION__) <= 0) {
+    if (manual) toast({ kind: 'info', title: 'Это последняя версия' });
+    return setState({ kind: 'latest' });
+  }
   try {
-    const bundle = await CapacitorUpdater.download({ url: new URL(remote.bundle, SITE).href, version: remote.version });
+    const bundle = await CapacitorUpdater.download({ url: new URL(remote.bundle, SITE).href, version: remote.version, checksum: remote.checksum });
     await CapacitorUpdater.next({ id: bundle.id });
     setState({ kind: 'web', version: remote.version });
+    if (manual) toast({ kind: 'info', title: `Скачана версия ${remote.version}`, sub: 'Включится при следующем запуске' });
   } catch (e) {
     console.error('update', e);
     setState({ kind: 'idle' });

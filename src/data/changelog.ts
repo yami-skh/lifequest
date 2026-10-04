@@ -7,6 +7,27 @@ export interface Release { version: string; date: string; title?: string; change
 
 export const CHANGELOG: Release[] = [
   {
+    version: '0.7.3',
+    date: '2026-10-05',
+    changes: [
+      { kind: 'better', title: 'Тексты «Что нового» проще', sub: 'Без технических подробностей.' },
+    ],
+  },
+  {
+    version: '0.7.2',
+    date: '2026-10-05',
+    changes: [
+      { kind: 'fix', title: 'Обновления скачиваются надёжнее' },
+    ],
+  },
+  {
+    version: '0.7.1',
+    date: '2026-10-05',
+    changes: [
+      { kind: 'better', title: '«Проверить» в настройках говорит, что нашла', sub: '«Это последняя версия» или «Скачана, включится при следующем запуске».' },
+    ],
+  },
+  {
     version: '0.7.0',
     date: '2026-10-05',
     title: 'Настройки и автообновление',

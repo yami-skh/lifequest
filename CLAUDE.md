@@ -27,9 +27,12 @@ RPG-трекер саморазвития для брата пользовате
 - `npm run check` — типы + тесты + перегенерация CODEMAP. Запускать после каждой правки кода.
 - `npm run dev` — сервер (preview: конфиг `lifequest`, порт 5173).
 - `npm run deploy` — тесты, сборка, публикация на https://yami-skh.github.io/lifequest/ (ветка `gh-pages`; Actions не используются — у токена нет scope `workflow`).
-- `npm run apk` → `D:/Android/release/LifeQuest-<version>.apk`. Ключ `D:/Android/keys/` — **не терять**. JDK/SDK/Gradle в `D:/Android/`. Эмулятор: AVD `LifeQuest` (Pixel 7, Android 15) в `D:/Android/avd` — запускать с `ANDROID_AVD_HOME=D:/Android/avd`.
+- `npm run apk` → `D:/Android/release/LifeQuest-<version>.apk`; `npm run release` — публикует его в GitHub Releases (публично; ключ подписи не публикуется). Ключ `D:/Android/keys/` — **не терять**. JDK/SDK/Gradle в `D:/Android/`. Эмулятор: AVD `LifeQuest` (Pixel 7, Android 15) в `D:/Android/avd` — запускать с `ANDROID_AVD_HOME=D:/Android/avd`.
 
-**Выпуск версии:** поднять `version` в package.json → дописать изменения простыми словами в `src/data/changelog.ts` (окно «Что нового» покажется само) → `npm run check` → `deploy` → `apk` → commit + push → обновить «Статус» и `docs/project-map.html`, переопубликовать карту.
+**Выпуск версии** (APK обновляется сам — `src/lib/update.ts`, `version.json` на сайте):
+- Обычный (только веб-код): поднять `version` → дописать `src/data/changelog.ts` → `npm run check` → `npm run deploy` → commit + push. Приложение у брата скачает архив само и включит при сворачивании/перезапуске.
+- Нативный (новый плагин Capacitor, правка `android/`, `capacitor.config.ts`): ещё и `nativeVersion` = `version` в package.json → `npm run apk` → `npm run release` (APK в GitHub Releases) → `deploy`. У брата появится карточка «Доступна версия» и APK поставится из приложения.
+- После выпуска: обновить «Статус» и `docs/project-map.html`, переопубликовать карту.
 
 ## Как работать экономно
 
@@ -44,9 +47,9 @@ RPG-трекер саморазвития для брата пользовате
 - Карта и роудмап: https://claude.ai/artifact/F2EFLi3nU41LJs4wQzrBUo (исходник `docs/project-map.html`)
 - Репозиторий: github.com/yami-skh/lifequest (публичный)
 
-## Статус (0.6.0)
+## Статус (0.7.3)
 
-- Готово: v1.0 шаги 1–8 (запись, журнал, дерево, фото, квесты, замеры и рубежи, резервная копия) + §16 (фокус, ступени, требования, «Ближайшее», ржавчина, туман) + 0.5 «Упрощение» (компактный главный, подходы с клавиатурой, рубежи по повторам, склеенные всплывашки) + 0.5.1 кнопка «Назад» в APK (`lib/backButton.ts`, `useBackClose` для оверлеев) + 0.6.0 «Навык проще» (подходы/рекорд/рубеж на странице навыка, «Записать тренировку» сохраняет подставленные подходы — `EntryPreset.workout`, меню ⋯) и «Что нового» (`src/data/changelog.ts`, `profile.seenVersion`).
+- Готово: v1.0 шаги 1–8 (запись, журнал, дерево, фото, квесты, замеры и рубежи, резервная копия) + §16 (фокус, ступени, требования, «Ближайшее», ржавчина, туман) + 0.5 «Упрощение» (компактный главный, подходы с клавиатурой, рубежи по повторам, склеенные всплывашки) + 0.5.1 кнопка «Назад» в APK (`lib/backButton.ts`, `useBackClose` для оверлеев) + 0.6.0 «Навык проще» (подходы/рекорд/рубеж на странице навыка, «Записать тренировку» сохраняет подставленные подходы — `EntryPreset.workout`, меню ⋯) и «Что нового» (`src/data/changelog.ts`, `profile.seenVersion`) + 0.7 «Настройки» (`screens/Settings.tsx`), светлая тема (`lib/theme.ts`, `[data-theme='light']` в base.css, цвета направлений — через `ac()`), автообновление APK (`lib/update.ts`, плагин capgo без их серверов), шрифты встроены (@fontsource-variable). Проверено на эмуляторе: «Назад», новый APK из приложения, тихое обновление веб-части.
 - Сейчас: обкатка у брата — камера, «Поделиться», перенос данных в APK на реальном телефоне не проверены.
 - Дальше: §16 идея 11 (созвездие/граф), идея 9 (шаблоны веток — ждём список от брата).
 - Телефон брата не в одной сети с ПК — проверять на телефоне только опубликованную версию. У APK своё хранилище: данные из браузера переносятся только резервной копией.
