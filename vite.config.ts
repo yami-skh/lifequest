@@ -11,6 +11,8 @@ export default defineConfig({
       registerType: 'autoUpdate',
       // Регистрируем сами в main.tsx: в APK service worker не нужен.
       injectRegister: false,
+      // Новая версия включается сразу, даже если открыта страница старой сборки.
+      workbox: { skipWaiting: true, clientsClaim: true },
       includeAssets: ['icon.svg', 'apple-touch-icon.png'],
       manifest: {
         id: './',
