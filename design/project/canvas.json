@@ -430,6 +430,42 @@
       "w": 390,
       "x": 1800,
       "y": 0
+    },
+    "AiSkill.dc.html": {
+      "h": 844,
+      "page": "ai",
+      "radius": 28,
+      "title": "Кнопка на навыке",
+      "w": 390,
+      "x": 0,
+      "y": 0
+    },
+    "AiAsk.dc.html": {
+      "h": 844,
+      "page": "ai",
+      "radius": 28,
+      "title": "Запрос",
+      "w": 390,
+      "x": 450,
+      "y": 0
+    },
+    "AiPreview.dc.html": {
+      "h": 844,
+      "page": "ai",
+      "radius": 28,
+      "title": "Предложенные цели",
+      "w": 390,
+      "x": 900,
+      "y": 0
+    },
+    "AiSettings.dc.html": {
+      "h": 420,
+      "page": "ai",
+      "radius": 28,
+      "title": "Настройки: код",
+      "w": 390,
+      "x": 1350,
+      "y": 0
     }
   },
   "createdOnFiles": {
@@ -439,7 +475,7 @@
   "designSystems": [],
   "launch": {
     "view": "canvas",
-    "page": "settings"
+    "page": "ai"
   },
   "notes": {
     "atelierTitle": {
@@ -545,6 +581,14 @@
       "text": "Настройки, светлая тема и обновление приложения",
       "x": 0,
       "y": -260
+    },
+    "aiTitle": {
+      "kind": "title1",
+      "maxW": 1720,
+      "page": "ai",
+      "text": "AI-помощник целей: кнопка, запрос, предпросмотр, код доступа",
+      "x": 0,
+      "y": -260
     }
   },
   "order": [
@@ -594,7 +638,11 @@
     "SettingsLight.dc.html",
     "MainLight.dc.html",
     "UpdateReady.dc.html",
-    "UpdateProgress.dc.html"
+    "UpdateProgress.dc.html",
+    "AiSkill.dc.html",
+    "AiAsk.dc.html",
+    "AiPreview.dc.html",
+    "AiSettings.dc.html"
   ],
   "pages": [
     {
@@ -640,6 +688,10 @@
     {
       "id": "settings",
       "name": "Настройки и обновления"
+    },
+    {
+      "id": "ai",
+      "name": "AI-помощник целей"
     }
   ],
   "title": "LifeQuest — макет"
