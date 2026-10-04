@@ -3,7 +3,7 @@ import { App } from './App';
 import { ensureStarter, seedIfEmpty } from './db/seed';
 import { Capacitor } from '@capacitor/core';
 import { registerSW } from 'virtual:pwa-register';
-import './styles.css';
+import './styles/index.css';
 
 async function start() {
   await seedIfEmpty();

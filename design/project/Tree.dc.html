@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Дерево навыков</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Unbounded:wght@500;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#F2B544}a:hover{color:#FFD27A}
+</style>
+</helmet>
+<div style="width: 390px; height: 920px; box-sizing: border-box; position: relative; overflow: hidden; background: #0E1015; color: #ECEDF1; font-family: Manrope, sans-serif">
+<div style="padding: 24px 20px 110px; display: flex; flex-direction: column; gap: 16px">
+
+<div style="display: flex; justify-content: space-between; align-items: center">
+<div style="font-family: Unbounded, sans-serif; font-size: 22px; font-weight: 700">Дерево навыков</div>
+<button type="button" aria-label="Добавить направление" style="width: 44px; height: 44px; border-radius: 22px; border: 0; background: #222631; color: #ECEDF1; display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+</div>
+
+<div style="height: 44px; border-radius: 12px; background: #171A21; border: 1px solid #252A35; display: flex; align-items: center; gap: 10px; padding: 0 14px; color: #8B92A0; font-size: 14px">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+<span>Найти навык</span>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 2px">
+
+<div style="display: flex; align-items: center; gap: 12px; height: 52px">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8B92A0" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+<span style="width: 10px; height: 10px; border-radius: 5px; background: #7AA7FF"></span>
+<span style="flex: 1; font-size: 16px; font-weight: 700">Интеллект</span>
+<span style="font-size: 14px; color: #A3A9B6; font-weight: 700">34%</span>
+</div>
+
+<div style="display: flex; align-items: center; gap: 12px; height: 52px">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8B92A0" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+<span style="width: 10px; height: 10px; border-radius: 5px; background: #FF8A5B"></span>
+<span style="flex: 1; font-size: 16px; font-weight: 700">Тело</span>
+<span style="font-size: 14px; color: #A3A9B6; font-weight: 700">52%</span>
+</div>
+
+<div style="display: flex; align-items: center; gap: 12px; height: 52px">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ECEDF1" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+<span style="width: 10px; height: 10px; border-radius: 5px; background: #4CC9A0"></span>
+<span style="flex: 1; font-size: 16px; font-weight: 700">Практика</span>
+<span style="font-size: 14px; color: #A3A9B6; font-weight: 700">41%</span>
+</div>
+
+<div style="margin-left: 7px; padding-left: 18px; border-left: 2px solid #252A35; display: flex; flex-direction: column; gap: 2px">
+
+<div style="display: flex; align-items: center; gap: 10px; height: 48px">
+<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ECEDF1" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+<span style="flex: 1; font-size: 15px; font-weight: 700">Кулинария</span>
+<span style="font-size: 13px; color: #A3A9B6; font-weight: 700">48%</span>
+</div>
+
+<div style="margin-left: 6px; padding-left: 16px; border-left: 2px solid #252A35; display: flex; flex-direction: column; gap: 2px">
+<div style="display: flex; align-items: center; gap: 10px; height: 44px">
+<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ECEDF1" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+<span style="flex: 1; font-size: 14px; font-weight: 700">Японская кухня</span>
+<span style="font-size: 13px; color: #A3A9B6; font-weight: 700">45%</span>
+</div>
+
+<a href="Skill.dc.html" style="display: flex; flex-direction: column; gap: 6px; padding: 10px 12px; margin-left: 12px; border-radius: 12px; background: #171A21; border: 1px solid #F2B544; text-decoration: none; color: #ECEDF1">
+<span style="display: flex; align-items: center; gap: 8px">
+<span style="flex: 1; font-size: 14px; font-weight: 700">Рамен</span>
+<span style="padding: 3px 8px; border-radius: 6px; background: #2B2414; color: #F2B544; font-size: 11px; font-weight: 800">ур. 3</span>
+<span style="font-size: 13px; color: #ECEDF1; font-weight: 700">46%</span>
+</span>
+<span style="display: block; height: 5px; border-radius: 3px; background: #252A35"><span style="display: block; width: 46%; height: 100%; border-radius: 3px; background: #4CC9A0"></span></span>
+</a>
+
+<div style="display: flex; flex-direction: column; gap: 4px; padding: 10px 12px; margin-left: 12px; border-radius: 12px; background: #13151B; border: 1px dashed #3A404D">
+<div style="display: flex; align-items: center; gap: 8px; color: #A3A9B6">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
+<span style="flex: 1; font-size: 14px; font-weight: 700">Суши</span>
+</div>
+<div style="font-size: 12px; color: #8B92A0">Откроется: Работа с ножом — 40% (сейчас 25%)</div>
+</div>
+</div>
+
+<div style="display: flex; align-items: center; gap: 10px; height: 48px">
+<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8B92A0" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+<span style="flex: 1; font-size: 15px; font-weight: 600">Техника приготовления</span>
+<span style="font-size: 13px; color: #A3A9B6; font-weight: 700">58%</span>
+</div>
+</div>
+
+<div style="display: flex; align-items: center; gap: 10px; height: 48px">
+<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8B92A0" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+<span style="flex: 1; font-size: 15px; font-weight: 600">Ремонт и инструменты</span>
+<span style="font-size: 13px; color: #A3A9B6; font-weight: 700">30%</span>
+</div>
+
+<div style="display: flex; align-items: center; gap: 10px; height: 48px">
+<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8B92A0" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+<span style="flex: 1; font-size: 15px; font-weight: 600">Финансовая грамотность</span>
+<span style="font-size: 12px; color: #8B92A0; font-weight: 600">нет целей</span>
+</div>
+</div>
+
+<div style="display: flex; align-items: center; gap: 12px; height: 52px">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8B92A0" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+<span style="width: 10px; height: 10px; border-radius: 5px; background: #E08AE8"></span>
+<span style="flex: 1; font-size: 16px; font-weight: 700">Творчество</span>
+<span style="font-size: 14px; color: #A3A9B6; font-weight: 700">12%</span>
+</div>
+
+<div style="display: flex; align-items: center; gap: 12px; height: 52px">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8B92A0" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+<span style="width: 10px; height: 10px; border-radius: 5px; background: #B9A4FF"></span>
+<span style="flex: 1; font-size: 16px; font-weight: 700">Технологии</span>
+<span style="font-size: 14px; color: #A3A9B6; font-weight: 700">63%</span>
+</div>
+
+</div>
+</div>
+
+<nav style="position: absolute; left: 0; right: 0; bottom: 0; height: 84px; background: #151821; border-top: 1px solid #252A35; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); align-items: start">
+<a href="Main.dc.html" style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding-top: 12px; text-decoration: none; font-size: 11px; font-weight: 600; color: #8B92A0"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg><span>Персонаж</span></a>
+<a href="Tree.dc.html" style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding-top: 12px; text-decoration: none; font-size: 11px; font-weight: 700; color: #F2B544"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="2"/><circle cx="6" cy="19" r="2"/><circle cx="18" cy="19" r="2"/><path d="M12 7v5M6 17v-5h12v5"/></svg><span>Дерево</span></a>
+<a href="Entry.dc.html" aria-label="Новая запись" style="display: flex; justify-content: center; text-decoration: none"><span style="width: 58px; height: 58px; margin-top: -20px; border-radius: 29px; background: #F2B544; color: #14161C; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 0 6px #0E1015"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></a>
+<a href="Main.dc.html" style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding-top: 12px; text-decoration: none; font-size: 11px; font-weight: 600; color: #8B92A0"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/></svg><span>Журнал</span></a>
+<a href="Achievements.dc.html" style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding-top: 12px; text-decoration: none; font-size: 11px; font-weight: 600; color: #8B92A0"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg><span>Ещё</span></a>
+</nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":920}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

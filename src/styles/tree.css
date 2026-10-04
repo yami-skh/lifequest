@@ -1,0 +1,85 @@
+/* дерево */
+.tree { display: flex; flex-direction: column; gap: 2px; }
+.tree-row { display: flex; align-items: center; }
+.tree-toggle { flex: 1; display: flex; align-items: center; gap: 10px; min-height: 50px; background: none; border: 0; text-align: left; color: var(--fg); padding: 0; min-width: 0; }
+.tree-toggle > svg { color: var(--muted-2); flex-shrink: 0; }
+.tree-title { flex: 1; font-weight: 600; font-size: 15px; min-width: 0; overflow-wrap: anywhere; }
+.tree-title.area { font-weight: 800; font-size: 16px; }
+.dot { width: 10px; height: 10px; border-radius: 5px; flex-shrink: 0; }
+.tree-children { display: flex; flex-direction: column; gap: 4px; }
+.tree-add { display: flex; gap: 18px; padding-bottom: 6px; }
+.tree-skill-wrap { display: flex; align-items: center; gap: 2px; }
+.tree-skill { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px; padding: 10px 12px; border-radius: 12px; background: var(--surface); border: 1px solid var(--line); }
+.tree-skill.locked { background: #13151B; border-style: dashed; border-color: var(--line-2); }
+.tree-skill-title { display: flex; align-items: center; gap: 6px; font-weight: 700; min-width: 0; overflow-wrap: anywhere; }
+.tree-skill.locked .tree-skill-title { color: var(--muted); }
+.tree-skill-meta { display: flex; align-items: center; gap: 8px; font-size: 13px; flex-shrink: 0; }
+.lvl-chip { padding: 3px 8px; border-radius: 6px; background: var(--gold-bg); color: var(--gold); font-size: 11px; font-weight: 800; }
+
+
+/* дерево: направления-карточки, ветви-линии, навыки-узлы */
+.t-tree { display: flex; flex-direction: column; gap: 12px; }
+.t-area { --c: var(--muted); background: var(--surface); border: 1px solid var(--line); border-radius: 20px; padding: 6px 0 6px 10px; }
+.t-area.open { border-color: color-mix(in srgb, var(--c) 45%, var(--line)); }
+.t-area-head { display: flex; align-items: center; }
+.t-area-btn { flex: 1; min-width: 0; display: flex; align-items: center; gap: 12px; min-height: 64px; background: none; border: 0; padding: 0; text-align: left; }
+.t-area-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.t-area-title { font-family: var(--display); font-size: 16px; font-weight: 700; overflow-wrap: anywhere; }
+.t-sub { font-size: 12.5px; color: var(--muted); font-weight: 600; }
+.ring { position: relative; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.ring svg { position: absolute; inset: 0; }
+.ring-label { position: relative; display: flex; align-items: center; justify-content: center; color: var(--c, var(--fg)); }
+.t-ring-pct { font-size: 13px; font-weight: 800; color: var(--fg); }
+.t-lvl { font-family: var(--display); font-size: 15px; font-weight: 700; color: var(--fg); }
+
+.t-rail { --ind: 18px; position: relative; margin: 2px 0 4px 21px; padding-left: var(--ind); display: flex; flex-direction: column; gap: 6px; }
+.t-rail::before { content: ''; position: absolute; left: 0; top: 0; bottom: 22px; width: 2px; border-radius: 1px; background: color-mix(in srgb, var(--c) 40%, transparent); }
+.t-item { position: relative; }
+/* вложенные ветки — короткий отступ, линия идёт от ромбика */
+.t-rail .t-rail { --ind: 14px; margin-left: 4px; }
+.t-item::before { content: ''; position: absolute; left: calc(-1 * var(--ind)); top: 22px; width: calc(var(--ind) - 6px); height: 2px; background: color-mix(in srgb, var(--c) 40%, transparent); }
+.t-add { display: flex; gap: 18px; min-height: 44px; align-items: center; }
+.t-add::before { background: color-mix(in srgb, var(--c) 20%, transparent); }
+
+.t-branch-row { display: flex; align-items: center; }
+.t-branch-btn { flex: 1; min-width: 0; display: flex; align-items: center; gap: 10px; min-height: 44px; background: none; border: 0; padding: 0; text-align: left; }
+.t-branch-btn > svg { color: var(--muted-2); flex-shrink: 0; }
+.t-diamond { width: 10px; height: 10px; transform: rotate(45deg); border: 2px solid var(--c); background: var(--surface); flex-shrink: 0; }
+.t-diamond.open { background: var(--c); }
+.t-branch-title { flex: 1; min-width: 0; font-weight: 700; overflow-wrap: break-word; }
+
+.t-skill { display: flex; align-items: flex-start; }
+.t-skill::before { top: 30px; }
+.t-skill-card { flex: 1; min-width: 0; display: flex; align-items: center; gap: 12px; padding: 10px 12px 10px 10px; border-radius: 14px; background: var(--surface-2); border: 1px solid var(--line); }
+.t-skill-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 5px; }
+.t-skill-top { display: flex; justify-content: space-between; gap: 8px; }
+.t-skill-title { flex: 1; min-width: 0; font-weight: 700; overflow-wrap: break-word; }
+.t-skill-pct { font-size: 13px; font-weight: 800; flex-shrink: 0; }
+.t-skill .icon-btn { margin-top: 8px; width: 36px; }
+.t-branch-row .icon-btn, .t-area-head .icon-btn { width: 40px; }
+.t-skill-title { display: inline-flex; align-items: center; gap: 6px; }
+.t-skill-title svg { color: var(--gold); flex-shrink: 0; }
+.t-skill-title svg path { fill: currentColor; }
+.t-skill.focus .t-skill-card { border-color: var(--gold); }
+/* туман: навык ещё не исследован */
+.t-skill.fog .t-skill-card { background: #13151B; border-color: var(--surface-2); opacity: 0.78; }
+.t-skill.fog .t-skill-title { color: var(--fg-2); }
+.t-lvl.muted { color: var(--muted-2); }
+/* ржавчина: 60+ дней без записей */
+.t-skill-card { position: relative; }
+.t-skill.rusty .t-skill-card { background: #1A1C22; border-color: #3A3F49; filter: saturate(0.35); }
+.t-skill.rusty .t-skill-title { color: var(--fg-2); }
+.t-web { position: absolute; top: -4px; right: -4px; color: var(--muted-2); opacity: 0.7; pointer-events: none; }
+.t-skill.locked .t-skill-card { background: transparent; border-style: dashed; border-color: var(--line-2); }
+.t-skill.locked .t-skill-title { color: var(--muted); }
+
+.menu-item { display: flex; align-items: center; gap: 12px; min-height: 52px; padding: 0 14px; border-radius: 14px; background: var(--surface-2); border: 0; font-weight: 700; text-align: left; color: var(--fg); }
+.menu-item.disabled { opacity: 0.5; }
+.menu-meta { margin-left: auto; color: var(--muted); font-size: 13px; }
+.colors { display: flex; flex-wrap: wrap; gap: 10px; }
+.color { width: 40px; height: 40px; border-radius: 20px; border: 3px solid transparent; }
+.color.on { border-color: var(--fg); }
+.icons { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
+.icon-pick { height: 48px; border-radius: 12px; border: 2px solid transparent; background: var(--surface-2); display: flex; align-items: center; justify-content: center; }
+.icon-pick.on { border-color: currentColor; }
+

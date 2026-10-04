@@ -10,7 +10,9 @@
     "test": "vitest run",
     "icons": "node scripts/icons.mjs",
     "deploy": "node scripts/deploy.mjs",
-    "apk": "node scripts/apk.mjs"
+    "apk": "node scripts/apk.mjs",
+    "map": "node scripts/codemap.mjs",
+    "check": "tsc --noEmit && vitest run --reporter=dot && node scripts/codemap.mjs"
   },
   "dependencies": {
     "@capacitor/android": "^8.5.2",

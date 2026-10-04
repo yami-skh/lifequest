@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Восстановление из копии</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Unbounded:wght@500;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#F2B544}a:hover{color:#FFD27A}
+</style>
+</helmet>
+<div style="width: 390px; height: 820px; box-sizing: border-box; position: relative; overflow: hidden; background: #07080B; color: #ECEDF1; font-family: Manrope, sans-serif">
+<div style="padding: 24px 18px; opacity: 0.25; font-family: Unbounded, sans-serif; font-size: 20px; font-weight: 700">Резервная копия</div>
+
+<div style="position: absolute; left: 0; right: 0; bottom: 0; top: 130px; background: #171A21; border-radius: 24px 24px 0 0; border-top: 1px solid #2A2F3B; padding: 10px 18px 24px; box-sizing: border-box; display: flex; flex-direction: column; gap: 16px">
+<div style="width: 40px; height: 5px; border-radius: 3px; background: #3A404D; align-self: center"></div>
+<div style="display: flex; justify-content: space-between; align-items: center">
+<div style="font-family: Unbounded, sans-serif; font-size: 20px; font-weight: 700">Восстановить?</div>
+<span style="width: 44px; height: 44px; border-radius: 22px; background: #2A2F3B; color: #A3A9B6; display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></span>
+</div>
+
+<div style="font-size: 13px; color: #A3A9B6">lifequest-backup-2026-10-01.zip</div>
+
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+<div style="padding: 12px; border-radius: 14px; background: #1E222B; display: flex; flex-direction: column; gap: 6px">
+<span style="font-size: 12px; font-weight: 800; letter-spacing: 0.6px; color: #A3A9B6">СЕЙЧАС</span>
+<span style="font-family: Unbounded, sans-serif; font-size: 18px; font-weight: 700">ур. 1</span>
+<span style="font-size: 13px; color: #C9CDD6">0 записей<br>0 фото</span>
+</div>
+<div style="padding: 12px; border-radius: 14px; background: rgba(76,201,160,0.1); border: 1px solid rgba(76,201,160,0.4); display: flex; flex-direction: column; gap: 6px">
+<span style="font-size: 12px; font-weight: 800; letter-spacing: 0.6px; color: #6FE0BA">В КОПИИ · 1 ОКТ</span>
+<span style="font-family: Unbounded, sans-serif; font-size: 18px; font-weight: 700">ур. 7</span>
+<span style="font-size: 13px; color: #C9CDD6">42 записи<br>18 фото</span>
+</div>
+</div>
+
+<div style="display: flex; gap: 10px; padding: 12px 14px; border-radius: 14px; background: rgba(240,96,96,0.1); border: 1px solid rgba(255,122,122,0.35); font-size: 13.5px; line-height: 1.45">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FF7A7A" stroke-width="2.4" stroke-linecap="round" style="flex-shrink: 0; margin-top: 1px"><path d="M12 8v5M12 16.5v.5"/><circle cx="12" cy="12" r="9"/></svg>
+<span>Текущие данные на этом телефоне <b>заменятся</b> данными из копии. Отменить нельзя.</span>
+</div>
+
+<div style="margin-top: auto; display: flex; flex-direction: column; gap: 8px">
+<div style="min-height: 52px; border-radius: 16px; background: #F2B544; color: #14161C; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 15px">Заменить и восстановить</div>
+<div style="min-height: 48px; border-radius: 14px; border: 1px solid #2A2F3B; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14.5px">Отмена</div>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":820}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

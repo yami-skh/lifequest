@@ -1,0 +1,33 @@
+/* квесты */
+.quest-card { display: flex; flex-direction: column; gap: 8px; padding: 14px; border-radius: 16px; background: var(--surface); border: 1px solid var(--line); }
+.quest-card.main { border-color: var(--gold); }
+.quest-row { display: flex; align-items: flex-start; gap: 12px; }
+.quest-icon { width: 40px; height: 40px; border-radius: 12px; background: var(--line); color: var(--fg-2); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.quest-icon.gold { background: var(--gold-bg); color: var(--gold); }
+.quest-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.quest-xp { font-size: 13px; font-weight: 800; color: var(--gold); flex-shrink: 0; }
+.weekly-row { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 14px; background: var(--surface); min-height: 64px; }
+.weekly-row.done { background: rgba(76, 201, 160, 0.08); border: 1px solid rgba(76, 201, 160, 0.35); }
+.weekly-check { width: 40px; height: 40px; border-radius: 20px; background: var(--green); color: var(--bg); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.weekly-check.fail { background: var(--line-2); color: var(--fg-2); }
+.weekly-mini { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.weekly-tile { padding: 10px 6px; border-radius: 14px; background: var(--surface); display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; min-width: 0; }
+.weekly-tile.done { background: rgba(76, 201, 160, 0.08); border: 1px solid rgba(76, 201, 160, 0.35); }
+.weekly-tile .weekly-check { width: 36px; height: 36px; }
+.weekly-tile-title { font-size: 12px; font-weight: 700; overflow-wrap: anywhere; }
+.small-ring { font-size: 11px; }
+.gold-chip { background: var(--gold-bg); color: var(--gold); }
+.step-card { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 14px; background: var(--surface); }
+.step-card.current { border: 1px solid var(--gold); }
+.step-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.step-sub { font-size: 12px; color: var(--muted-2); font-weight: 600; }
+.grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.draft-step { display: flex; align-items: center; gap: 10px; padding: 6px 4px 6px 12px; border-radius: 12px; background: var(--surface-2); }
+.draft-kind { font-size: 11.5px; font-weight: 800; width: 66px; flex-shrink: 0; color: var(--fg-2); }
+.draft-kind.stage { color: var(--green); }
+.draft-kind.count { color: #7AA7FF; }
+.draft-kind.goal { color: var(--gold); }
+.draft-title { flex: 1; min-width: 0; font-size: 14px; font-weight: 600; overflow-wrap: anywhere; }
+select.input { appearance: none; }
+
+

@@ -1,0 +1,56 @@
+/* навык */
+.topbar { display: flex; align-items: center; gap: 4px; margin: -8px 0 -8px -12px; }
+.topbar-text { flex: 1; min-width: 0; }
+.crumbs { font-size: 13px; color: var(--muted); font-weight: 600; overflow-wrap: anywhere; }
+.topbar-title { font-family: var(--display); font-size: 20px; font-weight: 700; }
+.skill-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap; }
+.level-badge { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; padding: 8px 12px; border-radius: 12px; background: var(--gold-bg); min-width: 140px; }
+.level-badge .bar { background: #4A3B1C; }
+.level-badge-title { font-size: 13px; color: var(--gold); font-weight: 800; }
+.level-badge-sub { font-size: 11px; color: #C9B48A; font-weight: 600; }
+.notice { display: flex; gap: 12px; padding: 14px; border-radius: 14px; background: var(--surface); border: 1px dashed var(--line-2); color: var(--fg-2); }
+.notice a { color: var(--gold); }
+.notice.error { background: var(--red-bg); border: 1px solid rgba(255, 122, 122, 0.35); }
+.notice-icon { width: 28px; height: 28px; border-radius: 14px; background: rgba(255, 122, 122, 0.18); color: var(--red); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.note { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px 4px; display: flex; flex-direction: column; gap: 4px; }
+.note-text { white-space: pre-wrap; overflow-wrap: anywhere; }
+.note-link { display: flex; align-items: center; gap: 12px; }
+.note-link a { color: var(--gold); font-weight: 700; overflow-wrap: anywhere; }
+
+
+/* навык: фокус, требования, ступени */
+.fg-2 { color: var(--fg-2); }
+.ok-text { color: var(--green-fg); font-weight: 700; }
+.focus-btn { align-self: flex-start; display: inline-flex; align-items: center; gap: 6px; min-height: 40px; padding: 0 14px; border-radius: 99px; border: 1px solid var(--line-2); background: transparent; color: var(--fg-2); font-weight: 800; font-size: 13px; }
+.focus-btn.on { background: var(--gold); border-color: var(--gold); color: var(--on-gold); }
+.focus-btn.on svg path { fill: currentColor; }
+.req-card { display: flex; flex-direction: column; gap: 8px; padding: 12px 14px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); }
+.req-line { display: flex; align-items: center; gap: 10px; min-height: 36px; font-size: 14px; font-weight: 600; }
+.req-line > span:nth-child(2) { flex: 1; }
+.req-row { display: flex; align-items: center; gap: 12px; padding: 10px 4px 10px 14px; border-radius: 14px; background: var(--surface-2); }
+.req-row-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 5px; }
+.req-progress { display: flex; align-items: center; gap: 8px; }
+.req-progress .mini-bar { flex: 1; }
+.new-req { display: flex; flex-direction: column; gap: 10px; padding: 14px; border-radius: 16px; border: 1px dashed var(--line-2); }
+.stepper { display: flex; align-items: center; gap: 10px; }
+.stepper .btn { font-size: 22px; }
+.stepper-value { flex: 1; text-align: center; font-family: var(--display); font-size: 24px; font-weight: 700; }
+
+.stage { border-radius: 16px; }
+.stage-head { width: 100%; display: flex; align-items: center; gap: 12px; padding: 12px 14px; background: none; border: 0; text-align: left; color: var(--fg); }
+.stage-text { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.stage-sub { font-size: 12.5px; color: var(--muted); font-weight: 600; }
+.stage-sub.ok { color: var(--green-fg); }
+.stage-num { width: 30px; height: 30px; border-radius: 15px; border: 2px solid var(--gold); color: var(--gold); display: flex; align-items: center; justify-content: center; font-family: var(--display); font-size: 13px; font-weight: 700; flex-shrink: 0; }
+.stage-num.ok { border: 0; background: var(--green); color: var(--bg); }
+.stage-num.lock { border: 0; background: var(--surface-2); color: var(--muted-2); }
+.stage-bonus { font-size: 12px; font-weight: 800; color: var(--gold); }
+.stage-goals { padding: 0 14px 8px; display: flex; flex-direction: column; }
+.stage.done { background: rgba(76, 201, 160, 0.08); border: 1px solid rgba(76, 201, 160, 0.35); }
+.stage.done .stage-head > svg { color: var(--muted-2); }
+.stage.current { background: var(--surface); border: 1px solid var(--gold); }
+.stage.locked { border: 1px dashed var(--line-2); }
+.stage.locked .strong { color: var(--fg-2); }
+.goal-form { margin-top: 6px; }
+
+

@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Напоминание о копии</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Unbounded:wght@500;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#F2B544}a:hover{color:#FFD27A}
+</style>
+</helmet>
+<div style="width: 390px; height: 400px; box-sizing: border-box; background: #0E1015; color: #ECEDF1; font-family: Manrope, sans-serif; padding: 24px 18px; display: flex; flex-direction: column; gap: 18px">
+<div style="display: flex; justify-content: space-between; align-items: flex-start">
+<div style="display: flex; flex-direction: column; gap: 4px"><span style="font-size: 13px; color: #A3A9B6; font-weight: 700">Персонаж</span><span style="font-family: Unbounded, sans-serif; font-size: 28px; font-weight: 700">mildyan</span></div>
+<span style="display: flex; align-items: center; gap: 6px; padding: 8px 12px; border-radius: 999px; background: #2A1E14; color: #FF9A5C; font-weight: 800; font-size: 14px">9 дней</span>
+</div>
+<div style="background: #171A21; border: 1px solid #F2B544; border-radius: 18px; padding: 14px; display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; align-items: flex-start; gap: 12px">
+<span style="width: 40px; height: 40px; border-radius: 12px; background: #2B2414; color: #F2B544; display: flex; align-items: center; justify-content: center; flex-shrink: 0"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M12 8v5M12 16v.5"/></svg></span>
+<span style="flex: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-weight: 800">Копии не было 9 дней</span><span style="font-size: 13px; color: #A3A9B6">С тех пор 14 новых записей и 5 фото</span></span>
+<span style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; color: #8B92A0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></span>
+</div>
+<div style="min-height: 46px; border-radius: 14px; background: #F2B544; color: #14161C; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 14.5px">Сохранить копию</div>
+</div>
+<div style="font-size: 13px; color: #8B92A0">Карточка появляется на главном, если копии не было 7+ дней и есть новые записи. Крестик прячет её до завтра.</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":400}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

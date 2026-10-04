@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Стиль: HUD</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Russo+One&amp;family=Exo+2:wght@400;600;700&amp;family=JetBrains+Mono:wght@500;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#38E1FF}a:hover{color:#8EEFFF}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; position: relative; overflow: hidden; background: #070A10; color: #DCE8F2; font-family: 'Exo 2', sans-serif; background-image: linear-gradient(rgba(56,225,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(56,225,255,0.05) 1px, transparent 1px); background-size: 26px 26px">
+<div style="padding: 20px 16px 104px; display: flex; flex-direction: column; gap: 14px">
+
+<div style="display: flex; justify-content: space-between; align-items: flex-end">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #5E7A92; letter-spacing: 2px">ОПЕРАТОР</span>
+<span style="font-family: 'Russo One', sans-serif; font-size: 30px; letter-spacing: 1px; line-height: 1">MILDYAN</span>
+<span style="font-size: 13px; color: #38E1FF; font-weight: 600">Класс: инженер-ремесленник</span>
+</div>
+<div style="display: flex; flex-direction: column; align-items: flex-end; gap: 2px">
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #5E7A92">LVL</span>
+<span style="font-family: 'Russo One', sans-serif; font-size: 44px; line-height: 0.9; color: #FFB547">07</span>
+</div>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 6px">
+<div style="height: 6px; background: #142231; clip-path: polygon(0 0, 100% 0, calc(100% - 6px) 100%, 0 100%)"><div style="width: 40%; height: 100%; background: #FFB547"></div></div>
+<div style="display: flex; justify-content: space-between; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #8DA4B8"><span>XP 0180/0450</span><span>STREAK 09D</span></div>
+</div>
+
+<div style="background: rgba(10,20,30,0.85); border: 1px solid #1C3448; clip-path: polygon(14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%, 0 14px); padding: 10px 0 4px">
+<div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #5E7A92; letter-spacing: 2px; padding: 0 14px">ПРОФИЛЬ НАВЫКОВ</div>
+<svg width="358" height="232" viewBox="0 0 320 224" role="img" aria-label="Профиль: Интеллект 34, Тело 52, Практика 41, Творчество 12, Технологии 63">
+<polygon points="160,30 245.6,92.2 212.9,192.8 107.1,192.8 74.4,92.2" fill="none" stroke="#1C3448" stroke-width="1"/>
+<polygon points="160,75 202.8,106.1 186.5,156.4 133.5,156.4 117.2,106.1" fill="none" stroke="#1C3448" stroke-width="1"/>
+<line x1="160" y1="120" x2="160" y2="30" stroke="#1C3448"/><line x1="160" y1="120" x2="245.6" y2="92.2" stroke="#1C3448"/><line x1="160" y1="120" x2="212.9" y2="192.8" stroke="#1C3448"/><line x1="160" y1="120" x2="107.1" y2="192.8" stroke="#1C3448"/><line x1="160" y1="120" x2="74.4" y2="92.2" stroke="#1C3448"/>
+<polygon points="160,89.4 204.5,105.5 181.7,149.9 153.6,128.7 106.1,102.5" fill="rgba(56,225,255,0.18)" stroke="#38E1FF" stroke-width="2" stroke-linejoin="round"/>
+<circle cx="160" cy="89.4" r="3" fill="#38E1FF"/><circle cx="204.5" cy="105.5" r="3" fill="#38E1FF"/><circle cx="181.7" cy="149.9" r="3" fill="#38E1FF"/><circle cx="153.6" cy="128.7" r="3" fill="#38E1FF"/><circle cx="106.1" cy="102.5" r="3" fill="#38E1FF"/>
+<text x="160" y="16" text-anchor="middle" fill="#DCE8F2" font-family="Exo 2, sans-serif" font-size="12" font-weight="700">Интеллект 34</text>
+<text x="262" y="82" text-anchor="middle" fill="#DCE8F2" font-family="Exo 2, sans-serif" font-size="12" font-weight="700">Тело 52</text>
+<text x="226" y="214" text-anchor="middle" fill="#DCE8F2" font-family="Exo 2, sans-serif" font-size="12" font-weight="700">Практика 41</text>
+<text x="94" y="214" text-anchor="middle" fill="#DCE8F2" font-family="Exo 2, sans-serif" font-size="12" font-weight="700">Творчество 12</text>
+<text x="58" y="82" text-anchor="middle" fill="#38E1FF" font-family="Exo 2, sans-serif" font-size="12" font-weight="700">Технологии 63</text>
+</svg>
+</div>
+
+<div style="border-left: 2px solid #FFB547; background: rgba(255,181,71,0.06); padding: 10px 12px; display: flex; flex-direction: column; gap: 6px">
+<div style="display: flex; justify-content: space-between; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #FFB547"><span>МИССИЯ АКТИВНА</span><span>3/5</span></div>
+<div style="font-size: 16px; font-weight: 700">Обустрой персонажа</div>
+<div style="font-size: 12.5px; color: #8DA4B8">След. цель: создать первый замер · +200 XP</div>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 2px; font-family: 'JetBrains Mono', monospace; font-size: 12px">
+<div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #142231"><span style="color: #8DA4B8">14:32</span><span style="flex: 1; padding: 0 12px; color: #DCE8F2">Рамен с нуля</span><span style="color: #FFB547">+132</span></div>
+<div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #142231"><span style="color: #8DA4B8">09:10</span><span style="flex: 1; padding: 0 12px; color: #DCE8F2">Жим 62×5 · рекорд</span><span style="color: #FFB547">+95</span></div>
+</div>
+</div>
+
+<nav style="position: absolute; left: 0; right: 0; bottom: 0; height: 80px; background: rgba(5,8,13,0.96); border-top: 1px solid #1C3448; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); align-items: start">
+<a href="#" style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding-top: 12px; text-decoration: none; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #38E1FF"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg><span>ПРОФИЛЬ</span></a>
+<a href="#" style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding-top: 12px; text-decoration: none; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #5E7A92"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="2"/><circle cx="6" cy="19" r="2"/><circle cx="18" cy="19" r="2"/><path d="M12 7v5M6 17v-5h12v5"/></svg><span>ДЕРЕВО</span></a>
+<a href="#" aria-label="Новая запись" style="display: flex; justify-content: center"><span style="width: 56px; height: 56px; margin-top: -18px; background: #38E1FF; clip-path: polygon(25% 0, 75% 0, 100% 50%, 75% 100%, 25% 100%, 0 50%); display: flex; align-items: center; justify-content: center"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#070A10" stroke-width="3" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></a>
+<a href="#" style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding-top: 12px; text-decoration: none; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #5E7A92"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/></svg><span>ЛОГ</span></a>
+<a href="#" style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding-top: 12px; text-decoration: none; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #5E7A92"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg><span>ЕЩЁ</span></a>
+</nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,510 @@
+{
+  "v": 3,
+  "attachments": {},
+  "boards": {
+    "Achievements.dc.html": {
+      "h": 940,
+      "is_interactive": true,
+      "page": "screens",
+      "radius": 28,
+      "title": "Достижения",
+      "w": 390,
+      "x": 2350,
+      "y": 0
+    },
+    "AtlusLevelUp.dc.html": {
+      "h": 844,
+      "page": "atelier",
+      "radius": 28,
+      "title": "Новый уровень",
+      "w": 390,
+      "x": 470,
+      "y": 0
+    },
+    "AtlusMain.dc.html": {
+      "h": 844,
+      "page": "atelier",
+      "radius": 28,
+      "title": "Персонаж",
+      "w": 390,
+      "x": 0,
+      "y": 0
+    },
+    "AtlusSkill.dc.html": {
+      "h": 844,
+      "page": "atelier",
+      "radius": 28,
+      "title": "Навык",
+      "w": 390,
+      "x": 940,
+      "y": 0
+    },
+    "BackupReminder.dc.html": {
+      "h": 400,
+      "page": "backup",
+      "radius": 28,
+      "title": "3 · Напоминание на главном",
+      "w": 390,
+      "x": 940,
+      "y": 0
+    },
+    "BackupRestore.dc.html": {
+      "h": 820,
+      "page": "backup",
+      "radius": 28,
+      "title": "2 · Восстановление из файла",
+      "w": 390,
+      "x": 470,
+      "y": 0
+    },
+    "BackupScreen.dc.html": {
+      "h": 920,
+      "page": "backup",
+      "radius": 28,
+      "title": "1 · Ещё → Резервная копия",
+      "w": 390,
+      "x": 0,
+      "y": 0
+    },
+    "Entry.dc.html": {
+      "h": 1000,
+      "is_interactive": true,
+      "page": "screens",
+      "radius": 28,
+      "title": "＋ Новая запись",
+      "w": 390,
+      "x": 470,
+      "y": 0
+    },
+    "FeatMain.dc.html": {
+      "h": 1120,
+      "page": "features",
+      "radius": 28,
+      "title": "1 · Главный: фокус и ближайшее",
+      "w": 390,
+      "x": 0,
+      "y": 0
+    },
+    "FeatReq.dc.html": {
+      "h": 900,
+      "page": "features",
+      "radius": 28,
+      "title": "4 · Настройка требований",
+      "w": 390,
+      "x": 1410,
+      "y": 0
+    },
+    "FeatSkill.dc.html": {
+      "h": 1180,
+      "page": "features",
+      "radius": 28,
+      "title": "2 · Навык: ступени, фокус, требования",
+      "w": 390,
+      "x": 470,
+      "y": 0
+    },
+    "FeatTree.dc.html": {
+      "h": 1180,
+      "page": "features",
+      "radius": 28,
+      "title": "3 · Дерево: туман, ржавчина, фокус",
+      "w": 390,
+      "x": 940,
+      "y": 0
+    },
+    "Main.dc.html": {
+      "h": 1120,
+      "is_interactive": true,
+      "page": "screens",
+      "radius": 28,
+      "title": "Персонаж (главный)",
+      "w": 390,
+      "x": 0,
+      "y": 0
+    },
+    "Metric.dc.html": {
+      "h": 1020,
+      "is_interactive": true,
+      "page": "screens",
+      "radius": 28,
+      "title": "Замер и рубеж",
+      "w": 390,
+      "x": 1880,
+      "y": 0
+    },
+    "MetricAdd.dc.html": {
+      "h": 900,
+      "page": "metrics",
+      "radius": 28,
+      "title": "3 · Новое значение",
+      "w": 390,
+      "x": 940,
+      "y": 0
+    },
+    "MetricDetail.dc.html": {
+      "h": 1020,
+      "page": "metrics",
+      "radius": 28,
+      "title": "2 · Замер изнутри",
+      "w": 390,
+      "x": 470,
+      "y": 0
+    },
+    "MetricEntry.dc.html": {
+      "h": 900,
+      "page": "metrics",
+      "radius": 28,
+      "title": "5 · Замер в записи + рекорд",
+      "w": 390,
+      "x": 1880,
+      "y": 0
+    },
+    "MetricList.dc.html": {
+      "h": 1000,
+      "page": "metrics",
+      "radius": 28,
+      "title": "1 · Список замеров",
+      "w": 390,
+      "x": 0,
+      "y": 0
+    },
+    "MilestoneNew.dc.html": {
+      "h": 820,
+      "page": "metrics",
+      "radius": 28,
+      "title": "4 · Новый рубеж",
+      "w": 390,
+      "x": 1410,
+      "y": 0
+    },
+    "QuestCreate.dc.html": {
+      "h": 1120,
+      "page": "quests",
+      "radius": 28,
+      "title": "3 · Новый квест",
+      "w": 390,
+      "x": 940,
+      "y": 0
+    },
+    "QuestDetail.dc.html": {
+      "h": 1120,
+      "page": "quests",
+      "radius": 28,
+      "title": "2 · Квест изнутри",
+      "w": 390,
+      "x": 470,
+      "y": 0
+    },
+    "QuestList.dc.html": {
+      "h": 1120,
+      "page": "quests",
+      "radius": 28,
+      "title": "1 · Список квестов",
+      "w": 390,
+      "x": 0,
+      "y": 0
+    },
+    "QuestMain.dc.html": {
+      "h": 760,
+      "page": "quests",
+      "radius": 28,
+      "title": "4 · Квесты на главном",
+      "w": 390,
+      "x": 1410,
+      "y": 0
+    },
+    "Skill.dc.html": {
+      "h": 1060,
+      "is_interactive": true,
+      "page": "screens",
+      "radius": 28,
+      "title": "Навык: Рамен",
+      "w": 390,
+      "x": 1410,
+      "y": 0
+    },
+    "StyleBento.dc.html": {
+      "h": 844,
+      "page": "styles",
+      "radius": 28,
+      "title": "G · Bento, игровая палитра",
+      "w": 390,
+      "x": 940,
+      "y": 1224
+    },
+    "StyleBright.dc.html": {
+      "h": 844,
+      "page": "styles",
+      "radius": 28,
+      "title": "D · Яркий игровой",
+      "w": 390,
+      "x": 1410,
+      "y": 0
+    },
+    "StyleBrutal.dc.html": {
+      "h": 844,
+      "page": "styles",
+      "radius": 28,
+      "title": "F · Необрутализм",
+      "w": 390,
+      "x": 470,
+      "y": 1224
+    },
+    "StyleClay.dc.html": {
+      "h": 844,
+      "page": "styles",
+      "radius": 28,
+      "title": "E · Claymorphism",
+      "w": 390,
+      "x": 0,
+      "y": 1224
+    },
+    "StyleFantasy.dc.html": {
+      "h": 844,
+      "page": "styles",
+      "radius": 28,
+      "title": "A · Фэнтези-свиток",
+      "w": 390,
+      "x": 0,
+      "y": 0
+    },
+    "StyleGlass.dc.html": {
+      "h": 844,
+      "page": "styles",
+      "radius": 28,
+      "title": "H · Стекло и сияние",
+      "w": 390,
+      "x": 1410,
+      "y": 1224
+    },
+    "StyleHud.dc.html": {
+      "h": 844,
+      "page": "styles",
+      "radius": 28,
+      "title": "C · Sci-fi HUD",
+      "w": 390,
+      "x": 940,
+      "y": 0
+    },
+    "StylePixel.dc.html": {
+      "h": 844,
+      "page": "styles",
+      "radius": 28,
+      "title": "B · Пиксель 8-бит",
+      "w": 390,
+      "x": 470,
+      "y": 0
+    },
+    "Tree.dc.html": {
+      "h": 920,
+      "is_interactive": true,
+      "page": "screens",
+      "radius": 28,
+      "title": "Дерево навыков",
+      "w": 390,
+      "x": 940,
+      "y": 0
+    },
+    "SimpleMain.dc.html": {
+      "h": 900,
+      "page": "simplify",
+      "radius": 28,
+      "title": "1 · Главный: всё в один экран",
+      "w": 390,
+      "x": 0,
+      "y": 0
+    },
+    "SimpleEntry.dc.html": {
+      "h": 844,
+      "page": "simplify",
+      "radius": 28,
+      "title": "2 · Запись: главное сверху, остальное в «Подробнее»",
+      "w": 390,
+      "x": 470,
+      "y": 0
+    },
+    "SimpleSets.dc.html": {
+      "h": 1000,
+      "page": "simplify",
+      "radius": 28,
+      "title": "3 · Тренировка подходами + цифровая клавиатура",
+      "w": 390,
+      "x": 940,
+      "y": 0
+    },
+    "SimpleMilestone.dc.html": {
+      "h": 844,
+      "page": "simplify",
+      "radius": 28,
+      "title": "4 · Рубеж: вес или повторы",
+      "w": 390,
+      "x": 1410,
+      "y": 0
+    }
+  },
+  "createdOnFiles": {
+    "at": "2026-10-04T12:00:00Z",
+    "v": 1
+  },
+  "designSystems": [],
+  "launch": {
+    "view": "canvas",
+    "page": "simplify"
+  },
+  "notes": {
+    "atelierTitle": {
+      "kind": "title1",
+      "maxW": 1250,
+      "page": "atelier",
+      "text": "«Ателье»: бежевый, чёрный, оранжевый",
+      "w": 240,
+      "x": 0,
+      "y": -260
+    },
+    "backupTitle": {
+      "kind": "title1",
+      "maxW": 1250,
+      "page": "backup",
+      "text": "Резервная копия: перенос данных в APK",
+      "w": 240,
+      "x": 0,
+      "y": -260
+    },
+    "featuresTitle": {
+      "kind": "title1",
+      "maxW": 1720,
+      "page": "features",
+      "text": "Фокус, ступени, ближайшее, ржавчина, туман, требования",
+      "w": 240,
+      "x": 0,
+      "y": -260
+    },
+    "metricsTitle": {
+      "kind": "title1",
+      "maxW": 1720,
+      "page": "metrics",
+      "text": "Замеры и рубежи: вес, жим, подтягивания, сон",
+      "w": 240,
+      "x": 0,
+      "y": -260
+    },
+    "proMaxTitle": {
+      "kind": "title1",
+      "maxW": 1800,
+      "page": "styles",
+      "text": "E–H — варианты по UI/UX Pro Max",
+      "w": 240,
+      "x": 0,
+      "y": 964
+    },
+    "questsTitle": {
+      "kind": "title1",
+      "maxW": 1720,
+      "page": "quests",
+      "text": "Квесты: недельные, основные, побочные",
+      "w": 240,
+      "x": 0,
+      "y": -260
+    },
+    "stylesTitle": {
+      "kind": "title1",
+      "maxW": 1800,
+      "page": "styles",
+      "text": "Главный экран: A–D — первые варианты",
+      "w": 240,
+      "x": 0,
+      "y": -260
+    },
+    "title": {
+      "kind": "title1",
+      "maxW": 2740,
+      "page": "screens",
+      "text": "LifeQuest · mildyan — как будет выглядеть приложение",
+      "w": 240,
+      "x": 0,
+      "y": -260
+    },
+    "simplifyTitle": {
+      "kind": "title1",
+      "maxW": 1720,
+      "page": "simplify",
+      "text": "Упрощение: главный, запись, подходы, рубеж",
+      "x": 0,
+      "y": -260
+    }
+  },
+  "order": [
+    "Main.dc.html",
+    "Entry.dc.html",
+    "Tree.dc.html",
+    "Skill.dc.html",
+    "Metric.dc.html",
+    "Achievements.dc.html",
+    "StyleFantasy.dc.html",
+    "StylePixel.dc.html",
+    "StyleHud.dc.html",
+    "StyleBright.dc.html",
+    "StyleClay.dc.html",
+    "StyleBrutal.dc.html",
+    "StyleBento.dc.html",
+    "StyleGlass.dc.html",
+    "AtlusMain.dc.html",
+    "AtlusLevelUp.dc.html",
+    "AtlusSkill.dc.html",
+    "FeatMain.dc.html",
+    "FeatSkill.dc.html",
+    "FeatTree.dc.html",
+    "FeatReq.dc.html",
+    "BackupScreen.dc.html",
+    "BackupRestore.dc.html",
+    "BackupReminder.dc.html",
+    "QuestList.dc.html",
+    "QuestDetail.dc.html",
+    "QuestCreate.dc.html",
+    "QuestMain.dc.html",
+    "MetricList.dc.html",
+    "MetricDetail.dc.html",
+    "MetricAdd.dc.html",
+    "MilestoneNew.dc.html",
+    "MetricEntry.dc.html",
+    "SimpleMain.dc.html",
+    "SimpleEntry.dc.html",
+    "SimpleSets.dc.html",
+    "SimpleMilestone.dc.html"
+  ],
+  "pages": [
+    {
+      "id": "screens",
+      "name": "Экраны"
+    },
+    {
+      "id": "styles",
+      "name": "Направления дизайна"
+    },
+    {
+      "id": "atelier",
+      "name": "Стиль «Ателье»"
+    },
+    {
+      "id": "features",
+      "name": "Дерево: новые фичи"
+    },
+    {
+      "id": "backup",
+      "name": "Резервная копия"
+    },
+    {
+      "id": "quests",
+      "name": "Квесты"
+    },
+    {
+      "id": "metrics",
+      "name": "Замеры и рубежи"
+    },
+    {
+      "id": "simplify",
+      "name": "Упрощение"
+    }
+  ],
+  "title": "LifeQuest — макет"
+}

@@ -1,0 +1,10 @@
+/* Порядок важен: база → общие компоненты → экраны. */
+@import './base.css';
+@import './common.css';
+@import './home.css';
+@import './entry.css';
+@import './tree.css';
+@import './skill.css';
+@import './quests.css';
+@import './metrics.css';
+@import './more.css';
