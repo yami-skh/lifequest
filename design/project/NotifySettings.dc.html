@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Звуки и напоминания</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Unbounded:wght@500;700&amp;display=swap" rel="stylesheet">
+<style>body{margin:0}</style>
+</helmet>
+<div style="width: 390px; height: 700px; box-sizing: border-box; background: #0E1015; color: #ECEDF1; font-family: Manrope, sans-serif; padding: 18px; display: flex; flex-direction: column; gap: 10px">
+<span style="font-size: 12px; font-weight: 800; letter-spacing: 0.6px; color: #A3A9B6">ЗВУКИ</span>
+<div style="border-radius: 16px; background: #171A21; overflow: hidden">
+<div style="display: flex; align-items: center; gap: 12px; padding: 0 14px; min-height: 58px; border-bottom: 1px solid #1E222B"><span style="flex: 1; display: flex; flex-direction: column"><span style="font-weight: 700">Звуки</span><span style="font-size: 12px; color: #A3A9B6">XP, новый уровень, рекорд, рубеж</span></span><span style="width: 50px; height: 30px; border-radius: 15px; background: #4CC9A0; position: relative; flex-shrink: 0"><span style="position: absolute; left: 23px; top: 3px; width: 24px; height: 24px; border-radius: 12px; background: #0E1015"></span></span></div>
+<div style="display: flex; align-items: center; gap: 12px; padding: 0 14px; min-height: 58px; border-bottom: 1px solid #1E222B"><span style="flex: 1; display: flex; flex-direction: column"><span style="font-weight: 700">Вибрация</span><span style="font-size: 12px; color: #A3A9B6">короткий отклик на награды</span></span><span style="width: 50px; height: 30px; border-radius: 15px; background: #4CC9A0; position: relative; flex-shrink: 0"><span style="position: absolute; left: 23px; top: 3px; width: 24px; height: 24px; border-radius: 12px; background: #0E1015"></span></span></div>
+<div style="display: flex; align-items: center; gap: 12px; padding: 0 14px; min-height: 52px"><span style="font-weight: 700; flex: 1">Громкость</span><span style="width: 150px; height: 6px; border-radius: 3px; background: #2A2F3B; position: relative"><span style="position: absolute; left: 0; top: 0; bottom: 0; width: 60%; border-radius: 3px; background: #F2B544"></span><span style="position: absolute; left: 82px; top: -7px; width: 20px; height: 20px; border-radius: 10px; background: #ECEDF1"></span></span><span style="font-size: 13px; color: #6FE0BA; font-weight: 800">▶ проба</span></div>
+</div>
+<span style="font-size: 12px; font-weight: 800; letter-spacing: 0.6px; color: #A3A9B6; margin-top: 8px">НАПОМИНАНИЯ</span>
+<div style="border-radius: 16px; background: #171A21; overflow: hidden">
+<div style="display: flex; align-items: center; gap: 12px; padding: 0 14px; min-height: 58px; border-bottom: 1px solid #1E222B"><span style="flex: 1; display: flex; flex-direction: column"><span style="font-weight: 700">Записать день</span><span style="font-size: 12px; color: #A3A9B6">если сегодня ещё нет записей</span></span><span style="padding: 6px 10px; border-radius: 10px; background: #2A2F3B; font-weight: 800; font-size: 14px">21:00</span><span style="width: 50px; height: 30px; border-radius: 15px; background: #4CC9A0; position: relative; flex-shrink: 0"><span style="position: absolute; left: 23px; top: 3px; width: 24px; height: 24px; border-radius: 12px; background: #0E1015"></span></span></div>
+<div style="display: flex; align-items: center; gap: 12px; padding: 0 14px; min-height: 58px; border-bottom: 1px solid #1E222B"><span style="flex: 1; display: flex; flex-direction: column"><span style="font-weight: 700">Серия под угрозой</span><span style="font-size: 12px; color: #A3A9B6">за 3 часа до конца дня, если серия от 3 дней</span></span><span style="width: 50px; height: 30px; border-radius: 15px; background: #4CC9A0; position: relative; flex-shrink: 0"><span style="position: absolute; left: 23px; top: 3px; width: 24px; height: 24px; border-radius: 12px; background: #0E1015"></span></span></div>
+<div style="display: flex; align-items: center; gap: 12px; padding: 0 14px; min-height: 58px; border-bottom: 1px solid #1E222B"><span style="flex: 1; display: flex; flex-direction: column"><span style="font-weight: 700">Недельные квесты</span><span style="font-size: 12px; color: #A3A9B6">в воскресенье, если что-то не закрыто</span></span><span style="width: 50px; height: 30px; border-radius: 15px; background: #4CC9A0; position: relative; flex-shrink: 0"><span style="position: absolute; left: 23px; top: 3px; width: 24px; height: 24px; border-radius: 12px; background: #0E1015"></span></span></div>
+<div style="display: flex; align-items: center; gap: 12px; padding: 0 14px; min-height: 58px; border-bottom: 1px solid #1E222B"><span style="flex: 1; display: flex; flex-direction: column"><span style="font-weight: 700">Резервная копия</span><span style="font-size: 12px; color: #A3A9B6">раз в неделю, если копии давно не было</span></span><span style="width: 50px; height: 30px; border-radius: 15px; background: #3A404D; position: relative; flex-shrink: 0"><span style="position: absolute; left: 3px; top: 3px; width: 24px; height: 24px; border-radius: 12px; background: #ECEDF1"></span></span></div>
+</div>
+<span style="font-size: 12.5px; color: #A3A9B6">Напоминания работают в приложении для Android. На сайте — только звуки.</span>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":700}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

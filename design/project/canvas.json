@@ -493,6 +493,33 @@
       "w": 390,
       "x": 1350,
       "y": 0
+    },
+    "StarMap.dc.html": {
+      "h": 844,
+      "page": "v09",
+      "radius": 28,
+      "title": "Созвездие",
+      "w": 390,
+      "x": 0,
+      "y": 0
+    },
+    "NotifySettings.dc.html": {
+      "h": 700,
+      "page": "v09",
+      "radius": 28,
+      "title": "Настройки: звуки и напоминания",
+      "w": 390,
+      "x": 450,
+      "y": 0
+    },
+    "NotifyShade.dc.html": {
+      "h": 844,
+      "page": "v09",
+      "radius": 28,
+      "title": "Уведомления и разрешение",
+      "w": 390,
+      "x": 900,
+      "y": 0
     }
   },
   "createdOnFiles": {
@@ -502,7 +529,7 @@
   "designSystems": [],
   "launch": {
     "view": "canvas",
-    "page": "aicopy"
+    "page": "v09"
   },
   "notes": {
     "atelierTitle": {
@@ -624,6 +651,14 @@
       "text": "AI-помощник через копирование: подходит любая нейросеть",
       "x": 0,
       "y": -260
+    },
+    "v09Title": {
+      "kind": "title1",
+      "maxW": 1720,
+      "page": "v09",
+      "text": "Созвездие навыков · звуки и напоминания",
+      "x": 0,
+      "y": -260
     }
   },
   "order": [
@@ -680,7 +715,10 @@
     "AiSettings.dc.html",
     "AiCopy.dc.html",
     "AiPaste.dc.html",
-    "AiSettingsAny.dc.html"
+    "AiSettingsAny.dc.html",
+    "StarMap.dc.html",
+    "NotifySettings.dc.html",
+    "NotifyShade.dc.html"
   ],
   "pages": [
     {
@@ -734,6 +772,10 @@
     {
       "id": "aicopy",
       "name": "AI: любая нейросеть"
+    },
+    {
+      "id": "v09",
+      "name": "Созвездие и напоминания"
     }
   ],
   "title": "LifeQuest — макет"
