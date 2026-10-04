@@ -340,6 +340,24 @@
       "w": 390,
       "x": 1410,
       "y": 0
+    },
+    "WhatsNew.dc.html": {
+      "h": 844,
+      "page": "whatsnew",
+      "radius": 28,
+      "title": "После обновления (один раз)",
+      "w": 390,
+      "x": 0,
+      "y": 0
+    },
+    "Changelog.dc.html": {
+      "h": 844,
+      "page": "whatsnew",
+      "radius": 28,
+      "title": "Ещё → Что нового",
+      "w": 390,
+      "x": 450,
+      "y": 0
     }
   },
   "createdOnFiles": {
@@ -349,7 +367,7 @@
   "designSystems": [],
   "launch": {
     "view": "canvas",
-    "page": "simplify"
+    "page": "whatsnew"
   },
   "notes": {
     "atelierTitle": {
@@ -431,6 +449,14 @@
       "text": "Упрощение: главный, запись, подходы, рубеж",
       "x": 0,
       "y": -260
+    },
+    "whatsnewTitle": {
+      "kind": "title1",
+      "maxW": 1720,
+      "page": "whatsnew",
+      "text": "Что нового: окно после обновления и история версий",
+      "x": 0,
+      "y": -260
     }
   },
   "order": [
@@ -470,7 +496,9 @@
     "SimpleMain.dc.html",
     "SimpleEntry.dc.html",
     "SimpleSets.dc.html",
-    "SimpleMilestone.dc.html"
+    "SimpleMilestone.dc.html",
+    "WhatsNew.dc.html",
+    "Changelog.dc.html"
   ],
   "pages": [
     {
@@ -504,6 +532,10 @@
     {
       "id": "simplify",
       "name": "Упрощение"
+    },
+    {
+      "id": "whatsnew",
+      "name": "Что нового"
     }
   ],
   "title": "LifeQuest — макет"

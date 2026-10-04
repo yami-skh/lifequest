@@ -29,14 +29,14 @@ RPG-трекер саморазвития для брата пользовате
 - `npm run deploy` — тесты, сборка, публикация на https://yami-skh.github.io/lifequest/ (ветка `gh-pages`; Actions не используются — у токена нет scope `workflow`).
 - `npm run apk` → `D:/Android/release/LifeQuest-<version>.apk`. Ключ `D:/Android/keys/` — **не терять**. JDK/SDK/Gradle в `D:/Android/`.
 
-**Выпуск версии:** поднять `version` в package.json → `npm run check` → `deploy` → `apk` → commit + push → обновить «Статус» и `docs/project-map.html`, переопубликовать карту.
+**Выпуск версии:** поднять `version` в package.json → дописать изменения для пользователя (окно «Что нового», после его появления) → `npm run check` → `deploy` → `apk` → commit + push → обновить «Статус» и `docs/project-map.html`, переопубликовать карту.
 
 ## Как работать экономно
 
 - Код: CODEMAP → кусок файла. Стили разбиты по экранам: `src/styles/<экран>.css` (порядок подключения в `index.css` важен).
 - Правки: Edit; много однотипных правок — разовый python-скрипт в scratchpad (не в проекте).
 - Проверка в браузере: на мобильной эмуляции клики панели промахиваются — нажимать через `javascript_tool` (`el.click()` + паузы 100–300 мс между нажатиями). Размеры и текст проверять через JS, скриншот — один в конце, `scale: 0.6`.
-- Холст: правка артборда в `design/project/`, новая страница — `python tools/canvas_page.py ...`, публикация — Artifact с `url` холста, `root: design`, `files` = изменённые файлы.
+- Холст: правка артборда в `design/project/`, новая страница — `python tools/canvas_page.py ...`, публикация — Artifact с `url` холста, `root: design`, `file_path: design/project/canvas.json`, `files` = изменённые артборды.
 
 ## Артефакты
 
