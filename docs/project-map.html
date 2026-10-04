@@ -1,0 +1,255 @@
+<title>LifeQuest: карта и роудмап</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@500;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column; the map is stacked layer bands, the roadmap is a vertical track with status nodes */
+:root {
+  --bg: #F5F5F1;
+  --surface: #FFFFFF;
+  --surface-2: #ECECE6;
+  --line: #DADAD2;
+  --fg: #17181C;
+  --muted: #5D6170;
+  --gold: #9A6A00;
+  --gold-soft: #F6E7C3;
+  --done: #1E7F5C;
+  --done-soft: #D7F0E5;
+  --now: #9A6A00;
+  --blue: #2F5FC4; --orange: #C2541F; --green: #1E7F5C; --pink: #A63FAF; --violet: #5B47C9;
+  --display: "Unbounded", "Segoe UI", system-ui, sans-serif;
+  --body: "Manrope", "Segoe UI", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0E1015; --surface: #171A21; --surface-2: #1F232C; --line: #2A2F3B;
+  --fg: #ECEDF1; --muted: #A3A9B6; --gold: #F2B544; --gold-soft: #2B2414;
+  --done: #4CC9A0; --done-soft: #12271F; --now: #F2B544;
+  --blue: #7AA7FF; --orange: #FF8A5B; --green: #4CC9A0; --pink: #E08AE8; --violet: #B9A4FF;
+  color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #0E1015; --surface: #171A21; --surface-2: #1F232C; --line: #2A2F3B;
+  --fg: #ECEDF1; --muted: #A3A9B6; --gold: #F2B544; --gold-soft: #2B2414;
+  --done: #4CC9A0; --done-soft: #12271F; --now: #F2B544;
+  --blue: #7AA7FF; --orange: #FF8A5B; --green: #4CC9A0; --pink: #E08AE8; --violet: #B9A4FF;
+  color-scheme: dark }
+
+body { background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 15px; line-height: 1.55; }
+.wrap { max-width: 900px; margin: 0 auto; padding-inline: 20px; padding-block: 40px 80px; display: flex; flex-direction: column; gap: 56px; }
+h1, h2, h3 { font-family: var(--display); text-wrap: balance; margin: 0; letter-spacing: -0.01em; }
+h1 { font-size: clamp(28px, 5vw, 40px); font-weight: 700; }
+h2 { font-size: 22px; font-weight: 700; }
+h3 { font-size: 15px; font-weight: 700; }
+p { margin: 0; }
+.eyebrow { font-size: 12px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.lead { color: var(--muted); max-width: 62ch; }
+section { display: flex; flex-direction: column; gap: 20px; }
+.head { display: flex; flex-direction: column; gap: 10px; }
+
+/* status strip */
+.status { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; }
+.stat { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; display: flex; flex-direction: column; gap: 4px; }
+.stat b { font-family: var(--display); font-size: 18px; }
+.stat span { color: var(--muted); font-size: 13px; }
+
+/* chips */
+.chip { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 800; white-space: nowrap; }
+.chip.done { background: var(--done-soft); color: var(--done); }
+.chip.now { background: var(--gold-soft); color: var(--now); }
+.chip.next { background: var(--surface-2); color: var(--muted); }
+
+/* map */
+.flow { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 16px; }
+.flow .node { padding: 8px 12px; border-radius: 10px; background: var(--surface-2); font-weight: 700; font-size: 14px; }
+.flow .node.key { background: var(--gold-soft); color: var(--gold); }
+.flow .arr { color: var(--muted); font-weight: 700; }
+.layers { display: flex; flex-direction: column; gap: 10px; }
+.layer { display: grid; grid-template-columns: 170px minmax(0, 1fr); gap: 16px; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 16px; }
+.layer-name { display: flex; flex-direction: column; gap: 4px; }
+.layer-name small { color: var(--muted); font-size: 13px; line-height: 1.4; }
+.mods { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 8px; }
+.mod { border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.mod b { font-size: 14px; }
+.mod span { color: var(--muted); font-size: 12.5px; line-height: 1.4; }
+.dots { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 2px; }
+.dot { width: 10px; height: 10px; border-radius: 5px; }
+
+.tree { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 18px; overflow-x: auto; }
+.tree pre { margin: 0; font-family: var(--mono); font-size: 13px; line-height: 1.7; color: var(--fg); }
+.tree .c { color: var(--muted); }
+
+/* roadmap */
+.phase { display: flex; flex-direction: column; gap: 12px; }
+.phase-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px 14px; }
+.track { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.step { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 14px; position: relative; padding-bottom: 18px; }
+.step:not(:last-child)::before { content: ""; position: absolute; left: 13px; top: 28px; bottom: 0; width: 2px; background: var(--line); }
+.node-mark { width: 28px; height: 28px; border-radius: 14px; border: 2px solid var(--line); background: var(--bg); box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; color: var(--muted); font-variant-numeric: tabular-nums; }
+.step.done .node-mark { background: var(--done); border-color: var(--done); color: var(--bg); }
+.step.now .node-mark { border-color: var(--now); color: var(--now); box-shadow: 0 0 0 4px var(--gold-soft); }
+.step-body { display: flex; flex-direction: column; gap: 4px; padding-top: 3px; min-width: 0; }
+.step-title { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-weight: 800; }
+.step-body p { color: var(--muted); font-size: 14px; }
+.step-body .touch { color: var(--fg); font-size: 13.5px; }
+.step-body .touch::before { content: "Результат: "; font-weight: 800; color: var(--gold); }
+.later { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 8px; }
+.card ul { margin: 0; padding-left: 18px; color: var(--muted); font-size: 14px; display: flex; flex-direction: column; gap: 4px; }
+.foot { color: var(--muted); font-size: 13px; border-top: 1px solid var(--line); padding-top: 16px; }
+
+@media (max-width: 620px) {
+  .layer { grid-template-columns: minmax(0, 1fr); gap: 10px; }
+}
+</style>
+
+<div class="wrap">
+
+<header class="head">
+  <div class="eyebrow">Проект для mildyan</div>
+  <h1>LifeQuest: карта и роудмап</h1>
+  <p class="lead">Личная RPG-система развития на телефоне. На этой странице видно, из каких частей состоит приложение, что уже сделано и в каком порядке будем делать остальное.</p>
+</header>
+
+<div class="status">
+  <div class="stat"><span>Архитектура</span><b>Готова</b></div>
+  <div class="stat"><span>Макет экранов</span><b>Готов, 6 экранов</b></div>
+  <div class="stat"><span>Код приложения</span><b>Прототип 0.1</b></div>
+  <div class="stat"><span>Следующий шаг</span><b>Квесты и достижения</b></div>
+</div>
+
+<section>
+  <div class="head">
+    <div class="eyebrow">Карта проекта</div>
+    <h2>Как всё связано</h2>
+    <p class="lead">Почти всё в приложении запускает одно действие: запись в журнале. Из неё считается XP, она двигает навыки, квесты, достижения и уровень персонажа.</p>
+  </div>
+
+  <div class="flow" aria-label="Главный поток данных">
+    <span class="node key">＋ Запись</span><span class="arr">→</span>
+    <span class="node">Расчёт XP</span><span class="arr">→</span>
+    <span class="node">Навыки и дерево</span><span class="arr">→</span>
+    <span class="node">Уровень персонажа</span><span class="arr">→</span>
+    <span class="node">Квесты, достижения</span>
+  </div>
+  <div class="flow" aria-label="Поток замеров">
+    <span class="node key">Значение замера</span><span class="arr">→</span>
+    <span class="node">График</span><span class="arr">→</span>
+    <span class="node">Рубеж</span><span class="arr">→</span>
+    <span class="node">Личный рекорд +50 XP</span>
+  </div>
+
+  <div class="layers">
+    <div class="layer">
+      <div class="layer-name"><h3>Экраны</h3><small>Что видит mildyan. Нижняя панель на 5 кнопок</small></div>
+      <div class="mods">
+        <div class="mod"><b>Персонаж</b><span>уровень, серия, направления, активное</span></div>
+        <div class="mod"><b>＋ Запись</b><span>главный сценарий, 15 секунд</span></div>
+        <div class="mod"><b>Дерево</b><span>направления → ветки → навыки</span></div>
+        <div class="mod"><b>Навык</b><span>цели, опыт, материалы, галерея</span></div>
+        <div class="mod"><b>Журнал</b><span>лента записей, фильтры</span></div>
+        <div class="mod"><b>Квесты</b><span>основные, побочные, недельные</span></div>
+        <div class="mod"><b>Достижения</b><span>полученные, в процессе, скрытые</span></div>
+        <div class="mod"><b>Замеры и рубежи</b><span>графики, цели с числом</span></div>
+        <div class="mod"><b>Настройки</b><span>имя, бэкап, тема</span></div>
+      </div>
+    </div>
+
+    <div class="layer">
+      <div class="layer-name"><h3>Движок</h3><small>Правила игры. Чистые функции, покрыты тестами</small></div>
+      <div class="mods">
+        <div class="mod"><b>XP-калькулятор</b><span>тип × сложность × новизна × повтор × фото</span></div>
+        <div class="mod"><b>Уровни</b><span>персонаж: 100 + 50·L, навык: 0–10 с названиями</span></div>
+        <div class="mod"><b>Прогресс</b><span>одна полоска: теория ×1, практика ×2</span></div>
+        <div class="mod"><b>Разблокировки</b><span>требования к навыкам</span></div>
+        <div class="mod"><b>Достижения</b><span>правила над счётчиками, скрытые</span></div>
+        <div class="mod"><b>Квесты и рубежи</b><span>шаги, награды, прогноз по темпу</span></div>
+        <div class="mod"><b>Серии</b><span>дни подряд с записью</span></div>
+      </div>
+    </div>
+
+    <div class="layer">
+      <div class="layer-name"><h3>Данные</h3><small>IndexedDB на телефоне. Ничего не уходит на сервер</small></div>
+      <div class="mods">
+        <div class="mod"><b>Node, Goal</b><span>дерево и цели навыков</span></div>
+        <div class="mod"><b>Entry, EntrySkill</b><span>записи и XP по навыкам</span></div>
+        <div class="mod"><b>Photo</b><span>фото и превью как Blob</span></div>
+        <div class="mod"><b>Quest, Achievement</b><span>квесты и полученные награды</span></div>
+        <div class="mod"><b>Metric, Milestone</b><span>замеры и рубежи</span></div>
+        <div class="mod"><b>Note</b><span>заметки и ссылки</span></div>
+      </div>
+    </div>
+
+    <div class="layer">
+      <div class="layer-name"><h3>Платформа</h3><small>Как приложение живёт на телефоне</small></div>
+      <div class="mods">
+        <div class="mod"><b>PWA</b><span>значок на главном экране, офлайн</span></div>
+        <div class="mod"><b>Бэкап .zip</b><span>данные + фото, «Поделиться» в Telegram</span></div>
+        <div class="mod"><b>storage.persist</b><span>просим браузер не стирать данные</span></div>
+        <div class="mod"><b>Хостинг</b><span>GitHub Pages или Netlify, бесплатно</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mods" aria-label="Стартовые направления" style="grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));">
+    <div class="mod"><b>Интеллект</b><span>языки, наука, чтение</span><div class="dots"><span class="dot" style="background: var(--blue)"></span></div></div>
+    <div class="mod"><b>Тело</b><span>сила, выносливость, восстановление</span><div class="dots"><span class="dot" style="background: var(--orange)"></span></div></div>
+    <div class="mod"><b>Практика</b><span>кулинария, ремонт, финансы</span><div class="dots"><span class="dot" style="background: var(--green)"></span></div></div>
+    <div class="mod"><b>Творчество</b><span>рисование, музыка, письмо</span><div class="dots"><span class="dot" style="background: var(--pink)"></span></div></div>
+    <div class="mod"><b>Технологии</b><span>железо, код, безопасность</span><div class="dots"><span class="dot" style="background: var(--violet)"></span></div></div>
+  </div>
+
+  <div class="tree">
+<pre><span class="c">lifequest/</span>
+├─ ARCHITECTURE.md        <span class="c">механика, формулы, модель данных</span>
+├─ docs/project-map.html  <span class="c">эта страница</span>
+└─ src/                   <span class="c">прототип 0.1</span>
+   ├─ engine/             <span class="c">xp.ts · levels.ts · progress.ts · achievements.ts · milestones.ts</span>
+   ├─ db/                 <span class="c">schema.ts · seed.ts (стартовый набор) · backup.ts</span>
+   ├─ screens/            <span class="c">Character · Entry · Tree · Skill · Journal · Quests · Achievements · Metrics · Settings</span>
+   ├─ components/         <span class="c">ProgressBar · LevelBadge · BottomNav · Sheet · PhotoPicker · Chart</span>
+   └─ pwa/                <span class="c">manifest · service worker · иконки</span></pre>
+  </div>
+</section>
+
+<section>
+  <div class="head">
+    <div class="eyebrow">Роудмап</div>
+    <h2>Порядок работы</h2>
+    <p class="lead">После каждого шага в v1.0 есть что открыть и потрогать на телефоне. Раньше всего делаем главный сценарий — запись, потому что без неё остальное не оживёт.</p>
+  </div>
+
+  <div class="phase">
+    <div class="phase-head"><h3>Подготовка</h3><span class="chip done">Готово</span></div>
+    <ol class="track">
+      <li class="step done"><span class="node-mark">✓</span><div class="step-body"><div class="step-title">Архитектура v1.0</div><p>Механика XP и уровней, одна полоска прогресса, квесты, достижения, рубежи, история ошибок, модель данных. Учтены ответы брата.</p></div></li>
+      <li class="step done"><span class="node-mark">✓</span><div class="step-body"><div class="step-title">Макет экранов</div><p>Персонаж, запись, дерево, навык, замер с рубежом, достижения. Тёмная тема, кликабельный прототип.</p></div></li>
+    </ol>
+  </div>
+
+  <div class="phase">
+    <div class="phase-head"><h3>v1.0 · рабочее приложение</h3><span class="chip now">В работе</span></div>
+    <ol class="track">
+      <li class="step done"><span class="node-mark">✓</span><div class="step-body"><div class="step-title">Каркас PWA</div><p>Vite, Preact, TypeScript, манифест, service worker, нижняя навигация, тёмная тема.</p><p class="touch">пустое приложение ставится на телефон значком</p></div></li>
+      <li class="step done"><span class="node-mark">✓</span><div class="step-body"><div class="step-title">База и движок</div><p>Таблицы Dexie, стартовый набор из 5 направлений, формулы XP, уровней и прогресса с тестами.</p><p class="touch">дерево со стартовыми навыками</p></div></li>
+      <li class="step done"><span class="node-mark">✓</span><div class="step-body"><div class="step-title">＋ Запись и журнал</div><p>Шторка записи, выбор навыков, сложность, исход ✅/❌, предпросмотр XP, лента журнала.</p><p class="touch">можно начинать пользоваться каждый день</p></div></li>
+      <li class="step done"><span class="node-mark">✓</span><div class="step-body"><div class="step-title">Персонаж, дерево, навык</div><p>Главный экран, редактирование дерева, страница навыка с целями и ошибками, разблокировки.</p><p class="touch">видно рост уровня и полосок</p></div></li>
+      <li class="step done"><span class="node-mark">✓</span><div class="step-body"><div class="step-title">Фото</div><p>Камера, сжатие, превью и галерея навыка готовы. Фото в замерах появятся вместе с шагом 7. На реальном телефоне ещё не проверено.</p><p class="touch">записи с фотоотчётом</p></div></li>
+      <li class="step now"><span class="node-mark">6</span><div class="step-body"><div class="step-title">Квесты и достижения <span class="chip now">Следующий</span></div><p>Квесты с шагами и недельные шаблоны. Достижения уже работают (стартовые и скрытые), осталось связать с квестами.</p><p class="touch">игровая часть целиком</p></div></li>
+      <li class="step"><span class="node-mark">7</span><div class="step-body"><div class="step-title">Замеры и рубежи</div><p>Метрики, графики, личные рекорды, рубежи с прогнозом по темпу.</p><p class="touch">трекер тренировок и веса</p></div></li>
+      <li class="step"><span class="node-mark">8</span><div class="step-body"><div class="step-title">Бэкап</div><p>Экспорт и импорт .zip с фото, напоминание раз в неделю, storage.persist.</p><p class="touch">данные не потеряются</p></div></li>
+      <li class="step"><span class="node-mark">9</span><div class="step-body"><div class="step-title">Запуск и обкатка</div><p>Публикация на хостинг, установка на телефон брата, 1–2 недели использования, правка цифр в формулах.</p><p class="touch">v1.0 у mildyan в руках</p></div></li>
+    </ol>
+  </div>
+
+  <div class="phase">
+    <div class="phase-head"><h3>Дальше</h3><span class="chip next">После v1.0</span></div>
+    <div class="later">
+      <div class="card"><h3>v1.1 · удобство</h3><ul><li>визуальный граф Skill Tree</li><li>недельная сводка</li><li>push-напоминания</li></ul></div>
+      <div class="card"><h3>v1.2 · AI</h3><ul><li>запись свободным текстом: «пожал 50×10×3»</li><li>автоматически тренировка, замер, навыки и XP</li><li>совет по следующему шагу</li></ul></div>
+      <div class="card"><h3>v2.0 · синхронизация</h3><ul><li>аккаунт и синк телефон ↔ ПК</li><li>обмен шаблонами веток</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<p class="foot">Подробная механика и формулы — в ARCHITECTURE.md в папке проекта.</p>
+
+</div>
