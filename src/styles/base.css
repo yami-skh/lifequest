@@ -17,8 +17,8 @@
   --red: #FF7A7A;
   --red-bg: rgba(240, 96, 96, 0.1);
   --on-gold: #14161C;
-  --display: 'Unbounded', 'Segoe UI', system-ui, sans-serif;
-  --body: 'Manrope', 'Segoe UI', system-ui, sans-serif;
+  --display: 'Unbounded Variable', 'Unbounded', 'Segoe UI', system-ui, sans-serif;
+  --body: 'Manrope Variable', 'Manrope', 'Segoe UI', system-ui, sans-serif;
   --nav-h: 76px;
   --safe-b: env(safe-area-inset-bottom, 0px);
   color-scheme: dark;

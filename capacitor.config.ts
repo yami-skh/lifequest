@@ -9,6 +9,10 @@ const config: CapacitorConfig = {
   android: {
     backgroundColor: '#0E1015',
   },
+  plugins: {
+    // Обновления веб-части — только вручную из src/lib/update.ts, без серверов capgo и без статистики.
+    CapacitorUpdater: { autoUpdate: false, statsUrl: '', resetWhenUpdate: true },
+  },
 };
 
 export default config;

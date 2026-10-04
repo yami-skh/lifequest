@@ -80,11 +80,13 @@
   parse:4, *useRoute:6, *go:19, *back:23
 - **toast.ts** (66) — Всплывашки: XP, новый уровень, достижения.
   *ToastKind:5, *Toast:6, MERGE_MS:9, LIFETIME:10, RANK:11, toasts:13, nextId:14, lastGame:15, timers:16, listeners:17, emit:18, schedule:20, *toast:29, *useToasts:56
+- **update.ts** (107) — Автообновление APK. Сайт обновляется сам (service worker), здесь — только приложение.
+  *SITE:14, *Remote:15, *UpdateState:17, state:26, listeners:27, setState:28, *useUpdate:33, fetchRemote:42, *checkForUpdate:52, *installApk:72, *initUpdates:94
 
 ## src
 
-- **main.tsx** (21)
-  start:9
+- **main.tsx** (26)
+  start:13
 
 ## src/screens
 
