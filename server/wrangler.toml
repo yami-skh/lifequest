@@ -15,4 +15,4 @@ LIMIT_TOTAL = "20"
 # Счётчики лимитов. id появится после: npx wrangler kv namespace create USAGE
 [[kv_namespaces]]
 binding = "USAGE"
-id = "REPLACE_AFTER_KV_CREATE"
+id = "969bf2e106a54c79ba290ab247cf34fb"
