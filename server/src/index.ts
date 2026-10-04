@@ -72,7 +72,7 @@ type Quota = { error: string } | { remaining: number; refund: () => Promise<void
 async function takeQuota(env: Env, code: string): Promise<Quota> {
   const day = new Date().toISOString().slice(0, 10);
   const perCode = Number(env.LIMIT_PER_CODE ?? 10);
-  const total = Number(env.LIMIT_TOTAL ?? 50);
+  const total = Number(env.LIMIT_TOTAL ?? 20);
   const kCode = `n:${day}:${code}`;
   const kAll = `n:${day}:*`;
   const ttl = { expirationTtl: 60 * 60 * 48 };
@@ -129,7 +129,8 @@ export default {
     try {
       const msg = await client.beta.messages.parse({
         model: env.MODEL ?? 'claude-opus-5-5',
-        max_tokens: 16000,
+        // Предел ответа ограничивает цену одного запроса (Opus 5.5: до ~$0.17).
+        max_tokens: 8000,
         betas: ['server-side-fallback-2026-07-01'],
         fallbacks: 'default',
         output_config: { effort: env.EFFORT ?? 'medium', format: betaZodOutputFormat(GoalsResponse) },
