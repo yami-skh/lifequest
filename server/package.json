@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "wrangler dev",
     "deploy": "wrangler deploy",
-    "check": "tsc --noEmit"
+    "check": "tsc --noEmit",
+    "model": "node scripts/set-model.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.131.0",

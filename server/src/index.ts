@@ -90,6 +90,14 @@ async function takeQuota(env: Env, code: string): Promise<Quota> {
   };
 }
 
+// ---- Модели: переключение — `npm run model -- sonnet` (server/scripts/set-model.mjs) ----
+// effort — у Haiku 4.5 его нет; fallbacks: "default" — только у новых моделей.
+export const MODELS: Record<string, { effort: boolean; fallbacks: boolean }> = {
+  'claude-opus-5-5': { effort: true, fallbacks: true },
+  'claude-sonnet-5-5': { effort: true, fallbacks: true },
+  'claude-haiku-4-5': { effort: false, fallbacks: false },
+};
+
 // ---- HTTP ----
 function cors(origin: string | null): Record<string, string> {
   const allow = origin && ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
@@ -128,13 +136,14 @@ export default {
 
     const client = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY, maxRetries: 1 });
     try {
+      const model = env.MODEL ?? 'claude-opus-5-5';
+      const m = MODELS[model] ?? MODELS['claude-opus-5-5'];
       const msg = await client.beta.messages.parse({
-        model: env.MODEL ?? 'claude-opus-5-5',
+        model,
         // Предел ответа ограничивает цену одного запроса (Opus 5.5: до ~$0.17).
         max_tokens: 8000,
-        betas: ['server-side-fallback-2026-07-01'],
-        fallbacks: 'default',
-        output_config: { effort: env.EFFORT ?? 'medium', format: betaZodOutputFormat(GoalsResponse) },
+        ...(m.fallbacks ? { betas: ['server-side-fallback-2026-07-01'], fallbacks: 'default' as const } : {}),
+        output_config: { ...(m.effort ? { effort: env.EFFORT ?? 'medium' } : {}), format: betaZodOutputFormat(GoalsResponse) },
         system: SYSTEM,
         messages: [{ role: 'user', content: buildPrompt(r) }],
       });
