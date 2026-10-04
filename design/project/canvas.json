@@ -385,6 +385,51 @@
       "w": 390,
       "x": 900,
       "y": 0
+    },
+    "Settings.dc.html": {
+      "h": 1240,
+      "page": "settings",
+      "radius": 28,
+      "title": "Настройки · тёмная",
+      "w": 390,
+      "x": 0,
+      "y": 0
+    },
+    "SettingsLight.dc.html": {
+      "h": 1240,
+      "page": "settings",
+      "radius": 28,
+      "title": "Настройки · светлая",
+      "w": 390,
+      "x": 450,
+      "y": 0
+    },
+    "MainLight.dc.html": {
+      "h": 900,
+      "page": "settings",
+      "radius": 28,
+      "title": "Главный · светлая",
+      "w": 390,
+      "x": 900,
+      "y": 0
+    },
+    "UpdateReady.dc.html": {
+      "h": 900,
+      "page": "settings",
+      "radius": 28,
+      "title": "Нужен новый APK",
+      "w": 390,
+      "x": 1350,
+      "y": 0
+    },
+    "UpdateProgress.dc.html": {
+      "h": 900,
+      "page": "settings",
+      "radius": 28,
+      "title": "Скачивание",
+      "w": 390,
+      "x": 1800,
+      "y": 0
     }
   },
   "createdOnFiles": {
@@ -394,7 +439,7 @@
   "designSystems": [],
   "launch": {
     "view": "canvas",
-    "page": "skillsimple"
+    "page": "settings"
   },
   "notes": {
     "atelierTitle": {
@@ -492,6 +537,14 @@
       "text": "Страница навыка: проще (тренировка, обычный, меню ⋯)",
       "x": 0,
       "y": -260
+    },
+    "settingsTitle": {
+      "kind": "title1",
+      "maxW": 1720,
+      "page": "settings",
+      "text": "Настройки, светлая тема и обновление приложения",
+      "x": 0,
+      "y": -260
     }
   },
   "order": [
@@ -536,7 +589,12 @@
     "Changelog.dc.html",
     "SkillWorkout.dc.html",
     "SkillPlain.dc.html",
-    "SkillMenu.dc.html"
+    "SkillMenu.dc.html",
+    "Settings.dc.html",
+    "SettingsLight.dc.html",
+    "MainLight.dc.html",
+    "UpdateReady.dc.html",
+    "UpdateProgress.dc.html"
   ],
   "pages": [
     {
@@ -578,6 +636,10 @@
     {
       "id": "skillsimple",
       "name": "Навык проще"
+    },
+    {
+      "id": "settings",
+      "name": "Настройки и обновления"
     }
   ],
   "title": "LifeQuest — макет"
