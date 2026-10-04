@@ -12,6 +12,13 @@ export function addDays(date: string, days: number) {
   return localDate(new Date(y, m - 1, d + days));
 }
 
+/** Целых дней от a до b (обе — YYYY-MM-DD). */
+export function daysBetween(a: string, b: string) {
+  const [ay, am, ad] = a.split('-').map(Number);
+  const [by, bm, bd] = b.split('-').map(Number);
+  return Math.round((Date.UTC(by, bm - 1, bd) - Date.UTC(ay, am - 1, ad)) / 86400000);
+}
+
 const MONTHS = ['янв', 'фев', 'мар', 'апр', 'мая', 'июн', 'июл', 'авг', 'сен', 'окт', 'ноя', 'дек'];
 
 export function humanDate(date: string, today = localDate()) {

@@ -4,6 +4,9 @@ import { createContext } from 'preact';
 import { useContext } from 'preact/hooks';
 import { db, type Entry, type EntrySkill, type Goal, type Node, type Note, type Profile, type Unlocked } from './db';
 import { computeProgress, skillProgress } from '../engine/progress';
+import { currentStage, stagesOf } from '../engine/stages';
+import { RUST_DAYS } from '../engine/xp';
+import { daysBetween } from '../engine/dates';
 import { characterLevel, skillLevel } from '../engine/levels';
 import { bestStreak, currentStreak, localDate } from '../engine/dates';
 import type { Stats } from '../engine/achievements';
@@ -31,7 +34,16 @@ export async function loadWorld(): Promise<World> {
   return { profile, nodes, goals, entries, entrySkills, notes, unlocked };
 }
 
-export interface LockReason { node: Node; need: string; have: string }
+export interface LockReason {
+  node: Node;
+  /** Позиция в node.requires — для удаления. */
+  index: number;
+  need: string;
+  have: string;
+  /** 0..1 — насколько выполнено. */
+  ratio: number;
+  met: boolean;
+}
 
 export function derive(w: World) {
   const nodeById = new Map(w.nodes.map((n) => [n.id, n]));
@@ -114,21 +126,21 @@ export function derive(w: World) {
 
   const skillLevelOf = (id: string) => skillLevel(xpBySkill.get(id) ?? 0);
 
-  const lockReasons = (n: Node): LockReason[] =>
-    (n.requires ?? []).flatMap((r) => {
+  /** Все требования узла с текущим состоянием. */
+  const requirementsOf = (n: Node): LockReason[] =>
+    (n.requires ?? []).flatMap((r, index) => {
       const req = nodeById.get(r.nodeId);
       if (!req) return [];
-      const reasons: LockReason[] = [];
+      if (r.minLevel !== undefined) {
+        const lv = req.kind === 'skill' ? skillLevelOf(req.id).level : 0;
+        return [{ node: req, index, need: `ур. ${r.minLevel}`, have: `ур. ${lv}`, ratio: Math.min(1, lv / r.minLevel), met: lv >= r.minLevel }];
+      }
       const pr = progress.get(req.id) ?? 0;
-      if (r.minProgress !== undefined && pr < r.minProgress) {
-        reasons.push({ node: req, need: `${r.minProgress}%`, have: `${Math.round(pr)}%` });
-      }
-      const lv = skillLevelOf(req.id).level;
-      if (r.minLevel !== undefined && lv < r.minLevel) {
-        reasons.push({ node: req, need: `ур. ${r.minLevel}`, have: `ур. ${lv}` });
-      }
-      return reasons;
+      const need = r.minProgress ?? 0;
+      return [{ node: req, index, need: `${need}%`, have: `${Math.round(pr)}%`, ratio: need ? Math.min(1, pr / need) : 1, met: pr >= need }];
     });
+
+  const lockReasons = (n: Node): LockReason[] => requirementsOf(n).filter((r) => !r.met);
 
   const skills = w.nodes.filter((n) => n.kind === 'skill').sort((a, b) => a.title.localeCompare(b.title));
 
@@ -140,7 +152,84 @@ export function derive(w: World) {
     if (recentSkills.length >= 6) break;
   }
 
-  const dates = w.entries.map((e) => e.date);
+  // Серию и даты считаем только по настоящим записям, без бонусов за ступени.
+  const dates = w.entries.filter((e) => e.type !== 'bonus').map((e) => e.date);
+  const today = localDate();
+
+  // --- ступени, фокус, ржавчина, туман, подсказки (§16) ---
+
+  const stagesOfSkill = (id: string) => stagesOf(goalsBySkill.get(id) ?? []);
+
+  /** Цели, которые сейчас можно закрывать: из открытых ступеней. */
+  const openGoalsOf = (id: string) =>
+    stagesOfSkill(id).filter((s) => s.unlocked).flatMap((s) => s.goals.filter((g) => !g.done));
+
+  const lastDateBySkill = new Map<string, string>();
+  for (const e of w.entries) {
+    if (e.type === 'bonus') continue;
+    for (const es of skillsOfEntry.get(e.id) ?? []) {
+      const prev = lastDateBySkill.get(es.skillId);
+      if (!prev || e.date > prev) lastDateBySkill.set(es.skillId, e.date);
+    }
+  }
+  /** Дней без записей, если навык «заржавел»; иначе null. */
+  const rustDays = (id: string) => {
+    const last = lastDateBySkill.get(id);
+    if (!last) return null;
+    const d = daysBetween(last, today);
+    return d >= RUST_DAYS ? d : null;
+  };
+  const explored = (id: string) => (xpBySkill.get(id) ?? 0) > 0;
+
+  const focusSkills = skills.filter((s) => s.focus);
+
+  /** Какие навыки открывает данный узел своим прогрессом. */
+  const unlocksOf = (id: string) => w.nodes.filter((n) => n.requires?.some((r) => r.nodeId === id));
+
+  type Hint =
+    | { kind: 'level'; node: Node; left: number; next: number }
+    | { kind: 'goal'; node: Node; goal: Goal; area: Node; delta: number }
+    | { kind: 'unlock'; node: Node; reason: LockReason }
+    | { kind: 'rust'; node: Node; days: number };
+
+  const hints = (): Hint[] => {
+    const out: Hint[] = [];
+
+    const near = skills
+      .map((n) => ({ n, lv: skillLevelOf(n.id) }))
+      .filter(({ lv }) => lv.xp > 0 && lv.level < 10 && lv.left <= 60)
+      .sort((a, b) => a.lv.left - b.lv.left)[0];
+    if (near) out.push({ kind: 'level', node: near.n, left: near.lv.left, next: near.lv.level + 1 });
+
+    // Цель, которая сильнее всего двинет полоску направления.
+    let best: Extract<Hint, { kind: 'goal' }> | null = null;
+    for (const s of skills) {
+      if (lockReasons(s).length) continue;
+      const area = areaOf(s.id);
+      if (!area) continue;
+      const before = progress.get(area.id) ?? 0;
+      for (const g of openGoalsOf(s.id)) {
+        const map = new Map(goalsBySkill);
+        map.set(s.id, (goalsBySkill.get(s.id) ?? []).map((x) => (x.id === g.id ? { ...x, done: true } : x)));
+        const delta = (computeProgress(w.nodes, map).get(area.id) ?? 0) - before;
+        if (!best || delta > best.delta) best = { kind: 'goal', node: s, goal: g, area, delta };
+      }
+    }
+    if (best && best.delta >= 0.5) out.push(best);
+
+    const unlock = skills
+      .flatMap((n) => lockReasons(n).filter((r) => r.ratio < 1).map((reason) => ({ n, reason })))
+      .sort((a, b) => b.reason.ratio - a.reason.ratio)[0];
+    if (unlock) out.push({ kind: 'unlock', node: unlock.n, reason: unlock.reason });
+
+    const rusty = skills
+      .map((n) => ({ n, d: rustDays(n.id) }))
+      .filter((x): x is { n: Node; d: number } => x.d !== null)
+      .sort((a, b) => b.d - a.d)[0];
+    if (rusty) out.push({ kind: 'rust', node: rusty.n, days: rusty.d });
+
+    return out;
+  };
   const level = characterLevel(totalXp);
 
   const stats = (): Stats => {
@@ -210,9 +299,18 @@ export function derive(w: World) {
     pathOf,
     openErrorsBySkill,
     lockReasons,
+    requirementsOf,
     skills,
     recentSkills,
-    streak: currentStreak(dates, localDate()),
+    streak: currentStreak(dates, today),
+    stagesOfSkill,
+    currentStageOf: (id: string) => currentStage(stagesOfSkill(id)),
+    openGoalsOf,
+    rustDays,
+    explored,
+    focusSkills,
+    unlocksOf,
+    hints,
     stats,
   };
 }

@@ -3,6 +3,7 @@ import { calcXp, secondaryXp, xpContextFromHistory } from './xp';
 import { characterLevel, skillLevel } from './levels';
 import { computeProgress, skillProgress } from './progress';
 import { bestStreak, currentStreak } from './dates';
+import { assignStages, currentStage, stagesOf } from './stages';
 
 describe('xp', () => {
   it('рамен из документа: практика, тяжело, впервые, с фото = 132', () => {
@@ -27,6 +28,35 @@ describe('xp', () => {
     );
     expect(c.firstOfTypeForSkill).toBe(false);
     expect(c.sameSkillEntriesToday).toBe(1);
+  });
+});
+
+describe('фокус, возвращение, ступени', () => {
+  const base = { type: 'practice' as const, difficulty: 1 as const, firstOfTypeForSkill: false, sameSkillEntriesToday: 0, hasPhoto: false, fixesError: false };
+  it('фокус ×1.2', () => {
+    expect(calcXp({ ...base, isFocus: true }).xp).toBe(48);
+  });
+  it('возвращение после 60 дней ×1.5, раньше — нет', () => {
+    expect(calcXp({ ...base, daysSinceLast: 60 }).xp).toBe(60);
+    expect(calcXp({ ...base, daysSinceLast: 59 }).xp).toBe(40);
+  });
+  it('дни с последней записи берутся из истории', () => {
+    const c = xpContextFromHistory([{ type: 'learn', date: '2026-08-01' }], { type: 'learn', difficulty: 1, hasPhoto: false, fixesError: false }, '2026-10-04');
+    expect(c.daysSinceLast).toBe(64);
+  });
+  it('следующая ступень открывается после предыдущей', () => {
+    const s = stagesOf([
+      { stage: 1, done: true }, { stage: 1, done: true },
+      { stage: 2, done: true }, { stage: 2, done: false },
+      { stage: 3, done: false },
+    ]);
+    expect(s.map((x) => [x.stage, x.complete, x.unlocked])).toEqual([[1, true, true], [2, false, true], [3, false, false]]);
+    expect(currentStage(s)?.name).toBe('Базовый');
+  });
+  it('раскладка целей по ступеням: теория — 1, практика пополам на 2 и 3', () => {
+    const k = (kind: 'theory' | 'practice') => ({ kind });
+    expect(assignStages([k('theory'), k('theory'), k('practice'), k('practice'), k('practice')])).toEqual([1, 1, 2, 2, 3]);
+    expect(assignStages([k('practice'), k('practice')])).toEqual([1, 2]);
   });
 });
 

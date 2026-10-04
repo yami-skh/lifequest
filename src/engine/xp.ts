@@ -1,4 +1,5 @@
 // Начисление XP за запись журнала. ARCHITECTURE.md §4.1–4.2.
+import { daysBetween } from './dates';
 
 export type EntryType = 'learn' | 'practice' | 'workout' | 'project' | 'course' | 'teach' | 'bonus';
 export type Difficulty = 1 | 2 | 3;
@@ -41,7 +42,14 @@ export interface XpContext {
   sameSkillEntriesToday: number;
   hasPhoto: boolean;
   fixesError: boolean;
+  /** Основной навык в фокусе (§16, идея 1). */
+  isFocus?: boolean;
+  /** Дней с последней записи по навыку; null — записей не было (§16, идея 6). */
+  daysSinceLast?: number | null;
 }
+
+/** Через сколько дней без записей навык «ржавеет». */
+export const RUST_DAYS = 60;
 
 export interface XpFactor { label: string; mult: number }
 
@@ -54,6 +62,8 @@ export function calcXp(c: XpContext): { xp: number; base: number; factors: XpFac
   if (c.sameSkillEntriesToday >= REPEAT_FREE_PER_DAY) factors.push({ label: 'повтор', mult: 0.5 });
   if (c.hasPhoto) factors.push({ label: 'фото', mult: 1.1 });
   if (c.fixesError) factors.push({ label: 'исправление', mult: 1.5 });
+  if (c.isFocus) factors.push({ label: 'фокус', mult: 1.2 });
+  if (c.daysSinceLast != null && c.daysSinceLast >= RUST_DAYS) factors.push({ label: 'возвращение', mult: 1.5 });
   const xp = Math.round(factors.reduce((acc, f) => acc * f.mult, base));
   return { xp, base, factors };
 }
@@ -63,12 +73,14 @@ export const secondaryXp = (primaryXp: number) => Math.round(primaryXp * SECONDA
 /** Контекст для расчёта по истории основного навыка. */
 export function xpContextFromHistory(
   history: { type: EntryType; date: string }[],
-  draft: Omit<XpContext, 'firstOfTypeForSkill' | 'sameSkillEntriesToday'>,
+  draft: Omit<XpContext, 'firstOfTypeForSkill' | 'sameSkillEntriesToday' | 'daysSinceLast'>,
   today: string,
 ): XpContext {
+  const last = history.reduce<string | null>((m, h) => (m === null || h.date > m ? h.date : m), null);
   return {
     ...draft,
     firstOfTypeForSkill: !history.some((h) => h.type === draft.type),
     sameSkillEntriesToday: history.filter((h) => h.date === today).length,
+    daysSinceLast: last ? daysBetween(last, today) : null,
   };
 }

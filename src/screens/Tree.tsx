@@ -54,6 +54,9 @@ export function Tree({ focusId }: { focusId?: string }) {
   const skillCount = (n: Node): number =>
     n.kind === 'skill' ? 1 : (w.children.get(n.id) ?? []).reduce((acc, k) => acc + skillCount(k), 0);
 
+  const skillsIn = (n: Node): Node[] => (n.kind === 'skill' ? [n] : (w.children.get(n.id) ?? []).flatMap(skillsIn));
+  const exploredTotal = w.skills.filter((s) => w.explored(s.id)).length;
+
   const menuBtn = (n: Node) => (
     <button type="button" class="icon-btn" aria-label={`Действия: ${n.title}`} onClick={() => setEditor({ mode: 'menu', node: n })}>
       <Icon name="dots" size={22} stroke={3} />
@@ -77,25 +80,38 @@ export function Tree({ focusId }: { focusId?: string }) {
     if (n.kind === 'skill') {
       const lv = w.skillLevelOf(n.id);
       const locks = w.lockReasons(n);
-      const fresh = lv.xp === 0;
+      const fresh = !w.explored(n.id);
+      const rust = w.rustDays(n.id);
+      const stage = w.currentStageOf(n.id);
+      const stages = w.stagesOfSkill(n.id);
+      const cls = `t-item t-skill${locks.length ? ' locked' : ''}${fresh && !locks.length ? ' fog' : ''}${rust !== null ? ' rusty' : ''}${n.focus ? ' focus' : ''}`;
       return (
-        <div class={`t-item t-skill${locks.length ? ' locked' : ''}${fresh ? ' fresh' : ''}`} key={n.id}>
+        <div class={cls} key={n.id}>
           <a class="t-skill-card" href={`#/skill/${n.id}`}>
-            <Ring pct={lv.pct} size={40} stroke={3.5} color="var(--c)">
-              {locks.length ? <Icon name="lock" size={16} /> : <span class="t-lvl">{lv.level}</span>}
+            <Ring pct={fresh ? 0 : lv.pct} size={40} stroke={3.5} color="var(--c)">
+              {locks.length ? <Icon name="lock" size={16} /> : fresh ? <span class="t-lvl muted">?</span> : <span class="t-lvl">{lv.level}</span>}
             </Ring>
             <span class="t-skill-body">
               <span class="t-skill-top">
-                <span class="t-skill-title">{n.title}</span>
+                <span class="t-skill-title">{n.title}{n.focus && <Icon name="star" size={14} stroke={2.4} />}</span>
                 <span class="t-skill-pct">{pctText(p)}</span>
               </span>
               {p !== null && p !== undefined && <span class="mini-bar"><span style={{ width: `${p}%`, background: 'var(--c)' }} /></span>}
               {locks.length > 0 ? (
                 locks.map((l) => <span class="t-sub" key={l.node.id}>Откроется: {l.node.title} {l.need} (сейчас {l.have})</span>)
               ) : (
-                <span class="t-sub">{fresh ? 'ещё не начат' : `${lv.name} · ${lv.xp} XP`}</span>
+                <span class="t-sub">
+                  {rust !== null
+                    ? `${rust} дней без записей · вернись: +50%`
+                    : fresh
+                      ? 'не исследован · первая запись ×1.5'
+                      : stage && stages.length > 1
+                        ? `${n.focus ? 'в фокусе · ' : ''}ступень ${stage.stage} из ${stages.length}`
+                        : `${lv.name} · ${lv.xp} XP`}
+                </span>
               )}
             </span>
+            {rust !== null && <span class="t-web"><Icon name="web" size={30} stroke={1.2} /></span>}
           </a>
           {menuBtn(n)}
         </div>
@@ -121,7 +137,7 @@ export function Tree({ focusId }: { focusId?: string }) {
     }
 
     const count = skillCount(n);
-    const xp = w.xpByNode.get(n.id) ?? 0;
+    const explored = skillsIn(n).filter((s) => w.explored(s.id)).length;
     return (
       <section class={open ? 't-area open' : 't-area'} key={n.id} style={{ '--c': n.color ?? 'var(--muted)' }}>
         <div class="t-area-head">
@@ -129,7 +145,7 @@ export function Tree({ focusId }: { focusId?: string }) {
             <AreaTile node={n} size={44} />
             <span class="t-area-text">
               <span class="t-area-title">{n.title}</span>
-              <span class="t-sub">{count} {plural(count, 'навык', 'навыка', 'навыков')} · {xp} XP</span>
+              <span class="t-sub">{count} {plural(count, 'навык', 'навыка', 'навыков')} · {explored} исследовано</span>
             </span>
             <Ring pct={p ?? 0} size={46} stroke={4} color="var(--c)">
               <span class="t-ring-pct">{p === null || p === undefined ? '—' : `${Math.round(p)}%`}</span>
@@ -145,7 +161,10 @@ export function Tree({ focusId }: { focusId?: string }) {
   return (
     <div class="page">
       <div class="spread">
-        <h1 class="display small-display">Дерево навыков</h1>
+        <div class="stack-4">
+          <h1 class="display small-display">Дерево навыков</h1>
+          <span class="t-sub">исследовано {exploredTotal} из {w.skills.length}</span>
+        </div>
         <button type="button" class="icon-btn round" aria-label="Добавить направление" onClick={() => setEditor({ mode: 'add', parent: null, kind: 'area' })}><Icon name="plus" size={20} stroke={2.4} /></button>
       </div>
 

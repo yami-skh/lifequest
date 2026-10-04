@@ -2,6 +2,7 @@
 import Dexie, { type Table } from 'dexie';
 import type { Difficulty, EntryType } from '../engine/xp';
 import type { GoalKind } from '../engine/progress';
+import { assignStages } from '../engine/stages';
 
 export type NodeKind = 'area' | 'branch' | 'skill';
 
@@ -20,6 +21,10 @@ export interface Node {
   icon?: string;
   order: number;
   requires?: Requirement[];
+  /** В фокусе: ×1.2 XP, показывается на главном (§16, идея 1). Не больше 3. */
+  focus?: boolean;
+  /** Ступени, за которые уже начислен бонус. */
+  stagesAwarded?: number[];
   createdAt: string;
 }
 
@@ -30,6 +35,8 @@ export interface Goal {
   title: string;
   done: boolean;
   doneAt?: string;
+  /** Номер ступени, с 1 (§16, идея 2). */
+  stage: number;
   order: number;
 }
 
@@ -98,6 +105,17 @@ class LifeQuestDB extends Dexie {
         if (!n.icon && AREA_ICON_BY_TITLE[n.title]) n.icon = AREA_ICON_BY_TITLE[n.title];
       }),
     );
+    // v3: ступени у целей, созданных до их появления.
+    this.version(3).stores({}).upgrade(async (tx) => {
+      const goals = await tx.table<Goal, string>('goals').toArray();
+      const bySkill = new Map<string, Goal[]>();
+      for (const g of goals) bySkill.set(g.skillId, [...(bySkill.get(g.skillId) ?? []), g]);
+      for (const list of bySkill.values()) {
+        list.sort((a, b) => a.order - b.order);
+        const stages = assignStages(list);
+        await Promise.all(list.map((g, i) => (g.stage ? null : tx.table('goals').update(g.id, { stage: stages[i] }))));
+      }
+    });
   }
 }
 

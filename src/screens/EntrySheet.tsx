@@ -8,6 +8,7 @@ import { compressPhoto, useBlobUrl } from '../lib/photo';
 import { toast } from '../lib/toast';
 import { Icon } from '../components/Icon';
 import { Check, SectionLabel, Sheet } from '../components/ui';
+import { stagesToast } from './Skill';
 
 export interface EntryPreset { skillId?: string; fixesEntryId?: string }
 
@@ -39,13 +40,13 @@ export function EntrySheet({ preset, onClose }: { preset: EntryPreset; onClose: 
 
   const primaryId = skillIds[0];
   const primary = primaryId ? w.nodeById.get(primaryId) : undefined;
-  const openGoals = primaryId ? (w.goalsBySkill.get(primaryId) ?? []).filter((g) => !g.done) : [];
+  const openGoals = primaryId ? w.openGoalsOf(primaryId) : [];
   const openErrors = primaryId ? w.openErrorsBySkill.get(primaryId) ?? [] : [];
 
   const preview = useMemo(() => {
     if (!primaryId) return null;
-    const history = w.entries.filter((e) => w.primaryOf(e.id) === primaryId).map((e) => ({ type: e.type, date: e.date }));
-    const ctx = xpContextFromHistory(history, { type, difficulty, hasPhoto: photos.length > 0, fixesError: outcome === 'ok' && !!fixesId }, localDate());
+    const history = w.entries.filter((e) => e.type !== 'bonus' && w.primaryOf(e.id) === primaryId).map((e) => ({ type: e.type, date: e.date }));
+    const ctx = xpContextFromHistory(history, { type, difficulty, hasPhoto: photos.length > 0, fixesError: outcome === 'ok' && !!fixesId, isFocus: !!primary?.focus }, localDate());
     return calcXp(ctx);
   }, [w, primaryId, type, difficulty, photos.length, outcome, fixesId]);
 
@@ -90,7 +91,7 @@ export function EntrySheet({ preset, onClose }: { preset: EntryPreset; onClose: 
     if (!primaryId || busy) return;
     setBusy(true);
     try {
-      const { xp } = await saveEntry({
+      const { xp, stages } = await saveEntry({
         type,
         text,
         difficulty,
@@ -103,6 +104,7 @@ export function EntrySheet({ preset, onClose }: { preset: EntryPreset; onClose: 
         photos,
       });
       toast({ kind: 'xp', title: `+${xp} XP`, sub: primary?.title });
+      stagesToast(stages);
       onClose();
     } catch (e) {
       console.error(e);
@@ -149,9 +151,11 @@ export function EntrySheet({ preset, onClose }: { preset: EntryPreset; onClose: 
             <button type="button" class="chip big dashed" onClick={() => setPicking(!picking)}>+ навык</button>
           )}
         </div>
-        {skillIds.length === 0 && !picking && w.recentSkills.length > 0 && (
+        {skillIds.length === 0 && !picking && (w.recentSkills.length > 0 || w.focusSkills.length > 0) && (
           <div class="chips">
-            {w.recentSkills.map((s) => <button type="button" key={s.id} class="chip big" onClick={() => addSkill(s.id)}>{s.title}</button>)}
+            {[...w.focusSkills, ...w.recentSkills.filter((s) => !s.focus)].slice(0, 6).map((s) => (
+              <button type="button" key={s.id} class="chip big" onClick={() => addSkill(s.id)}>{s.focus && <Icon name="star" size={14} stroke={2.4} />}{s.title}</button>
+            ))}
           </div>
         )}
         {picking && (

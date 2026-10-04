@@ -3,6 +3,7 @@ import { Icon } from '../components/Icon';
 import { AreaTile, ProgressBar, SectionLabel, pctText } from '../components/ui';
 import { EntryCard } from '../components/EntryCard';
 import { InstallCard } from '../components/InstallCard';
+import { FocusBlock, HintsBlock } from '../components/FocusAndHints';
 
 export function Character({ onAdd }: { onAdd: () => void }) {
   const w = useWorld();
@@ -43,6 +44,10 @@ export function Character({ onAdd }: { onAdd: () => void }) {
       </section>
 
       <InstallCard />
+
+      <FocusBlock />
+
+      <HintsBlock />
 
       <section class="stack-10">
         <SectionLabel>Направления</SectionLabel>

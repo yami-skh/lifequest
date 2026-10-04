@@ -1,6 +1,7 @@
 // Стартовый набор. ARCHITECTURE.md §13.
 import { AREA_ICON_BY_TITLE, db, nowIso, uid, type Goal, type Node } from './db';
 import type { GoalKind } from '../engine/progress';
+import { assignStages } from '../engine/stages';
 
 type G = [GoalKind, string];
 interface SeedNode {
@@ -83,7 +84,10 @@ export async function seedIfEmpty() {
       nodes.push(node);
       byTitle.set(s.title, node.id);
       if (s.requires) pending.push([node, s.requires]);
-      s.goals?.forEach(([gk, title], i) => goals.push({ id: uid(), skillId: node.id, kind: gk, title, done: false, order: i }));
+      if (s.goals) {
+        const stages = assignStages(s.goals.map(([kind]) => ({ kind })));
+        s.goals.forEach(([gk, title], i) => goals.push({ id: uid(), skillId: node.id, kind: gk, title, done: false, stage: stages[i], order: i }));
+      }
       if (s.children) walk(s.children, node.id);
     });
   };

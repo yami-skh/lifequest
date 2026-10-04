@@ -70,6 +70,19 @@ main { padding-bottom: calc(var(--nav-h) + var(--safe-b) + 24px); }
 .mini-bar { display: block; height: 5px; border-radius: 3px; background: var(--line); overflow: hidden; }
 .mini-bar > span { display: block; height: 100%; border-radius: 3px; }
 
+
+/* главный: фокус и подсказки */
+.focus-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.focus-card { --c: var(--gold); background: var(--surface); border: 1px solid var(--gold); border-radius: 16px; padding: 12px 8px; display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; min-width: 0; }
+.focus-title { font-size: 13.5px; font-weight: 800; overflow-wrap: anywhere; }
+.focus-sub { font-size: 11.5px; color: var(--muted); font-weight: 600; }
+.hint { display: flex; align-items: center; gap: 12px; min-height: 56px; padding: 10px 14px; border-radius: 14px; background: var(--surface); }
+.hint.rust { border: 1px dashed var(--line-2); }
+.hint-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; font-size: 14px; }
+.hint-icon { width: 36px; height: 36px; border-radius: 18px; background: var(--line); color: var(--fg-2); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.hint-icon.gold { background: var(--gold-bg); color: var(--gold); }
+.hint-icon.green { background: rgba(76, 201, 160, 0.15); color: var(--green); }
+
 /* установка */
 .install { display: flex; flex-direction: column; gap: 10px; border-color: var(--gold); }
 .install .icon-btn { margin: -10px -10px -10px 0; }
@@ -235,7 +248,19 @@ textarea { resize: vertical; line-height: 1.4; }
 .t-skill-pct { font-size: 13px; font-weight: 800; flex-shrink: 0; }
 .t-skill .icon-btn { margin-top: 8px; width: 36px; }
 .t-branch-row .icon-btn, .t-area-head .icon-btn { width: 40px; }
-.t-skill.fresh .t-skill-title { color: var(--fg-2); }
+.t-skill-title { display: inline-flex; align-items: center; gap: 6px; }
+.t-skill-title svg { color: var(--gold); flex-shrink: 0; }
+.t-skill-title svg path { fill: currentColor; }
+.t-skill.focus .t-skill-card { border-color: var(--gold); }
+/* туман: навык ещё не исследован */
+.t-skill.fog .t-skill-card { background: #13151B; border-color: var(--surface-2); opacity: 0.78; }
+.t-skill.fog .t-skill-title { color: var(--fg-2); }
+.t-lvl.muted { color: var(--muted-2); }
+/* ржавчина: 60+ дней без записей */
+.t-skill-card { position: relative; }
+.t-skill.rusty .t-skill-card { background: #1A1C22; border-color: #3A3F49; filter: saturate(0.35); }
+.t-skill.rusty .t-skill-title { color: var(--fg-2); }
+.t-web { position: absolute; top: -4px; right: -4px; color: var(--muted-2); opacity: 0.7; pointer-events: none; }
 .t-skill.locked .t-skill-card { background: transparent; border-style: dashed; border-color: var(--line-2); }
 .t-skill.locked .t-skill-title { color: var(--muted); }
 
@@ -267,6 +292,42 @@ textarea { resize: vertical; line-height: 1.4; }
 .note-text { white-space: pre-wrap; overflow-wrap: anywhere; }
 .note-link { display: flex; align-items: center; gap: 12px; }
 .note-link a { color: var(--gold); font-weight: 700; overflow-wrap: anywhere; }
+
+
+/* навык: фокус, требования, ступени */
+.fg-2 { color: var(--fg-2); }
+.ok-text { color: var(--green-fg); font-weight: 700; }
+.focus-btn { align-self: flex-start; display: inline-flex; align-items: center; gap: 6px; min-height: 40px; padding: 0 14px; border-radius: 99px; border: 1px solid var(--line-2); background: transparent; color: var(--fg-2); font-weight: 800; font-size: 13px; }
+.focus-btn.on { background: var(--gold); border-color: var(--gold); color: var(--on-gold); }
+.focus-btn.on svg path { fill: currentColor; }
+.req-card { display: flex; flex-direction: column; gap: 8px; padding: 12px 14px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); }
+.req-line { display: flex; align-items: center; gap: 10px; min-height: 36px; font-size: 14px; font-weight: 600; }
+.req-line > span:nth-child(2) { flex: 1; }
+.req-row { display: flex; align-items: center; gap: 12px; padding: 10px 4px 10px 14px; border-radius: 14px; background: var(--surface-2); }
+.req-row-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 5px; }
+.req-progress { display: flex; align-items: center; gap: 8px; }
+.req-progress .mini-bar { flex: 1; }
+.new-req { display: flex; flex-direction: column; gap: 10px; padding: 14px; border-radius: 16px; border: 1px dashed var(--line-2); }
+.stepper { display: flex; align-items: center; gap: 10px; }
+.stepper .btn { font-size: 22px; }
+.stepper-value { flex: 1; text-align: center; font-family: var(--display); font-size: 24px; font-weight: 700; }
+
+.stage { border-radius: 16px; }
+.stage-head { width: 100%; display: flex; align-items: center; gap: 12px; padding: 12px 14px; background: none; border: 0; text-align: left; color: var(--fg); }
+.stage-text { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.stage-sub { font-size: 12.5px; color: var(--muted); font-weight: 600; }
+.stage-sub.ok { color: var(--green-fg); }
+.stage-num { width: 30px; height: 30px; border-radius: 15px; border: 2px solid var(--gold); color: var(--gold); display: flex; align-items: center; justify-content: center; font-family: var(--display); font-size: 13px; font-weight: 700; flex-shrink: 0; }
+.stage-num.ok { border: 0; background: var(--green); color: var(--bg); }
+.stage-num.lock { border: 0; background: var(--surface-2); color: var(--muted-2); }
+.stage-bonus { font-size: 12px; font-weight: 800; color: var(--gold); }
+.stage-goals { padding: 0 14px 8px; display: flex; flex-direction: column; }
+.stage.done { background: rgba(76, 201, 160, 0.08); border: 1px solid rgba(76, 201, 160, 0.35); }
+.stage.done .stage-head > svg { color: var(--muted-2); }
+.stage.current { background: var(--surface); border: 1px solid var(--gold); }
+.stage.locked { border: 1px dashed var(--line-2); }
+.stage.locked .strong { color: var(--fg-2); }
+.goal-form { margin-top: 6px; }
 
 /* достижения */
 .ach-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
