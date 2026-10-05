@@ -35,8 +35,8 @@
   Field:9, *setsText:11, *SetsEditor:13
 - **StarMap.tsx** (203) — Созвездие навыков: второй вид дерева (§16, идея 11). Макет: холст, «Созвездие и напоминания».
   Star:9, Cluster:10, View:11, RUST:13, *StarMap:15, .scale:67, .zoomAt:71, .onDown:77, .onMove:86, .onUp:102, .tap:106, *useSkyHeight:188
-- **StarMap3D.tsx** (389) — Объёмное созвездие (мастер-план §12, решения 05.10.2026; флаг stars-3d, только бета).
-  State:11, Star3:12, Area3:13, RUST:15, HOME:16, AUTO_KEY:17, FONT:18, loadAuto:20, *StarMap3D:28, .local:279, .onDown:283, .onMove:297, .onUp:320, .onWheel:342, .setAuto:347
+- **StarMap3D.tsx** (390) — Объёмное созвездие (мастер-план §12, решения 05.10.2026; флаг stars-3d, только бета).
+  State:11, Star3:12, Area3:13, RUST:15, HOME:16, AUTO_KEY:17, FONT:18, loadAuto:20, *StarMap3D:28, .local:279, .onDown:283, .onMove:297, .onUp:321, .onWheel:343, .setAuto:348
 - **Templates.tsx** (252) — «Готовые пути» — шаблоны навыков (мастер-план §12, фаза 1). Макет: холст, страница «Шаблоны».
   Phase:16, goalsWord:18, skillsWord:19, *TemplatesSheet:21, AreaChip:40, Catalog:45, Preview:85, Paste:191
 - **ui.tsx** (133)
@@ -120,6 +120,8 @@
   *Channel:9, KEY:10, *getChannel:12, *setChannel:25
 - **errorlog.ts** (90) — Журнал ошибок: 50 последних сбоев на устройстве. Наружу — только по кнопке «Отправить отчёт»,
   *LoggedError:8, KEY:9, MAX:10, listeners:11, *getErrors:13, save:21, *logError:31, *clearErrors:44, *useErrors:46, *initErrorLog:56, *buildReport:61, *shareReport:73
+- **hscroll.ts** (44) — Горизонтальные ленты (.type-row в шторке «+», .chips.scroll-x) на ПК: пальцем они листаются сами,
+  SEL:3, scrollable:5, *initHScroll:10
 - **install.ts** (52) — Установка PWA: ловим событие beforeinstallprompt от Chrome и показываем свою кнопку.
   InstallPromptEvent:5, deferred:10, listeners:11, emit:12, *isStandalone:24, *isIos:28, *useInstall:30
 - **photo.ts** (72) — Сжатие фото перед сохранением: основное до 1600px, превью до 320px. ARCHITECTURE.md §9.
@@ -141,8 +143,8 @@
 
 ## src
 
-- **main.tsx** (31)
-  start:17
+- **main.tsx** (33)
+  start:18
 
 ## src/screens
 

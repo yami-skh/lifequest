@@ -314,8 +314,9 @@ export function StarMap3D() {
     g.moved += Math.abs(dx) + Math.abs(dy);
     const k = 0.006 / cam.current.zoom;
     cam.current.yaw += dx * k;
-    cam.current.pitch = clampPitch(cam.current.pitch - dy * k);
-    vel.current = { yaw: dx * k, pitch: -dy * k };
+    // Вертикаль: небо идёт за пальцем (вниз — к себе), как просил пользователь (BACKLOG, 2026-10-05).
+    cam.current.pitch = clampPitch(cam.current.pitch + dy * k);
+    vel.current = { yaw: dx * k, pitch: dy * k };
   };
   const onUp = (e: PointerEvent) => {
     const g = gesture.current;

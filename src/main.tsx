@@ -11,6 +11,7 @@ import '@fontsource-variable/manrope';
 import '@fontsource-variable/unbounded';
 import './styles/index.css';
 import { initErrorLog } from './lib/errorlog';
+import { initHScroll } from './lib/hscroll';
 
 initTheme();
 
@@ -24,6 +25,7 @@ async function start() {
   initBackButton();
   initErrorLog();
   initUpdates();
+  initHScroll();
   render(<App />, document.getElementById('app')!);
 }
 
