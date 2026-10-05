@@ -16,6 +16,7 @@ export function Onboarding() {
   const [picked, setPicked] = useState<Set<string>>(() => new Set(['start']));
   const [all, setAll] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [name, setName] = useState('');
 
   const chosen = TEMPLATES.filter((t) => picked.has(t.id));
   // Совпадающие навыки разных путей не дублируются: «Старт» + «Сильное тело» = 11, а не 12.
@@ -33,7 +34,7 @@ export function Onboarding() {
   const start = async (list: typeof TEMPLATES) => {
     setBusy(true);
     try {
-      await finishOnboarding(list);
+      await finishOnboarding(list, name);
       go(list.length ? 'tree' : '');
     } catch (e) {
       logError(e, 'Первый запуск');
@@ -45,6 +46,11 @@ export function Onboarding() {
   return (
     <div class="page onb">
       <span class="onb-brand">LifeQuest</span>
+      <label class="stack-4" for="onb-name">
+        <span class="section-label">Как тебя зовут?</span>
+        <input id="onb-name" class="input onb-name" maxLength={40} autoComplete="nickname" placeholder="Герой" value={name} onInput={(e) => setName(e.currentTarget.value)} />
+        <span class="muted small">Имя персонажа. Можно пропустить — будет «Герой», поменять — в Настройках.</span>
+      </label>
       <h1 class="display onb-title">Кем хочешь стать?</h1>
       <p class="muted">Выбери один или несколько путей: навыки, цели по ступеням и замеры уже расписаны. Потом можно добавить ещё или собрать своё.</p>
       <div class="stack-8">

@@ -441,10 +441,11 @@ export async function importTemplate(plan: ImportPlan) {
 }
 
 /** Первый запуск: добавить выбранные пути по очереди (каждый следующий видит предыдущие — без дублей) и стартовый квест. */
-export async function finishOnboarding(templates: Template[]) {
+export async function finishOnboarding(templates: Template[], name = '') {
   for (const t of templates) await importTemplate(await previewTemplate(t));
   await addStarterQuest();
-  await db.profile.update('me', { onboarding: false });
+  // Пустое имя — остаётся «Герой» из seed.ts.
+  await db.profile.update('me', { onboarding: false, ...(name.trim() ? { name: name.trim().slice(0, 40) } : {}) });
 }
 
 /** Готовый навык (пресет) внутрь ветки: навык, цели по ступеням и замер. Требования пресета не переносятся — их ключи из шаблона. */

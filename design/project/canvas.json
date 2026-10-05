@@ -322,10 +322,10 @@
       "y": 0
     },
     "Onboarding.dc.html": {
-      "h": 900,
+      "h": 1010,
       "page": "presets",
       "radius": 28,
-      "title": "3 · Первый запуск",
+      "title": "3 · Первый запуск (с именем)",
       "w": 390,
       "x": 900,
       "y": 0
@@ -646,7 +646,7 @@
   "designSystems": [],
   "launch": {
     "view": "canvas",
-    "page": "nextaction"
+    "page": "presets"
   },
   "notes": {
     "aiTitle": {
