@@ -15,12 +15,11 @@ export function Journal() {
     return (w.skillsOfEntry.get(e.id) ?? []).some((s) => w.areaOf(s.skillId)?.id === area);
   });
 
-  const groups: [string, typeof list][] = [];
-  for (const e of list) {
-    const last = groups[groups.length - 1];
-    if (last && last[0] === e.date) last[1].push(e);
-    else groups.push([e.date, [e]]);
-  }
+  // Группы по дню действия. Записи идут по времени создания, а не по дате: действие, записанное задним числом,
+  // раньше открывало второй блок того же дня (и два блока с одним ключом). Теперь — один блок на день, новые дни сверху.
+  const byDate = new Map<string, typeof list>();
+  for (const e of list) byDate.set(e.date, [...(byDate.get(e.date) ?? []), e]);
+  const groups = [...byDate.entries()].sort((a, b) => b[0].localeCompare(a[0]));
 
   return (
     <div class="page">

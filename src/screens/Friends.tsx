@@ -5,7 +5,7 @@ import { Capacitor } from '@capacitor/core';
 import { Share } from '@capacitor/share';
 import { useEffect, useState } from 'preact/hooks';
 import { useWorld } from '../db/world';
-import { setFriendsShare, toggleExperiment } from '../db/actions';
+import { setFriendsShare, setPlayer, toggleExperiment } from '../db/actions';
 import { DEFAULT_SHARE, type WeekCard } from '../engine/friends';
 import { addDays, localDate } from '../engine/dates';
 import { weekStart } from '../engine/quests';
@@ -37,7 +37,17 @@ function useFriends(): [Load, () => void] {
     let alive = true;
     (async () => {
       try {
-        const player = await ensurePlayer(w.profile);
+        let player = await ensurePlayer(w.profile);
+        // Сервер не узнал ключ (удалён «Выйти из друзей» на другом устройстве, копия с другого сервера):
+        // не застреваем на ошибке — заводим новый ключ и честно говорим, что друзей нужно позвать заново.
+        try {
+          await listFriends(player);
+        } catch (e) {
+          if (!(e instanceof FriendsError) || (e.code !== 'bad_key' && e.code !== 'no_key')) throw e;
+          await setPlayer(undefined);
+          player = await ensurePlayer(undefined);
+          toast({ kind: 'info', title: `Новый код игрока: ${prettyCode(player.code)}`, sub: 'Сервер не узнал старый ключ — пригласи друзей заново' });
+        }
         await pushCard(player, myCard(w)).catch((e) => logError(e, 'Друзья: карточка'));
         const r = await listFriends(player);
         if (alive) setState({ kind: 'ok', player: { ...player, code: r.code || player.code }, friends: r.friends });

@@ -48,8 +48,8 @@
 
 ## src/data
 
-- **changelog.ts** (276) — Что нового в версиях — для пользователя, простыми словами. Новые версии — сверху.
-  *ChangeKind:4, *Change:5, *Release:6, *CHANGELOG:8, *SEEN_BEFORE_CHANGELOG:275
+- **changelog.ts** (279) — Что нового в версиях — для пользователя, простыми словами. Новые версии — сверху.
+  *ChangeKind:4, *Change:5, *Release:6, *CHANGELOG:8, *SEEN_BEFORE_CHANGELOG:278
 - **presets.test.ts** (40)
   AREAS:6
 - **presets.ts** (48) — Готовые навыки при ручном добавлении (мастер-план §12): навыки шаблонов, сгруппированные по направлениям,
@@ -188,9 +188,9 @@
   *Character:16, NextHome:85, WEEK_SHORT:172, TodayCard:175, *plural:236
 - **EntrySheet.tsx** (315) — «＋ Запись» — главный сценарий, цель 15 секунд. Макет: холст, страница «Упрощение», экраны 2–3.
   *EntryPreset:25, LAST_TYPE:27, loadType:28, PhotoPreview:37, *EntrySheet:47, .setType:84, .choosePrimary:122, .addSecondary:131, .onFiles:138, .save:149
-- **Friends.tsx** (354) — «Друзья» (эксперимент friends): напарники по коду, итоги недели и реакции. Макет: холст, страница «Друзья».
-  MONTHS:24, short:25, weekLabel:26, sinceLabel:27, Load:29, useFriends:32, *Friends:54, FriendsMain:60, shareInvite:81, Invite:93, AddByCode:113, Privacy:145, Dots:151, Reactions:155, Avatar:177, FriendsList:182, FriendWeek:221, WeekBlock:255, ShareSettings:279, AddByLink:329
-- **Journal.tsx** (45)
+- **Friends.tsx** (364) — «Друзья» (эксперимент friends): напарники по коду, итоги недели и реакции. Макет: холст, страница «Друзья».
+  MONTHS:24, short:25, weekLabel:26, sinceLabel:27, Load:29, useFriends:32, *Friends:64, FriendsMain:70, shareInvite:91, Invite:103, AddByCode:123, Privacy:155, Dots:161, Reactions:165, Avatar:187, FriendsList:192, FriendWeek:231, WeekBlock:265, ShareSettings:289, AddByLink:339
+- **Journal.tsx** (44)
   *Journal:7
 - **Metrics.tsx** (490) — Замеры и рубежи. Макет: холст, страница «Замеры и рубежи». ARCHITECTURE.md §8.
   METRIC_SUGGEST:20, Info:22, *MetricInfo:23, *metricToasts:25, *Sparkline:30, deltaText:46, *Metrics:52, *MilestoneCard:109, Chart:146, *MetricDetail:185, *usesSets:255, *lastSetsOf:258, *recordHintFor:266, *BigNumber:276, PhotoThumb:293, AddValueSheet:303, MilestoneSheet:357, bestRepsAtOf:430, NewMetricSheet:436, *SkillMetrics:473

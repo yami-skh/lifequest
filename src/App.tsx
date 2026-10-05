@@ -110,7 +110,7 @@ function useGameEvents(w: ReturnType<typeof derive> | null) {
     if (!w) return;
     if (prevLevel.current !== null && w.level.level > prevLevel.current) {
       // Флаг anim: полноэкранный момент (components/Fx.tsx); после вылета XP — чтобы не перекрыть его.
-      if (w.hasExp('anim')) setTimeout(() => fx({ kind: 'level', level: w.level.level, left: w.level.left }), 900);
+      if (w.hasExp('anim')) { const from = prevLevel.current; setTimeout(() => fx({ kind: 'level', level: w.level.level, from, left: w.level.left }), 900); }
       else toast({ kind: 'level', title: `Уровень ${w.level.level}!`, sub: 'Персонаж стал сильнее' });
     }
     prevLevel.current = w.level.level;

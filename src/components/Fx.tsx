@@ -9,11 +9,11 @@ let seq = 0;
 
 export function FxLayer() {
   const [flies, setFlies] = useState<Fly[]>([]);
-  const [level, setLevel] = useState<{ level: number; left: number } | null>(null);
+  const [level, setLevel] = useState<{ level: number; from: number; left: number } | null>(null);
   useBackClose(!!level, () => setLevel(null));
 
   useEffect(() => onFx((e) => {
-    if (e.kind === 'level') return setLevel({ level: e.level, left: e.left });
+    if (e.kind === 'level') return setLevel({ level: e.level, from: e.from, left: e.left });
     // Куда лететь: полоска опыта на главном, если она на экране; иначе — просто вверх.
     const bar = document.querySelector('.char-xp-bar') as HTMLElement | null;
     const r = bar?.getBoundingClientRect();
@@ -43,7 +43,7 @@ export function FxLayer() {
           {[30, 40, 52, 62, 70, 46, 58].map((x, i) => <span class="fx-spark" key={i} style={{ left: `${x}%`, animationDelay: `${0.9 + (i % 4) * 0.05}s` }} />)}
           <span class="fx-level-k">НОВЫЙ УРОВЕНЬ</span>
           <span class="fx-flip">
-            <span class="fx-old">{level.level - 1}</span>
+            <span class="fx-old">{level.from}</span>
             <span class="fx-new">{level.level}</span>
           </span>
           <span class="fx-level-t">Персонаж стал сильнее</span>

@@ -4,7 +4,7 @@
 
 export type FxEvent =
   | { kind: 'xp'; amount: number; badges?: string[] }
-  | { kind: 'level'; level: number; left: number };
+  | { kind: 'level'; level: number; from: number; left: number };
 
 type Listener = (e: FxEvent) => void;
 const listeners = new Set<Listener>();
