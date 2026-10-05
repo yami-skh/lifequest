@@ -28,7 +28,13 @@ export function SuggestInput({ id, value, onValue, items, exclude, placeholder, 
 }) {
   const on = useWorld().hasExp('suggest');
   const [open, setOpen] = useState(false);
-  const list = useMemo(() => (on && open ? suggest(value, items, { limit, exclude }) : []), [on, open, value, items, exclude, limit]);
+  // Введённое совпало с вариантом (выбрал или допечатал сам) — нужное найдено, список прячем,
+  // чтобы он не закрывал кнопку и не мешал. Сотрёшь букву — список вернётся.
+  const exact = useMemo(() => {
+    const v = value.toLowerCase().replace(/ё/g, 'е').trim();
+    return !!v && items.some((s) => s.text.toLowerCase().replace(/ё/g, 'е').trim() === v);
+  }, [value, items]);
+  const list = useMemo(() => (on && open && !exact ? suggest(value, items, { limit, exclude }) : []), [on, open, exact, value, items, exclude, limit]);
   // Новый запрос — список снова с начала (он листается сам по себе).
   const listRef = useRef<HTMLUListElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -47,8 +53,9 @@ export function SuggestInput({ id, value, onValue, items, exclude, placeholder, 
       const r = inp.getBoundingClientRect();
       const vh = window.visualViewport?.height ?? innerHeight;
       const box = sheet?.getBoundingClientRect();
-      const save = sheet?.querySelector('.save-zone') as HTMLElement | null;
-      const bottom = Math.min(vh, save ? save.getBoundingClientRect().top : box ? box.bottom : vh) - 8;
+      // Граница снизу — ближайшая кнопка подтверждения под полем («Сохранить», «Добавить»): список её не закрывает.
+      const stops = sheet ? [...sheet.querySelectorAll('.save-zone, .btn.primary')].map((el) => el.getBoundingClientRect().top).filter((t) => t > r.bottom) : [];
+      const bottom = Math.min(vh, stops.length ? Math.min(...stops) : box ? box.bottom : vh) - 8;
       const top = (box ? Math.max(box.top + 50, 0) : 8);
       const below = bottom - r.bottom - 4;
       const above = r.top - top - 4;
@@ -72,7 +79,7 @@ export function SuggestInput({ id, value, onValue, items, exclude, placeholder, 
         onBlur={() => setTimeout(() => setOpen(false), 180)}
         onKeyDown={(e) => {
           if (e.key === 'Escape') setOpen(false);
-          if (e.key === 'Enter' && onEnter) onEnter();
+          if (e.key === 'Enter') { setOpen(false); onEnter?.(); }
         }}
         aria-autocomplete="list" aria-controls={`${id}-sg`} aria-expanded={list.length > 0} />
       {list.length > 0 && (

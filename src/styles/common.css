@@ -153,3 +153,12 @@ textarea { resize: vertical; line-height: 1.4; }
 /* Подсказки без ползунка: видимой полосы нет, о продолжении говорит мягкое затухание внизу. */
 .sg-list { scrollbar-width: none; padding-bottom: 22px; mask-image: linear-gradient(to bottom, #000 calc(100% - 30px), transparent); -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 30px), transparent); }
 .sg-list::-webkit-scrollbar { display: none; }
+/* Кнопка подтверждения в шторках прилипает к низу — видна и с открытой клавиатурой (как «Сохранить» в «Новом действии»).
+   Кольцо цвета шторки прячет то, что проезжает под кнопкой при прокрутке. */
+.sheet > .btn.primary:last-child, .sheet > form:last-child > .btn.primary:last-child {
+  position: sticky; bottom: calc(6px + var(--safe-b)); z-index: 3; box-shadow: 0 0 0 10px var(--surface), 0 34px 0 22px var(--surface), 0 -18px 18px -4px var(--surface);
+}
+/* Неактивная прилипшая кнопка — не полупрозрачная (иначе сквозь неё и её подложку видно то, что под ней), а приглушённая. */
+.sheet > .btn.primary:last-child:disabled, .sheet > form:last-child > .btn.primary:last-child:disabled {
+  opacity: 1; background: color-mix(in srgb, var(--gold) 35%, var(--surface-2)); color: color-mix(in srgb, var(--fg) 70%, transparent);
+}
