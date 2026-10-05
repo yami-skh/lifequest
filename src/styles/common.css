@@ -150,9 +150,6 @@ textarea { resize: vertical; line-height: 1.4; }
 /* Список открывается вверх, если внизу шторки мало места (SuggestInput считает). */
 .sg-list.up { top: auto; bottom: calc(100% + 4px); box-shadow: 0 -14px 30px rgba(0, 0, 0, 0.5); }
 
-/* Ползунок прокрутки подсказок: тонкий, скруглённый, не залезает на скруглённые углы. */
-.sg-list { scrollbar-width: thin; scrollbar-color: var(--line-3, #4A505E) transparent; }
-.sg-list::-webkit-scrollbar { width: 4px; }
-.sg-list::-webkit-scrollbar-track { background: transparent; margin: 10px 0; }
-.sg-list::-webkit-scrollbar-thumb { background: var(--line-3, #4A505E); border-radius: 2px; }
-.sg-list::-webkit-scrollbar-thumb:active { background: var(--muted); }
+/* Подсказки без ползунка: видимой полосы нет, о продолжении говорит мягкое затухание внизу. */
+.sg-list { scrollbar-width: none; padding-bottom: 22px; mask-image: linear-gradient(to bottom, #000 calc(100% - 30px), transparent); -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 30px), transparent); }
+.sg-list::-webkit-scrollbar { display: none; }
