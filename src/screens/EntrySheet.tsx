@@ -65,6 +65,7 @@ export function EntrySheet({ preset, onClose }: { preset: EntryPreset; onClose: 
   const [sets, setSets] = useState<WorkSet[] | null>(null);
   const [single, setSingle] = useState<number | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
+  const compact = w.hasExp('compact');
 
   // Подсказки «Что сделал»: свои записи (сначала по этому навыку) → цели навыка → запас по типу действия.
   const ideaSkill = skillIds[0];
@@ -178,7 +179,7 @@ export function EntrySheet({ preset, onClose }: { preset: EntryPreset; onClose: 
   const summary = [diffLabel, outcome === 'ok' ? 'получилось' : 'не получилось', skillIds.length > 1 ? `${skillIds.length} навыка` : null, fixesId ? 'исправляет ошибку' : null].filter(Boolean).join(' · ');
 
   return (
-    <Sheet open onClose={onClose} title="Новое действие">
+    <Sheet open onClose={onClose} title="Новое действие" class={compact ? 'entry-compact' : undefined}>
       <div class="type-row" role="radiogroup" aria-label="Тип действия">
         {ENTRY_TYPES.map((t) => (
           <button type="button" key={t.id} role="radio" aria-checked={type === t.id} class={type === t.id ? 'chip big primary' : 'chip big'} onClick={() => setType(t.id)}>{t.label}</button>
@@ -186,13 +187,15 @@ export function EntrySheet({ preset, onClose }: { preset: EntryPreset; onClose: 
       </div>
 
       <div class="stack-8">
-        <SectionLabel>Навык</SectionLabel>
-        <div class="chips">
+        {/* Компактно (флаг compact): без подписи «Навык», одна прокручиваемая строка, поиск — первым чипом. */}
+        {!compact && <SectionLabel>Навык</SectionLabel>}
+        <div class={compact ? 'chips scroll-x entry-skills' : 'chips'}>
+          {compact && <button type="button" class="chip big dashed" onClick={() => setPicking(picking ? null : 'primary')}>{picking ? 'закрыть' : <><Icon name="search" size={14} />навык</>}</button>}
           {primary && <span class="chip big primary">{primary.focus && <Icon name="star" size={14} stroke={2.4} />}{primary.title}</span>}
           {!picking && suggestions.map((s) => (
             <button type="button" key={s.id} class="chip big" onClick={() => choosePrimary(s.id)}>{s.focus && <Icon name="star" size={14} stroke={2.4} />}{s.title}</button>
           ))}
-          <button type="button" class="chip big dashed" onClick={() => setPicking(picking ? null : 'primary')}>{picking ? 'закрыть' : 'поиск…'}</button>
+          {!compact && <button type="button" class="chip big dashed" onClick={() => setPicking(picking ? null : 'primary')}>{picking ? 'закрыть' : 'поиск…'}</button>}
         </div>
         {picking && (
           <div class="picker">
@@ -247,7 +250,7 @@ export function EntrySheet({ preset, onClose }: { preset: EntryPreset; onClose: 
         </div>
       )}
 
-      <div class="more-box">
+      <div class={compact && !more ? 'more-box hidden' : 'more-box'}>
         <button type="button" class="more-head" onClick={() => setMore(!more)} aria-expanded={more}>
           <span class="stack-4"><span class="strong">Подробнее</span><span class="muted small">{summary}</span></span>
           <Icon name={more ? 'up' : 'down'} size={18} stroke={2.4} />
@@ -295,6 +298,9 @@ export function EntrySheet({ preset, onClose }: { preset: EntryPreset; onClose: 
           </span>
         )}
         <div class="save-row">
+          {compact && !more && (
+            <button type="button" class="btn ghost small more-mini" onClick={() => setMore(true)} aria-expanded={false}>Подробнее<Icon name="down" size={16} stroke={2.4} /></button>
+          )}
           {preview && (
             <button type="button" class="xp-why" onClick={() => setWhy(!why)} aria-expanded={why}>
               <span class="xp-big">+{total}</span><span class="why-link">почему?</span>

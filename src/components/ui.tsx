@@ -132,7 +132,7 @@ function useSwipeClose(ref: { current: HTMLDivElement | null }, open: boolean, o
 const CLOSE_MS = 160;
 const reducedMotion = () => typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-export function Sheet({ open, onClose, onBack, title, children }: { open: boolean; onClose: () => void; onBack?: () => void; title: string; children: ComponentChildren }) {
+export function Sheet({ open, onClose, onBack, title, children, class: cls }: { open: boolean; onClose: () => void; onBack?: () => void; title: string; children: ComponentChildren; class?: string }) {
   // Закрытие крестиком, тапом мимо и кнопкой «назад» — шторка уезжает вниз (чуть быстрее, чем открывается).
   const [closing, setClosing] = useState(false);
   useEffect(() => setClosing(false), [open]);
@@ -156,7 +156,7 @@ export function Sheet({ open, onClose, onBack, title, children }: { open: boolea
   if (!open) return null;
   return (
     <div class={closing ? 'sheet-backdrop closing' : 'sheet-backdrop'} onClick={(e) => e.target === e.currentTarget && requestClose()}>
-      <div class="sheet" role="dialog" aria-modal="true" aria-label={title} ref={sheetRef}>
+      <div class={cls ? `sheet ${cls}` : 'sheet'} role="dialog" aria-modal="true" aria-label={title} ref={sheetRef}>
         <div class="sheet-handle" />
         <div class="sheet-head">
           {onBack ? (

@@ -48,8 +48,8 @@
 
 ## src/data
 
-- **changelog.ts** (249) — Что нового в версиях — для пользователя, простыми словами. Новые версии — сверху.
-  *ChangeKind:4, *Change:5, *Release:6, *CHANGELOG:8, *SEEN_BEFORE_CHANGELOG:248
+- **changelog.ts** (259) — Что нового в версиях — для пользователя, простыми словами. Новые версии — сверху.
+  *ChangeKind:4, *Change:5, *Release:6, *CHANGELOG:8, *SEEN_BEFORE_CHANGELOG:258
 - **presets.test.ts** (40)
   AREAS:6
 - **presets.ts** (48) — Готовые навыки при ручном добавлении (мастер-план §12): навыки шаблонов, сгруппированные по направлениям,
@@ -85,8 +85,8 @@
 - **dates.ts** (55) — Даты храним как локальные YYYY-MM-DD.
   *localDate:3, *addDays:10, *daysBetween:16, MONTHS:22, *humanDate:24, *currentStreak:32, *bestStreak:43
 - **engine.test.ts** (244)
-- **experiments.ts** (28) — Флаг экспериментов: новый UX включается только у тех, кто сам включил эксперимент
-  *IS_BETA:7, *EXPERIMENTS:10, *hasExp:21, *toggleExp:24
+- **experiments.ts** (29) — Флаг экспериментов: новый UX включается только у тех, кто сам включил эксперимент
+  *IS_BETA:7, *EXPERIMENTS:10, *hasExp:22, *toggleExp:25
 - **friends.test.ts** (53)
   base:5
 - **friends.ts** (72) — Друзья: что уходит на сервер — карточка недели (docs/arch/11-friends.md). Чистая функция, без базы.
@@ -186,8 +186,8 @@
   KIND:11, ORDER:16, fmtDate:18, changesWord:19, *WhatsNew:22, ChangeRow:60, *Changelog:70, ReleaseCard:85
 - **Character.tsx** (243) — Главный экран — всё важное примерно в один экран. Макет: холст, страница «Упрощение», экран 1.
   *Character:16, NextHome:85, WEEK_SHORT:172, TodayCard:175, *plural:236
-- **EntrySheet.tsx** (309) — «＋ Запись» — главный сценарий, цель 15 секунд. Макет: холст, страница «Упрощение», экраны 2–3.
-  *EntryPreset:25, LAST_TYPE:27, loadType:28, PhotoPreview:37, *EntrySheet:47, .setType:83, .choosePrimary:121, .addSecondary:130, .onFiles:137, .save:148
+- **EntrySheet.tsx** (315) — «＋ Запись» — главный сценарий, цель 15 секунд. Макет: холст, страница «Упрощение», экраны 2–3.
+  *EntryPreset:25, LAST_TYPE:27, loadType:28, PhotoPreview:37, *EntrySheet:47, .setType:84, .choosePrimary:122, .addSecondary:131, .onFiles:138, .save:149
 - **Friends.tsx** (354) — «Друзья» (эксперимент friends): напарники по коду, итоги недели и реакции. Макет: холст, страница «Друзья».
   MONTHS:24, short:25, weekLabel:26, sinceLabel:27, Load:29, useFriends:32, *Friends:54, FriendsMain:60, shareInvite:81, Invite:93, AddByCode:113, Privacy:145, Dots:151, Reactions:155, Avatar:177, FriendsList:182, FriendWeek:221, WeekBlock:255, ShareSettings:279, AddByLink:329
 - **Journal.tsx** (45)
@@ -211,8 +211,8 @@
   Тёмная тема по макету: золото = XP, у направлений свои цвета.:1, Светлая тема (макет: холст, «Настройки и обновления»). Соответствие цветов — tools/light_palette.py.:44, текст:108, раскладка:119, полоски:132, нижняя панель:140, всплывашки:148, Отклик на нажатие (план: анимируем прогресс, а нажатие — только короткой обратной связью).:160
 - **common.css** (149) — записи
   записи:1, чипы:16, кнопки:26, поля:43, фото:53, шторка:65, закрытие шторки (Sheet → closing): уезжает вниз чуть быстрее, чем выезжает:73, Подсказки при вводе (components/SuggestInput.tsx).:96, Всплывающий список поверх содержимого: шторка не растёт, список листается сам (и не утаскивает шторку).:98, Анимации прогресса (components/Fx.tsx, макет: холст, «Анимации прогресса»).:108, Галочка цели: рисуется штрихом и «щёлкает» — только в момент закрытия (класс just от Check).:144
-- **entry.css** (50) — шторка записи (0.5)
-  шторка записи (0.5):1, подходы и клавиатура (0.5):16
+- **entry.css** (65) — шторка записи (0.5)
+  шторка записи (0.5):1, подходы и клавиатура (0.5):16, Компактное «Новое действие» (флаг compact; макет: холст, «Новое действие: компактнее»): 537 → ~380 px.:51
 - **friends.css** (33) — «Друзья» (screens/Friends.tsx). Макет: холст, страница «Друзья».
   «Друзья» (screens/Friends.tsx). Макет: холст, страница «Друзья».:1
 - **home.css** (88) — главный: фокус и подсказки

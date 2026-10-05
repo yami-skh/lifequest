@@ -47,3 +47,18 @@
 .ms-target-num { font-family: var(--display); font-size: 40px; font-weight: 700; line-height: 1; }
 .ms-target-num .muted { font-size: 16px; }
 
+
+/* Компактное «Новое действие» (флаг compact; макет: холст, «Новое действие: компактнее»): 537 → ~380 px. */
+.sheet.entry-compact { gap: 10px; padding-top: 8px; padding-left: 16px; padding-right: 16px; }
+.entry-compact .sheet-handle { width: 36px; height: 4px; }
+.entry-compact .sheet-title { font-size: 17px; }
+.entry-compact .sheet-head .icon-btn.round { width: 34px; height: 34px; }
+.entry-compact .type-row .chip.big, .entry-compact .entry-skills .chip.big { min-height: 34px; padding: 0 12px; font-size: 13px; }
+.entry-compact .entry-skills { margin: 0 -16px; padding: 0 16px 2px; }
+.entry-compact .text-row .input { min-height: 44px; }
+.entry-compact .text-cam { width: 44px; }
+.entry-compact .more-box.hidden { display: none; }
+.entry-compact .save-zone { margin: 0 -16px calc(-20px - var(--safe-b)); padding: 10px 16px calc(12px + var(--safe-b)); gap: 8px; }
+.entry-compact .save-row .btn { min-height: 46px; }
+.entry-compact .xp-why { min-height: 46px; }
+.more-mini { flex: 0 0 auto; gap: 4px; padding: 0 12px; color: var(--fg-2); }
