@@ -43,13 +43,13 @@
   SRC:8, Hl:10, *SuggestInput:17
 - **Templates.tsx** (252) — «Готовые пути» — шаблоны навыков (мастер-план §12, фаза 1). Макет: холст, страница «Шаблоны».
   Phase:16, goalsWord:18, skillsWord:19, *TemplatesSheet:21, AreaChip:40, Catalog:45, Preview:85, Paste:191
-- **ui.tsx** (213)
-  *ProgressBar:9, *LevelBadge:17, *Ring:28, *AreaTile:49, *TopBar:58, useSwipeClose:77, CLOSE_MS:132, reducedMotion:133, *Sheet:135, *Confirm:181, *SectionLabel:195, *Check:204, *pctText:212
+- **ui.tsx** (224)
+  *ProgressBar:9, *LevelBadge:17, *Ring:28, *AreaTile:49, *TopBar:58, useSwipeClose:77, CLOSE_MS:132, reducedMotion:133, *Sheet:135, *Confirm:192, *SectionLabel:206, *Check:215, *pctText:223
 
 ## src/data
 
-- **changelog.ts** (267) — Что нового в версиях — для пользователя, простыми словами. Новые версии — сверху.
-  *ChangeKind:4, *Change:5, *Release:6, *CHANGELOG:8, *SEEN_BEFORE_CHANGELOG:266
+- **changelog.ts** (274) — Что нового в версиях — для пользователя, простыми словами. Новые версии — сверху.
+  *ChangeKind:4, *Change:5, *Release:6, *CHANGELOG:8, *SEEN_BEFORE_CHANGELOG:273
 - **presets.test.ts** (40)
   AREAS:6
 - **presets.ts** (48) — Готовые навыки при ручном добавлении (мастер-план §12): навыки шаблонов, сгруппированные по направлениям,

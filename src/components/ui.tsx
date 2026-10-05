@@ -1,5 +1,5 @@
 import type { ComponentChildren } from 'preact';
-import { useEffect, useRef, useState } from 'preact/hooks';
+import { useEffect, useLayoutEffect, useRef, useState } from 'preact/hooks';
 import { Icon } from './Icon';
 import { back } from '../lib/router';
 import type { Node } from '../db/db';
@@ -133,9 +133,21 @@ const CLOSE_MS = 160;
 const reducedMotion = () => typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 export function Sheet({ open, onClose, onBack, title, children, class: cls, tall }: { open: boolean; onClose: () => void; onBack?: () => void; title: string; children: ComponentChildren; class?: string; tall?: number }) {
-  // tall — доля экрана: постоянная высота, замеренная при открытии (до клавиатуры), чтобы шторка не прыгала,
-  // когда клавиатура открывается и закрывается.
-  const [tallPx] = useState(() => (tall ? Math.round(window.innerHeight * tall) : 0));
+  // Постоянная высота шторки с полями ввода — чтобы не прыгала, когда открывается/закрывается клавиатура
+  // и когда всплывают подсказки. Замер — один раз при открытии (до клавиатуры): содержимое, но не меньше доли экрана
+  // (tall, по умолчанию 0,6 для форм) и не больше 94%. Шторки без полей (меню, подтверждения) — по содержимому, как раньше.
+  const [tallPx, setTallPx] = useState(0);
+  const sheetRef = useRef<HTMLDivElement>(null);
+  useLayoutEffect(() => {
+    const el = sheetRef.current;
+    if (!open || !el) return;
+    const hasField = !!el.querySelector('input:not([type=file]):not([type=checkbox]):not([type=radio]):not([hidden]), textarea');
+    if (!tall && !hasField) return setTallPx(0);
+    const vh = window.innerHeight;
+    el.style.height = '';
+    setTallPx(Math.round(Math.min(vh * 0.94, Math.max(el.scrollHeight, vh * (tall ?? 0.6)))));
+    // title — та же шторка может сменить содержимое (меню → «Новая ветка»): мерим заново.
+  }, [open, title]);
   // Закрытие крестиком, тапом мимо и кнопкой «назад» — шторка уезжает вниз (чуть быстрее, чем открывается).
   const [closing, setClosing] = useState(false);
   useEffect(() => setClosing(false), [open]);
@@ -146,7 +158,6 @@ export function Sheet({ open, onClose, onBack, title, children, class: cls, tall
     setTimeout(onClose, CLOSE_MS);
   };
   useBackClose(open, requestClose);
-  const sheetRef = useRef<HTMLDivElement>(null);
   useSwipeClose(sheetRef, open, onClose);
   useEffect(() => {
     if (!open) return;

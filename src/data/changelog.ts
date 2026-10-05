@@ -7,6 +7,13 @@ export interface Release { version: string; date: string; title?: string; change
 
 export const CHANGELOG: Release[] = [
   {
+    version: '0.10.1-beta.9',
+    date: '2026-10-06',
+    changes: [
+      { kind: 'fix', title: 'Все окна с полями не прыгают', sub: 'Новая ветка, навык, направление, переименование, замер, квест — постоянная высота, не сжимаются после клавиатуры и не листаются из-за подсказок.' },
+    ],
+  },
+  {
     version: '0.10.1-beta.8',
     date: '2026-10-06',
     changes: [
