@@ -24,6 +24,8 @@ export interface Profile {
   aiCode?: string;
   /** Включённые эксперименты (src/engine/experiments.ts). Нет поля — всё выключено. */
   experiments?: string[];
+  /** Новая установка: путь ещё не выбран — показать экран «Кем хочешь стать?» (components/Onboarding.tsx). */
+  onboarding?: boolean;
 }
 
 export interface Requirement { nodeId: string; minProgress?: number; minLevel?: number }

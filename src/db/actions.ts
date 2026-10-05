@@ -7,8 +7,8 @@ import { calcXp, secondaryXp, xpContextFromHistory, type Difficulty, type EntryT
 import { localDate } from '../engine/dates';
 import type { GoalKind } from '../engine/progress';
 import { toggleExp } from '../engine/experiments';
-import { planImport, type ImportPlan, type Template } from '../engine/templates';
-import { AREA_COLORS } from './seed';
+import { planImport, type ImportPlan, type Template, type TplSkill } from '../engine/templates';
+import { AREA_COLORS, addStarterQuest } from './seed';
 
 export interface PhotoDraft { blob: Blob; thumb: Blob; width: number; height: number }
 
@@ -199,7 +199,7 @@ export async function toggleExperiment(name: string) {
 }
 export const setAiCode = (code: string) => db.profile.update('me', { aiCode: code.trim() || undefined });
 export const setSeenVersion = (v: string) => db.profile.update('me', { seenVersion: v });
-export const setName = (name: string) => db.profile.update('me', { name: name.trim() || 'mildyan' });
+export const setName = (name: string) => db.profile.update('me', { name: name.trim() || 'Герой' });
 
 export async function unlockAchievements(ids: string[]) {
   const at = nowIso();
@@ -432,6 +432,29 @@ export async function importTemplate(plan: ImportPlan) {
         id: uid(), title: plan.quest.title, kind: 'main', rewardXp: plan.quest.rewardXp, status: 'active', since: localDate(), createdAt: now,
         steps: plan.quest.steps.map((s) => ({ id: uid(), kind: 'stage' as const, title: s.title, skillId: s.skillId, stage: s.stage })),
       });
+    }
+  });
+}
+
+/** Первый запуск: добавить выбранные пути по очереди (каждый следующий видит предыдущие — без дублей) и стартовый квест. */
+export async function finishOnboarding(templates: Template[]) {
+  for (const t of templates) await importTemplate(await previewTemplate(t));
+  await addStarterQuest();
+  await db.profile.update('me', { onboarding: false });
+}
+
+/** Готовый навык (пресет) внутрь ветки: навык, цели по ступеням и замер. Требования пресета не переносятся — их ключи из шаблона. */
+export async function addPresetSkill(parentId: string, s: TplSkill) {
+  await db.transaction('rw', [db.nodes, db.goals, db.metrics], async () => {
+    const now = nowIso();
+    const order = await db.nodes.where('parentId').equals(parentId).count();
+    const id = uid();
+    await db.nodes.add({ id, parentId, kind: 'skill', title: s.title, order, createdAt: now });
+    let i = 0;
+    for (const st of s.stages) for (const g of st.goals) await db.goals.add({ id: uid(), skillId: id, kind: g.kind, title: g.title, done: false, stage: st.stage, order: i++ });
+    const m = s.metric;
+    if (m && !(await db.metrics.toArray()).some((x) => x.title.trim().toLowerCase() === m.title.trim().toLowerCase())) {
+      await db.metrics.add({ ...m, id: uid(), skillId: id, order: await db.metrics.count(), createdAt: now });
     }
   });
 }

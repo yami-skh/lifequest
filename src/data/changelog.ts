@@ -7,6 +7,14 @@ export interface Release { version: string; date: string; title?: string; change
 
 export const CHANGELOG: Release[] = [
   {
+    version: '0.10.0-beta.6',
+    date: '2026-10-05',
+    changes: [
+      { kind: 'new', title: 'Первый запуск: «Кем хочешь стать?»', sub: 'Новичок выбирает готовые пути вместо общего дерева. Твоих данных это не касается.' },
+      { kind: 'new', title: 'Готовые навыки (эксперимент)', sub: 'Дерево → ⋯ у ветки → «Добавить навык внутрь»: готовые навыки с целями для этого направления или свой.' },
+    ],
+  },
+  {
     version: '0.10.0-beta.5',
     date: '2026-10-05',
     changes: [

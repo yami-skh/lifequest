@@ -22,6 +22,7 @@ import { completeQuest, maintainQuests } from './db/actions';
 import { localDate } from './engine/dates';
 import { EntrySheet, type EntryPreset } from './screens/EntrySheet';
 import { logError } from './lib/errorlog';
+import { Onboarding } from './components/Onboarding';
 
 export function App() {
   const [world, setWorld] = useState<World | null>(null);
@@ -40,6 +41,16 @@ export function App() {
 
   const [screen, param] = route;
   const openEntry = (p: EntryPreset = {}) => setEntry(p);
+
+  // Новая установка: сначала выбор пути. Резервная копия доступна — данные переносятся в APK через неё.
+  if (derived.profile?.onboarding && screen !== 'backup') {
+    return (
+      <WorldContext.Provider value={derived}>
+        <main class="no-nav"><Onboarding /></main>
+        <Toasts />
+      </WorldContext.Provider>
+    );
+  }
 
   let page;
   if (screen === 'tree') page = <Tree focusId={param} key={param ?? 'tree'} />;
