@@ -179,7 +179,7 @@ export function EntrySheet({ preset, onClose }: { preset: EntryPreset; onClose: 
   const summary = [diffLabel, outcome === 'ok' ? 'получилось' : 'не получилось', skillIds.length > 1 ? `${skillIds.length} навыка` : null, fixesId ? 'исправляет ошибку' : null].filter(Boolean).join(' · ');
 
   return (
-    <Sheet open onClose={onClose} title="Новое действие" class={compact ? 'entry-compact' : undefined}>
+    <Sheet open onClose={onClose} title="Новое действие" class={compact ? 'entry-compact' : undefined} tall={compact ? 0.72 : undefined}>
       <div class="type-row" role="radiogroup" aria-label="Тип действия">
         {ENTRY_TYPES.map((t) => (
           <button type="button" key={t.id} role="radio" aria-checked={type === t.id} class={type === t.id ? 'chip big primary' : 'chip big'} onClick={() => setType(t.id)}>{t.label}</button>

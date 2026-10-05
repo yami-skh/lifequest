@@ -62,3 +62,6 @@
 .entry-compact .save-row .btn { min-height: 46px; }
 .entry-compact .xp-why { min-height: 46px; }
 .more-mini { flex: 0 0 auto; gap: 4px; padding: 0 12px; color: var(--fg-2); }
+
+/* Высокая шторка постоянной высоты (Sheet tall): «Сохранить» прижата к низу. */
+.entry-compact .save-zone { margin-top: auto; }

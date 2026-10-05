@@ -132,7 +132,10 @@ function useSwipeClose(ref: { current: HTMLDivElement | null }, open: boolean, o
 const CLOSE_MS = 160;
 const reducedMotion = () => typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-export function Sheet({ open, onClose, onBack, title, children, class: cls }: { open: boolean; onClose: () => void; onBack?: () => void; title: string; children: ComponentChildren; class?: string }) {
+export function Sheet({ open, onClose, onBack, title, children, class: cls, tall }: { open: boolean; onClose: () => void; onBack?: () => void; title: string; children: ComponentChildren; class?: string; tall?: number }) {
+  // tall — доля экрана: постоянная высота, замеренная при открытии (до клавиатуры), чтобы шторка не прыгала,
+  // когда клавиатура открывается и закрывается.
+  const [tallPx] = useState(() => (tall ? Math.round(window.innerHeight * tall) : 0));
   // Закрытие крестиком, тапом мимо и кнопкой «назад» — шторка уезжает вниз (чуть быстрее, чем открывается).
   const [closing, setClosing] = useState(false);
   useEffect(() => setClosing(false), [open]);
@@ -156,7 +159,7 @@ export function Sheet({ open, onClose, onBack, title, children, class: cls }: { 
   if (!open) return null;
   return (
     <div class={closing ? 'sheet-backdrop closing' : 'sheet-backdrop'} onClick={(e) => e.target === e.currentTarget && requestClose()}>
-      <div class={cls ? `sheet ${cls}` : 'sheet'} role="dialog" aria-modal="true" aria-label={title} ref={sheetRef}>
+      <div class={cls ? `sheet ${cls}` : 'sheet'} role="dialog" aria-modal="true" aria-label={title} ref={sheetRef} style={tallPx ? { height: `${tallPx}px` } : undefined}>
         <div class="sheet-handle" />
         <div class="sheet-head">
           {onBack ? (

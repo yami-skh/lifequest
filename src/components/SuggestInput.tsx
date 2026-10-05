@@ -31,10 +31,41 @@ export function SuggestInput({ id, value, onValue, items, exclude, placeholder, 
   const list = useMemo(() => (on && open ? suggest(value, items, { limit, exclude }) : []), [on, open, value, items, exclude, limit]);
   // Новый запрос — список снова с начала (он листается сам по себе).
   const listRef = useRef<HTMLUListElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   useEffect(() => { if (listRef.current) listRef.current.scrollTop = 0; }, [value]);
+
+  // Список не должен выходить за шторку (иначе шторка начинает листаться): меряем место до низа шторки
+  // (над кнопкой «Сохранить») и сверху; где больше — туда и открываем, высоту подгоняем. Пересчёт — когда открывается клавиатура.
+  const [place, setPlace] = useState<{ up: boolean; max: number }>({ up: false, max: 232 });
+  const shown = list.length > 0;
+  useEffect(() => {
+    if (!shown) return;
+    const measure = () => {
+      const inp = inputRef.current;
+      const sheet = inp?.closest('.sheet') as HTMLElement | null;
+      if (!inp) return;
+      const r = inp.getBoundingClientRect();
+      const vh = window.visualViewport?.height ?? innerHeight;
+      const box = sheet?.getBoundingClientRect();
+      const save = sheet?.querySelector('.save-zone') as HTMLElement | null;
+      const bottom = Math.min(vh, save ? save.getBoundingClientRect().top : box ? box.bottom : vh) - 8;
+      const top = (box ? Math.max(box.top + 50, 0) : 8);
+      const below = bottom - r.bottom - 4;
+      const above = r.top - top - 4;
+      const up = below < 150 && above > below;
+      setPlace({ up, max: Math.max(96, Math.min(232, up ? above : below)) });
+    };
+    measure();
+    window.visualViewport?.addEventListener('resize', measure);
+    addEventListener('resize', measure);
+    return () => {
+      window.visualViewport?.removeEventListener('resize', measure);
+      removeEventListener('resize', measure);
+    };
+  }, [shown, value]);
   return (
     <div class="sg">
-      <input id={id} class={cls} placeholder={placeholder} value={value} autoComplete="off" autoFocus={autoFocus}
+      <input ref={inputRef} id={id} class={cls} placeholder={placeholder} value={value} autoComplete="off" autoFocus={autoFocus}
         onInput={(e) => { onValue(e.currentTarget.value); setOpen(true); }}
         onFocus={() => setOpen(true)}
         // Закрываем с задержкой: на телефоне фокус уходит раньше, чем доходит нажатие на строку списка.
@@ -45,7 +76,7 @@ export function SuggestInput({ id, value, onValue, items, exclude, placeholder, 
         }}
         aria-autocomplete="list" aria-controls={`${id}-sg`} aria-expanded={list.length > 0} />
       {list.length > 0 && (
-        <ul class="sg-list" id={`${id}-sg`} role="listbox" ref={listRef}>
+        <ul class={place.up ? 'sg-list up' : 'sg-list'} id={`${id}-sg`} role="listbox" ref={listRef} style={{ maxHeight: `${place.max}px` }}>
           {list.map((s) => (
             <li key={s.text} role="option" aria-selected={false}
               // mousedown + preventDefault: мышью поле не теряет фокус до выбора (pointerdown для этого не хватает).

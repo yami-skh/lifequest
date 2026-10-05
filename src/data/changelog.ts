@@ -7,6 +7,13 @@ export interface Release { version: string; date: string; title?: string; change
 
 export const CHANGELOG: Release[] = [
   {
+    version: '0.10.1-beta.8',
+    date: '2026-10-06',
+    changes: [
+      { kind: 'fix', title: 'Окно действия не прыгает', sub: 'Постоянная высота: не сжимается, когда закрываешь клавиатуру, и само не листается — подсказки помещаются внутри.' },
+    ],
+  },
+  {
     version: '0.10.1-beta.7',
     date: '2026-10-06',
     title: 'Компактное «Новое действие»',
