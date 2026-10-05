@@ -303,6 +303,15 @@
       "x": 0,
       "y": 0
     },
+    "NextVariants.dc.html": {
+      "h": 840,
+      "page": "nextaction",
+      "radius": 28,
+      "title": "4 · Варианты карточки",
+      "w": 390,
+      "x": 1350,
+      "y": 0
+    },
     "NotifySettings.dc.html": {
       "h": 700,
       "page": "v09",
@@ -629,13 +638,40 @@
       "x": 0,
       "y": 0
     },
-    "NextVariants.dc.html": {
-      "h": 840,
-      "page": "nextaction",
+    "FriendsInvite.dc.html": {
+      "h": 760,
+      "page": "friends",
       "radius": 28,
-      "title": "4 · Варианты карточки",
+      "title": "1. Пригласить и добавить",
       "w": 390,
-      "x": 1350,
+      "x": 0,
+      "y": 0
+    },
+    "FriendsList.dc.html": {
+      "h": 760,
+      "page": "friends",
+      "radius": 28,
+      "title": "2. Список: неделя и реакции",
+      "w": 390,
+      "x": 430,
+      "y": 0
+    },
+    "FriendWeek.dc.html": {
+      "h": 760,
+      "page": "friends",
+      "radius": 28,
+      "title": "3. Итоги недели друга",
+      "w": 390,
+      "x": 860,
+      "y": 0
+    },
+    "FriendsPrivacy.dc.html": {
+      "h": 760,
+      "page": "friends",
+      "radius": 28,
+      "title": "4. Что видят друзья, ключ",
+      "w": 390,
+      "x": 1290,
       "y": 0
     }
   },
@@ -646,7 +682,7 @@
   "designSystems": [],
   "launch": {
     "view": "canvas",
-    "page": "presets"
+    "page": "friends"
   },
   "notes": {
     "aiTitle": {
@@ -708,6 +744,7 @@
       "maxW": 1720,
       "page": "nextaction",
       "text": "Фаза 2 · Следующее действие: главный → запись → нет активных путей → варианты",
+      "w": 240,
       "x": 0,
       "y": -260
     },
@@ -818,6 +855,14 @@
       "w": 240,
       "x": 0,
       "y": -260
+    },
+    "friendsTitle": {
+      "kind": "title1",
+      "maxW": 1720,
+      "page": "friends",
+      "text": "Друзья: напарники по коду, без регистрации (ступень 1 — анонимный ключ)",
+      "x": 0,
+      "y": -260
     }
   },
   "order": [
@@ -890,7 +935,11 @@
     "NextMain.dc.html",
     "NextEntry.dc.html",
     "NextEmpty.dc.html",
-    "NextVariants.dc.html"
+    "NextVariants.dc.html",
+    "FriendsInvite.dc.html",
+    "FriendsList.dc.html",
+    "FriendWeek.dc.html",
+    "FriendsPrivacy.dc.html"
   ],
   "pages": [
     {
@@ -964,6 +1013,10 @@
     {
       "id": "nextaction",
       "name": "Следующее действие"
+    },
+    {
+      "id": "friends",
+      "name": "Друзья"
     }
   ],
   "title": "LifeQuest — макет"
