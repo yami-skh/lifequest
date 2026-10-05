@@ -52,8 +52,8 @@
   AREAS:6
 - **presets.ts** (48) — Готовые навыки при ручном добавлении (мастер-план §12): навыки шаблонов, сгруппированные по направлениям,
   T:6, P:7, sk:8, EXTRA:13, norm:29, *presetsFor:32
-- **suggest.ts** (142) — Запас подсказок при вводе (макет: холст, «Подсказки при вводе»). Источники: 18 путей (data/templates.ts)
-  uniq:8, tplSkills:11, tplBranches:12, *AREA_IDEAS:25, BRANCH_EXTRA:32, *branchIdeas:43, SKILL_EXTRA:46, *skillIdeas:72, *skillIdeasFor:73, *goalsFromPaths:77, GOAL_GENERIC:82, *goalIdeas:89, *allPathGoals:90, ACTIONS:93, *actionIdeas:126, *METRIC_IDEAS:129, *QUEST_IDEAS:136, *STEP_IDEAS:141
+- **suggest.ts** (188) — Запас подсказок при вводе (макет: холст, «Подсказки при вводе»). Источники: 18 путей (data/templates.ts)
+  uniq:8, tplSkills:11, tplBranches:12, *AREA_IDEAS:25, BRANCH_EXTRA:32, *branchIdeas:45, SKILL_EXTRA:48, GOAL_EXTRA:85, *skillIdeas:105, *skillIdeasFor:106, *goalsFromPaths:110, GOAL_GENERIC:115, *goalIdeas:122, *allPathGoals:124, ACTIONS:127, *actionIdeas:168, *METRIC_IDEAS:171, *QUEST_IDEAS:180, *STEP_IDEAS:187
 - **templatePrompt.ts** (39) — Запрос для «любой нейросети»: она составляет путь в формате шаблона (engine/templates.ts).
   *TEMPLATE_PROMPT:4
 - **templates.test.ts** (49)
