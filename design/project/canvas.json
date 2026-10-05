@@ -157,6 +157,15 @@
       "x": 470,
       "y": 0
     },
+    "ErrorLog.dc.html": {
+      "h": 844,
+      "page": "phase0",
+      "radius": 28,
+      "title": "Журнал ошибок",
+      "w": 390,
+      "x": 450,
+      "y": 0
+    },
     "FeatMain.dc.html": {
       "h": 1120,
       "page": "features",
@@ -493,6 +502,42 @@
       "x": 470,
       "y": 0
     },
+    "TplCatalog.dc.html": {
+      "h": 844,
+      "page": "templates",
+      "radius": 28,
+      "title": "2 · Каталог",
+      "w": 390,
+      "x": 450,
+      "y": 0
+    },
+    "TplEntry.dc.html": {
+      "h": 300,
+      "page": "templates",
+      "radius": 28,
+      "title": "1 · Вход: Дерево",
+      "w": 390,
+      "x": 0,
+      "y": 0
+    },
+    "TplPaste.dc.html": {
+      "h": 844,
+      "page": "templates",
+      "radius": 28,
+      "title": "4 · Свой шаблон (с ошибкой)",
+      "w": 390,
+      "x": 1350,
+      "y": 0
+    },
+    "TplPreview.dc.html": {
+      "h": 844,
+      "page": "templates",
+      "radius": 28,
+      "title": "3 · Что добавится",
+      "w": 390,
+      "x": 900,
+      "y": 0
+    },
     "Tree.dc.html": {
       "h": 920,
       "is_interactive": true,
@@ -530,49 +575,31 @@
       "x": 0,
       "y": 0
     },
-    "ErrorLog.dc.html": {
+    "PresetPick.dc.html": {
       "h": 844,
-      "page": "phase0",
+      "page": "presets",
       "radius": 28,
-      "title": "Журнал ошибок",
-      "w": 390,
-      "x": 450,
-      "y": 0
-    },
-    "TplEntry.dc.html": {
-      "h": 300,
-      "page": "templates",
-      "radius": 28,
-      "title": "1 · Вход: Дерево",
+      "title": "1 · Новый навык: выбран готовый",
       "w": 390,
       "x": 0,
       "y": 0
     },
-    "TplCatalog.dc.html": {
+    "PresetOwn.dc.html": {
       "h": 844,
-      "page": "templates",
+      "page": "presets",
       "radius": 28,
-      "title": "2 · Каталог",
+      "title": "2 · Новый навык: свой",
       "w": 390,
       "x": 450,
       "y": 0
     },
-    "TplPreview.dc.html": {
-      "h": 844,
-      "page": "templates",
+    "Onboarding.dc.html": {
+      "h": 900,
+      "page": "presets",
       "radius": 28,
-      "title": "3 · Что добавится",
+      "title": "3 · Первый запуск",
       "w": 390,
       "x": 900,
-      "y": 0
-    },
-    "TplPaste.dc.html": {
-      "h": 844,
-      "page": "templates",
-      "radius": 28,
-      "title": "4 · Свой шаблон (с ошибкой)",
-      "w": 390,
-      "x": 1350,
       "y": 0
     }
   },
@@ -583,7 +610,7 @@
   "designSystems": [],
   "launch": {
     "view": "canvas",
-    "page": "templates"
+    "page": "presets"
   },
   "notes": {
     "aiTitle": {
@@ -645,6 +672,7 @@
       "maxW": 1720,
       "page": "phase0",
       "text": "Фаза 0: снимок перед восстановлением · журнал ошибок",
+      "w": 240,
       "x": 0,
       "y": -260
     },
@@ -702,6 +730,15 @@
       "x": 0,
       "y": -260
     },
+    "templatesTitle": {
+      "kind": "title1",
+      "maxW": 1720,
+      "page": "templates",
+      "text": "Фаза 1 · Готовые пути: вход → каталог → предпросмотр → свой шаблон",
+      "w": 240,
+      "x": 0,
+      "y": -260
+    },
     "title": {
       "kind": "title1",
       "maxW": 2740,
@@ -729,11 +766,11 @@
       "x": 0,
       "y": -260
     },
-    "templatesTitle": {
+    "presetsTitle": {
       "kind": "title1",
       "maxW": 1720,
-      "page": "templates",
-      "text": "Фаза 1 · Готовые пути: вход → каталог → предпросмотр → свой шаблон",
+      "page": "presets",
+      "text": "Фаза 1 · Готовые навыки при добавлении и выбор пути при первом запуске",
       "x": 0,
       "y": -260
     }
@@ -801,7 +838,10 @@
     "TplEntry.dc.html",
     "TplCatalog.dc.html",
     "TplPreview.dc.html",
-    "TplPaste.dc.html"
+    "TplPaste.dc.html",
+    "PresetPick.dc.html",
+    "PresetOwn.dc.html",
+    "Onboarding.dc.html"
   ],
   "pages": [
     {
@@ -867,6 +907,10 @@
     {
       "id": "templates",
       "name": "Шаблоны"
+    },
+    {
+      "id": "presets",
+      "name": "Пресеты и первый запуск"
     }
   ],
   "title": "LifeQuest — макет"
