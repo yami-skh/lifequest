@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { planImport, validateTemplate, type Template } from './templates';
+import { parseTemplateText, planImport, templateSkills, templateStats, validateTemplate, type Template } from './templates';
 
 const tpl: Template = {
   format: 1,
@@ -88,5 +88,30 @@ describe('шаблоны: план импорта', () => {
     expect(p.nodes.map((x) => x.title)).toEqual(['Подтягивания']);
     expect(p.goals.filter((g) => g.skillId === 's').map((g) => g.title)).toEqual(['Техника отжиманий']);
     expect(p.skipped.goals).toBe(1);
+  });
+});
+
+describe('шаблоны: для экранов', () => {
+  it('план помнит, куда легли навыки и новые ли они', () => {
+    const have = { nodes: [{ id: 'a', parentId: null, kind: 'area' as const, title: 'Тело' }, { id: 'b', parentId: 'a', kind: 'branch' as const, title: 'Сила' }, { id: 's', parentId: 'b', kind: 'skill' as const, title: 'Отжимания' }], goals: [], metrics: [] };
+    const p = planImport(tpl, have, id);
+    expect(p.skills.map((x) => [x.key, x.isNew])).toEqual([['push', false], ['pull', true]]);
+    expect(p.skills[0].id).toBe('s');
+  });
+  it('разбор текста: ответ нейросети в ```json с пояснениями', () => {
+    const text = `Вот путь:\n\`\`\`json\n${JSON.stringify(tpl, null, 2)}\n\`\`\`\nУдачи!`;
+    const r = parseTemplateText(text);
+    expect(r.ok && r.template.title).toBe('Тест');
+  });
+  it('разбор текста: понятные ошибки', () => {
+    expect(parseTemplateText('привет')).toEqual({ ok: false, errors: ['Не нашёл шаблон: нужен текст в фигурных скобках { … }'] });
+    const cut = parseTemplateText(JSON.stringify(tpl).slice(0, 80) + '}');
+    expect(cut.ok).toBe(false);
+    const bad = parseTemplateText('{"format":1,"id":"x","title":"X","areas":[]}');
+    expect(bad.ok ? [] : bad.errors).toContain('Нет направлений (areas)');
+  });
+  it('подсчёт и список навыков с путём', () => {
+    expect(templateStats(tpl)).toEqual({ skills: 2, goals: 4, metrics: 1 });
+    expect(templateSkills(tpl).map((x) => x.path.join(' › '))).toEqual(['Тело › Сила', 'Тело › Сила']);
   });
 });

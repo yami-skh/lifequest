@@ -10,6 +10,7 @@ import { AreaTile, Confirm, Ring, Sheet, pctText } from '../components/ui';
 import { plural } from './Character';
 import { ac } from '../lib/theme';
 import { StarMap } from '../components/StarMap';
+import { TemplatesSheet } from '../components/Templates';
 
 type Editor =
   | { mode: 'menu'; node: Node }
@@ -34,6 +35,8 @@ export function Tree({ focusId }: { focusId?: string }) {
   const [query, setQuery] = useState('');
   const [editor, setEditor] = useState<Editor | null>(null);
   const [toDelete, setToDelete] = useState<Node | null>(null);
+  const [tplOpen, setTplOpen] = useState(false);
+  const tpl = w.hasExp('templates');
   const [mode, setModeState] = useState<'list' | 'stars'>(() => {
     try {
       return localStorage.getItem('lq.treeView') === 'stars' ? 'stars' : 'list';
@@ -182,8 +185,19 @@ export function Tree({ focusId }: { focusId?: string }) {
           <h1 class="display small-display">Дерево навыков</h1>
           <span class="t-sub">исследовано {exploredTotal} из {w.skills.length}</span>
         </div>
-        <button type="button" class="icon-btn round" aria-label="Добавить направление" onClick={() => setEditor({ mode: 'add', parent: null, kind: 'area' })}><Icon name="plus" size={20} stroke={2.4} /></button>
+        <div class="tree-head-btns">
+          {tpl && <button type="button" class="icon-btn round tpl-open" aria-label="Готовые пути" title="Готовые пути" onClick={() => setTplOpen(true)}><Icon name="grid" size={20} /></button>}
+          <button type="button" class="icon-btn round" aria-label="Добавить направление" onClick={() => setEditor({ mode: 'add', parent: null, kind: 'area' })}><Icon name="plus" size={20} stroke={2.4} /></button>
+        </div>
       </div>
+
+      {tpl && w.skills.length < 5 && (
+        <button type="button" class="tpl-hint" onClick={() => setTplOpen(true)}>
+          <span class="strong">Не знаешь, с чего начать?</span>
+          <span class="muted">Возьми готовый путь: навыки, цели по ступеням и замеры уже расписаны.</span>
+          <span class="tpl-go">Выбрать шаблон →</span>
+        </button>
+      )}
 
       <div class="segmented" role="tablist" aria-label="Вид дерева">
         <button type="button" role="tab" aria-selected={mode === 'list'} class={mode === 'list' ? 'on' : ''} onClick={() => setMode('list')}>Список</button>
@@ -219,6 +233,8 @@ export function Tree({ focusId }: { focusId?: string }) {
         <div class="t-tree">{w.areas.map(renderNode)}</div>
       )}
       </>}
+
+      <TemplatesSheet open={tplOpen} onClose={() => setTplOpen(false)} />
 
       <NodeEditor editor={editor} onClose={() => setEditor(null)} onDelete={(n) => { setEditor(null); setToDelete(n); }} onAdded={(parentId) => {
         if (parentId && !expanded.has(parentId)) toggle(parentId);

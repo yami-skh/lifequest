@@ -7,6 +7,13 @@ export interface Release { version: string; date: string; title?: string; change
 
 export const CHANGELOG: Release[] = [
   {
+    version: '0.10.0-beta.3',
+    date: '2026-10-05',
+    changes: [
+      { kind: 'new', title: 'Готовые пути (эксперимент)', sub: 'Дерево → кнопка с квадратиками: 8 шаблонов навыков с целями по ступеням, замерами и кампаниями. Что уже есть — не дублируется. Можно вставить свой шаблон — например, от нейросети. Включается в «Экспериментах».' },
+    ],
+  },
+  {
     version: '0.10.0-beta.2',
     date: '2026-10-05',
     changes: [
