@@ -1,8 +1,9 @@
 // «Ещё» → «Резервная копия». Макет: холст, страница «Резервная копия».
-import { useRef, useState } from 'preact/hooks';
+import { useEffect, useRef, useState } from 'preact/hooks';
 import { useWorld } from '../db/world';
 import { db } from '../db/db';
-import { currentSummary, exportBackup, readBackup, restoreBackup, type BackupSummary, type ParsedBackup } from '../lib/backup';
+import { currentSummary, exportBackup, readBackup, restoreBackup, restoreSnapshot, type BackupSummary, type ParsedBackup } from '../lib/backup';
+import { listSnapshots, type Snapshot } from '../lib/snapshots';
 import { daysBetween, humanDate, localDate } from '../engine/dates';
 import { toast } from '../lib/toast';
 import { go } from '../lib/router';
@@ -99,6 +100,8 @@ export function Backup() {
         <input ref={fileRef} id="backup-file" type="file" accept=".zip,application/zip" hidden onChange={(e) => pick(e.currentTarget.files)} />
       </section>
 
+      <SnapshotCard />
+
       <section class="stack-8">
         <span class="section-label">Напоминание</span>
         <button type="button" class="toggle-row" role="switch" aria-checked={reminder} onClick={() => db.profile.update('me', { backupReminder: !reminder })}>
@@ -129,7 +132,7 @@ export function Backup() {
           </div>
           <div class="notice error">
             <Icon name="alert" size={18} stroke={2.4} />
-            <span class="small">Текущие данные на этом телефоне <b>заменятся</b> данными из копии. Отменить нельзя.</span>
+            <span class="small">Текущие данные на этом телефоне <b>заменятся</b> данными из копии. Перед этим сохранится снимок — их можно будет вернуть.</span>
           </div>
           <div class="stack-8">
             <button type="button" class="btn primary" disabled={busy} onClick={restore}>{busy ? 'Восстанавливаю…' : 'Заменить и восстановить'}</button>
@@ -187,6 +190,60 @@ export function BackupReminder() {
         <button type="button" class="icon-btn" aria-label="Скрыть до завтра" onClick={snooze}><Icon name="x" size={16} stroke={2.4} /></button>
       </div>
       <a class="btn primary small" href="#/backup">Сохранить копию</a>
+    </section>
+  );
+}
+
+const fmtWhen = (iso: string) => `${humanDate(localDate(new Date(iso))).toLowerCase()} ${new Date(iso).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })}`;
+
+/** «Вернуть как было»: последний снимок перед восстановлением. Макет: холст, страница «Фаза 0». */
+function SnapshotCard() {
+  const [snap, setSnap] = useState<Snapshot | null>(null);
+  const [confirm, setConfirm] = useState(false);
+  const [busy, setBusy] = useState(false);
+  useEffect(() => {
+    listSnapshots().then((l) => setSnap(l[0] ?? null)).catch(() => {});
+  }, []);
+  if (!snap) return null;
+  const s = snap.summary;
+  const back = async () => {
+    setBusy(true);
+    try {
+      await restoreSnapshot(snap.id);
+      await ensureStarter();
+      toast({ kind: 'info', title: 'Данные возвращены', sub: `как было ${fmtWhen(snap.createdAt)}` });
+      go('');
+    } catch (e) {
+      console.error(e);
+      toast({ kind: 'info', title: 'Не удалось вернуть', sub: 'Текущие данные не тронуты' });
+      setBusy(false);
+    }
+  };
+  return (
+    <section class="card stack-12 snapshot-card">
+      <div class="backup-head">
+        <span class="backup-icon gold"><Icon name="undo" size={22} stroke={2.2} /></span>
+        <span class="stack-4">
+          <span class="strong">Вернуть как было</span>
+          <span class="muted small">{snap.reason === 'before-undo' ? 'Снимок перед возвратом' : 'Снимок перед восстановлением'} · {fmtWhen(snap.createdAt)}</span>
+        </span>
+      </div>
+      <div class="chips">
+        <span class="chip static">ур. {s.level}</span>
+        <span class="chip static">{s.entries} {plural(s.entries, 'запись', 'записи', 'записей')}</span>
+        <span class="chip static">{s.photos} фото</span>
+      </div>
+      <button type="button" class="btn ghost" onClick={() => setConfirm(true)}>Вернуть эти данные</button>
+      <span class="muted small">Снимок делается сам перед каждым восстановлением. Хранятся 3 последних, только на этом телефоне.</span>
+      {confirm && (
+        <Sheet open onClose={() => setConfirm(false)} title="Вернуть данные?">
+          <p class="small fg-2">Данные станут такими, как были {fmtWhen(snap.createdAt)}. Текущие тоже сохранятся снимком — можно будет передумать.</p>
+          <div class="stack-8">
+            <button type="button" class="btn primary" disabled={busy} onClick={back}>{busy ? 'Возвращаю…' : 'Вернуть'}</button>
+            <button type="button" class="btn ghost" onClick={() => setConfirm(false)}>Отмена</button>
+          </div>
+        </Sheet>
+      )}
     </section>
   );
 }

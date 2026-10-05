@@ -82,3 +82,7 @@
 
 /* номер версии — скрытая кнопка «Эксперименты» */
 .version-tap { background: none; border: 0; padding: 0; color: inherit; text-align: left; font: inherit; font-weight: 800; }
+
+/* снимок перед восстановлением (фаза 0) */
+.snapshot-card { border-color: var(--gold); }
+.chip.static { pointer-events: none; }

@@ -7,6 +7,13 @@ export interface Release { version: string; date: string; title?: string; change
 
 export const CHANGELOG: Release[] = [
   {
+    version: '0.9.2',
+    date: '2026-10-05',
+    changes: [
+      { kind: 'new', title: 'Снимок перед восстановлением', sub: 'Перед заменой данных из копии приложение само сохраняет текущие. Вернуть — «Резервная копия» → «Вернуть как было».' },
+    ],
+  },
+  {
     version: '0.9.1',
     date: '2026-10-05',
     changes: [
