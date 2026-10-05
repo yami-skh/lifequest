@@ -133,7 +133,8 @@ main { padding-bottom: calc(var(--nav-h) + var(--safe-b) + 24px); }
 .bar { width: 100%; border-radius: 99px; background: var(--line); overflow: hidden; }
 .bar-fill { height: 100%; border-radius: 99px; transition: width 0.5s ease; }
 .mini-bar { display: block; height: 5px; border-radius: 3px; background: var(--line); overflow: hidden; }
-.mini-bar > span { display: block; height: 100%; border-radius: 3px; }
+.mini-bar > span { display: block; height: 100%; border-radius: 3px; transition: width 0.5s ease; }
+.ring circle { transition: stroke-dashoffset 0.5s ease, stroke 0.3s; }
 
 
 /* нижняя панель */
@@ -155,6 +156,14 @@ main { padding-bottom: calc(var(--nav-h) + var(--safe-b) + 24px); }
 .toast.level .toast-sub, .toast.achievement .toast-sub { color: var(--fg-2); }
 @keyframes drop { from { transform: translateY(-16px); opacity: 0; } to { transform: none; opacity: 1; } }
 
+
+/* Отклик на нажатие (план: анимируем прогресс, а нажатие — только короткой обратной связью). */
+.btn, .chip, .icon-btn, .fab > span, .menu-item, .menu-row, .preset, .picker-item, .t2-card, .t-skill-card, .fr-react, .tpl-card, .onb-card, .segmented button, .type-row > button, .goal-row, .stage-head {
+  transition: transform 0.08s ease, filter 0.08s ease, background-color 0.15s;
+}
+.btn:active, .chip:active, .icon-btn:active, .fab:active > span, .fr-react:active, .segmented button:active, .type-row > button:active { transform: scale(0.95); }
+.menu-item:active, .menu-row:active, .preset:active, .picker-item:active, .t2-card:active, .t-skill-card:active, .tpl-card:active, .onb-card:active, .goal-row:active { transform: scale(0.985); filter: brightness(1.12); }
+.btn:disabled:active, .chip:disabled:active { transform: none; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }

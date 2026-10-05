@@ -43,7 +43,8 @@ export function gestures(o: GestureOpts): GestureHandlers {
       if (e.pointerType === 'mouse' && e.button !== 0) return;
       const el = e.currentTarget as HTMLElement;
       g = { id: e.pointerId, x: e.clientX, y: e.clientY, el, held: false, swiping: false, touch: e.pointerType !== 'mouse' };
-      el.style.transition = '';
+      // Без перехода: строка должна идти за пальцем без задержки (в CSS есть короткий переход для отклика на нажатие).
+      el.style.transition = 'none';
       g.timer = window.setTimeout(() => {
         if (!g || g.swiping) return;
         g.held = true;
