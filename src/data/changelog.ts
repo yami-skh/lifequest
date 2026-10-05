@@ -65,6 +65,13 @@ export const CHANGELOG: Release[] = [
     ],
   },
   {
+    version: '0.9.4',
+    date: '2026-10-05',
+    changes: [
+      { kind: 'fix', title: 'Техническая правка сайта', sub: 'В приложении ничего не меняется.' },
+    ],
+  },
+  {
     version: '0.9.3',
     date: '2026-10-05',
     changes: [
