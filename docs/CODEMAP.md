@@ -38,13 +38,13 @@
 
 ## src/data
 
-- **changelog.ts** (190) — Что нового в версиях — для пользователя, простыми словами. Новые версии — сверху.
-  *ChangeKind:4, *Change:5, *Release:6, *CHANGELOG:8, *SEEN_BEFORE_CHANGELOG:189
+- **changelog.ts** (197) — Что нового в версиях — для пользователя, простыми словами. Новые версии — сверху.
+  *ChangeKind:4, *Change:5, *Release:6, *CHANGELOG:8, *SEEN_BEFORE_CHANGELOG:196
 - **templatePrompt.ts** (39) — Запрос для «любой нейросети»: она составляет путь в формате шаблона (engine/templates.ts).
   *TEMPLATE_PROMPT:4
-- **templates.test.ts** (33)
+- **templates.test.ts** (45)
   goalsOf:5
-- **templates.ts** (127) — Готовые шаблоны путей (мастер-план §12). Формат — engine/templates.ts. ЧЕРНОВИК: содержание на согласовании.
+- **templates.ts** (127) — Готовые шаблоны путей (мастер-план §12). Формат — engine/templates.ts.
   T:5, P:6, sk:9, M:18, BODY:26, MIND:27, TECH:28, ART:29, MONEY:30, PEOPLE:31, CALM:32, *TEMPLATES:34
 
 ## src/db

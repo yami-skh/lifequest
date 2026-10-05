@@ -29,4 +29,16 @@ describe('готовые шаблоны', () => {
       expect(p.goals.length, t.id).toBeGreaterThan(0);
     }
   });
+  it('«Старт» и тематические пути не плодят похожие цели в одном навыке', () => {
+    let n = 0;
+    const newId = () => `id${++n}`;
+    const byId = (id: string) => TEMPLATES.find((t) => t.id === id)!;
+    for (const other of ['strong-body', 'health']) {
+      const start = planImport(byId('start'), { nodes: [], goals: [], metrics: [] }, newId);
+      const p = planImport(byId(other), { nodes: start.nodes, goals: start.goals, metrics: start.metrics }, newId);
+      // Общий навык (Отжимания / Сон) не создаётся заново, а совпадающие цели пропускаются.
+      expect(p.skills.some((x) => !x.isNew), other).toBe(true);
+      expect(p.skipped.goals, other).toBeGreaterThanOrEqual(3);
+    }
+  });
 });
