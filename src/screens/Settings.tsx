@@ -144,7 +144,7 @@ export function Settings() {
       <Confirm
         open={confirmReset}
         title="Стереть все данные?"
-        text="Пропадут все записи, фото, XP и изменения в дереве. Отменить нельзя."
+        text="Пропадут все действия, фото, XP и изменения в дереве. Отменить нельзя."
         action="Стереть"
         onConfirm={resetAll}
         onClose={() => setConfirmReset(false)}
@@ -204,7 +204,7 @@ export function UpdateCard({ fallback }: { fallback?: ComponentChildren }) {
         <span class="update-icon"><Icon name="download" size={22} stroke={2.4} /></span>
         <span class="stack-4">
           <span class="strong">{u.kind === 'error' ? 'Не получилось скачать' : `Доступна версия ${v}`}</span>
-          <span class="muted small">{u.kind === 'error' ? 'Проверь интернет и попробуй ещё раз.' : 'Нужно обновить приложение — это минута, записи останутся.'}</span>
+          <span class="muted small">{u.kind === 'error' ? 'Проверь интернет и попробуй ещё раз.' : 'Нужно обновить приложение — это минута, данные останутся.'}</span>
         </span>
       </div>
       <button type="button" class="btn update-btn" onClick={() => installApk()}>{u.kind === 'error' ? 'Попробовать ещё раз' : 'Скачать и установить'}</button>
@@ -341,7 +341,7 @@ function ErrorLogRow() {
               </div>
             ))}
           </div>
-          <div class="ai-privacy"><span>В отчёте — версия, канал, устройство и тексты ошибок. Записи, фото и заметки не попадают.</span></div>
+          <div class="ai-privacy"><span>В отчёте — версия, канал, устройство и тексты ошибок. Действия, фото и заметки не попадают.</span></div>
           <button type="button" class="btn primary" onClick={send}>Отправить отчёт</button>
           <button type="button" class="link small muted err-clear" onClick={() => { clearErrors(); setOpen(false); }}>Очистить журнал</button>
         </Sheet>

@@ -78,11 +78,11 @@ export function Backup() {
           <span class="stack-4">
             <span class="strong">{last ? `Последняя копия: ${agoText(last)}` : 'Копии ещё не было'}</span>
             <span class="muted small">
-              {last ? `${humanDate(last.slice(0, 10))} · с тех пор ${sinceLast} ${plural(sinceLast, 'запись', 'записи', 'записей')}` : `${realEntries.length} ${plural(realEntries.length, 'запись', 'записи', 'записей')} · ${w.entries.reduce((n, e) => n + e.photoIds.length, 0)} фото`}
+              {last ? `${humanDate(last.slice(0, 10))} · с тех пор ${sinceLast} ${plural(sinceLast, 'действие', 'действия', 'действий')}` : `${realEntries.length} ${plural(realEntries.length, 'действие', 'действия', 'действий')} · ${w.entries.reduce((n, e) => n + e.photoIds.length, 0)} фото`}
             </span>
           </span>
         </div>
-        <p class="small fg-2">Все записи, дерево, цели, заметки и фото — в одном файле <b>.zip</b>. Отправь его себе в Telegram «Избранное» или на Google Диск.</p>
+        <p class="small fg-2">Все действия, дерево, цели, заметки и фото — в одном файле <b>.zip</b>. Отправь его себе в Telegram «Избранное» или на Google Диск.</p>
         <button type="button" class="btn primary" disabled={busy} onClick={save}>
           <Icon name="download" size={20} stroke={2.4} />{busy ? 'Готовлю файл…' : 'Сохранить копию'}
         </button>
@@ -113,7 +113,7 @@ export function Backup() {
 
       <div class="notice warn">
         <Icon name="alert" size={18} stroke={2.4} />
-        <span class="small">Данные хранятся только на этом телефоне. Если удалить приложение без копии — записи пропадут.</span>
+        <span class="small">Данные хранятся только на этом телефоне. Если удалить приложение без копии — действия пропадут.</span>
       </div>
 
       {parsed && current && (
@@ -123,12 +123,12 @@ export function Backup() {
             <div class="compare">
               <span class="section-label">Сейчас</span>
               <span class="compare-lvl">ур. {current.level}</span>
-              <span class="small fg-2">{current.entries} {plural(current.entries, 'запись', 'записи', 'записей')}<br />{current.photos} фото</span>
+              <span class="small fg-2">{current.entries} {plural(current.entries, 'действие', 'действия', 'действий')}<br />{current.photos} фото</span>
             </div>
             <div class="compare new">
               <span class="section-label ok-text">В копии · {parsed.summary.date ? humanDate(parsed.summary.date) : ''}</span>
               <span class="compare-lvl">ур. {parsed.summary.level}</span>
-              <span class="small fg-2">{parsed.summary.entries} {plural(parsed.summary.entries, 'запись', 'записи', 'записей')}<br />{parsed.summary.photos} фото</span>
+              <span class="small fg-2">{parsed.summary.entries} {plural(parsed.summary.entries, 'действие', 'действия', 'действий')}<br />{parsed.summary.photos} фото</span>
             </div>
           </div>
           <div class="notice error">
@@ -186,7 +186,7 @@ export function BackupReminder() {
         <span class="backup-icon gold"><Icon name="shield" size={20} stroke={2.2} /></span>
         <span class="stack-4" style={{ flex: '1' }}>
           <span class="strong">{last ? `Копии не было ${days} ${plural(days, 'день', 'дня', 'дней')}` : 'Копии ещё не было'}</span>
-          <span class="muted small">С тех пор {fresh.length} {plural(fresh.length, 'новая запись', 'новые записи', 'новых записей')}{photos ? ` и ${photos} фото` : ''}</span>
+          <span class="muted small">С тех пор {fresh.length} {plural(fresh.length, 'новое действие', 'новые действия', 'новых действий')}{photos ? ` и ${photos} фото` : ''}</span>
         </span>
         <button type="button" class="icon-btn" aria-label="Скрыть до завтра" onClick={snooze}><Icon name="x" size={16} stroke={2.4} /></button>
       </div>
@@ -231,7 +231,7 @@ function SnapshotCard() {
       </div>
       <div class="chips">
         <span class="chip static">ур. {s.level}</span>
-        <span class="chip static">{s.entries} {plural(s.entries, 'запись', 'записи', 'записей')}</span>
+        <span class="chip static">{s.entries} {plural(s.entries, 'действие', 'действия', 'действий')}</span>
         <span class="chip static">{s.photos} фото</span>
       </div>
       <button type="button" class="btn ghost" onClick={() => setConfirm(true)}>Вернуть эти данные</button>

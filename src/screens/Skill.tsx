@@ -62,7 +62,7 @@ export function Skill({ id, onAdd }: { id: string; onAdd: (p: EntryPreset) => vo
 
   const onFocus = async () => {
     const ok = await toggleFocus(id);
-    if (!ok) toast({ kind: 'info', title: 'В фокусе уже 3 навыка', sub: 'Сними фокус с одного из них' });
+    if (!ok) toast({ kind: 'info', title: 'Активных навыков уже 3', sub: 'Сделай неактивным один из них' });
   };
 
   const goalsMeta = cur ? `ступень ${cur.stage} · ${cur.done} из ${cur.goals.length}` : goals.length ? 'все пройдены' : 'добавить';
@@ -74,7 +74,7 @@ export function Skill({ id, onAdd }: { id: string; onAdd: (p: EntryPreset) => vo
         crumbs={w.pathOf(id).slice(0, -1).map((n) => n.title).join(' › ')}
         right={
           <>
-            <button type="button" class={node.focus ? 'focus-star on' : 'focus-star'} onClick={onFocus} aria-pressed={!!node.focus} aria-label={node.focus ? 'Убрать из фокуса' : 'В фокус'}>
+            <button type="button" class={node.focus ? 'focus-star on' : 'focus-star'} onClick={onFocus} aria-pressed={!!node.focus} aria-label={node.focus ? 'Сделать неактивным' : 'Сделать активным'}>
               <Icon name="star" size={node.focus ? 16 : 22} stroke={2.2} />
               {node.focus && <span>×1.2</span>}
             </button>
@@ -105,8 +105,8 @@ export function Skill({ id, onAdd }: { id: string; onAdd: (p: EntryPreset) => vo
         <div class="notice">
           <Icon name="web" size={18} />
           <div class="stack-4">
-            <span class="strong">{rust} дней без записей</span>
-            <span class="small">Первая запись после перерыва даст +50% XP.</span>
+            <span class="strong">{rust} дней без действий</span>
+            <span class="small">Первое действие после перерыва даст +50% XP.</span>
           </div>
         </div>
       )}
@@ -124,7 +124,7 @@ export function Skill({ id, onAdd }: { id: string; onAdd: (p: EntryPreset) => vo
               {!r.met && <span class="muted small">сейчас {r.have}</span>}
             </a>
           ))}
-          {reqs.some((r) => !r.met) && <span class="muted small">Записывать опыт можно и до открытия.</span>}
+          {reqs.some((r) => !r.met) && <span class="muted small">Записывать действия можно и до открытия.</span>}
         </div>
       )}
 
@@ -134,7 +134,7 @@ export function Skill({ id, onAdd }: { id: string; onAdd: (p: EntryPreset) => vo
           <div class="stack-4">
             <span class="strong">Нерешённая ошибка</span>
             <span class="small">{humanDate(e.date)} — {e.failNote || e.text}</span>
-            <button type="button" class="link small" onClick={() => onAdd({ skillId: id, fixesEntryId: e.id })}>Исправил — записать (×1.5 XP)</button>
+            <button type="button" class="link small" onClick={() => onAdd({ skillId: id, fixesEntryId: e.id })}>Исправил — записать действие (×1.5 XP)</button>
           </div>
         </div>
       ))}
@@ -159,7 +159,7 @@ export function Skill({ id, onAdd }: { id: string; onAdd: (p: EntryPreset) => vo
       {!workout && metric && <SkillMetrics skillId={id} />}
 
       <button type="button" class="btn primary skill-cta" onClick={() => onAdd(workout ? { skillId: id, workout: true } : { skillId: id })}>
-        <span class="skill-cta-main"><Icon name="plus" size={20} stroke={2.6} />{workout ? 'Записать тренировку' : 'Записать опыт'}</span>
+        <span class="skill-cta-main"><Icon name="plus" size={20} stroke={2.6} />{workout ? 'Записать тренировку' : 'Записать действие'}</span>
         {workout && info?.last && <span class="skill-cta-sub">подставим подходы прошлого раза</span>}
       </button>
 
@@ -170,10 +170,10 @@ export function Skill({ id, onAdd }: { id: string; onAdd: (p: EntryPreset) => vo
             <Goals skillId={id} goals={goals} />
           </FoldRow>
         )}
-        <FoldRow title="История" meta={`${entries.length} ${workout ? word(entries.length, 'тренировка', 'тренировки', 'тренировок') : word(entries.length, 'запись', 'записи', 'записей')}`} open={fold === 'history'} onToggle={() => toggle('history')}>
+        <FoldRow title="История" meta={`${entries.length} ${workout ? word(entries.length, 'тренировка', 'тренировки', 'тренировок') : word(entries.length, 'действие', 'действия', 'действий')}`} open={fold === 'history'} onToggle={() => toggle('history')}>
           <div class="stack-10">
             <div class="muted small">{lv.xp} XP за всё время</div>
-            {entries.length === 0 ? <p class="muted">Пока нет записей по этому навыку.</p> : entries.map((e) => <EntryCard entry={e} key={e.id} />)}
+            {entries.length === 0 ? <p class="muted">Пока нет действий по этому навыку.</p> : entries.map((e) => <EntryCard entry={e} key={e.id} />)}
           </div>
         </FoldRow>
         <FoldRow title="Заметки и фото" meta={notesMeta} open={fold === 'notes'} onToggle={() => toggle('notes')}>
@@ -252,7 +252,7 @@ function SkillMenu({ id, onFocus, onReq, onClose }: { id: string; onFocus: () =>
       <div class="menu-list">
         <button type="button" class="menu-row" onClick={onFocus} aria-pressed={!!node.focus}>
           <span class="menu-row-icon gold"><Icon name="star" size={20} stroke={2.2} /></span>
-          <span class="menu-row-text"><span class="strong">В фокус</span><span class="muted small">×1.2 XP, до трёх навыков</span></span>
+          <span class="menu-row-text"><span class="strong">Сделать активным</span><span class="muted small">×1.2 XP, до трёх навыков</span></span>
           <span class={node.focus ? 'switch on' : 'switch'}><span /></span>
         </button>
         <button type="button" class="menu-row" onClick={onReq}>
@@ -425,7 +425,7 @@ function FullPhoto({ id, onClose }: { id: string; onClose: () => void }) {
 
 function Gallery({ photoIds }: { photoIds: string[] }) {
   const [open, setOpen] = useState<string | null>(null);
-  if (photoIds.length === 0) return <p class="muted">Фото из записей по навыку появятся здесь.</p>;
+  if (photoIds.length === 0) return <p class="muted">Фото из действий по навыку появятся здесь.</p>;
   return (
     <>
       <div class="gallery">{photoIds.map((id) => <GalleryItem id={id} key={id} onOpen={() => setOpen(id)} />)}</div>

@@ -7,6 +7,13 @@ export interface Release { version: string; date: string; title?: string; change
 
 export const CHANGELOG: Release[] = [
   {
+    version: '0.10.0-beta.8',
+    date: '2026-10-05',
+    changes: [
+      { kind: 'better', title: 'Новые слова: «Действие» вместо «Записи»', sub: 'Всё, что ты делаешь и отмечаешь, теперь называется действием. «Фокус» стал «Активными навыками».' },
+    ],
+  },
+  {
     version: '0.10.0-beta.7',
     date: '2026-10-05',
     changes: [

@@ -63,13 +63,13 @@ export function EntryCard({ entry, showDate = true }: { entry: Entry; showDate?:
           )}
           <div class="row-2">
             {primaryNode && <button type="button" class="btn ghost small" onClick={() => go(`skill/${primaryNode.id}`)}>Открыть навык</button>}
-            <button type="button" class="btn ghost small danger-text" onClick={() => setConfirm(true)}>Удалить запись</button>
+            <button type="button" class="btn ghost small danger-text" onClick={() => setConfirm(true)}>Удалить действие</button>
           </div>
         </div>
       )}
       <Confirm
         open={confirm}
-        title="Удалить запись?"
+        title="Удалить действие?"
         text={`XP за неё (${primary?.xp ?? 0}) пропадёт. Закрытые цели останутся закрытыми.`}
         action="Удалить"
         onConfirm={() => deleteEntry(entry.id)}

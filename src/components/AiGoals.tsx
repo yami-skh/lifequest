@@ -127,7 +127,7 @@ function AiGoalsSheet({ skillId, onClose }: { skillId: string; onClose: () => vo
             <textarea id="ai-wish" rows={3} maxLength={300} placeholder="Например: хочу смотреть сериалы без субтитров" value={wish} onInput={(e) => setWish(e.currentTarget.value)} />
             <div class="chips">{WISHES.map((x) => <button type="button" class="chip" key={x} onClick={() => setWish(wish ? `${wish}, ${x}` : x)}>{x}</button>)}</div>
           </div>
-          <div class="ai-privacy"><Icon name="shield" size={18} /><span>Отправится только: название навыка, путь в дереве, уровень и текущие цели. Записи, фото и заметки — нет.</span></div>
+          <div class="ai-privacy"><Icon name="shield" size={18} /><span>Отправится только: название навыка, путь в дереве, уровень и текущие цели. Действия, фото и заметки — нет.</span></div>
           {phase.kind === 'error' && <div class="notice error"><span class="small">{phase.message}</span></div>}
           <button type="button" class="btn ai-main" onClick={ask} disabled={remaining === 0}><Icon name="spark" size={18} />{phase.kind === 'error' ? 'Попробовать ещё раз' : 'Предложить цели'}</button>
           {left}

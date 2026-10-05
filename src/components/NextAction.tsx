@@ -72,13 +72,13 @@ function ChoosePath() {
   const w = useWorld();
   const list = w.suggestPaths();
   const pick = async (id: string) => {
-    if (!(await toggleFocus(id))) toast({ kind: 'info', title: 'Активных путей уже три' });
+    if (!(await toggleFocus(id))) toast({ kind: 'info', title: 'Активных навыков уже три' });
   };
   return (
     <section class="na-card na-empty" aria-label="Следующее действие">
       <span class="na-label">Следующее действие</span>
-      <span class="na-goal">Выбери путь, по которому идёшь сейчас</span>
-      <span class="na-sub">До трёх путей. По ним будет подсказка, что делать дальше, и ×1.2 XP.</span>
+      <span class="na-goal">Выбери навыки, над которыми работаешь сейчас</span>
+      <span class="na-sub">До трёх навыков. По ним будет подсказка, что делать дальше, и ×1.2 XP.</span>
       {list.length > 0 ? (
         <div class="stack-4">
           {list.map((s) => {
@@ -94,9 +94,9 @@ function ChoosePath() {
           })}
         </div>
       ) : (
-        <span class="muted small">Сначала добавь навык с целями в «Путях».</span>
+        <span class="muted small">Сначала добавь навык с целями в «Дереве».</span>
       )}
-      <a class="link small na-all" href="#/tree">Навыки, где ты ближе всего к следующей ступени · Все пути →</a>
+      <a class="link small na-all" href="#/tree">Навыки, где ты ближе всего к следующей ступени · Всё дерево →</a>
     </section>
   );
 }
