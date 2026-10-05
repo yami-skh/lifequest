@@ -13,6 +13,11 @@ import { go } from '../lib/router';
 import { Icon } from '../components/Icon';
 import { Confirm, ProgressBar, SectionLabel, Sheet, TopBar } from '../components/ui';
 import { ac } from '../lib/theme';
+import { SuggestInput } from '../components/SuggestInput';
+import { items as suggestItems } from '../engine/suggest';
+import { METRIC_IDEAS } from '../data/suggest';
+
+const METRIC_SUGGEST = suggestItems({ idea: METRIC_IDEAS });
 
 type Info = ReturnType<ReturnType<typeof useWorld>['metricInfo']>;
 export type MetricInfo = Info;
@@ -440,7 +445,7 @@ function NewMetricSheet({ onClose }: { onClose: () => void }) {
 
   return (
     <Sheet open onClose={onClose} title="Новый замер">
-      <input id="metric-title" class="input" placeholder="Название: например, бег 3 км" value={title} onInput={(e) => setTitle(e.currentTarget.value)} />
+      <SuggestInput id="metric-title" placeholder="Название: например, бег 3 км" value={title} onValue={setTitle} items={METRIC_SUGGEST} exclude={w.metrics.map((m) => m.title)} />
       <span class="field-label">Единица</span>
       <div class="chips">{['кг', 'раз', 'мин', 'км', 'ч', '%'].map((u) => <button type="button" key={u} class={unit === u ? 'chip big primary' : 'chip big'} onClick={() => setUnit(u)}>{u}</button>)}</div>
       <div class="segmented">

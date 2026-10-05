@@ -1,4 +1,7 @@
-import { useState } from 'preact/hooks';
+import { useMemo, useState } from 'preact/hooks';
+import { SuggestInput } from '../components/SuggestInput';
+import { items } from '../engine/suggest';
+import { allPathGoals, goalIdeas } from '../data/suggest';
 import { useWorld } from '../db/world';
 import type { Goal } from '../db/db';
 import { addGoal, addNote, deleteGoal, deleteNote, fmtNum, renameNode, setArchived, toggleFocus, toggleGoal, toggleNoteStudied } from '../db/actions';
@@ -303,6 +306,9 @@ function Goals({ skillId, goals }: { skillId: string; goals: Goal[] }) {
   const [kind, setKind] = useState<GoalKind>('practice');
   const [target, setTarget] = useState<number>(cur?.stage ?? Math.max(1, last));
   const [editing, setEditing] = useState(false);
+  // Подсказки цели: из путей для этого навыка и общие с его названием → все цели путей.
+  const skillTitle = w.nodeById.get(skillId)?.title ?? '';
+  const goalIdeasHere = useMemo(() => items({ goal: goalIdeas(skillTitle), idea: allPathGoals() }), [skillTitle]);
   const [openDone, setOpenDone] = useState<number[]>([]);
 
   return (
@@ -364,7 +370,7 @@ function Goals({ skillId, goals }: { skillId: string; goals: Goal[] }) {
           <button type="button" class={kind === 'practice' ? 'on' : ''} onClick={() => setKind('practice')}>Практика</button>
         </div>
         <div class="input-row">
-          <input id="goal-title" class="input" placeholder="Например: сварить бульон" value={title} onInput={(e) => setTitle(e.currentTarget.value)} />
+          <SuggestInput id="goal-title" placeholder="Например: сварить бульон" value={title} onValue={setTitle} items={goalIdeasHere} exclude={goals.map((g) => g.title)} />
           <button type="submit" class="btn primary square" aria-label="Добавить цель" disabled={!title.trim()}><Icon name="plus" size={20} stroke={2.6} /></button>
         </div>
       </form>

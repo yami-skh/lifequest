@@ -14,6 +14,9 @@ import { SetsEditor } from '../components/SetsEditor';
 import { stagesToast } from './Skill';
 import { BigNumber, lastSetsOf, metricToasts, recordHintFor, usesSets } from './Metrics';
 import { logError } from '../lib/errorlog';
+import { SuggestInput } from '../components/SuggestInput';
+import { items } from '../engine/suggest';
+import { actionIdeas, allPathGoals, goalsFromPaths } from '../data/suggest';
 
 /** workout: открыто кнопкой «Записать тренировку» — тип «Тренировка», подставленные подходы сохраняются как есть. */
 /** goalId + closeGoal — из «Следующего действия»: «Цель выполнена ✓» (закрыть) или «Сделал шаг» (работал, не закрывая). */
@@ -60,6 +63,20 @@ export function EntrySheet({ preset, onClose }: { preset: EntryPreset; onClose: 
   const [sets, setSets] = useState<WorkSet[] | null>(null);
   const [single, setSingle] = useState<number | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
+
+  // Подсказки «Что сделал»: свои записи (сначала по этому навыку) → цели навыка → запас по типу действия.
+  const ideaSkill = skillIds[0];
+  const textIdeas = useMemo(() => {
+    const byDate = (a: { createdAt: string }, b: { createdAt: string }) => b.createdAt.localeCompare(a.createdAt);
+    const own = ideaSkill ? (w.entriesBySkill.get(ideaSkill) ?? []) : [];
+    const recent = [...w.entries].sort(byDate).slice(0, 300);
+    const skillTitle = ideaSkill ? w.nodeById.get(ideaSkill)?.title ?? '' : '';
+    return items({
+      mine: [...own, ...recent].filter((e) => e.type !== 'bonus').map((e) => e.text),
+      goal: ideaSkill ? [...w.openGoalsOf(ideaSkill).map((g) => g.title), ...goalsFromPaths(skillTitle)] : [],
+      idea: [...actionIdeas(type), ...allPathGoals()],
+    });
+  }, [ideaSkill, type, w.entries]);
 
   const setType = (t: EntryType) => {
     setTypeState(t);
@@ -190,7 +207,7 @@ export function EntrySheet({ preset, onClose }: { preset: EntryPreset; onClose: 
       </div>
 
       <div class="text-row">
-        <input id="entry-text" class="input" placeholder={type === 'workout' ? 'Что делал (необязательно)' : 'Что сделал'} value={text} onInput={(e) => setText(e.currentTarget.value)} />
+        <SuggestInput id="entry-text" placeholder={type === 'workout' ? 'Что делал (необязательно)' : 'Что сделал'} value={text} onValue={setText} items={textIdeas} />
         <button type="button" class="text-cam" aria-label="Добавить фото" onClick={() => fileRef.current?.click()}><Icon name="camera" size={22} /></button>
         <input ref={fileRef} id="entry-photo" type="file" accept="image/*" capture="environment" multiple hidden onChange={(e) => onFiles(e.currentTarget.files)} />
       </div>

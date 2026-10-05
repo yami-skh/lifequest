@@ -10,6 +10,12 @@ import { go } from '../lib/router';
 import { Icon } from '../components/Icon';
 import { Check, Confirm, ProgressBar, Ring, SectionLabel, Sheet, TopBar } from '../components/ui';
 import { plural } from './Character';
+import { SuggestInput } from '../components/SuggestInput';
+import { items as suggestItems } from '../engine/suggest';
+import { QUEST_IDEAS, STEP_IDEAS } from '../data/suggest';
+
+const QUEST_SUGGEST = suggestItems({ idea: QUEST_IDEAS });
+const STEP_SUGGEST = suggestItems({ idea: STEP_IDEAS });
 
 const KIND_TITLE: Record<QuestKind, string> = { main: 'основной', side: 'побочный', weekly: 'недельный' };
 
@@ -253,7 +259,7 @@ function NewQuestSheet({ onClose }: { onClose: () => void }) {
     <Sheet open onClose={onClose} title="Новый квест">
       <label class="field">
         <span class="field-label">Название</span>
-        <input id="quest-title" class="input" placeholder="Например: Мастер рамена" value={title} onInput={(e) => setTitle(e.currentTarget.value)} />
+        <SuggestInput id="quest-title" placeholder="Например: Мастер рамена" value={title} onValue={setTitle} items={QUEST_SUGGEST} />
       </label>
       <div class="segmented">
         <button type="button" class={kind === 'main' ? 'on' : ''} onClick={() => setKind('main')}>Основной</button>
@@ -329,7 +335,7 @@ function StepBuilder({ kind, onDone }: { kind: DraftKind; onDone: (s: QuestStep 
     return (
       <div class="new-req">
         <span class="section-label">Свой шаг</span>
-        <input id="step-text" class="input" placeholder="Например: угостить друзей своим раменом" value={text} onInput={(e) => setText(e.currentTarget.value)} />
+        <SuggestInput id="step-text" placeholder="Например: угостить друзей своим раменом" value={text} onValue={setText} items={STEP_SUGGEST} />
         <div class="row-2">
           <button type="button" class="btn ghost" onClick={() => onDone(null)}>Отмена</button>
           <button type="button" class="btn primary" disabled={!text.trim()} onClick={() => onDone({ id: uid(), kind: 'custom', title: text.trim() })}>Добавить</button>

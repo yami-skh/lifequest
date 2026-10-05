@@ -37,6 +37,8 @@
   Star:9, Cluster:10, View:11, RUST:13, *StarMap:15, .scale:67, .zoomAt:71, .onDown:77, .onMove:86, .onUp:102, .tap:106, *useSkyHeight:188
 - **StarMap3D.tsx** (390) — Объёмное созвездие (мастер-план §12, решения 05.10.2026; флаг stars-3d, только бета).
   State:11, Star3:12, Area3:13, RUST:15, HOME:16, AUTO_KEY:17, FONT:18, loadAuto:20, *StarMap3D:28, .local:279, .onDown:283, .onMove:297, .onUp:321, .onWheel:343, .setAuto:348
+- **SuggestInput.tsx** (61) — Поле с подсказками при вводе (макет: холст, «Подсказки при вводе»). Один элемент для всех мест добавления:
+  SRC:8, Hl:10, *SuggestInput:17
 - **Templates.tsx** (252) — «Готовые пути» — шаблоны навыков (мастер-план §12, фаза 1). Макет: холст, страница «Шаблоны».
   Phase:16, goalsWord:18, skillsWord:19, *TemplatesSheet:21, AreaChip:40, Catalog:45, Preview:85, Paste:191
 - **ui.tsx** (133)
@@ -50,6 +52,8 @@
   AREAS:6
 - **presets.ts** (48) — Готовые навыки при ручном добавлении (мастер-план §12): навыки шаблонов, сгруппированные по направлениям,
   T:6, P:7, sk:8, EXTRA:13, norm:29, *presetsFor:32
+- **suggest.ts** (142) — Запас подсказок при вводе (макет: холст, «Подсказки при вводе»). Источники: 18 путей (data/templates.ts)
+  uniq:8, tplSkills:11, tplBranches:12, *AREA_IDEAS:25, BRANCH_EXTRA:32, *branchIdeas:43, SKILL_EXTRA:46, *skillIdeas:72, *skillIdeasFor:73, *goalsFromPaths:77, GOAL_GENERIC:82, *goalIdeas:89, *allPathGoals:90, ACTIONS:93, *actionIdeas:126, *METRIC_IDEAS:129, *QUEST_IDEAS:136, *STEP_IDEAS:141
 - **templatePrompt.ts** (39) — Запрос для «любой нейросети»: она составляет путь в формате шаблона (engine/templates.ts).
   *TEMPLATE_PROMPT:4
 - **templates.test.ts** (49)
@@ -77,8 +81,8 @@
 - **dates.ts** (55) — Даты храним как локальные YYYY-MM-DD.
   *localDate:3, *addDays:10, *daysBetween:16, MONTHS:22, *humanDate:24, *currentStreak:32, *bestStreak:43
 - **engine.test.ts** (244)
-- **experiments.ts** (26) — Флаг экспериментов: новый UX включается только у тех, кто сам включил эксперимент
-  *IS_BETA:7, *EXPERIMENTS:10, *hasExp:19, *toggleExp:22
+- **experiments.ts** (27) — Флаг экспериментов: новый UX включается только у тех, кто сам включил эксперимент
+  *IS_BETA:7, *EXPERIMENTS:10, *hasExp:20, *toggleExp:23
 - **friends.test.ts** (53)
   base:5
 - **friends.ts** (72) — Друзья: что уходит на сервер — карточка недели (docs/arch/11-friends.md). Чистая функция, без базы.
@@ -103,6 +107,10 @@
   *SNAPSHOT_KEEP:4, *snapshotsToPrune:7
 - **stages.ts** (51) — Ступени целей навыка. ARCHITECTURE.md §16, идея 2.
   *STAGE_NAMES:4, *stageName:5, *STAGE_BONUS:7, *StagedGoal:9, *StageInfo:11, *stagesOf:21, *currentStage:34, *assignStages:40
+- **suggest.test.ts** (44)
+  pool:5, texts:10
+- **suggest.ts** (43) — Подсказки при вводе: отбор и порядок (макет: холст, «Подсказки при вводе»). Чистая функция.
+  *SuggestSrc:4, *SuggestItem:5, norm:7, RANK:8, *suggest:14, *items:41
 - **templates.test.ts** (118)
   tpl:4, n:21, id:22, empty:23
 - **templates.ts** (224) — Шаблон пути — единый JSON-формат для готовых шаблонов, ответа «любой нейросети» и будущего AI /path
@@ -172,31 +180,31 @@
   KIND:11, ORDER:16, fmtDate:18, changesWord:19, *WhatsNew:22, ChangeRow:60, *Changelog:70, ReleaseCard:85
 - **Character.tsx** (243) — Главный экран — всё важное примерно в один экран. Макет: холст, страница «Упрощение», экран 1.
   *Character:16, NextHome:85, WEEK_SHORT:172, TodayCard:175, *plural:236
-- **EntrySheet.tsx** (288) — «＋ Запись» — главный сценарий, цель 15 секунд. Макет: холст, страница «Упрощение», экраны 2–3.
-  *EntryPreset:20, LAST_TYPE:22, loadType:23, PhotoPreview:32, *EntrySheet:42, .setType:64, .choosePrimary:102, .addSecondary:111, .onFiles:118, .save:129
+- **EntrySheet.tsx** (305) — «＋ Запись» — главный сценарий, цель 15 секунд. Макет: холст, страница «Упрощение», экраны 2–3.
+  *EntryPreset:23, LAST_TYPE:25, loadType:26, PhotoPreview:35, *EntrySheet:45, .setType:81, .choosePrimary:119, .addSecondary:128, .onFiles:135, .save:146
 - **Friends.tsx** (354) — «Друзья» (эксперимент friends): напарники по коду, итоги недели и реакции. Макет: холст, страница «Друзья».
   MONTHS:24, short:25, weekLabel:26, sinceLabel:27, Load:29, useFriends:32, *Friends:54, FriendsMain:60, shareInvite:81, Invite:93, AddByCode:113, Privacy:145, Dots:151, Reactions:155, Avatar:177, FriendsList:182, FriendWeek:221, WeekBlock:255, ShareSettings:279, AddByLink:329
 - **Journal.tsx** (45)
   *Journal:7
-- **Metrics.tsx** (485) — Замеры и рубежи. Макет: холст, страница «Замеры и рубежи». ARCHITECTURE.md §8.
-  Info:17, *MetricInfo:18, *metricToasts:20, *Sparkline:25, deltaText:41, *Metrics:47, *MilestoneCard:104, Chart:141, *MetricDetail:180, *usesSets:250, *lastSetsOf:253, *recordHintFor:261, *BigNumber:271, PhotoThumb:288, AddValueSheet:298, MilestoneSheet:352, bestRepsAtOf:425, NewMetricSheet:431, *SkillMetrics:468
+- **Metrics.tsx** (490) — Замеры и рубежи. Макет: холст, страница «Замеры и рубежи». ARCHITECTURE.md §8.
+  METRIC_SUGGEST:20, Info:22, *MetricInfo:23, *metricToasts:25, *Sparkline:30, deltaText:46, *Metrics:52, *MilestoneCard:109, Chart:146, *MetricDetail:185, *usesSets:255, *lastSetsOf:258, *recordHintFor:266, *BigNumber:276, PhotoThumb:293, AddValueSheet:303, MilestoneSheet:357, bestRepsAtOf:430, NewMetricSheet:436, *SkillMetrics:473
 - **More.tsx** (58)
   SOON:10, *More:18
-- **Quests.tsx** (447) — Квесты. Макет: холст, страница «Квесты». ARCHITECTURE.md §6.
-  KIND_TITLE:14, daysToMonday:16, *QuestCard:22, WeeklyRow:43, *Quests:64, *QuestDetail:148, stepKindLabel:228, DraftKind:232, NewQuestSheet:234, StepBuilder:313, *QuestsBlock:412
+- **Quests.tsx** (453) — Квесты. Макет: холст, страница «Квесты». ARCHITECTURE.md §6.
+  QUEST_SUGGEST:17, STEP_SUGGEST:18, KIND_TITLE:20, daysToMonday:22, *QuestCard:28, WeeklyRow:49, *Quests:70, *QuestDetail:154, stepKindLabel:234, DraftKind:238, NewQuestSheet:240, StepBuilder:319, *QuestsBlock:418
 - **Settings.tsx** (359) — Настройки: персонаж, тема, недельные квесты, резервная копия, о приложении, стереть данные.
   THEMES:23, *Toggle:29, Group:38, *Settings:47, AboutRow:162, hiddenThisSession:192, *UpdateCard:193, AiBlock:226, ChannelPicker:275, ErrorLogRow:322
-- **Skill.tsx** (441)
-  *stagesToast:23, Fold:26, word:27, *Skill:31, .toggle:61, .onFocus:63, FoldRow:198, WorkoutCard:212, SkillMenu:247, GoalRow:284, Goals:297, Notes:376, GalleryItem:416, FullPhoto:421, Gallery:431
-- **Tree.tsx** (688)
-  Editor:24, loadExpanded:31, *Tree:39, .hideHoldHint:60, .openMenu:69, .setMode:82, .toggle:91, .skillCount:109, .skillsIn:112, .menuBtn:115, .renderChildren:121, .rowOf:133, .summaryOf:146, .headSummary:147, .renderSkillClear:154, .filtered:182, .filterChips:183, .renderNode:197, KIND_LABEL:396, MoveSheet:399, TreeHelp:445, NodeEditor:478, .has:598, .goalCount:601, .close:602, .submit:608
+- **Skill.tsx** (447)
+  *stagesToast:26, Fold:29, word:30, *Skill:34, .toggle:64, .onFocus:66, FoldRow:201, WorkoutCard:215, SkillMenu:250, GoalRow:287, Goals:300, Notes:382, GalleryItem:422, FullPhoto:427, Gallery:437
+- **Tree.tsx** (696)
+  Editor:27, loadExpanded:34, *Tree:42, .hideHoldHint:63, .openMenu:72, .setMode:85, .toggle:94, .skillCount:112, .skillsIn:115, .menuBtn:118, .renderChildren:124, .rowOf:136, .summaryOf:149, .headSummary:150, .renderSkillClear:157, .filtered:185, .filterChips:186, .renderNode:200, KIND_LABEL:399, MoveSheet:402, TreeHelp:448, NodeEditor:481, .has:601, .goalCount:604, .close:609, .submit:615
 
 ## src/styles
 
 - **base.css** (161) — Тёмная тема по макету: золото = XP, у направлений свои цвета.
   Тёмная тема по макету: золото = XP, у направлений свои цвета.:1, Светлая тема (макет: холст, «Настройки и обновления»). Соответствие цветов — tools/light_palette.py.:44, текст:108, раскладка:119, полоски:132, нижняя панель:139, всплывашки:147
-- **common.css** (90) — записи
-  записи:1, чипы:16, кнопки:26, поля:43, фото:53, шторка:65
+- **common.css** (101) — записи
+  записи:1, чипы:16, кнопки:26, поля:43, фото:53, шторка:65, Подсказки при вводе (components/SuggestInput.tsx).:91
 - **entry.css** (50) — шторка записи (0.5)
   шторка записи (0.5):1, подходы и клавиатура (0.5):16
 - **friends.css** (33) — «Друзья» (screens/Friends.tsx). Макет: холст, страница «Друзья».

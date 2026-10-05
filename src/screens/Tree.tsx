@@ -18,6 +18,9 @@ import type { TplSkill } from '../engine/templates';
 import { areaSummary, skillRow } from '../engine/treeRow';
 import { FILTERS, matchesFilter, moveTargets, type TreeFilter } from '../engine/treeOps';
 import { gestures } from '../lib/gestures';
+import { SuggestInput } from '../components/SuggestInput';
+import { items as suggestItems } from '../engine/suggest';
+import { AREA_IDEAS, branchIdeas, skillIdeasFor } from '../data/suggest';
 import { toast } from '../lib/toast';
 import type { EntryPreset } from './EntrySheet';
 
@@ -599,6 +602,10 @@ function NodeEditor({ editor, onClose, onDelete, onAdded, setEditor, onAdd }: {
   const sorted = [...presets.filter((p) => !has(p)), ...presets.filter(has)];
   const shown = allPresets ? sorted : sorted.slice(0, 3);
   const goalCount = (p: TplSkill) => p.stages.reduce((n, st) => n + st.goals.length, 0);
+  // Подсказки названия (data/suggest.ts): направления / ветки этого направления / навыки (сначала этого направления).
+  const kindNow: NodeKind = editor.mode === 'add' ? editor.kind : editor.node.kind;
+  const areaTitle = editor.mode === 'add' ? (editor.parent ? w.areaOf(editor.parent.id)?.title : undefined) : w.areaOf(editor.node.id)?.title;
+  const titleIdeas = suggestItems({ idea: kindNow === 'area' ? AREA_IDEAS : kindNow === 'branch' ? branchIdeas(areaTitle) : skillIdeasFor(areaTitle) });
   const close = () => {
     setTitle('');
     setPreset(null);
@@ -659,8 +666,9 @@ function NodeEditor({ editor, onClose, onDelete, onAdded, setEditor, onAdd }: {
             <span class="section-label">Или свой</span>
           </div>
         )}
-        <input id="node-title" class="input" placeholder={presets.length ? 'Название своего навыка' : 'Название'} value={title}
-          onInput={(e) => { setTitle(e.currentTarget.value); if (e.currentTarget.value) setPreset(null); }} autoFocus={!presets.length} />
+        <SuggestInput id="node-title" placeholder={presets.length ? 'Название своего навыка' : 'Название'} value={title}
+          onValue={(v) => { setTitle(v); if (v) setPreset(null); }} autoFocus={!presets.length}
+          items={titleIdeas} exclude={w.nodes.filter((n) => n.kind === kindNow).map((n) => n.title)} />
         {!isRename && editor.kind === 'area' && (
           <div class="colors" role="radiogroup" aria-label="Цвет направления">
             {AREA_COLORS.map((c) => (
