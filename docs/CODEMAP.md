@@ -38,6 +38,10 @@
 
 - **changelog.ts** (183) — Что нового в версиях — для пользователя, простыми словами. Новые версии — сверху.
   *ChangeKind:4, *Change:5, *Release:6, *CHANGELOG:8, *SEEN_BEFORE_CHANGELOG:182
+- **templates.test.ts** (33)
+  goalsOf:5
+- **templates.ts** (127) — Готовые шаблоны путей (мастер-план §12). Формат — engine/templates.ts. ЧЕРНОВИК: содержание на согласовании.
+  T:5, P:6, sk:9, M:18, BODY:26, MIND:27, TECH:28, ART:29, MONEY:30, PEOPLE:31, CALM:32, *TEMPLATES:34
 
 ## src/db
 
