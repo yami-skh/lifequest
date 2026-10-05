@@ -1,0 +1,20 @@
+# Проверка на каждый push и pull request: типы, тесты движка (npm run check) и типы сервера AI.
+name: check
+on:
+  push:
+    branches: [main]
+  pull_request:
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run check
+      - name: Сервер AI — типы
+        working-directory: server
+        run: npm ci && npx tsc --noEmit

@@ -26,7 +26,7 @@ RPG-трекер саморазвития. Сейчас обкатка — по�
 
 - `npm run check` — типы + тесты + перегенерация CODEMAP. Запускать после каждой правки кода.
 - `npm run dev` — сервер (preview: конфиг `lifequest`, порт 5173).
-- `npm run deploy` — тесты, сборка, публикация на https://yami-skh.github.io/lifequest/ (ветка `gh-pages`; Actions не используются — у токена нет scope `workflow`).
+- `npm run deploy` — тесты, сборка, публикация на https://yami-skh.github.io/lifequest/ (ветка `gh-pages`, выкладка — скриптом, не через Actions). CI: `.github/workflows/check.yml` — `npm run check` и типы `server/` на каждый push в main.
 - `npm run apk` → `D:/Android/release/LifeQuest-<version>.apk`; `npm run release` — публикует его в GitHub Releases (публично; ключ подписи не публикуется). Ключ `D:/Android/keys/` — **не терять**. JDK/SDK/Gradle в `D:/Android/`. Эмулятор: AVD `LifeQuest` (Pixel 7, Android 15) в `D:/Android/avd` — запускать с `ANDROID_AVD_HOME=D:/Android/avd`.
 
 **Выпуск версии — два канала** (APK обновляется сам — `src/lib/update.ts`; канал — `src/lib/channel.ts`):
