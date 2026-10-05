@@ -12,15 +12,15 @@ EFFORT = "medium"
 LIMIT_PER_CODE = "10"
 LIMIT_TOTAL = "20"
 
-# Счётчики лимитов. id появится после: npx wrangler kv namespace create USAGE
 # Друзья (src/friends.ts). Создать: npx wrangler d1 create lifequest → вписать database_id;
 # таблицы: npx wrangler d1 migrations apply lifequest --remote. Без базы сервер отвечает «Друзья ещё не включены».
 [[d1_databases]]
 binding = "DB"
 database_name = "lifequest"
-database_id = "00000000-0000-0000-0000-000000000000"
+database_id = "c9c82e8a-ad67-4841-b097-10093b53719a"
 migrations_dir = "migrations"
 
+# Счётчики лимитов. id появится после: npx wrangler kv namespace create USAGE
 [[kv_namespaces]]
 binding = "USAGE"
 id = "969bf2e106a54c79ba290ab247cf34fb"
