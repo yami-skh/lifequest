@@ -754,6 +754,24 @@
       "w": 390,
       "x": 860,
       "y": 0
+    },
+    "AutoEntry.dc.html": {
+      "h": 860,
+      "page": "autocomplete",
+      "radius": 28,
+      "title": "1. «+» Новое действие",
+      "w": 390,
+      "x": 0,
+      "y": 0
+    },
+    "AutoGoal.dc.html": {
+      "h": 860,
+      "page": "autocomplete",
+      "radius": 28,
+      "title": "2. Пустое поле цели",
+      "w": 390,
+      "x": 430,
+      "y": 0
     }
   },
   "createdOnFiles": {
@@ -763,7 +781,7 @@
   "designSystems": [],
   "launch": {
     "view": "canvas",
-    "page": "suggest"
+    "page": "autocomplete"
   },
   "notes": {
     "aiTitle": {
@@ -968,6 +986,14 @@
       "text": "Готовые варианты — цели навыка, новый навык (поиск по путям), направление и ветка",
       "x": 0,
       "y": -260
+    },
+    "autocompleteTitle": {
+      "kind": "title1",
+      "maxW": 1720,
+      "page": "autocomplete",
+      "text": "Подсказки при вводе — во всех полях добавления: было, цели, варианты",
+      "x": 0,
+      "y": -260
     }
   },
   "order": [
@@ -1053,7 +1079,9 @@
     "HoldBranch.dc.html",
     "SuggestGoals.dc.html",
     "SuggestSkill.dc.html",
-    "SuggestArea.dc.html"
+    "SuggestArea.dc.html",
+    "AutoEntry.dc.html",
+    "AutoGoal.dc.html"
   ],
   "pages": [
     {
@@ -1143,6 +1171,10 @@
     {
       "id": "suggest",
       "name": "Готовые варианты"
+    },
+    {
+      "id": "autocomplete",
+      "name": "Подсказки при вводе"
     }
   ],
   "title": "LifeQuest — макет"
