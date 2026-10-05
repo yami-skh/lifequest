@@ -799,6 +799,24 @@
       "w": 390,
       "x": 860,
       "y": 0
+    },
+    "CompactBefore.dc.html": {
+      "h": 860,
+      "page": "compact",
+      "radius": 28,
+      "title": "1. Сейчас",
+      "w": 390,
+      "x": 0,
+      "y": 0
+    },
+    "CompactAfter.dc.html": {
+      "h": 860,
+      "page": "compact",
+      "radius": 28,
+      "title": "2. Компактно",
+      "w": 390,
+      "x": 430,
+      "y": 0
     }
   },
   "createdOnFiles": {
@@ -808,7 +826,7 @@
   "designSystems": [],
   "launch": {
     "view": "canvas",
-    "page": "anim"
+    "page": "compact"
   },
   "notes": {
     "aiTitle": {
@@ -1034,6 +1052,14 @@
       "text": "Анимации прогресса (мастер-план, высокий приоритет) — демо крутится по кругу",
       "x": 0,
       "y": -260
+    },
+    "compactTitle": {
+      "kind": "title1",
+      "maxW": 1720,
+      "page": "compact",
+      "text": "«Новое действие» компактнее: 537 → ~380 px, с открытой клавиатурой",
+      "x": 0,
+      "y": -260
     }
   },
   "order": [
@@ -1124,7 +1150,9 @@
     "AutoGoal.dc.html",
     "AnimGoal.dc.html",
     "AnimXp.dc.html",
-    "AnimLevel.dc.html"
+    "AnimLevel.dc.html",
+    "CompactBefore.dc.html",
+    "CompactAfter.dc.html"
   ],
   "pages": [
     {
@@ -1222,6 +1250,10 @@
     {
       "id": "anim",
       "name": "Анимации прогресса"
+    },
+    {
+      "id": "compact",
+      "name": "Новое действие: компактнее"
     }
   ],
   "title": "LifeQuest — макет"

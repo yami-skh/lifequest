@@ -95,7 +95,8 @@ textarea { resize: vertical; line-height: 1.4; }
 
 /* Подсказки при вводе (components/SuggestInput.tsx). */
 .sg { position: relative; display: flex; flex-direction: column; flex: 1; min-width: 0; }
-.sg-list { list-style: none; margin: 4px 0 0; padding: 0; border-radius: 14px; background: var(--surface-2); border: 1px solid var(--line); overflow: hidden; }
+/* Всплывающий список поверх содержимого: шторка не растёт, список листается сам (и не утаскивает шторку). */
+.sg-list { position: absolute; top: calc(100% + 4px); left: 0; right: 0; z-index: 20; list-style: none; margin: 0; padding: 0; border-radius: 14px; background: var(--surface-2); border: 1px solid var(--line-2); box-shadow: 0 14px 30px rgba(0, 0, 0, 0.5); max-height: min(232px, 34vh); overflow-y: auto; overscroll-behavior: contain; touch-action: pan-y; -webkit-overflow-scrolling: touch; }
 .sg-list li { display: flex; align-items: center; gap: 10px; min-height: 44px; padding: 8px 14px; cursor: pointer; }
 .sg-list li + li { border-top: 1px solid var(--line); }
 .sg-list li:active { background: var(--surface-3); }

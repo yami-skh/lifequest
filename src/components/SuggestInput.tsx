@@ -1,6 +1,6 @@
 // Поле с подсказками при вводе (макет: холст, «Подсказки при вводе»). Один элемент для всех мест добавления:
 // пустое поле в фокусе — популярное, печатаешь — список сужается, нажал строку — текст подставился.
-import { useMemo, useState } from 'preact/hooks';
+import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { suggest, type SuggestItem, type SuggestSrc } from '../engine/suggest';
 import { Icon } from './Icon';
 import { useWorld } from '../db/world';
@@ -14,7 +14,7 @@ function Hl({ text, q }: { text: string; q: string }) {
   return <>{text.slice(0, i)}<b class="sg-hl">{text.slice(i, i + n)}</b>{text.slice(i + n)}</>;
 }
 
-export function SuggestInput({ id, value, onValue, items, exclude, placeholder, class: cls = 'input', limit = 8, autoFocus, onEnter }: {
+export function SuggestInput({ id, value, onValue, items, exclude, placeholder, class: cls = 'input', limit = 20, autoFocus, onEnter }: {
   id: string;
   value: string;
   onValue: (v: string) => void;
@@ -29,6 +29,9 @@ export function SuggestInput({ id, value, onValue, items, exclude, placeholder, 
   const on = useWorld().hasExp('suggest');
   const [open, setOpen] = useState(false);
   const list = useMemo(() => (on && open ? suggest(value, items, { limit, exclude }) : []), [on, open, value, items, exclude, limit]);
+  // Новый запрос — список снова с начала (он листается сам по себе).
+  const listRef = useRef<HTMLUListElement>(null);
+  useEffect(() => { if (listRef.current) listRef.current.scrollTop = 0; }, [value]);
   return (
     <div class="sg">
       <input id={id} class={cls} placeholder={placeholder} value={value} autoComplete="off" autoFocus={autoFocus}
@@ -42,7 +45,7 @@ export function SuggestInput({ id, value, onValue, items, exclude, placeholder, 
         }}
         aria-autocomplete="list" aria-controls={`${id}-sg`} aria-expanded={list.length > 0} />
       {list.length > 0 && (
-        <ul class="sg-list" id={`${id}-sg`} role="listbox">
+        <ul class="sg-list" id={`${id}-sg`} role="listbox" ref={listRef}>
           {list.map((s) => (
             <li key={s.text} role="option" aria-selected={false}
               // mousedown + preventDefault: мышью поле не теряет фокус до выбора (pointerdown для этого не хватает).
