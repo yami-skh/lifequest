@@ -138,7 +138,8 @@ export function Tree({ focusId, onAdd }: { focusId?: string; onAdd?: (p: EntryPr
     const stages = w.stagesOfSkill(n.id);
     const cur = stages.find((s) => s.done < s.goals.length);
     return skillRow({
-      lockedBy: w.lockReasons(n).map((l) => l.node.title),
+      // Нужный навык в архиве — так и пишем, иначе его не найти в дереве.
+      lockedBy: w.lockReasons(n).map((l) => (l.node.archived ? `${l.node.title} (в архиве)` : l.node.title)),
       explored: w.explored(n.id),
       rustDays: w.rustDays(n.id),
       focus: !!n.focus,

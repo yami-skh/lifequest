@@ -14,3 +14,9 @@ export const onFx = (l: Listener) => {
   return () => void listeners.delete(l);
 };
 export const fx = (e: FxEvent) => listeners.forEach((l) => l(e));
+
+// Тихий режим: данные подменили целиком (восстановление копии/снимка) — уровень «вырос» не от действий,
+// поэтому ни анимации, ни всплывашки «Новый уровень» в ближайшие секунды.
+let quietUntil = 0;
+export const quietFx = (ms = 4000) => { quietUntil = Date.now() + ms; };
+export const isFxQuiet = () => Date.now() < quietUntil;

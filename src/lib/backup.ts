@@ -7,6 +7,7 @@ import { db, nowIso, type Entry, type EntrySkill, type Goal, type Metric, type M
 import { characterLevel } from '../engine/levels';
 import { localDate } from '../engine/dates';
 import { getSnapshot, saveSnapshot, type SnapshotReason } from './snapshots';
+import { quietFx } from './fx';
 
 const FORMAT = 1;
 
@@ -159,6 +160,8 @@ export async function restoreBackup({ data, zip }: ParsedBackup, opts: { reason?
     photos.push({ ...meta, blob: new Blob([b], { type: 'image/jpeg' }), thumb: new Blob([t], { type: 'image/jpeg' }) });
   }
   const tables = [db.profile, db.nodes, db.goals, db.entries, db.entrySkills, db.unlocked, db.notes, db.photos, db.quests, db.metrics, db.metricValues, db.milestones];
+  // Уровень после восстановления «вырос» не от действий — без анимации и всплывашки «Новый уровень».
+  quietFx();
   await db.transaction('rw', tables, async () => {
     await Promise.all(tables.map((t) => t.clear()));
     if (data.profile) await db.profile.add(opts.keepBackupMark ? data.profile : { ...data.profile, lastBackupAt: data.exportedAt });
@@ -174,6 +177,7 @@ export async function restoreBackup({ data, zip }: ParsedBackup, opts: { reason?
     await db.metricValues.bulkAdd(data.metricValues ?? []);
     await db.milestones.bulkAdd(data.milestones ?? []);
   });
+  quietFx();
 }
 
 /** Сохранить снимок текущих данных (перед восстановлением, сменой канала и т. п.). */

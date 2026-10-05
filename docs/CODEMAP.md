@@ -48,8 +48,8 @@
 
 ## src/data
 
-- **changelog.ts** (279) — Что нового в версиях — для пользователя, простыми словами. Новые версии — сверху.
-  *ChangeKind:4, *Change:5, *Release:6, *CHANGELOG:8, *SEEN_BEFORE_CHANGELOG:278
+- **changelog.ts** (281) — Что нового в версиях — для пользователя, простыми словами. Новые версии — сверху.
+  *ChangeKind:4, *Change:5, *Release:6, *CHANGELOG:8, *SEEN_BEFORE_CHANGELOG:280
 - **presets.test.ts** (40)
   AREAS:6
 - **presets.ts** (48) — Готовые навыки при ручном добавлении (мастер-план §12): навыки шаблонов, сгруппированные по направлениям,
@@ -138,16 +138,16 @@
   *AI_URL:6, *AiGoal:8, *AiStage:9, *AiGoalsAnswer:10, *AiSkillInput:11, *AiError:19, call:25, *askGoals:37, *fetchQuota:40
 - **backButton.ts** (60) — Системная кнопка «Назад» в APK: закрывает верхнее открытое (клавиатура, шторка, фото),
   stack:9, *useBackClose:12, EXIT_MS:26, exitArmedAt:27, *closeTop:30, *handleBack:37, *initBackButton:49
-- **backup.ts** (192) — Резервная копия: всё в один .zip — data.json + фото. ARCHITECTURE.md §12.
-  FORMAT:11, BackupData:13, *BackupSummary:32, summarize:34, *currentSummary:41, buildZip:47, toBase64:71, *exportBackup:83, download:113, *ParsedBackup:123, *readBackup:126, *restoreBackup:150, *takeSnapshot:180, *restoreSnapshot:186
+- **backup.ts** (196) — Резервная копия: всё в один .zip — data.json + фото. ARCHITECTURE.md §12.
+  FORMAT:12, BackupData:14, *BackupSummary:33, summarize:35, *currentSummary:42, buildZip:48, toBase64:72, *exportBackup:84, download:114, *ParsedBackup:124, *readBackup:127, *restoreBackup:151, *takeSnapshot:184, *restoreSnapshot:190
 - **channel.ts** (63) — Канал обновлений APK: «стабильная» (по умолчанию, у брата) или «бета» (каждая новая сборка).
   *Channel:11, KEY:12, *SITE:13, *getChannel:15, remember:24, *setChannel:38
 - **errorlog.ts** (90) — Журнал ошибок: 50 последних сбоев на устройстве. Наружу — только по кнопке «Отправить отчёт»,
   *LoggedError:8, KEY:9, MAX:10, listeners:11, *getErrors:13, save:21, *logError:31, *clearErrors:44, *useErrors:46, *initErrorLog:56, *buildReport:61, *shareReport:73
 - **friends.ts** (101) — «Друзья»: ключ игрока и запросы к серверу (server/src/friends.ts, docs/arch/11-friends.md).
   *Player:10, *EMOJI:11, *FriendView:13, *FriendsError:21, call:25, randomSecret:41, *ensurePlayer:44, *prettyCode:55, *inviteLink:56, *listFriends:58, *addFriend:59, *removeFriend:60, *react:61, *newCode:64, *leave:72, *myCard:77, SENT_KEY:91, *pushCard:93
-- **fx.ts** (17) — Анимации реального прогресса (мастер-план «Анимации реального прогресса»; макет: холст, «Анимации прогресса»).
-  *FxEvent:5, Listener:9, listeners:10, *onFx:12, *fx:16
+- **fx.ts** (23) — Анимации реального прогресса (мастер-план «Анимации реального прогресса»; макет: холст, «Анимации прогресса»).
+  *FxEvent:5, Listener:9, listeners:10, *onFx:12, *fx:16, quietUntil:20, *quietFx:21, *isFxQuiet:22
 - **gestures.ts** (106) — Жесты в дереве: удержание (быстрое меню) и свайп по строке навыка (вправо — действие, влево — меню).
   HOLD_MS:5, MOVE_CANCEL:6, SWIPE:7, G:9, g:10, suppressUntil:11, buzz:13, reset:21, *GestureOpts:27, *GestureHandlers:30, *gestures:40
 - **hscroll.ts** (44) — Горизонтальные ленты (.type-row в шторке «+», .chips.scroll-x) на ПК: пальцем они листаются сами,
@@ -202,8 +202,8 @@
   THEMES:23, *Toggle:29, Group:38, *Settings:47, AboutRow:162, hiddenThisSession:192, *UpdateCard:193, AiBlock:226, ChannelPicker:275, ErrorLogRow:322
 - **Skill.tsx** (454)
   *stagesToast:27, Fold:30, word:31, *Skill:35, .toggle:65, .onFocus:67, FoldRow:202, WorkoutCard:216, SkillMenu:251, GoalRow:288, Goals:307, Notes:389, GalleryItem:429, FullPhoto:434, Gallery:444
-- **Tree.tsx** (697)
-  Editor:27, loadExpanded:34, *Tree:42, .hideHoldHint:63, .openMenu:72, .setMode:85, .toggle:94, .skillCount:112, .skillsIn:115, .menuBtn:118, .renderChildren:125, .rowOf:137, .summaryOf:150, .headSummary:151, .renderSkillClear:158, .filtered:186, .filterChips:187, .renderNode:201, KIND_LABEL:400, MoveSheet:403, TreeHelp:449, NodeEditor:482, .has:602, .goalCount:605, .close:610, .submit:616
+- **Tree.tsx** (698)
+  Editor:27, loadExpanded:34, *Tree:42, .hideHoldHint:63, .openMenu:72, .setMode:85, .toggle:94, .skillCount:112, .skillsIn:115, .menuBtn:118, .renderChildren:125, .rowOf:137, .summaryOf:151, .headSummary:152, .renderSkillClear:159, .filtered:187, .filterChips:188, .renderNode:202, KIND_LABEL:401, MoveSheet:404, TreeHelp:450, NodeEditor:483, .has:603, .goalCount:606, .close:611, .submit:617
 
 ## src/styles
 

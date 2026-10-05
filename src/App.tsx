@@ -25,7 +25,7 @@ import { logError } from './lib/errorlog';
 import { Onboarding } from './components/Onboarding';
 import { Friends } from './screens/Friends';
 import { FxLayer } from './components/Fx';
-import { fx } from './lib/fx';
+import { fx, isFxQuiet } from './lib/fx';
 
 export function App() {
   const [world, setWorld] = useState<World | null>(null);
@@ -108,7 +108,7 @@ function useGameEvents(w: ReturnType<typeof derive> | null) {
   }, [w]);
   useEffect(() => {
     if (!w) return;
-    if (prevLevel.current !== null && w.level.level > prevLevel.current) {
+    if (prevLevel.current !== null && w.level.level > prevLevel.current && !isFxQuiet()) {
       // Флаг anim: полноэкранный момент (components/Fx.tsx); после вылета XP — чтобы не перекрыть его.
       if (w.hasExp('anim')) { const from = prevLevel.current; setTimeout(() => fx({ kind: 'level', level: w.level.level, from, left: w.level.left }), 900); }
       else toast({ kind: 'level', title: `Уровень ${w.level.level}!`, sub: 'Персонаж стал сильнее' });
