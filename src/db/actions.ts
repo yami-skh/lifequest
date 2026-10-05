@@ -7,6 +7,7 @@ import { calcXp, secondaryXp, xpContextFromHistory, type Difficulty, type EntryT
 import { localDate } from '../engine/dates';
 import type { GoalKind } from '../engine/progress';
 import { toggleExp } from '../engine/experiments';
+import { planImport, type ImportPlan, type Template } from '../engine/templates';
 
 export interface PhotoDraft { blob: Blob; thumb: Blob; width: number; height: number }
 
@@ -371,3 +372,50 @@ export const removeMilestone = (id: string) => db.milestones.delete(id);
 
 /** 74.2 → «74,2», 62 → «62». */
 export const fmtNum = (n: number) => (Math.round(n * 10) / 10).toString().replace('.', ',');
+
+// --- шаблоны путей (мастер-план §12, engine/templates.ts) ---
+
+/** План импорта по текущим данным: показать «добавится N, уже есть M» до записи. */
+export async function previewTemplate(t: Template): Promise<ImportPlan> {
+  const [nodes, goals, metrics, quests] = await Promise.all([db.nodes.toArray(), db.goals.toArray(), db.metrics.toArray(), db.quests.toArray()]);
+  return planImport(t, { nodes, goals, metrics, quests }, uid);
+}
+
+/** Добавить шаблон в дерево одной транзакцией. Существующее не меняется. */
+export async function importTemplate(plan: ImportPlan) {
+  await db.transaction('rw', [db.nodes, db.goals, db.metrics, db.quests], async () => {
+    const now = nowIso();
+    const orderIn = new Map<string, number>();
+    const nextOrder = async (parentId: string | null) => {
+      const key = parentId ?? '';
+      if (!orderIn.has(key)) {
+        orderIn.set(key, parentId ? await db.nodes.where('parentId').equals(parentId).count() : await db.nodes.where('kind').equals('area').count());
+      }
+      const o = orderIn.get(key)!;
+      orderIn.set(key, o + 1);
+      return o;
+    };
+    for (const n of plan.nodes) {
+      const node: Node = { id: n.id, parentId: n.parentId, kind: n.kind, title: n.title, order: await nextOrder(n.parentId), createdAt: now };
+      if (n.color) node.color = n.color;
+      if (n.icon) node.icon = n.icon;
+      if (n.requires?.length) node.requires = n.requires;
+      await db.nodes.add(node);
+    }
+    const goalOrder = new Map<string, number>();
+    for (const g of plan.goals) {
+      if (!goalOrder.has(g.skillId)) goalOrder.set(g.skillId, await db.goals.where('skillId').equals(g.skillId).count());
+      const order = goalOrder.get(g.skillId)!;
+      goalOrder.set(g.skillId, order + 1);
+      await db.goals.add({ id: uid(), skillId: g.skillId, kind: g.kind, title: g.title, done: false, stage: g.stage, order });
+    }
+    let metricOrder = await db.metrics.count();
+    for (const m of plan.metrics) await db.metrics.add({ ...m, id: uid(), order: metricOrder++, createdAt: now });
+    if (plan.quest) {
+      await db.quests.add({
+        id: uid(), title: plan.quest.title, kind: 'main', rewardXp: plan.quest.rewardXp, status: 'active', since: localDate(), createdAt: now,
+        steps: plan.quest.steps.map((s) => ({ id: uid(), kind: 'stage' as const, title: s.title, skillId: s.skillId, stage: s.stage })),
+      });
+    }
+  });
+}

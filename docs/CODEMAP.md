@@ -41,8 +41,8 @@
 
 ## src/db
 
-- **actions.ts** (374) — Все изменения данных.
-  *PhotoDraft:11, *EntryDraft:13, *primaryHistory:27, *saveEntry:34, *deleteEntry:81, *toggleGoal:93, *addGoal:100, *awardStages:109, *toggleFocus:133, *setRequirements:141, *deleteGoal:143, *addNode:147, *renameNode:159, *deleteNode:162, *addNote:180, *toggleNoteStudied:184, *deleteNote:189, *toggleExperiment:194, *setAiCode:198, *setSeenVersion:199, *setName:200, *unlockAchievements:202, *resetAll:207, *createQuest:214, *toggleCustomStep:220, *abandonQuest:228, *deleteQuest:229, *completeQuest:232, *maintainQuests:246, *toggleWeeklyTemplate:271, *addMetric:286, *deleteMetric:291, bonus:300, *addMetricValue:311, *deleteMetricValue:353, *setMilestone:363, *removeMilestone:370, *fmtNum:373
+- **actions.ts** (422) — Все изменения данных.
+  *PhotoDraft:12, *EntryDraft:14, *primaryHistory:28, *saveEntry:35, *deleteEntry:82, *toggleGoal:94, *addGoal:101, *awardStages:110, *toggleFocus:134, *setRequirements:142, *deleteGoal:144, *addNode:148, *renameNode:160, *deleteNode:163, *addNote:181, *toggleNoteStudied:185, *deleteNote:190, *toggleExperiment:195, *setAiCode:199, *setSeenVersion:200, *setName:201, *unlockAchievements:203, *resetAll:208, *createQuest:215, *toggleCustomStep:221, *abandonQuest:229, *deleteQuest:230, *completeQuest:233, *maintainQuests:247, *toggleWeeklyTemplate:272, *addMetric:287, *deleteMetric:292, bonus:301, *addMetricValue:312, *deleteMetricValue:354, *setMilestone:364, *removeMilestone:371, *fmtNum:374, *previewTemplate:379, *importTemplate:385
 - **db.ts** (242) — Хранилище на устройстве. ARCHITECTURE.md §11.
   *NodeKind:7, *Profile:9, *Requirement:29, *Node:31, *Goal:49, *Entry:61, *EntrySkill:78, *Photo:80, *Unlocked:82, *Note:84, *QuestKind:96, *CountRule:98, *QuestStep:108, *Quest:115, *Metric:134, *MetricValue:145, *Milestone:159, *AREA_ICON_BY_TITLE:174, *AREA_ICONS:178, LifeQuestDB:180, *db:233, *uid:236, *nowIso:241
 - **seed.ts** (150) — Стартовый набор. ARCHITECTURE.md §13.
@@ -71,6 +71,10 @@
   *SNAPSHOT_KEEP:4, *snapshotsToPrune:7
 - **stages.ts** (51) — Ступени целей навыка. ARCHITECTURE.md §16, идея 2.
   *STAGE_NAMES:4, *stageName:5, *STAGE_BONUS:7, *StagedGoal:9, *StageInfo:11, *stagesOf:21, *currentStage:34, *assignStages:40
+- **templates.test.ts** (93)
+  tpl:4, n:21, id:22, empty:23
+- **templates.ts** (169) — Шаблон пути — единый JSON-формат для готовых шаблонов, ответа «любой нейросети» и будущего AI /path
+  *TplGoalKind:4, *TplCheck:6, *TplGoal:8, *TplStage:9, *TplMetric:10, *TplSkill:11, *TplBranch:20, *TplArea:21, *TplCampaign:22, *Template:23, isStr:34, *validateTemplate:36, *ExistingNode:78, *ExistingGoal:79, *ExistingMetric:80, *ExistingQuest:81, *PlanNode:83, *PlanGoal:84, *PlanMetric:85, *ImportPlan:86, norm:95, *planImport:98
 - **version.ts** (41) — Версии «0.9.2» и бета «0.10.0-beta.1»: сравнение, код версии Android, выбор того, что показать в «Что нового».
   *Version:3, *parseVersion:5, *cmpVersion:13, *androidVersionCode:28, *isBeta:33, *stableOf:35, *unseenReleases:38
 - **xp.ts** (87) — Начисление XP за запись журнала. ARCHITECTURE.md §4.1–4.2.
