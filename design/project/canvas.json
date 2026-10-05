@@ -294,6 +294,33 @@
       "x": 900,
       "y": 0
     },
+    "Onboarding.dc.html": {
+      "h": 900,
+      "page": "presets",
+      "radius": 28,
+      "title": "3 · Первый запуск",
+      "w": 390,
+      "x": 900,
+      "y": 0
+    },
+    "PresetOwn.dc.html": {
+      "h": 844,
+      "page": "presets",
+      "radius": 28,
+      "title": "2 · Новый навык: свой",
+      "w": 390,
+      "x": 450,
+      "y": 0
+    },
+    "PresetPick.dc.html": {
+      "h": 844,
+      "page": "presets",
+      "radius": 28,
+      "title": "1 · Новый навык: выбран готовый",
+      "w": 390,
+      "x": 0,
+      "y": 0
+    },
     "QuestCreate.dc.html": {
       "h": 1120,
       "page": "quests",
@@ -575,29 +602,29 @@
       "x": 0,
       "y": 0
     },
-    "PresetPick.dc.html": {
-      "h": 844,
-      "page": "presets",
+    "NextMain.dc.html": {
+      "h": 900,
+      "page": "nextaction",
       "radius": 28,
-      "title": "1 · Новый навык: выбран готовый",
+      "title": "1 · Главный",
       "w": 390,
       "x": 0,
       "y": 0
     },
-    "PresetOwn.dc.html": {
+    "NextEntry.dc.html": {
       "h": 844,
-      "page": "presets",
+      "page": "nextaction",
       "radius": 28,
-      "title": "2 · Новый навык: свой",
+      "title": "2 · «Начать»: запись с целью",
       "w": 390,
       "x": 450,
       "y": 0
     },
-    "Onboarding.dc.html": {
-      "h": 900,
-      "page": "presets",
+    "NextEmpty.dc.html": {
+      "h": 700,
+      "page": "nextaction",
       "radius": 28,
-      "title": "3 · Первый запуск",
+      "title": "3 · Нет активных путей",
       "w": 390,
       "x": 900,
       "y": 0
@@ -610,7 +637,7 @@
   "designSystems": [],
   "launch": {
     "view": "canvas",
-    "page": "presets"
+    "page": "nextaction"
   },
   "notes": {
     "aiTitle": {
@@ -672,6 +699,15 @@
       "maxW": 1720,
       "page": "phase0",
       "text": "Фаза 0: снимок перед восстановлением · журнал ошибок",
+      "w": 240,
+      "x": 0,
+      "y": -260
+    },
+    "presetsTitle": {
+      "kind": "title1",
+      "maxW": 1720,
+      "page": "presets",
+      "text": "Фаза 1 · Готовые навыки при добавлении и выбор пути при первом запуске",
       "w": 240,
       "x": 0,
       "y": -260
@@ -766,11 +802,11 @@
       "x": 0,
       "y": -260
     },
-    "presetsTitle": {
+    "nextactionTitle": {
       "kind": "title1",
       "maxW": 1720,
-      "page": "presets",
-      "text": "Фаза 1 · Готовые навыки при добавлении и выбор пути при первом запуске",
+      "page": "nextaction",
+      "text": "Фаза 2 · Следующее действие: главный → запись → нет активных путей",
       "x": 0,
       "y": -260
     }
@@ -841,7 +877,10 @@
     "TplPaste.dc.html",
     "PresetPick.dc.html",
     "PresetOwn.dc.html",
-    "Onboarding.dc.html"
+    "Onboarding.dc.html",
+    "NextMain.dc.html",
+    "NextEntry.dc.html",
+    "NextEmpty.dc.html"
   ],
   "pages": [
     {
@@ -911,6 +950,10 @@
     {
       "id": "presets",
       "name": "Пресеты и первый запуск"
+    },
+    {
+      "id": "nextaction",
+      "name": "Следующее действие"
     }
   ],
   "title": "LifeQuest — макет"
