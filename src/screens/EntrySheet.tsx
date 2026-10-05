@@ -16,7 +16,8 @@ import { BigNumber, lastSetsOf, metricToasts, recordHintFor, usesSets } from './
 import { logError } from '../lib/errorlog';
 
 /** workout: открыто кнопкой «Записать тренировку» — тип «Тренировка», подставленные подходы сохраняются как есть. */
-export interface EntryPreset { skillId?: string; fixesEntryId?: string; workout?: boolean }
+/** goalId + closeGoal — из «Следующего действия»: «Цель выполнена ✓» (закрыть) или «Сделал шаг» (работал, не закрывая). */
+export interface EntryPreset { skillId?: string; fixesEntryId?: string; workout?: boolean; goalId?: string; closeGoal?: boolean }
 
 const LAST_TYPE = 'lq.lastType';
 const loadType = (): EntryType => {
@@ -40,11 +41,13 @@ function PhotoPreview({ photo, onRemove }: { photo: PhotoDraft; onRemove: () => 
 
 export function EntrySheet({ preset, onClose }: { preset: EntryPreset; onClose: () => void }) {
   const w = useWorld();
-  const [type, setTypeState] = useState<EntryType>(() => (preset.workout ? 'workout' : loadType()));
+  const presetGoal = preset.goalId ? w.goals.find((g) => g.id === preset.goalId) : undefined;
+  // Тип по цели: теория → «Изучил», практика → «Практика».
+  const [type, setTypeState] = useState<EntryType>(() => (preset.workout ? 'workout' : presetGoal ? (presetGoal.kind === 'theory' ? 'learn' : 'practice') : loadType()));
   const [text, setText] = useState('');
   const [difficulty, setDifficulty] = useState<Difficulty>(1);
   const [skillIds, setSkillIds] = useState<string[]>(preset.skillId ? [preset.skillId] : []);
-  const [closeGoals, setCloseGoals] = useState<string[]>([]);
+  const [closeGoals, setCloseGoals] = useState<string[]>(preset.goalId && preset.closeGoal ? [preset.goalId] : []);
   const [outcome, setOutcome] = useState<'ok' | 'fail'>('ok');
   const [failNote, setFailNote] = useState('');
   const [fixesId, setFixesId] = useState<string | undefined>(preset.fixesEntryId);
@@ -130,6 +133,7 @@ export function EntrySheet({ preset, onClose }: { preset: EntryPreset; onClose: 
       const { xp, stages } = await saveEntry({
         type, text, difficulty, primaryId, secondaryIds: skillIds.slice(1), closeGoalIds: closeGoals,
         outcome, failNote, fixesEntryId: outcome === 'ok' ? fixesId : undefined, photos,
+        stepGoalIds: preset.goalId && primaryId === presetGoal?.skillId ? [preset.goalId] : undefined,
       });
       toast({ kind: 'xp', title: `+${xp} XP`, sub: primary?.title });
       stagesToast(stages);
@@ -153,7 +157,7 @@ export function EntrySheet({ preset, onClose }: { preset: EntryPreset; onClose: 
   const summary = [diffLabel, outcome === 'ok' ? 'получилось' : 'не получилось', skillIds.length > 1 ? `${skillIds.length} навыка` : null, fixesId ? 'исправляет ошибку' : null].filter(Boolean).join(' · ');
 
   return (
-    <Sheet open onClose={onClose} title="Новая запись">
+    <Sheet open onClose={onClose} title={w.hasExp('next-action') ? 'Новое действие' : 'Новая запись'}>
       <div class="type-row" role="radiogroup" aria-label="Тип записи">
         {ENTRY_TYPES.map((t) => (
           <button type="button" key={t.id} role="radio" aria-checked={type === t.id} class={type === t.id ? 'chip big primary' : 'chip big'} onClick={() => setType(t.id)}>{t.label}</button>

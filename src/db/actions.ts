@@ -23,6 +23,8 @@ export interface EntryDraft {
   failNote?: string;
   fixesEntryId?: string;
   photos: PhotoDraft[];
+  /** Цели, над которыми работал, не закрывая («Сделал шаг»). */
+  stepGoalIds?: string[];
 }
 
 /** История основного навыка — нужна для «впервые» и «повтор». */
@@ -66,6 +68,8 @@ export async function saveEntry(d: EntryDraft) {
     };
     if (d.outcome === 'fail' && d.failNote?.trim()) entry.failNote = d.failNote.trim();
     if (d.fixesEntryId) entry.fixesEntryId = d.fixesEntryId;
+    const steps = (d.stepGoalIds ?? []).filter((id) => !d.closeGoalIds.includes(id));
+    if (steps.length) entry.stepGoalIds = steps;
     await db.entries.add(entry);
 
     await db.entrySkills.add({ entryId: entry.id, skillId: d.primaryId, role: 'primary', xp });

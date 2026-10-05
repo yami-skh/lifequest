@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Следующее действие: нет активных путей</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Unbounded:wght@500;700&amp;display=swap" rel="stylesheet">
+<style>body{margin:0}</style>
+</helmet>
+<div style="width: 390px; height: 700px; box-sizing: border-box; position: relative; overflow: hidden; background: #0E1015; color: #ECEDF1; font-family: Manrope, sans-serif">
+<div style="padding: 20px 18px 100px; display: flex; flex-direction: column; gap: 14px"><div style="display: flex; justify-content: space-between; align-items: center">
+<div style="display: flex; align-items: center; gap: 12px">
+<span style="width: 48px; height: 48px; border-radius: 14px; background: #F2B544; color: #14161C; display: flex; flex-direction: column; align-items: center; justify-content: center"><span style="font-size: 9px; font-weight: 800; letter-spacing: 1px">LVL</span><span style="font-family: Unbounded, sans-serif; font-size: 20px; font-weight: 700; line-height: 1">7</span></span>
+<span style="display: flex; flex-direction: column; gap: 5px"><span style="font-family: Unbounded, sans-serif; font-size: 20px; font-weight: 700">Yami</span>
+<span style="display: flex; align-items: center; gap: 8px"><span style="display: block; width: 120px; height: 6px; border-radius: 3px; background: #252A35"><span style="display: block; width: 40%; height: 100%; border-radius: 3px; background: #F2B544"></span></span><span style="font-size: 12px; color: #A3A9B6; font-weight: 700">180 / 450 XP</span></span></span>
+</div>
+<span style="display: flex; align-items: center; gap: 6px; padding: 7px 11px; border-radius: 999px; background: #2A1E14; color: #FF9A5C; font-weight: 800; font-size: 14px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3c1 4 5 5 5 10a5 5 0 0 1-10 0c0-3 2-4 2-7 1 1 2 2 3 4 0-2 0-5 0-7z"/></svg>9</span>
+</div><div style="background: #171A21; border: 1px dashed #3A404D; border-radius: 20px; padding: 16px; display: flex; flex-direction: column; gap: 10px">
+<span style="font-size: 12px; font-weight: 800; letter-spacing: 0.6px; color: #F2B544">СЛЕДУЮЩЕЕ ДЕЙСТВИЕ</span>
+<span style="font-family: Unbounded, sans-serif; font-size: 17px; font-weight: 700; line-height: 1.3">Выбери путь, по которому идёшь сейчас</span>
+<span style="font-size: 13px; color: #A3A9B6">До трёх путей. По ним будет подсказка, что делать дальше, и ×1.2 XP.</span>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<div style="display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 12px; background: #1E222B"><span style="width: 8px; height: 8px; border-radius: 4px; background: #B9A4FF"></span><span style="flex: 1; font-weight: 700; font-size: 14px">Python</span><span style="font-size: 12px; color: #A3A9B6">ступень 2 · 40%</span><span style="font-size: 13px; font-weight: 800; color: #F2B544">Выбрать</span></div><div style="display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 12px; background: #1E222B"><span style="width: 8px; height: 8px; border-radius: 4px; background: #FF8A5B"></span><span style="flex: 1; font-weight: 700; font-size: 14px">Отжимания</span><span style="font-size: 12px; color: #A3A9B6">ступень 1 · 20%</span><span style="font-size: 13px; font-weight: 800; color: #F2B544">Выбрать</span></div><div style="display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 12px; background: #1E222B"><span style="width: 8px; height: 8px; border-radius: 4px; background: #4CC9A0"></span><span style="flex: 1; font-weight: 700; font-size: 14px">Рамен</span><span style="font-size: 12px; color: #A3A9B6">ступень 3 · 30%</span><span style="font-size: 13px; font-weight: 800; color: #F2B544">Выбрать</span></div>
+</div>
+<span style="font-size: 12.5px; color: #A3A9B6; text-align: center">Навыки, где ты ближе всего к следующей ступени · Все пути →</span>
+</div></div>
+<div style="position: absolute; left: 0; right: 0; bottom: 0; height: 76px; background: #12141A; border-top: 1px solid #2A2F3B; display: grid; grid-template-columns: repeat(5, 1fr); align-items: center; text-align: center; font-size: 11.5px; color: #8B92A0; font-weight: 700">
+<span style="color: #F2B544">Персонаж</span><span>Пути</span><span><span style="display: inline-flex; width: 56px; height: 56px; border-radius: 28px; background: #F2B544; color: #14161C; align-items: center; justify-content: center; font-size: 28px; margin-top: -26px">+</span></span><span>Квесты</span><span>Ещё</span></div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":700}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>
