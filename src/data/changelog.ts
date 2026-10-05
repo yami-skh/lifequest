@@ -7,6 +7,16 @@ export interface Release { version: string; date: string; title?: string; change
 
 export const CHANGELOG: Release[] = [
   {
+    version: '0.10.1-beta.3',
+    date: '2026-10-06',
+    title: 'Понятное дерево',
+    changes: [
+      { kind: 'better', title: 'Дерево читается проще', sub: 'У навыка — этап и что сделать дальше, у направления — сколько в работе и что ближе всего к цели. Кнопка «?» объясняет значки.' },
+      { kind: 'better', title: 'Порядок в «Ещё»', sub: 'Сначала друзья, достижения и замеры, служебное — ниже, настройки — последними.' },
+      { kind: 'better', title: 'Новое в «Скоро»', sub: 'Герой в 3D, дуэль недели, босс команды, класс и титулы, автозачёт шагов и сна.' },
+    ],
+  },
+  {
     version: '0.10.1-beta.2',
     date: '2026-10-06',
     changes: [

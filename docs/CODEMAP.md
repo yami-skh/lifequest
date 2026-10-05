@@ -44,8 +44,8 @@
 
 ## src/data
 
-- **changelog.ts** (205) — Что нового в версиях — для пользователя, простыми словами. Новые версии — сверху.
-  *ChangeKind:4, *Change:5, *Release:6, *CHANGELOG:8, *SEEN_BEFORE_CHANGELOG:204
+- **changelog.ts** (215) — Что нового в версиях — для пользователя, простыми словами. Новые версии — сверху.
+  *ChangeKind:4, *Change:5, *Release:6, *CHANGELOG:8, *SEEN_BEFORE_CHANGELOG:214
 - **presets.test.ts** (40)
   AREAS:6
 - **presets.ts** (48) — Готовые навыки при ручном добавлении (мастер-план §12): навыки шаблонов, сгруппированные по направлениям,
@@ -77,8 +77,8 @@
 - **dates.ts** (55) — Даты храним как локальные YYYY-MM-DD.
   *localDate:3, *addDays:10, *daysBetween:16, MONTHS:22, *humanDate:24, *currentStreak:32, *bestStreak:43
 - **engine.test.ts** (244)
-- **experiments.ts** (25) — Флаг экспериментов: новый UX включается только у тех, кто сам включил эксперимент
-  *IS_BETA:7, *EXPERIMENTS:10, *hasExp:18, *toggleExp:21
+- **experiments.ts** (26) — Флаг экспериментов: новый UX включается только у тех, кто сам включил эксперимент
+  *IS_BETA:7, *EXPERIMENTS:10, *hasExp:19, *toggleExp:22
 - **friends.test.ts** (53)
   base:5
 - **friends.ts** (72) — Друзья: что уходит на сервер — карточка недели (docs/arch/11-friends.md). Чистая функция, без базы.
@@ -107,6 +107,10 @@
   tpl:4, n:21, id:22, empty:23
 - **templates.ts** (224) — Шаблон пути — единый JSON-формат для готовых шаблонов, ответа «любой нейросети» и будущего AI /path
   *TplGoalKind:4, *TplCheck:6, *TplGoal:8, *TplStage:9, *TplMetric:10, *TplSkill:11, *TplBranch:20, *TplArea:21, *TplCampaign:22, *Template:23, isStr:34, *validateTemplate:36, *ExistingNode:78, *ExistingGoal:79, *ExistingMetric:80, *ExistingQuest:81, *PlanNode:83, *PlanGoal:84, *PlanMetric:85, *ImportPlan:86, norm:97, *planImport:100, *parseTemplateText:177, *templateSkills:191, *templateStats:203, *planImportMany:213
+- **treeRow.test.ts** (50)
+  base:4
+- **treeRow.ts** (75) — Строка навыка в дереве (макет: холст, «Дерево: читаемость»). Главный счёт — этап:
+  *RowState:5, *RowInput:7, *RowView:22, plural:33, list:36, *skillRow:38, *areaSummary:62
 - **version.ts** (41) — Версии «0.9.2» и бета «0.10.0-beta.1»: сравнение, код версии Android, выбор того, что показать в «Что нового».
   *Version:3, *parseVersion:5, *cmpVersion:13, *androidVersionCode:28, *isBeta:33, *stableOf:35, *unseenReleases:38
 - **xp.ts** (87) — Начисление XP за запись журнала. ARCHITECTURE.md §4.1–4.2.
@@ -178,8 +182,8 @@
   THEMES:23, *Toggle:29, Group:38, *Settings:47, AboutRow:162, hiddenThisSession:192, *UpdateCard:193, AiBlock:226, ChannelPicker:275, ErrorLogRow:322
 - **Skill.tsx** (436)
   *stagesToast:23, Fold:26, word:27, *Skill:31, .toggle:61, .onFocus:63, FoldRow:193, WorkoutCard:207, SkillMenu:242, GoalRow:279, Goals:292, Notes:371, GalleryItem:411, FullPhoto:416, Gallery:426
-- **Tree.tsx** (391)
-  Editor:18, loadExpanded:23, *Tree:31, .setMode:51, .toggle:60, .skillCount:78, .skillsIn:81, .menuBtn:84, .renderChildren:90, .renderNode:100, KIND_LABEL:259, NodeEditor:261
+- **Tree.tsx** (478)
+  Editor:20, loadExpanded:25, *Tree:33, .setMode:54, .toggle:63, .skillCount:81, .skillsIn:84, .menuBtn:87, .renderChildren:93, .rowOf:105, .summaryOf:118, .headSummary:119, .renderSkillClear:126, .renderNode:148, KIND_LABEL:312, TreeHelp:315, NodeEditor:348
 
 ## src/styles
 
@@ -203,5 +207,5 @@
   квесты:1
 - **skill.css** (115) — навык
   навык:1, навык: фокус, требования, ступени:21, навык 0.6: шапка, тренировка, сворачиваемые блоки, меню ⋯:58, AI-помощник целей:93
-- **tree.css** (169) — дерево
-  дерево:1, дерево: направления-карточки, ветви-линии, навыки-узлы:20, вложенные ветки — короткий отступ, линия идёт от ромбика:38, туман: навык ещё не исследован:64, ржавчина: 60+ дней без записей:68, созвездие (0.9): небо всегда тёмное, в любой теме:87, готовые пути (шаблоны) — components/Templates.tsx:103, готовые навыки в «Новый навык» (data/presets.ts):141, первый запуск (components/Onboarding.tsx):151, объёмное созвездие (components/StarMap3D.tsx):163
+- **tree.css** (206) — дерево
+  дерево:1, дерево: направления-карточки, ветви-линии, навыки-узлы:20, вложенные ветки — короткий отступ, линия идёт от ромбика:38, туман: навык ещё не исследован:64, ржавчина: 60+ дней без записей:68, созвездие (0.9): небо всегда тёмное, в любой теме:87, готовые пути (шаблоны) — components/Templates.tsx:103, готовые навыки в «Новый навык» (data/presets.ts):141, первый запуск (components/Onboarding.tsx):151, объёмное созвездие (components/StarMap3D.tsx):163, «Понятное дерево» (эксперимент tree-clear): главный счёт — этап. Макет: холст, «Дерево: читаемость».:170, подсказка «?»: те же плитки вне дерева:201

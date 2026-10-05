@@ -1,3 +1,4 @@
+import type { ComponentChildren } from 'preact';
 import { useMemo, useState } from 'preact/hooks';
 import { useWorld } from '../db/world';
 import type { Node, NodeKind } from '../db/db';
@@ -14,6 +15,7 @@ import { StarMap3D } from '../components/StarMap3D';
 import { TemplatesSheet } from '../components/Templates';
 import { presetsFor } from '../data/presets';
 import type { TplSkill } from '../engine/templates';
+import { areaSummary, skillRow } from '../engine/treeRow';
 
 type Editor =
   | { mode: 'menu'; node: Node }
@@ -39,6 +41,7 @@ export function Tree({ focusId }: { focusId?: string }) {
   const [editor, setEditor] = useState<Editor | null>(null);
   const [toDelete, setToDelete] = useState<Node | null>(null);
   const [tplOpen, setTplOpen] = useState(false);
+  const [help, setHelp] = useState(false);
   // Готовые пути: за флагом, но новичку с почти пустым деревом — сразу (иначе после «пустого дерева» их не найти).
   const tpl = w.hasExp('templates') || w.skills.length < 5;
   const [mode, setModeState] = useState<'list' | 'stars'>(() => {
@@ -97,10 +100,56 @@ export function Tree({ focusId }: { focusId?: string }) {
     </div>
   );
 
+  // «Понятное дерево» (эксперимент tree-clear): главный счёт — этап (engine/treeRow.ts).
+  const clear = w.hasExp('tree-clear');
+  const rowOf = (n: Node) => {
+    const stages = w.stagesOfSkill(n.id);
+    const cur = stages.find((s) => s.done < s.goals.length);
+    return skillRow({
+      lockedBy: w.lockReasons(n).map((l) => l.node.title),
+      explored: w.explored(n.id),
+      rustDays: w.rustDays(n.id),
+      focus: !!n.focus,
+      stages: stages.map((s) => ({ done: s.done, total: s.goals.length })),
+      nextGoal: cur?.goals.find((g) => !g.done)?.title,
+      firstGoal: stages[0]?.goals[0]?.title,
+    });
+  };
+  const summaryOf = (n: Node) => areaSummary(skillsIn(n).map((s) => ({ title: s.title, view: rowOf(s) })));
+  const headSummary = () => {
+    const views = w.skills.map(rowOf);
+    const work = views.filter((v) => v.stage !== null && v.state !== 'mastered').length;
+    const done = views.filter((v) => v.state === 'mastered').length;
+    return [work && `${work} в работе`, done && `${done} ${plural(done, 'освоен', 'освоено', 'освоено')}`, `${w.skills.length} ${plural(w.skills.length, 'навык', 'навыка', 'навыков')}`].filter(Boolean).join(' · ');
+  };
+
+  const renderSkillClear = (n: Node) => {
+    const v = rowOf(n);
+    const tile = v.state === 'locked' ? <Icon name="lock" size={16} />
+      : v.state === 'new' ? <span class="t2-q">?</span>
+      : v.state === 'mastered' ? <Icon name="crown" size={18} />
+      : v.stage !== null ? <><span class="t2-tile-k">этап</span><span class="t2-tile-n">{v.stage}</span></>
+      : <Icon name="sprout" size={16} />;
+    return (
+      <div class={`t-item t2-skill ${v.state}`} key={n.id}>
+        <a class="t2-card" href={`#/skill/${n.id}`}>
+          <span class="t2-tile">{tile}</span>
+          <span class="t2-body">
+            <span class="t2-top"><span class="t2-title">{n.title}</span><span class="t2-right">{v.right}</span></span>
+            {v.bar && <span class="t2-bar"><span class="mini-bar"><span style={{ width: `${(v.bar.done / Math.max(1, v.bar.total)) * 100}%` }} /></span><span class="t2-count">{v.bar.done}/{v.bar.total} {plural(v.bar.total, 'цель', 'цели', 'целей')}</span></span>}
+            {v.line && <span class="t2-line">{v.state === 'final' && <Icon name="sword" size={13} />}{v.line}</span>}
+          </span>
+        </a>
+        {menuBtn(n)}
+      </div>
+    );
+  };
+
   const renderNode = (n: Node) => {
     const p = w.progress.get(n.id);
     const open = expanded.has(n.id);
 
+    if (n.kind === 'skill' && clear) return renderSkillClear(n);
     if (n.kind === 'skill') {
       const lv = w.skillLevelOf(n.id);
       const locks = w.lockReasons(n);
@@ -150,7 +199,7 @@ export function Tree({ focusId }: { focusId?: string }) {
             <button type="button" class="t-branch-btn" onClick={() => toggle(n.id)} aria-expanded={open}>
               <span class={open ? 't-diamond open' : 't-diamond'} />
               <span class="t-branch-title">{n.title}</span>
-              <span class="t-sub">{count ? `${pctText(p)} · ${count} нав.` : 'пусто'}</span>
+              <span class="t-sub">{clear ? (count ? `· ${count} ${plural(count, 'навык', 'навыка', 'навыков')}` : 'пусто') : count ? `${pctText(p)} · ${count} нав.` : 'пусто'}</span>
               <Icon name={open ? 'down' : 'right'} size={16} stroke={2.4} />
             </button>
             {menuBtn(n)}
@@ -169,11 +218,13 @@ export function Tree({ focusId }: { focusId?: string }) {
             <AreaTile node={n} size={44} />
             <span class="t-area-text">
               <span class="t-area-title">{n.title}</span>
-              <span class="t-sub">{count} {plural(count, 'навык', 'навыка', 'навыков')} · {explored} исследовано</span>
+              <span class="t-sub">{clear ? summaryOf(n) : `${count} ${plural(count, 'навык', 'навыка', 'навыков')} · ${explored} исследовано`}</span>
             </span>
-            <Ring pct={p ?? 0} size={46} stroke={4} color="var(--c)">
-              <span class="t-ring-pct">{p === null || p === undefined ? '—' : `${Math.round(p)}%`}</span>
-            </Ring>
+            {clear ? <Icon name={open ? 'up' : 'down'} size={18} /> : (
+              <Ring pct={p ?? 0} size={46} stroke={4} color="var(--c)">
+                <span class="t-ring-pct">{p === null || p === undefined ? '—' : `${Math.round(p)}%`}</span>
+              </Ring>
+            )}
           </button>
           {menuBtn(n)}
         </div>
@@ -187,9 +238,10 @@ export function Tree({ focusId }: { focusId?: string }) {
       <div class="spread">
         <div class="stack-4">
           <h1 class="display small-display">Дерево навыков</h1>
-          <span class="t-sub">исследовано {exploredTotal} из {w.skills.length}</span>
+          <span class="t-sub">{clear ? headSummary() : `исследовано ${exploredTotal} из ${w.skills.length}`}</span>
         </div>
         <div class="tree-head-btns">
+          {clear && <button type="button" class="icon-btn round" aria-label="Как читать дерево" title="Как читать дерево" onClick={() => setHelp(true)}><span class="t2-help">?</span></button>}
           {tpl && <button type="button" class="icon-btn round tpl-open" aria-label="Готовые пути" title="Готовые пути" onClick={() => setTplOpen(true)}><Icon name="grid" size={20} /></button>}
           <button type="button" class="icon-btn round" aria-label="Добавить направление" onClick={() => setEditor({ mode: 'add', parent: null, kind: 'area' })}><Icon name="plus" size={20} stroke={2.4} /></button>
         </div>
@@ -239,6 +291,7 @@ export function Tree({ focusId }: { focusId?: string }) {
       </>}
 
       <TemplatesSheet open={tplOpen} onClose={() => setTplOpen(false)} />
+      {help && <TreeHelp onClose={() => setHelp(false)} />}
 
       <NodeEditor editor={editor} onClose={() => setEditor(null)} onDelete={(n) => { setEditor(null); setToDelete(n); }} onAdded={(parentId) => {
         if (parentId && !expanded.has(parentId)) toggle(parentId);
@@ -257,6 +310,40 @@ export function Tree({ focusId }: { focusId?: string }) {
 }
 
 const KIND_LABEL: Record<NodeKind, string> = { area: 'направление', branch: 'ветку', skill: 'навык' };
+
+/** «Как читать дерево» — словами плана (путь, этап, цель, уровень), без формул. Макет: TreeLegend. */
+function TreeHelp({ onClose }: { onClose: () => void }) {
+  const terms: [string, string][] = [
+    ['Навык — твой путь', 'Например «Отжимания» или «Python». Путь разбит на этапы.'],
+    ['Этап', 'Несколько целей. Закрыл все — этап пройден, открывается следующий. Номер этапа — на плитке навыка.'],
+    ['Цель', 'Конкретный результат: «30 отжиманий подряд». Полоска — сколько целей этапа уже закрыто.'],
+    ['Уровень', 'Растёт от XP за действия — смотри внутри навыка и у персонажа.'],
+  ];
+  const marks: [string, ComponentChildren, string, string][] = [
+    ['active', <><span class="t2-tile-k">этап</span><span class="t2-tile-n">2</span></>, 'Сейчас качаешь', 'золотая рамка; под названием — что сделать дальше'],
+    ['new', <span class="t2-q">?</span>, 'Не начат', 'первое действие откроет путь'],
+    ['locked', <Icon name="lock" size={16} />, 'Закрыт', 'откроется, когда подкачаешь другой навык — какой, видно внутри'],
+    ['rust', <><span class="t2-tile-k">этап</span><span class="t2-tile-n">1</span></>, 'Давно не занимался', 'прогресс цел — просто вернись'],
+    ['mastered', <Icon name="crown" size={18} />, 'Освоен', 'все этапы пройдены'],
+    ['final', <Icon name="sword" size={16} />, 'Финальный этап', 'контрольное задание пути'],
+  ];
+  return (
+    <Sheet open onClose={onClose} title="Как читать дерево">
+      <div class="card stack-12">
+        {terms.map(([t, s]) => <span class="stack-4" key={t}><span class="strong">{t}</span><span class="muted small">{s}</span></span>)}
+      </div>
+      <span class="section-label">Значки</span>
+      <div class="card stack-12">
+        {marks.map(([cls, tile, t, s]) => (
+          <span class={`t2-skill ${cls} t2-legend`} key={t}>
+            <span class="t2-tile">{tile}</span>
+            <span class="stack-4"><span class="strong">{t}</span><span class="muted small">{s}</span></span>
+          </span>
+        ))}
+      </div>
+    </Sheet>
+  );
+}
 
 function NodeEditor({ editor, onClose, onDelete, onAdded, setEditor }: {
   editor: Editor | null;

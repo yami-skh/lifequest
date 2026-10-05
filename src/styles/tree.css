@@ -166,3 +166,40 @@ main.no-nav { padding-bottom: calc(var(--safe-b) + 24px); }
 .sky-auto.on { color: #F2B544; border-color: rgba(242, 181, 68, 0.45); }
 .sky-legend .done { color: #F2B544; }
 .onb-name { font-size: 16px; font-weight: 700; }
+
+/* «Понятное дерево» (эксперимент tree-clear): главный счёт — этап. Макет: холст, «Дерево: читаемость». */
+.t2-skill { display: flex; align-items: flex-start; }
+.t2-skill .icon-btn { margin-top: 8px; width: 36px; }
+.t2-card { flex: 1; min-width: 0; display: flex; align-items: center; gap: 12px; padding: 10px 12px 10px 10px; border-radius: 14px; background: var(--surface-2); border: 1px solid var(--line); color: var(--fg); text-decoration: none; }
+.t2-tile { width: 40px; height: 40px; flex-shrink: 0; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1;
+  color: var(--c); background: color-mix(in srgb, var(--c) 15%, var(--surface-2)); border: 1.5px solid color-mix(in srgb, var(--c) 55%, transparent); }
+.t2-tile-k { font-size: 8px; font-weight: 800; letter-spacing: 0.4px; text-transform: uppercase; opacity: 0.85; }
+.t2-tile-n { font-family: Unbounded, sans-serif; font-size: 16px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.t2-q { font-weight: 800; color: var(--muted); }
+.t2-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 5px; }
+.t2-top { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+.t2-title { font-weight: 800; font-size: 14.5px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.t2-right { font-size: 12px; font-weight: 700; color: var(--muted); white-space: nowrap; }
+.t2-bar { display: flex; align-items: center; gap: 8px; }
+.t2-bar .mini-bar { flex: 1; }
+.t2-bar .mini-bar > span { background: var(--gold); }
+.t2-count { font-size: 11.5px; font-weight: 800; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.t2-line { font-size: 12.5px; font-weight: 600; line-height: 1.35; color: var(--muted); display: flex; gap: 5px; align-items: flex-start; }
+.t2-line svg { flex-shrink: 0; margin-top: 2px; }
+.t2-help { font-weight: 800; font-size: 16px; }
+
+.t2-skill.active .t2-card { border: 1.5px solid var(--gold); box-shadow: 0 0 0 3px color-mix(in srgb, var(--gold) 14%, transparent); }
+.t2-skill.active .t2-line { color: var(--gold); }
+.t2-skill.final .t2-line { color: #FF9A5C; }
+.t2-skill.locked .t2-card, .t2-skill.new .t2-card { background: transparent; border-style: dashed; border-color: var(--line-2); }
+.t2-skill.locked .t2-tile, .t2-skill.new .t2-tile { color: var(--muted); background: var(--fog, var(--surface)); border: 1.5px dashed var(--line-2); }
+.t2-skill.locked .t2-title, .t2-skill.new .t2-title { color: var(--fg-2); }
+.t2-skill.rust .t2-card { opacity: 0.8; filter: saturate(0.5); }
+.t2-skill.rust .t2-line { color: #C9A27A; }
+.t2-skill.mastered .t2-tile { color: #E08AE8; background: color-mix(in srgb, #E08AE8 16%, var(--surface-2)); border-color: #E08AE8; }
+.t2-skill.mastered .t2-line, .t2-skill.mastered .t2-right { color: #E08AE8; }
+/* подсказка «?»: те же плитки вне дерева */
+.t2-legend { display: flex; align-items: center; gap: 12px; --c: var(--gold); }
+.t2-legend.active .t2-tile { box-shadow: 0 0 0 2px var(--gold); }
+.t2-legend.rust .t2-tile { opacity: 0.7; }
+.t2-legend.final .t2-tile { color: #FF9A5C; background: transparent; border: 0; }
