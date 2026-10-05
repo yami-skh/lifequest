@@ -1,5 +1,5 @@
 import type { ComponentChildren } from 'preact';
-import { useEffect, useRef } from 'preact/hooks';
+import { useEffect, useRef, useState } from 'preact/hooks';
 import { Icon } from './Icon';
 import { back } from '../lib/router';
 import type { Node } from '../db/db';
@@ -129,8 +129,20 @@ function useSwipeClose(ref: { current: HTMLDivElement | null }, open: boolean, o
   }, [open]);
 }
 
+const CLOSE_MS = 160;
+const reducedMotion = () => typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 export function Sheet({ open, onClose, onBack, title, children }: { open: boolean; onClose: () => void; onBack?: () => void; title: string; children: ComponentChildren }) {
-  useBackClose(open, onClose);
+  // Закрытие крестиком, тапом мимо и кнопкой «назад» — шторка уезжает вниз (чуть быстрее, чем открывается).
+  const [closing, setClosing] = useState(false);
+  useEffect(() => setClosing(false), [open]);
+  const requestClose = () => {
+    if (closing) return;
+    if (reducedMotion()) return onClose();
+    setClosing(true);
+    setTimeout(onClose, CLOSE_MS);
+  };
+  useBackClose(open, requestClose);
   const sheetRef = useRef<HTMLDivElement>(null);
   useSwipeClose(sheetRef, open, onClose);
   useEffect(() => {
@@ -143,7 +155,7 @@ export function Sheet({ open, onClose, onBack, title, children }: { open: boolea
   }, [open]);
   if (!open) return null;
   return (
-    <div class="sheet-backdrop" onClick={(e) => e.target === e.currentTarget && onClose()}>
+    <div class={closing ? 'sheet-backdrop closing' : 'sheet-backdrop'} onClick={(e) => e.target === e.currentTarget && requestClose()}>
       <div class="sheet" role="dialog" aria-modal="true" aria-label={title} ref={sheetRef}>
         <div class="sheet-handle" />
         <div class="sheet-head">
@@ -153,7 +165,7 @@ export function Sheet({ open, onClose, onBack, title, children }: { open: boolea
               <h2 class="sheet-title">{title}</h2>
             </div>
           ) : <h2 class="sheet-title">{title}</h2>}
-          <button type="button" class="icon-btn round" aria-label="Закрыть" onClick={onClose}>
+          <button type="button" class="icon-btn round" aria-label="Закрыть" onClick={requestClose}>
             <Icon name="x" size={20} stroke={2.4} />
           </button>
         </div>

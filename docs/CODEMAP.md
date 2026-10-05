@@ -41,8 +41,8 @@
   SRC:8, Hl:10, *SuggestInput:17
 - **Templates.tsx** (252) — «Готовые пути» — шаблоны навыков (мастер-план §12, фаза 1). Макет: холст, страница «Шаблоны».
   Phase:16, goalsWord:18, skillsWord:19, *TemplatesSheet:21, AreaChip:40, Catalog:45, Preview:85, Paste:191
-- **ui.tsx** (194)
-  *ProgressBar:9, *LevelBadge:17, *Ring:28, *AreaTile:49, *TopBar:58, useSwipeClose:77, *Sheet:132, *Confirm:166, *SectionLabel:180, *Check:189, *pctText:193
+- **ui.tsx** (206)
+  *ProgressBar:9, *LevelBadge:17, *Ring:28, *AreaTile:49, *TopBar:58, useSwipeClose:77, CLOSE_MS:132, reducedMotion:133, *Sheet:135, *Confirm:178, *SectionLabel:192, *Check:201, *pctText:205
 
 ## src/data
 
@@ -203,8 +203,8 @@
 
 - **base.css** (161) — Тёмная тема по макету: золото = XP, у направлений свои цвета.
   Тёмная тема по макету: золото = XP, у направлений свои цвета.:1, Светлая тема (макет: холст, «Настройки и обновления»). Соответствие цветов — tools/light_palette.py.:44, текст:108, раскладка:119, полоски:132, нижняя панель:139, всплывашки:147
-- **common.css** (101) — записи
-  записи:1, чипы:16, кнопки:26, поля:43, фото:53, шторка:65, Подсказки при вводе (components/SuggestInput.tsx).:91
+- **common.css** (106) — записи
+  записи:1, чипы:16, кнопки:26, поля:43, фото:53, шторка:65, закрытие шторки (Sheet → closing): уезжает вниз чуть быстрее, чем выезжает:73, Подсказки при вводе (components/SuggestInput.tsx).:96
 - **entry.css** (50) — шторка записи (0.5)
   шторка записи (0.5):1, подходы и клавиатура (0.5):16
 - **friends.css** (33) — «Друзья» (screens/Friends.tsx). Макет: холст, страница «Друзья».
