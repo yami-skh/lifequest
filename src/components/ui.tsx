@@ -1,5 +1,5 @@
 import type { ComponentChildren } from 'preact';
-import { useEffect } from 'preact/hooks';
+import { useEffect, useRef } from 'preact/hooks';
 import { Icon } from './Icon';
 import { back } from '../lib/router';
 import type { Node } from '../db/db';
@@ -70,8 +70,69 @@ export function TopBar({ title, crumbs, right }: { title?: string; crumbs?: stri
   );
 }
 
+/**
+ * Закрыть шторку свайпом вниз. Тянуть можно за полоску/заголовок всегда, за остальное — когда шторка прокручена к самому верху
+ * (иначе свайп — это прокрутка). Горизонтальные ленты и поля ввода не перехватываем.
+ */
+function useSwipeClose(ref: { current: HTMLDivElement | null }, open: boolean, onClose: () => void) {
+  const close = useRef(onClose);
+  close.current = onClose;
+  useEffect(() => {
+    const el = ref.current;
+    if (!open || !el) return;
+    let s: { y: number; x: number; t: number; head: boolean; drag: boolean } | null = null;
+    let dy = 0;
+    const backdrop = el.parentElement;
+    const start = (e: TouchEvent) => {
+      const tg = e.target as HTMLElement;
+      if (e.touches.length !== 1 || tg.closest('input, textarea, .type-row, .scroll-x, .sg-list')) { s = null; return; }
+      s = { y: e.touches[0].clientY, x: e.touches[0].clientX, t: Date.now(), head: !!tg.closest('.sheet-handle, .sheet-head'), drag: false };
+      dy = 0;
+    };
+    const move = (e: TouchEvent) => {
+      if (!s) return;
+      dy = e.touches[0].clientY - s.y;
+      const dx = e.touches[0].clientX - s.x;
+      if (!s.drag) {
+        if (dy < 8 || Math.abs(dy) < Math.abs(dx) * 1.2) return;
+        if (!s.head && el.scrollTop > 0) { s = null; return; }
+        s.drag = true;
+        el.style.transition = 'none';
+      }
+      e.preventDefault();
+      el.style.transform = `translateY(${Math.max(0, dy)}px)`;
+      if (backdrop) backdrop.style.opacity = String(Math.max(0.35, 1 - dy / 600));
+    };
+    const end = () => {
+      if (!s?.drag) { s = null; return; }
+      const fast = dy / Math.max(1, Date.now() - s.t) > 0.6;
+      el.style.transition = 'transform .18s ease';
+      if (dy > 110 || (fast && dy > 40)) {
+        el.style.transform = 'translateY(100%)';
+        setTimeout(() => close.current(), 160);
+      } else {
+        el.style.transform = '';
+        if (backdrop) backdrop.style.opacity = '';
+      }
+      s = null;
+    };
+    el.addEventListener('touchstart', start, { passive: true });
+    el.addEventListener('touchmove', move, { passive: false });
+    el.addEventListener('touchend', end);
+    el.addEventListener('touchcancel', end);
+    return () => {
+      el.removeEventListener('touchstart', start);
+      el.removeEventListener('touchmove', move);
+      el.removeEventListener('touchend', end);
+      el.removeEventListener('touchcancel', end);
+    };
+  }, [open]);
+}
+
 export function Sheet({ open, onClose, onBack, title, children }: { open: boolean; onClose: () => void; onBack?: () => void; title: string; children: ComponentChildren }) {
   useBackClose(open, onClose);
+  const sheetRef = useRef<HTMLDivElement>(null);
+  useSwipeClose(sheetRef, open, onClose);
   useEffect(() => {
     if (!open) return;
     const prev = document.body.style.overflow;
@@ -83,7 +144,7 @@ export function Sheet({ open, onClose, onBack, title, children }: { open: boolea
   if (!open) return null;
   return (
     <div class="sheet-backdrop" onClick={(e) => e.target === e.currentTarget && onClose()}>
-      <div class="sheet" role="dialog" aria-modal="true" aria-label={title}>
+      <div class="sheet" role="dialog" aria-modal="true" aria-label={title} ref={sheetRef}>
         <div class="sheet-handle" />
         <div class="sheet-head">
           {onBack ? (

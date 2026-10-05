@@ -41,8 +41,8 @@
   SRC:8, Hl:10, *SuggestInput:17
 - **Templates.tsx** (252) — «Готовые пути» — шаблоны навыков (мастер-план §12, фаза 1). Макет: холст, страница «Шаблоны».
   Phase:16, goalsWord:18, skillsWord:19, *TemplatesSheet:21, AreaChip:40, Catalog:45, Preview:85, Paste:191
-- **ui.tsx** (133)
-  *ProgressBar:9, *LevelBadge:17, *Ring:28, *AreaTile:49, *TopBar:58, *Sheet:73, *Confirm:105, *SectionLabel:119, *Check:128, *pctText:132
+- **ui.tsx** (194)
+  *ProgressBar:9, *LevelBadge:17, *Ring:28, *AreaTile:49, *TopBar:58, useSwipeClose:77, *Sheet:132, *Confirm:166, *SectionLabel:180, *Check:189, *pctText:193
 
 ## src/data
 
