@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { items, suggest } from './suggest';
-import { actionIdeas, goalIdeas, skillIdeas, AREA_IDEAS, METRIC_IDEAS } from '../data/suggest';
+import { actionIdeas, allPathGoals, goalIdeas, skillIdeas, AREA_IDEAS, METRIC_IDEAS } from '../data/suggest';
 
 const pool = items({
   mine: ['Отжимания 3×20', 'Бег 3 км по парку'],
@@ -28,9 +28,10 @@ describe('подсказки при вводе', () => {
 });
 
 describe('запас подсказок «много вариантов»', () => {
-  it('объёмы: навыков 200+, действий 100+, направлений 25+, замеров 25+', () => {
-    expect(skillIdeas().length).toBeGreaterThanOrEqual(200);
-    expect(actionIdeas('workout').length).toBeGreaterThanOrEqual(100);
+  it('объёмы: навыков, действий и целей по 400+, направлений и замеров 25+', () => {
+    expect(skillIdeas().length).toBeGreaterThanOrEqual(400);
+    expect(actionIdeas('workout').length).toBeGreaterThanOrEqual(400);
+    expect(allPathGoals().length).toBeGreaterThanOrEqual(400);
     expect(AREA_IDEAS.length).toBeGreaterThanOrEqual(25);
     expect(METRIC_IDEAS.length).toBeGreaterThanOrEqual(25);
   });
