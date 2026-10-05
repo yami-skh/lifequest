@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Анимация: действие → XP</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Unbounded:wght@500;700&amp;display=swap" rel="stylesheet">
+<style>body{margin:0}</style>
+</helmet>
+<div style="width: 390px; height: 860px; box-sizing: border-box; position: relative; overflow: hidden; background: #0E1015; color: #ECEDF1; font-family: Manrope, sans-serif">
+<div style="padding: 20px 16px 100px; display: flex; flex-direction: column; gap: 12px"><style>
+@keyframes x-fly { 0%,10% { opacity: 0; transform: translate(0, 0) scale(.6) } 18% { opacity: 1; transform: translate(0, -20px) scale(1.15) } 30% { transform: translate(0, -30px) scale(1) }
+  62% { opacity: 1; transform: translate(-70px, -520px) scale(.7) } 70%,100% { opacity: 0; transform: translate(-70px, -530px) scale(.4) } }
+@keyframes x-bar { 0%,62% { width: 40% } 76%,100% { width: 49% } }
+@keyframes x-glow { 0%,62% { box-shadow: none } 68% { box-shadow: 0 0 0 6px #F2B54455, 0 0 24px #F2B544aa } 82%,100% { box-shadow: none } }
+@keyframes x-num { 0%,64% { opacity: 0 } 70%,92% { opacity: 1 } 100% { opacity: 0 } }
+@keyframes x-badge { 0%,20% { opacity: 0; transform: scale(.6) } 26%,56% { opacity: 1; transform: scale(1) } 64%,100% { opacity: 0; transform: scale(.8) } }
+@keyframes x-sheet { 0%,6% { transform: none; opacity: 1 } 12%,100% { transform: translateY(260px); opacity: 0 } }
+.x-fly { animation: x-fly 3.6s infinite cubic-bezier(.4,0,.2,1) } .x-bar { animation: x-bar 3.6s infinite } .x-glow { animation: x-glow 3.6s infinite }
+.x-num { animation: x-num 3.6s infinite } .x-b1 { animation: x-badge 3.6s infinite } .x-b2 { animation: x-badge 3.6s .15s infinite } .x-sheet { animation: x-sheet 3.6s infinite }
+</style><div style="display: flex; align-items: center; gap: 12px"><span style="width: 48px; height: 48px; border-radius: 14px; background: #F2B544; color: #14161C; display: flex; flex-direction: column; align-items: center; justify-content: center"><span style="font-size: 9px; font-weight: 800">LVL</span><span style="font-family: Unbounded, sans-serif; font-size: 20px; font-weight: 700; line-height: 1">6</span></span><span style="flex: 1; display: flex; flex-direction: column; gap: 6px"><span style="font-family: Unbounded, sans-serif; font-size: 20px; font-weight: 700">Yami</span><span class="x-glow" style="display: block; height: 8px; border-radius: 4px; background: #2A2F3B"><span class="x-bar" style="display: block; height: 100%; border-radius: 4px; background: #F2B544"></span></span><span style="display: flex; justify-content: space-between; font-size: 12px; color: #A3A9B6; font-weight: 700"><span>180 / 400 XP</span><span class="x-num" style="color: #F2B544">+40</span></span></span></div><div style="height: 470px"></div><div style="position: relative; display: flex; justify-content: center"><span class="x-fly" style="position: absolute; bottom: 70px; font-family: Unbounded, sans-serif; font-size: 26px; font-weight: 700; color: #F2B544; text-shadow: 0 0 18px #F2B54488">+40 XP</span><span style="position: absolute; bottom: 118px; display: flex; gap: 6px"><span class="x-b1" style="padding: 3px 8px; border-radius: 99px; background: #1E222B; color: #F2B544; font-size: 11.5px; font-weight: 800">×1.2 активный</span><span class="x-b2" style="padding: 3px 8px; border-radius: 99px; background: #1E222B; color: #4CC9A0; font-size: 11.5px; font-weight: 800">серия 5 дн.</span></span><span class="x-sheet" style="width: 100%; height: 60px; border-radius: 16px; background: #F2B544; color: #14161C; display: flex; align-items: center; justify-content: center; font-weight: 800">Записать · +40 XP</span></div><span style="font-size: 12.5px; color: #A3A9B6; text-align: center; line-height: 1.45; margin-top: 8px">Нажал «Записать» → шторка уходит, «+40 XP» вылетает,<br>множители мелкими бейджами, число летит к полоске уровня — та вспыхивает и дорастает. ≈0,6 с на полёт.</span></div>
+<div style="display: none; height: 76px; background: #12141A; border-top: 1px solid #2A2F3B; display: grid; grid-template-columns: repeat(5, 1fr); align-items: center; text-align: center; font-size: 11.5px; color: #8B92A0; font-weight: 700">
+<span>Персонаж</span><span style="color: #F2B544">Дерево</span><span><span style="display: inline-flex; width: 56px; height: 56px; border-radius: 28px; background: #F2B544; color: #14161C; align-items: center; justify-content: center; font-size: 28px; margin-top: -26px">+</span></span><span>Квесты</span><span>Ещё</span></div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":860}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

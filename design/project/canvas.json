@@ -102,6 +102,24 @@
       "x": 940,
       "y": 0
     },
+    "AutoEntry.dc.html": {
+      "h": 860,
+      "page": "autocomplete",
+      "radius": 28,
+      "title": "1. «+» Новое действие",
+      "w": 390,
+      "x": 0,
+      "y": 0
+    },
+    "AutoGoal.dc.html": {
+      "h": 860,
+      "page": "autocomplete",
+      "radius": 28,
+      "title": "2. Пустое поле цели",
+      "w": 390,
+      "x": 430,
+      "y": 0
+    },
     "BackupReminder.dc.html": {
       "h": 400,
       "page": "backup",
@@ -200,6 +218,69 @@
       "title": "3 · Дерево: туман, ржавчина, фокус",
       "w": 390,
       "x": 940,
+      "y": 0
+    },
+    "FriendWeek.dc.html": {
+      "h": 760,
+      "page": "friends",
+      "radius": 28,
+      "title": "3. Итоги недели друга",
+      "w": 390,
+      "x": 860,
+      "y": 0
+    },
+    "FriendsInvite.dc.html": {
+      "h": 760,
+      "page": "friends",
+      "radius": 28,
+      "title": "1. Пригласить и добавить",
+      "w": 390,
+      "x": 0,
+      "y": 0
+    },
+    "FriendsList.dc.html": {
+      "h": 760,
+      "page": "friends",
+      "radius": 28,
+      "title": "2. Список: неделя и реакции",
+      "w": 390,
+      "x": 430,
+      "y": 0
+    },
+    "FriendsPrivacy.dc.html": {
+      "h": 760,
+      "page": "friends",
+      "radius": 28,
+      "title": "4. Что видят друзья, ключ",
+      "w": 390,
+      "x": 1290,
+      "y": 0
+    },
+    "HoldBranch.dc.html": {
+      "h": 900,
+      "page": "tree-hold",
+      "radius": 28,
+      "title": "3. Ветка + подсказка новичку",
+      "w": 390,
+      "x": 860,
+      "y": 0
+    },
+    "HoldMenu.dc.html": {
+      "h": 900,
+      "page": "tree-hold",
+      "radius": 28,
+      "title": "1. Удержание навыка",
+      "w": 390,
+      "x": 0,
+      "y": 0
+    },
+    "HoldMove.dc.html": {
+      "h": 860,
+      "page": "tree-hold",
+      "radius": 28,
+      "title": "2. Перенести…",
+      "w": 390,
+      "x": 430,
       "y": 0
     },
     "Main.dc.html": {
@@ -565,6 +646,33 @@
       "x": 470,
       "y": 0
     },
+    "SuggestArea.dc.html": {
+      "h": 860,
+      "page": "suggest",
+      "radius": 28,
+      "title": "3. Направление и ветка",
+      "w": 390,
+      "x": 860,
+      "y": 0
+    },
+    "SuggestGoals.dc.html": {
+      "h": 900,
+      "page": "suggest",
+      "radius": 28,
+      "title": "1. Цели навыка",
+      "w": 390,
+      "x": 0,
+      "y": 0
+    },
+    "SuggestSkill.dc.html": {
+      "h": 860,
+      "page": "suggest",
+      "radius": 28,
+      "title": "2. Новый навык: поиск",
+      "w": 390,
+      "x": 430,
+      "y": 0
+    },
     "TplCatalog.dc.html": {
       "h": 844,
       "page": "templates",
@@ -611,6 +719,33 @@
       "x": 940,
       "y": 0
     },
+    "TreeAfter.dc.html": {
+      "h": 1060,
+      "page": "tree-read",
+      "radius": 28,
+      "title": "2. Стало: этап",
+      "w": 390,
+      "x": 430,
+      "y": 0
+    },
+    "TreeBefore.dc.html": {
+      "h": 860,
+      "page": "tree-read",
+      "radius": 28,
+      "title": "1. Было",
+      "w": 390,
+      "x": 0,
+      "y": 0
+    },
+    "TreeLegend.dc.html": {
+      "h": 900,
+      "page": "tree-read",
+      "radius": 28,
+      "title": "3. Подсказка «?»",
+      "w": 390,
+      "x": 860,
+      "y": 0
+    },
     "UpdateProgress.dc.html": {
       "h": 900,
       "page": "settings",
@@ -638,139 +773,31 @@
       "x": 0,
       "y": 0
     },
-    "FriendsInvite.dc.html": {
-      "h": 760,
-      "page": "friends",
+    "AnimGoal.dc.html": {
+      "h": 860,
+      "page": "anim",
       "radius": 28,
-      "title": "1. Пригласить и добавить",
+      "title": "1. Закрытие цели",
       "w": 390,
       "x": 0,
       "y": 0
     },
-    "FriendsList.dc.html": {
-      "h": 760,
-      "page": "friends",
+    "AnimXp.dc.html": {
+      "h": 860,
+      "page": "anim",
       "radius": 28,
-      "title": "2. Список: неделя и реакции",
+      "title": "2. Действие → XP",
       "w": 390,
       "x": 430,
       "y": 0
     },
-    "FriendWeek.dc.html": {
-      "h": 760,
-      "page": "friends",
+    "AnimLevel.dc.html": {
+      "h": 860,
+      "page": "anim",
       "radius": 28,
-      "title": "3. Итоги недели друга",
+      "title": "3. Новый уровень",
       "w": 390,
       "x": 860,
-      "y": 0
-    },
-    "FriendsPrivacy.dc.html": {
-      "h": 760,
-      "page": "friends",
-      "radius": 28,
-      "title": "4. Что видят друзья, ключ",
-      "w": 390,
-      "x": 1290,
-      "y": 0
-    },
-    "TreeBefore.dc.html": {
-      "h": 860,
-      "page": "tree-read",
-      "radius": 28,
-      "title": "1. Было",
-      "w": 390,
-      "x": 0,
-      "y": 0
-    },
-    "TreeAfter.dc.html": {
-      "h": 1060,
-      "page": "tree-read",
-      "radius": 28,
-      "title": "2. Стало: этап",
-      "w": 390,
-      "x": 430,
-      "y": 0
-    },
-    "TreeLegend.dc.html": {
-      "h": 900,
-      "page": "tree-read",
-      "radius": 28,
-      "title": "3. Подсказка «?»",
-      "w": 390,
-      "x": 860,
-      "y": 0
-    },
-    "HoldMenu.dc.html": {
-      "h": 900,
-      "page": "tree-hold",
-      "radius": 28,
-      "title": "1. Удержание навыка",
-      "w": 390,
-      "x": 0,
-      "y": 0
-    },
-    "HoldMove.dc.html": {
-      "h": 860,
-      "page": "tree-hold",
-      "radius": 28,
-      "title": "2. Перенести…",
-      "w": 390,
-      "x": 430,
-      "y": 0
-    },
-    "HoldBranch.dc.html": {
-      "h": 900,
-      "page": "tree-hold",
-      "radius": 28,
-      "title": "3. Ветка + подсказка новичку",
-      "w": 390,
-      "x": 860,
-      "y": 0
-    },
-    "SuggestGoals.dc.html": {
-      "h": 900,
-      "page": "suggest",
-      "radius": 28,
-      "title": "1. Цели навыка",
-      "w": 390,
-      "x": 0,
-      "y": 0
-    },
-    "SuggestSkill.dc.html": {
-      "h": 860,
-      "page": "suggest",
-      "radius": 28,
-      "title": "2. Новый навык: поиск",
-      "w": 390,
-      "x": 430,
-      "y": 0
-    },
-    "SuggestArea.dc.html": {
-      "h": 860,
-      "page": "suggest",
-      "radius": 28,
-      "title": "3. Направление и ветка",
-      "w": 390,
-      "x": 860,
-      "y": 0
-    },
-    "AutoEntry.dc.html": {
-      "h": 860,
-      "page": "autocomplete",
-      "radius": 28,
-      "title": "1. «+» Новое действие",
-      "w": 390,
-      "x": 0,
-      "y": 0
-    },
-    "AutoGoal.dc.html": {
-      "h": 860,
-      "page": "autocomplete",
-      "radius": 28,
-      "title": "2. Пустое поле цели",
-      "w": 390,
-      "x": 430,
       "y": 0
     }
   },
@@ -781,7 +808,7 @@
   "designSystems": [],
   "launch": {
     "view": "canvas",
-    "page": "autocomplete"
+    "page": "anim"
   },
   "notes": {
     "aiTitle": {
@@ -811,6 +838,15 @@
       "x": 0,
       "y": -260
     },
+    "autocompleteTitle": {
+      "kind": "title1",
+      "maxW": 1720,
+      "page": "autocomplete",
+      "text": "Подсказки при вводе — во всех полях добавления: было, цели, варианты",
+      "w": 240,
+      "x": 0,
+      "y": -260
+    },
     "backupTitle": {
       "kind": "title1",
       "maxW": 1250,
@@ -825,6 +861,15 @@
       "maxW": 1720,
       "page": "features",
       "text": "Фокус, ступени, ближайшее, ржавчина, туман, требования",
+      "w": 240,
+      "x": 0,
+      "y": -260
+    },
+    "friendsTitle": {
+      "kind": "title1",
+      "maxW": 1720,
+      "page": "friends",
+      "text": "Друзья: напарники по коду, без регистрации (ступень 1 — анонимный ключ)",
       "w": 240,
       "x": 0,
       "y": -260
@@ -919,6 +964,15 @@
       "x": 0,
       "y": -260
     },
+    "suggestTitle": {
+      "kind": "title1",
+      "maxW": 1720,
+      "page": "suggest",
+      "text": "Готовые варианты — цели навыка, новый навык (поиск по путям), направление и ветка",
+      "w": 240,
+      "x": 0,
+      "y": -260
+    },
     "templatesTitle": {
       "kind": "title1",
       "maxW": 1720,
@@ -933,6 +987,24 @@
       "maxW": 2740,
       "page": "screens",
       "text": "LifeQuest · mildyan — как будет выглядеть приложение",
+      "w": 240,
+      "x": 0,
+      "y": -260
+    },
+    "tree-holdTitle": {
+      "kind": "title1",
+      "maxW": 1720,
+      "page": "tree-hold",
+      "text": "Дерево: удержание — быстрые действия по долгому нажатию, перенос навыка",
+      "w": 240,
+      "x": 0,
+      "y": -260
+    },
+    "tree-readTitle": {
+      "kind": "title1",
+      "maxW": 1720,
+      "page": "tree-read",
+      "text": "Дерево: читаемость — главный счёт: этап; состояния с подписью, связи веток",
       "w": 240,
       "x": 0,
       "y": -260
@@ -955,43 +1027,11 @@
       "x": 0,
       "y": -260
     },
-    "friendsTitle": {
+    "animTitle": {
       "kind": "title1",
       "maxW": 1720,
-      "page": "friends",
-      "text": "Друзья: напарники по коду, без регистрации (ступень 1 — анонимный ключ)",
-      "x": 0,
-      "y": -260
-    },
-    "tree-readTitle": {
-      "kind": "title1",
-      "maxW": 1720,
-      "page": "tree-read",
-      "text": "Дерево: читаемость — главный счёт: этап; состояния с подписью, связи веток",
-      "x": 0,
-      "y": -260
-    },
-    "tree-holdTitle": {
-      "kind": "title1",
-      "maxW": 1720,
-      "page": "tree-hold",
-      "text": "Дерево: удержание — быстрые действия по долгому нажатию, перенос навыка",
-      "x": 0,
-      "y": -260
-    },
-    "suggestTitle": {
-      "kind": "title1",
-      "maxW": 1720,
-      "page": "suggest",
-      "text": "Готовые варианты — цели навыка, новый навык (поиск по путям), направление и ветка",
-      "x": 0,
-      "y": -260
-    },
-    "autocompleteTitle": {
-      "kind": "title1",
-      "maxW": 1720,
-      "page": "autocomplete",
-      "text": "Подсказки при вводе — во всех полях добавления: было, цели, варианты",
+      "page": "anim",
+      "text": "Анимации прогресса (мастер-план, высокий приоритет) — демо крутится по кругу",
       "x": 0,
       "y": -260
     }
@@ -1081,7 +1121,10 @@
     "SuggestSkill.dc.html",
     "SuggestArea.dc.html",
     "AutoEntry.dc.html",
-    "AutoGoal.dc.html"
+    "AutoGoal.dc.html",
+    "AnimGoal.dc.html",
+    "AnimXp.dc.html",
+    "AnimLevel.dc.html"
   ],
   "pages": [
     {
@@ -1175,6 +1218,10 @@
     {
       "id": "autocomplete",
       "name": "Подсказки при вводе"
+    },
+    {
+      "id": "anim",
+      "name": "Анимации прогресса"
     }
   ],
   "title": "LifeQuest — макет"

@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Анимация: новый уровень</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Unbounded:wght@500;700&amp;display=swap" rel="stylesheet">
+<style>body{margin:0}</style>
+</helmet>
+<div style="width: 390px; height: 860px; box-sizing: border-box; position: relative; overflow: hidden; background: #0E1015; color: #ECEDF1; font-family: Manrope, sans-serif">
+<div style="padding: 20px 16px 100px; display: flex; flex-direction: column; gap: 12px"><style>
+@keyframes l-bg { 0%,4% { opacity: 0 } 10%,86% { opacity: 1 } 96%,100% { opacity: 0 } }
+@keyframes l-wave { 0%,10% { transform: scale(.2); opacity: .9 } 40% { transform: scale(2.4); opacity: 0 } 100% { transform: scale(2.4); opacity: 0 } }
+@keyframes l-old { 0%,16% { transform: rotateX(0); opacity: 1 } 26%,100% { transform: rotateX(90deg); opacity: 0 } }
+@keyframes l-new { 0%,26% { transform: rotateX(-90deg); opacity: 0 } 36% { transform: rotateX(0) scale(1.15); opacity: 1 } 44%,100% { transform: scale(1); opacity: 1 } }
+@keyframes l-text { 0%,40% { opacity: 0; transform: translateY(10px) } 50%,100% { opacity: 1; transform: none } }
+@keyframes l-spark { 0%,30% { opacity: 0; transform: translateY(0) scale(.4) } 40% { opacity: 1 } 70%,100% { opacity: 0; transform: translateY(-120px) scale(1) } }
+.l-bg { animation: l-bg 5s infinite } .l-wave { animation: l-wave 5s infinite } .l-wave2 { animation: l-wave 5s .25s infinite }
+.l-old { animation: l-old 5s infinite; backface-visibility: hidden } .l-new { animation: l-new 5s infinite; backface-visibility: hidden }
+.l-t1 { animation: l-text 5s infinite } .l-t2 { animation: l-text 5s .2s infinite } .l-t3 { animation: l-text 5s .4s infinite }
+.l-s { animation: l-spark 5s infinite }
+</style><div class="l-bg" style="position: absolute; inset: 0; background: radial-gradient(circle at 50% 45%, #2A2010 0%, #0E1015 70%); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; overflow: hidden"><span class="l-wave" style="position: absolute; top: 45%; left: 50%; width: 220px; height: 220px; margin: -110px 0 0 -110px; border-radius: 50%; border: 3px solid #F2B544"></span><span class="l-wave2" style="position: absolute; top: 45%; left: 50%; width: 220px; height: 220px; margin: -110px 0 0 -110px; border-radius: 50%; background: #F2B54422"></span><span class="l-s" style="position: absolute; left: 30%; top: 52%; width: 6px; height: 6px; border-radius: 3px; background: #F2B544; animation-delay: 0s"></span><span class="l-s" style="position: absolute; left: 40%; top: 52%; width: 6px; height: 6px; border-radius: 3px; background: #F2B544; animation-delay: 0.1s"></span><span class="l-s" style="position: absolute; left: 52%; top: 52%; width: 6px; height: 6px; border-radius: 3px; background: #F2B544; animation-delay: 0.05s"></span><span class="l-s" style="position: absolute; left: 62%; top: 52%; width: 6px; height: 6px; border-radius: 3px; background: #F2B544; animation-delay: 0.15s"></span><span class="l-s" style="position: absolute; left: 70%; top: 52%; width: 6px; height: 6px; border-radius: 3px; background: #F2B544; animation-delay: 0.08s"></span><span class="l-s" style="position: absolute; left: 46%; top: 52%; width: 6px; height: 6px; border-radius: 3px; background: #F2B544; animation-delay: 0.2s"></span><span class="l-s" style="position: absolute; left: 58%; top: 52%; width: 6px; height: 6px; border-radius: 3px; background: #F2B544; animation-delay: 0.12s"></span><span class="l-t1" style="font-size: 13px; font-weight: 800; letter-spacing: 2px; color: #F2B544">НОВЫЙ УРОВЕНЬ</span><span style="position: relative; width: 150px; height: 150px; perspective: 600px"><span class="l-old" style="position: absolute; inset: 0; border-radius: 36px; background: #1E222B; border: 2px solid #2A2F3B; display: flex; align-items: center; justify-content: center; font-family: Unbounded, sans-serif; font-size: 72px; font-weight: 700; color: #A3A9B6">6</span><span class="l-new" style="position: absolute; inset: 0; border-radius: 36px; background: #F2B544; display: flex; align-items: center; justify-content: center; font-family: Unbounded, sans-serif; font-size: 72px; font-weight: 700; color: #14161C; box-shadow: 0 0 60px #F2B54488">7</span></span><span class="l-t2" style="font-family: Unbounded, sans-serif; font-size: 22px; font-weight: 700">Персонаж стал сильнее</span><span class="l-t3" style="font-size: 14px; color: #A3A9B6; text-align: center; line-height: 1.5">До уровня 8 — 450 XP</span><span class="l-t3" style="margin-top: 14px; padding: 14px 40px; border-radius: 16px; background: #F2B544; color: #14161C; font-weight: 800">Дальше</span></div></div>
+<div style="display: none; height: 76px; background: #12141A; border-top: 1px solid #2A2F3B; display: grid; grid-template-columns: repeat(5, 1fr); align-items: center; text-align: center; font-size: 11.5px; color: #8B92A0; font-weight: 700">
+<span>Персонаж</span><span style="color: #F2B544">Дерево</span><span><span style="display: inline-flex; width: 56px; height: 56px; border-radius: 28px; background: #F2B544; color: #14161C; align-items: center; justify-content: center; font-size: 28px; margin-top: -26px">+</span></span><span>Квесты</span><span>Ещё</span></div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":860}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

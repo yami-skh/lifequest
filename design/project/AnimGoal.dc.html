@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Анимация: закрытие цели</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Unbounded:wght@500;700&amp;display=swap" rel="stylesheet">
+<style>body{margin:0}</style>
+</helmet>
+<div style="width: 390px; height: 860px; box-sizing: border-box; position: relative; overflow: hidden; background: #0E1015; color: #ECEDF1; font-family: Manrope, sans-serif">
+<div style="padding: 20px 16px 100px; display: flex; flex-direction: column; gap: 12px"><style>
+@keyframes g-box { 0%,18% { background: transparent; border-color: #3A404D; transform: scale(1) } 22% { transform: scale(.85) } 28%,100% { background: #4CC9A0; border-color: #4CC9A0; transform: scale(1) } }
+@keyframes g-tick { 0%,24% { stroke-dashoffset: 24 } 34%,100% { stroke-dashoffset: 0 } }
+@keyframes g-text { 0%,30% { color: #ECEDF1; text-decoration-color: transparent } 40%,100% { color: #A3A9B6; text-decoration-color: #A3A9B6 } }
+@keyframes g-row { 0%,46% { transform: none; opacity: 1 } 58%,100% { transform: translateY(96px); opacity: .55 } }
+@keyframes g-up { 0%,46% { transform: none } 58%,100% { transform: translateY(-56px) } }
+@keyframes g-bar { 0%,40% { width: 60% } 56%,100% { width: 80% } }
+@keyframes g-xp { 0%,30% { opacity: 0; transform: translateY(6px) } 36%,60% { opacity: 1; transform: none } 70%,100% { opacity: 0; transform: translateY(-14px) } }
+.g-box { animation: g-box 4s infinite } .g-tick { stroke-dasharray: 24; animation: g-tick 4s infinite } .g-text { text-decoration: line-through; animation: g-text 4s infinite }
+.g-row { animation: g-row 4s infinite } .g-up { animation: g-up 4s infinite } .g-bar { animation: g-bar 4s infinite } .g-xp { animation: g-xp 4s infinite }
+</style><span style="font-size: 12px; color: #A3A9B6">Тело › Сила</span><span style="font-family: Unbounded, sans-serif; font-size: 20px; font-weight: 700; margin-top: -8px">Отжимания</span><div style="background: #171A21; border: 1px solid #F2B54466; border-radius: 18px; padding: 14px; display: flex; flex-direction: column; gap: 10px"><div style="display: flex; align-items: center; gap: 10px"><span style="width: 30px; height: 30px; border-radius: 15px; background: #F2B544; color: #14161C; display: flex; align-items: center; justify-content: center; font-weight: 900">2</span><span style="flex: 1; font-weight: 800">Этап 2 · Базовый</span><span style="font-size: 12px; color: #A3A9B6">+100 XP за этап</span></div><span style="height: 6px; border-radius: 3px; background: #2A2F3B; display: block"><span class="g-bar" style="display: block; height: 100%; border-radius: 3px; background: #F2B544"></span></span><div class="g-row" style="display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 12px; background: #1E222B; position: relative"><span class="g-box" style="width: 24px; height: 24px; border-radius: 7px; border: 2px solid #3A404D; display: flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 24 24"><path class="g-tick" d="M5 12l5 5 9-10" fill="none" stroke="#0E1015" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="g-text" style="flex: 1; font-size: 14.5px; font-weight: 600; color: #ECEDF1; ">30 отжиманий подряд</span><span class="g-xp" style="position: absolute; right: 12px; font-weight: 900; color: #F2B544; font-size: 13px">+20 XP</span></div><div class="g-up" style="display: flex; flex-direction: column; gap: 10px"><div class="" style="display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 12px; background: #1E222B; position: relative"><span style="width: 24px; height: 24px; border-radius: 7px; border: 2px solid #3A404D"></span><span class="" style="flex: 1; font-size: 14.5px; font-weight: 600; color: #ECEDF1; ">3 тренировки за неделю</span></div><div class="" style="display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 12px; background: #1E222B; position: relative"><span style="width: 24px; height: 24px; border-radius: 7px; border: 2px solid #3A404D"></span><span class="" style="flex: 1; font-size: 14.5px; font-weight: 600; color: #ECEDF1; ">Записать технику на видео</span></div></div><div class="" style="display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 12px; background: #1E222B; position: relative"><span style="width: 24px; height: 24px; border-radius: 7px; background: #4CC9A0; display: flex; align-items: center; justify-content: center; color: #0E1015; font-weight: 900">✓</span><span class="" style="flex: 1; font-size: 14.5px; font-weight: 600; color: #A3A9B6; text-decoration: line-through">Отжимания с паузой 3×10</span></div><div class="" style="display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 12px; background: #1E222B; position: relative"><span style="width: 24px; height: 24px; border-radius: 7px; background: #4CC9A0; display: flex; align-items: center; justify-content: center; color: #0E1015; font-weight: 900">✓</span><span class="" style="flex: 1; font-size: 14.5px; font-weight: 600; color: #A3A9B6; text-decoration: line-through">Правильная техника</span></div></div><span style="font-size: 12.5px; color: #A3A9B6; text-align: center; line-height: 1.45">1 — галочка рисуется штрихом и «щёлкает» (вибрация).<br>2 — «+20 XP» всплывает у строки.<br>3 — строка уходит вниз к выполненным, полоска этапа дорастает.<br>Последняя цель этапа — вспышка этапа и «+100 XP».</span></div>
+<div style="display: none; height: 76px; background: #12141A; border-top: 1px solid #2A2F3B; display: grid; grid-template-columns: repeat(5, 1fr); align-items: center; text-align: center; font-size: 11.5px; color: #8B92A0; font-weight: 700">
+<span>Персонаж</span><span style="color: #F2B544">Дерево</span><span><span style="display: inline-flex; width: 56px; height: 56px; border-radius: 28px; background: #F2B544; color: #14161C; align-items: center; justify-content: center; font-size: 28px; margin-top: -26px">+</span></span><span>Квесты</span><span>Ещё</span></div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":860}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>
