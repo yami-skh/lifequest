@@ -727,6 +727,33 @@
       "w": 390,
       "x": 860,
       "y": 0
+    },
+    "SuggestGoals.dc.html": {
+      "h": 900,
+      "page": "suggest",
+      "radius": 28,
+      "title": "1. Цели навыка",
+      "w": 390,
+      "x": 0,
+      "y": 0
+    },
+    "SuggestSkill.dc.html": {
+      "h": 860,
+      "page": "suggest",
+      "radius": 28,
+      "title": "2. Новый навык: поиск",
+      "w": 390,
+      "x": 430,
+      "y": 0
+    },
+    "SuggestArea.dc.html": {
+      "h": 860,
+      "page": "suggest",
+      "radius": 28,
+      "title": "3. Направление и ветка",
+      "w": 390,
+      "x": 860,
+      "y": 0
     }
   },
   "createdOnFiles": {
@@ -736,7 +763,7 @@
   "designSystems": [],
   "launch": {
     "view": "canvas",
-    "page": "tree-hold"
+    "page": "suggest"
   },
   "notes": {
     "aiTitle": {
@@ -933,6 +960,14 @@
       "text": "Дерево: удержание — быстрые действия по долгому нажатию, перенос навыка",
       "x": 0,
       "y": -260
+    },
+    "suggestTitle": {
+      "kind": "title1",
+      "maxW": 1720,
+      "page": "suggest",
+      "text": "Готовые варианты — цели навыка, новый навык (поиск по путям), направление и ветка",
+      "x": 0,
+      "y": -260
     }
   },
   "order": [
@@ -1015,7 +1050,10 @@
     "TreeLegend.dc.html",
     "HoldMenu.dc.html",
     "HoldMove.dc.html",
-    "HoldBranch.dc.html"
+    "HoldBranch.dc.html",
+    "SuggestGoals.dc.html",
+    "SuggestSkill.dc.html",
+    "SuggestArea.dc.html"
   ],
   "pages": [
     {
@@ -1101,6 +1139,10 @@
     {
       "id": "tree-hold",
       "name": "Дерево: удержание"
+    },
+    {
+      "id": "suggest",
+      "name": "Готовые варианты"
     }
   ],
   "title": "LifeQuest — макет"
