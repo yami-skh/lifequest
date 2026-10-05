@@ -196,8 +196,8 @@
   THEMES:23, *Toggle:29, Group:38, *Settings:47, AboutRow:162, hiddenThisSession:192, *UpdateCard:193, AiBlock:226, ChannelPicker:275, ErrorLogRow:322
 - **Skill.tsx** (447)
   *stagesToast:26, Fold:29, word:30, *Skill:34, .toggle:64, .onFocus:66, FoldRow:201, WorkoutCard:215, SkillMenu:250, GoalRow:287, Goals:300, Notes:382, GalleryItem:422, FullPhoto:427, Gallery:437
-- **Tree.tsx** (696)
-  Editor:27, loadExpanded:34, *Tree:42, .hideHoldHint:63, .openMenu:72, .setMode:85, .toggle:94, .skillCount:112, .skillsIn:115, .menuBtn:118, .renderChildren:124, .rowOf:136, .summaryOf:149, .headSummary:150, .renderSkillClear:157, .filtered:185, .filterChips:186, .renderNode:200, KIND_LABEL:399, MoveSheet:402, TreeHelp:448, NodeEditor:481, .has:601, .goalCount:604, .close:609, .submit:615
+- **Tree.tsx** (697)
+  Editor:27, loadExpanded:34, *Tree:42, .hideHoldHint:63, .openMenu:72, .setMode:85, .toggle:94, .skillCount:112, .skillsIn:115, .menuBtn:118, .renderChildren:125, .rowOf:137, .summaryOf:150, .headSummary:151, .renderSkillClear:158, .filtered:186, .filterChips:187, .renderNode:201, KIND_LABEL:400, MoveSheet:403, TreeHelp:449, NodeEditor:482, .has:602, .goalCount:605, .close:610, .submit:616
 
 ## src/styles
 

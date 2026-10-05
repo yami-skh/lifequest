@@ -121,13 +121,14 @@ export function Tree({ focusId, onAdd }: { focusId?: string; onAdd?: (p: EntryPr
     </button>
   );
 
+  // В «Понятном дереве» «+ навык / + ветка» — только у пустой ветки; в остальных — через «···» или удержание.
   const renderChildren = (n: Node) => (
     <div class="t-rail">
       {(w.children.get(n.id) ?? []).map(renderNode)}
-      <div class="t-item t-add">
+      {(!clear || (w.children.get(n.id) ?? []).length === 0) && <div class="t-item t-add">
         <button type="button" class="link small" onClick={() => setEditor({ mode: 'add', parent: n, kind: 'skill' })}>+ навык</button>
         <button type="button" class="link small" onClick={() => setEditor({ mode: 'add', parent: n, kind: 'branch' })}>+ ветка</button>
-      </div>
+      </div>}
     </div>
   );
 
