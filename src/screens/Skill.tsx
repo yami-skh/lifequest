@@ -25,7 +25,7 @@ import { useBackClose } from '../lib/backButton';
 import { ac } from '../lib/theme';
 
 export const stagesToast = (names: string[]) =>
-  names.forEach((n) => toast({ kind: 'achievement', title: `Ступень «${n}» пройдена`, sub: `+${STAGE_BONUS} XP` }));
+  names.forEach((n) => toast({ kind: 'achievement', title: `Этап «${n}» пройден`, sub: `+${STAGE_BONUS} XP` }));
 
 type Fold = 'goals' | 'history' | 'notes';
 const word = (n: number, one: string, few: string, many: string) =>
@@ -70,7 +70,7 @@ export function Skill({ id, onAdd }: { id: string; onAdd: (p: EntryPreset) => vo
     if (!ok) toast({ kind: 'info', title: 'Активных навыков уже 3', sub: 'Сделай неактивным один из них' });
   };
 
-  const goalsMeta = cur ? `ступень ${cur.stage} · ${cur.done} из ${cur.goals.length}` : goals.length ? 'все пройдены' : 'добавить';
+  const goalsMeta = cur ? `этап ${cur.stage} · ${cur.done} из ${cur.goals.length}` : goals.length ? 'все пройдены' : 'добавить';
   const notesMeta = [photoIds.length ? `${photoIds.length} фото` : '', notesCount ? `${notesCount} ${word(notesCount, 'заметка', 'заметки', 'заметок')}` : ''].filter(Boolean).join(' · ') || 'пусто';
 
   return (
@@ -106,7 +106,7 @@ export function Skill({ id, onAdd }: { id: string; onAdd: (p: EntryPreset) => vo
           <ProgressBar pct={prog?.pct ?? 0} color={ac(area?.color)} height={10} />
           <div class="spread small strong">
             <span>{prog ? `${Math.round(prog.pct)}%` : 'Нет целей'}</span>
-            <span class="muted">{prog ? `${cur ? `ступень ${cur.stage} из ${stages.length} · ` : ''}${prog.done} из ${prog.total} целей` : 'добавь цели, чтобы появилась полоска'}</span>
+            <span class="muted">{prog ? `${cur ? `этап ${cur.stage} из ${stages.length} · ` : ''}${prog.done} из ${prog.total} целей` : 'добавь цели, чтобы появилась полоска'}</span>
           </div>
         </div>
       )}
@@ -154,9 +154,9 @@ export function Skill({ id, onAdd }: { id: string; onAdd: (p: EntryPreset) => vo
 
       {!workout && (
         <section class="next-goals" style={{ '--c': color }}>
-          <span class="next-goals-label">{cur ? `Следующие цели · ступень ${cur.stage}` : 'Цели'}</span>
+          <span class="next-goals-label">{cur ? `Следующие цели · этап ${cur.stage}` : 'Цели'}</span>
           {cur?.goals.filter((g) => !g.done).slice(0, 2).map((g) => <GoalRow g={g} editing={false} key={g.id} />)}
-          {!cur && <span class="muted small">{goals.length ? 'Все цели пройдены — добавь новую ступень.' : 'Целей пока нет. Добавь, что хочешь узнать и что сделать руками.'}</span>}
+          {!cur && <span class="muted small">{goals.length ? 'Все цели пройдены — добавь новый этап.' : 'Целей пока нет. Добавь, что хочешь узнать и что сделать руками.'}</span>}
           <div class="spread">
             <button type="button" class="link small" onClick={() => toggle('goals')} aria-expanded={fold === 'goals'}>
               {fold === 'goals' ? 'Свернуть' : goals.length ? `Все цели (${goals.length}) →` : 'Добавить цель →'}
@@ -175,7 +175,7 @@ export function Skill({ id, onAdd }: { id: string; onAdd: (p: EntryPreset) => vo
 
       <div class="fold-list">
         {workout && (
-          <FoldRow title="Цели и ступени" meta={goalsMeta} open={fold === 'goals'} onToggle={() => toggle('goals')}>
+          <FoldRow title="Цели и этапы" meta={goalsMeta} open={fold === 'goals'} onToggle={() => toggle('goals')}>
             <div class="ai-row"><AiGoalsButton skillId={id} /></div>
             <Goals skillId={id} goals={goals} />
           </FoldRow>
@@ -330,7 +330,7 @@ function Goals({ skillId, goals }: { skillId: string; goals: Goal[] }) {
             <div class="stage done" key={s.stage}>
               <button type="button" class="stage-head" onClick={() => setOpenDone(open ? openDone.filter((x) => x !== s.stage) : [...openDone, s.stage])} aria-expanded={open}>
                 <span class="stage-num ok"><Icon name="check" size={16} stroke={3} /></span>
-                <span class="stage-text"><span class="strong">Ступень {s.stage} · {s.name}</span><span class="stage-sub ok">пройдена · {s.done} из {s.goals.length}</span></span>
+                <span class="stage-text"><span class="strong">Этап {s.stage} · {s.name}</span><span class="stage-sub ok">пройден · {s.done} из {s.goals.length}</span></span>
                 <Icon name={open ? 'down' : 'right'} size={16} stroke={2.4} />
               </button>
               {open && <div class="stage-goals">{s.goals.map((g) => <GoalRow g={g} editing={editing} key={g.id} />)}</div>}
@@ -342,7 +342,7 @@ function Goals({ skillId, goals }: { skillId: string; goals: Goal[] }) {
             <div class="stage current" key={s.stage}>
               <div class="stage-head">
                 <span class="stage-num">{s.stage}</span>
-                <span class="stage-text"><span class="strong">Ступень {s.stage} · {s.name}</span><span class="stage-sub">текущая · {s.done} из {s.goals.length}</span></span>
+                <span class="stage-text"><span class="strong">Этап {s.stage} · {s.name}</span><span class="stage-sub">текущий · {s.done} из {s.goals.length}</span></span>
                 <span class="stage-bonus">+{STAGE_BONUS} XP</span>
               </div>
               <div class="stage-goals">{s.goals.map((g) => <GoalRow g={g} editing={editing} key={g.id} />)}</div>
@@ -353,7 +353,7 @@ function Goals({ skillId, goals }: { skillId: string; goals: Goal[] }) {
           <div class="stage locked" key={s.stage}>
             <div class="stage-head">
               <span class="stage-num lock"><Icon name="lock" size={16} /></span>
-              <span class="stage-text"><span class="strong">Ступень {s.stage} · {s.name}</span><span class="stage-sub">откроется после ступени {s.stage - 1} · {s.goals.length} {s.goals.length === 1 ? 'цель' : s.goals.length < 5 ? 'цели' : 'целей'}</span></span>
+              <span class="stage-text"><span class="strong">Этап {s.stage} · {s.name}</span><span class="stage-sub">откроется после этапа {s.stage - 1} · {s.goals.length} {s.goals.length === 1 ? 'цель' : s.goals.length < 5 ? 'цели' : 'целей'}</span></span>
             </div>
             {editing && <div class="stage-goals">{s.goals.map((g) => <GoalRow g={g} editing key={g.id} />)}</div>}
           </div>
@@ -371,7 +371,7 @@ function Goals({ skillId, goals }: { skillId: string; goals: Goal[] }) {
           {stages.map((s) => (
             <button type="button" key={s.stage} class={target === s.stage ? 'chip big primary' : 'chip big'} onClick={() => setTarget(s.stage)}>{s.stage} · {s.name}</button>
           ))}
-          <button type="button" class={target === last + 1 ? 'chip big primary' : 'chip big dashed'} onClick={() => setTarget(last + 1)}>+ ступень {stageName(last + 1)}</button>
+          <button type="button" class={target === last + 1 ? 'chip big primary' : 'chip big dashed'} onClick={() => setTarget(last + 1)}>+ этап {stageName(last + 1)}</button>
         </div>
         <div class="segmented">
           <button type="button" class={kind === 'theory' ? 'on' : ''} onClick={() => setKind('theory')}>Теория</button>

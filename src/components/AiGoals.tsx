@@ -91,7 +91,7 @@ function AiGoalsSheet({ skillId, onClose }: { skillId: string; onClose: () => vo
         {a.comment && <div class="ai-note"><Icon name="spark" size={16} /><span>{a.comment}</span></div>}
         {a.stages.map((s) => (
           <section class="stack-4" key={s.stage}>
-            <span class="ai-stage">Ступень {s.stage} · {stageName(s.stage)}</span>
+            <span class="ai-stage">Этап {s.stage} · {stageName(s.stage)}</span>
             {s.goals.map((g, i) => {
               const key = `${s.stage}:${i}`;
               const on = picked.has(key);

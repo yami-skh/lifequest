@@ -2,7 +2,7 @@
 import type { GoalKind } from './progress';
 
 export const STAGE_NAMES = ['Новичок', 'Базовый', 'Уверенный', 'Продвинутый', 'Мастер'];
-export const stageName = (n: number) => STAGE_NAMES[n - 1] ?? `Ступень ${n}`;
+export const stageName = (n: number) => STAGE_NAMES[n - 1] ?? `Этап ${n}`;
 /** XP за полностью пройденную ступень. */
 export const STAGE_BONUS = 100;
 

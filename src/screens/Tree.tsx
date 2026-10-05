@@ -235,7 +235,7 @@ export function Tree({ focusId, onAdd }: { focusId?: string; onAdd?: (p: EntryPr
                     : fresh
                       ? 'не исследован · первое действие ×1.5'
                       : stage && stages.length > 1
-                        ? `${n.focus ? 'активный · ' : ''}ступень ${stage.stage} из ${stages.length}`
+                        ? `${n.focus ? 'активный · ' : ''}этап ${stage.stage} из ${stages.length}`
                         : `${lv.name} · ${lv.xp} XP`}
                 </span>
               )}
@@ -306,7 +306,7 @@ export function Tree({ focusId, onAdd }: { focusId?: string; onAdd?: (p: EntryPr
       {tpl && w.skills.length < 5 && (
         <button type="button" class="tpl-hint" onClick={() => setTplOpen(true)}>
           <span class="strong">Не знаешь, с чего начать?</span>
-          <span class="muted">Возьми готовый путь: навыки, цели по ступеням и замеры уже расписаны.</span>
+          <span class="muted">Возьми готовый путь: навыки, цели по этапам и замеры уже расписаны.</span>
           <span class="tpl-go">Выбрать шаблон →</span>
         </button>
       )}
@@ -651,7 +651,7 @@ function NodeEditor({ editor, onClose, onDelete, onAdded, setEditor, onAdd }: {
                     <span class="stack-4">
                       <span class="strong">{p.title}</span>
                       <span class="muted small">
-                        {p.stages.length} {plural(p.stages.length, 'ступень', 'ступени', 'ступеней')} · {n} {plural(n, 'цель', 'цели', 'целей')}{p.metric ? ` · замер «${p.metric.title}»` : ''}
+                        {p.stages.length} {plural(p.stages.length, 'этап', 'этапа', 'этапов')} · {n} {plural(n, 'цель', 'цели', 'целей')}{p.metric ? ` · замер «${p.metric.title}»` : ''}
                       </span>
                     </span>
                     {exists ? <span class="tpl-have">уже есть</span> : <span class={on ? 'radio on' : 'radio'} />}
@@ -659,7 +659,7 @@ function NodeEditor({ editor, onClose, onDelete, onAdded, setEditor, onAdd }: {
                   {on && (
                     <span class="preset-stages">
                       {p.stages.map((st) => (
-                        <span key={st.stage} class="small"><b class="tpl-gold">Ст. {st.stage}{st.boss ? ' · контрольная' : ''}</b> · {st.goals.map((g) => g.title).join(', ')}</span>
+                        <span key={st.stage} class="small"><b class="tpl-gold">Этап {st.stage}{st.boss ? ' · контрольный' : ''}</b> · {st.goals.map((g) => g.title).join(', ')}</span>
                       ))}
                     </span>
                   )}

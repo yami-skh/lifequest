@@ -124,7 +124,7 @@ export async function awardStages(skillId: string): Promise<string[]> {
     const createdAt = nowIso();
     for (const st of fresh) {
       const entry: Entry = {
-        id: uid(), date: localDate(), type: 'bonus', text: `Ступень «${st.name}» пройдена · ${node.title}`,
+        id: uid(), date: localDate(), type: 'bonus', text: `Этап «${st.name}» пройден · ${node.title}`,
         difficulty: 1, closedGoalIds: [], outcome: 'ok', photoIds: [], createdAt,
       };
       await db.entries.add(entry);

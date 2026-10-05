@@ -54,7 +54,7 @@ describe('шаблоны: план импорта', () => {
     expect(p.metrics).toHaveLength(1);
     const push = p.nodes.find((x) => x.title === 'Отжимания')!;
     expect(p.nodes.find((x) => x.title === 'Подтягивания')!.requires).toEqual([{ nodeId: push.id, minLevel: 2 }]);
-    expect(p.quest?.steps.map((s) => s.title)).toEqual(['Отжимания: ступень 1', 'Подтягивания: ступень 2']);
+    expect(p.quest?.steps.map((s) => s.title)).toEqual(['Отжимания: этап 1', 'Подтягивания: этап 2']);
   });
   it('повторный импорт ничего не дублирует', () => {
     n = 0;

@@ -33,10 +33,10 @@ export function NextActionCard({ onAdd }: { onAdd: (p: EntryPreset) => void }) {
       {a.kind === 'goal' ? (
         <>
           <div class="stack-4">
-            <span class="na-skill" style={{ color }}>{node.title} · ступень {a.stage} «{a.stageName}»</span>
+            <span class="na-skill" style={{ color }}>{node.title} · этап {a.stage} «{a.stageName}»</span>
             <span class="na-goal">{a.goal.title}</span>
             <span class="na-sub">
-              {a.goal.kind === 'theory' ? 'теория' : 'практика'} · {a.left === 1 ? 'последняя цель ступени → +100 XP' : `до ступени ещё ${a.left} ${plural(a.left, 'цель', 'цели', 'целей')}`}
+              {a.goal.kind === 'theory' ? 'теория' : 'практика'} · {a.left === 1 ? 'последняя цель этапа → +100 XP' : `до конца этапа ещё ${a.left} ${plural(a.left, 'цель', 'цели', 'целей')}`}
             </span>
             <span class={a.steps ? 'na-steps on' : 'na-steps'}>
               {a.steps
@@ -57,8 +57,8 @@ export function NextActionCard({ onAdd }: { onAdd: (p: EntryPreset) => void }) {
         <>
           <div class="stack-4">
             <span class="na-skill" style={{ color }}>{node.title} · уровень {w.skillLevelOf(a.skillId).level}</span>
-            <span class="na-goal">{a.hasGoals ? 'Все ступени пройдены. Что дальше?' : 'У навыка пока нет целей'}</span>
-            <span class="na-sub">Добавь следующую ступень — из готовых путей или своими целями</span>
+            <span class="na-goal">{a.hasGoals ? 'Все этапы пройдены. Что дальше?' : 'У навыка пока нет целей'}</span>
+            <span class="na-sub">Добавь следующий этап — из готовых путей или своими целями</span>
           </div>
           <button type="button" class="btn primary" onClick={() => go(`skill/${a.skillId}`)}>+ Цели</button>
         </>
@@ -87,7 +87,7 @@ function ChoosePath() {
               <div class="na-path" key={s.skillId}>
                 <span class="dot" style={{ background: ac(w.areaOf(s.skillId)?.color) ?? 'var(--muted)' }} />
                 <span class="strong na-path-title">{n.title}</span>
-                <span class="muted small">ступень {s.stage} · {Math.round(s.ratio * 100)}%</span>
+                <span class="muted small">этап {s.stage} · {Math.round(s.ratio * 100)}%</span>
                 <button type="button" class="link small" onClick={() => pick(s.skillId)}>Выбрать</button>
               </div>
             );
@@ -96,7 +96,7 @@ function ChoosePath() {
       ) : (
         <span class="muted small">Сначала добавь навык с целями в «Дереве».</span>
       )}
-      <a class="link small na-all" href="#/tree">Навыки, где ты ближе всего к следующей ступени · Всё дерево →</a>
+      <a class="link small na-all" href="#/tree">Навыки, где ты ближе всего к следующему этапу · Всё дерево →</a>
     </section>
   );
 }

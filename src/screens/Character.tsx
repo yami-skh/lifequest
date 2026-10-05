@@ -133,7 +133,7 @@ function NextHome({ onAdd }: { onAdd: (p?: EntryPreset) => void }) {
               <a class="nh-path" href={`#/skill/${n.id}`} key={n.id}>
                 <Ring pct={lv.pct} size={30} stroke={3} color={color}><span class="pill-lvl">{lv.level}</span></Ring>
                 <span class="stack-4 nh-path-body">
-                  <span class="spread"><span class="strong">{n.title}</span><span class="muted small strong">{cur ? `ступень ${cur.stage} · ${left} ${plural(left, 'цель', 'цели', 'целей')}` : 'всё пройдено'}</span></span>
+                  <span class="spread"><span class="strong">{n.title}</span><span class="muted small strong">{cur ? `этап ${cur.stage} · ${left} ${plural(left, 'цель', 'цели', 'целей')}` : 'всё пройдено'}</span></span>
                   <ProgressBar pct={w.progress.get(n.id) ?? 0} color={color} height={5} />
                 </span>
               </a>

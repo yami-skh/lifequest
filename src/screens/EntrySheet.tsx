@@ -240,7 +240,7 @@ export function EntrySheet({ preset, onClose }: { preset: EntryPreset; onClose: 
 
       {outcome === 'ok' && cur && stageGoals.length > 0 && (
         <div class="stack-4">
-          <SectionLabel>Закрыть цель? · ступень «{cur.name}»</SectionLabel>
+          <SectionLabel>Закрыть цель? · этап «{cur.name}»</SectionLabel>
           {stageGoals.map((g) => {
             const on = closeGoals.includes(g.id);
             return (

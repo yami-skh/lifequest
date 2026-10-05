@@ -50,10 +50,10 @@ export function validateTemplate(x: unknown): { ok: true; template: Template } |
       if (!isStr(s?.key, 60) || !isStr(s?.title, 80)) errors.push(`${p}: у навыка нет key или title`);
       else if (keys.has(s.key)) errors.push(`${p}: повтор key «${s.key}»`);
       else keys.add(s.key);
-      if (!Array.isArray(s?.stages) || s.stages.length === 0) errors.push(`${p}: нет ступеней`);
+      if (!Array.isArray(s?.stages) || s.stages.length === 0) errors.push(`${p}: нет этапов`);
       for (const st of s?.stages ?? []) {
-        if (!Number.isInteger(st?.stage) || st.stage < 1 || st.stage > 10) errors.push(`${p}: ступень вне 1–10`);
-        if (!Array.isArray(st?.goals) || st.goals.length === 0) errors.push(`${p}: ступень ${st?.stage} без целей`);
+        if (!Number.isInteger(st?.stage) || st.stage < 1 || st.stage > 10) errors.push(`${p}: этап вне 1–10`);
+        if (!Array.isArray(st?.goals) || st.goals.length === 0) errors.push(`${p}: этап ${st?.stage} без целей`);
         for (const g of st?.goals ?? []) {
           if (!isStr(g?.title)) errors.push(`${p}: цель без названия`);
           if (g?.kind !== 'theory' && g?.kind !== 'practice') errors.push(`${p}: цель «${g?.title}» — kind theory/practice`);
@@ -165,7 +165,7 @@ export function planImport(t: Template, have: { nodes: ExistingNode[]; goals: Ex
     plan.quest = {
       title: t.campaign.title,
       rewardXp: t.campaign.rewardXp ?? 500,
-      steps: t.campaign.steps.map((s) => ({ title: `${titleOf(skillIds.get(s.skill)!)}: ступень ${s.stage}`, skillId: skillIds.get(s.skill)!, stage: s.stage })),
+      steps: t.campaign.steps.map((s) => ({ title: `${titleOf(skillIds.get(s.skill)!)}: этап ${s.stage}`, skillId: skillIds.get(s.skill)!, stage: s.stage })),
     };
   }
   return plan;

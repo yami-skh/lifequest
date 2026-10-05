@@ -205,7 +205,7 @@ export function QuestDetail({ id }: { id: string }) {
 
       <div class="notice">
         <Icon name="star" size={18} />
-        <span class="small">Ступень, цель и счётчик действий закрываются сами. «Свой шаг» — нажми на квадрат, когда сделал.</span>
+        <span class="small">Этап, цель и счётчик действий закрываются сами. «Свой шаг» — нажми на квадрат, когда сделал.</span>
       </div>
 
       {q.status === 'active' ? (
@@ -232,7 +232,7 @@ export function QuestDetail({ id }: { id: string }) {
 }
 
 function stepKindLabel(s: QuestStep) {
-  return s.kind === 'stage' ? 'ступень навыка' : s.kind === 'goal' ? 'цель навыка' : s.kind === 'count' ? 'счётчик действий' : s.kind === 'auto' ? 'сам' : 'свой шаг';
+  return s.kind === 'stage' ? 'этап навыка' : s.kind === 'goal' ? 'цель навыка' : s.kind === 'count' ? 'счётчик действий' : s.kind === 'auto' ? 'сам' : 'свой шаг';
 }
 
 type DraftKind = 'stage' | 'goal' | 'count' | 'custom';
@@ -270,7 +270,7 @@ function NewQuestSheet({ onClose }: { onClose: () => void }) {
         <span class="field-label">Шаги · {steps.length}</span>
         {steps.map((s) => (
           <div class="draft-step" key={s.id}>
-            <span class={`draft-kind ${s.kind}`}>{s.kind === 'stage' ? 'СТУПЕНЬ' : s.kind === 'goal' ? 'ЦЕЛЬ' : s.kind === 'count' ? 'СЧЁТЧИК' : 'СВОЙ'}</span>
+            <span class={`draft-kind ${s.kind}`}>{s.kind === 'stage' ? 'ЭТАП' : s.kind === 'goal' ? 'ЦЕЛЬ' : s.kind === 'count' ? 'СЧЁТЧИК' : 'СВОЙ'}</span>
             <span class="draft-title">{s.title}</span>
             <button type="button" class="icon-btn" aria-label="Убрать шаг" onClick={() => setSteps(steps.filter((x) => x.id !== s.id))}><Icon name="x" size={16} stroke={2.4} /></button>
           </div>
@@ -283,7 +283,7 @@ function NewQuestSheet({ onClose }: { onClose: () => void }) {
         <div class="new-req">
           <span class="section-label">Добавить шаг</span>
           <div class="grid-2">
-            <button type="button" class="pick" onClick={() => setAdding('stage')}>Ступень навыка</button>
+            <button type="button" class="pick" onClick={() => setAdding('stage')}>Этап навыка</button>
             <button type="button" class="pick" onClick={() => setAdding('goal')}>Цель навыка</button>
             <button type="button" class="pick" onClick={() => setAdding('count')}>Счётчик действий</button>
             <button type="button" class="pick" onClick={() => setAdding('custom')}>Свой шаг</button>
@@ -358,7 +358,7 @@ function StepBuilder({ kind, onDone }: { kind: DraftKind; onDone: (s: QuestStep 
 
   return (
     <div class="new-req">
-      <span class="section-label">{kind === 'stage' ? 'Ступень навыка' : kind === 'goal' ? 'Цель навыка' : 'Счётчик действий'}</span>
+      <span class="section-label">{kind === 'stage' ? 'Этап навыка' : kind === 'goal' ? 'Цель навыка' : 'Счётчик действий'}</span>
       {skill ? (
         <div class="chips">
           <span class="chip big primary"><span class="chip-btn">{skill.title}</span><button type="button" class="chip-x" aria-label="Другой навык" onClick={() => setSkillId(null)}><Icon name="x" size={14} stroke={3} /></button></span>
@@ -370,11 +370,11 @@ function StepBuilder({ kind, onDone }: { kind: DraftKind; onDone: (s: QuestStep 
       {kind === 'stage' && skill && (
         <div class="stack-4">
           {w.stagesOfSkill(skill.id).filter((s) => !s.complete).map((s) => (
-            <button type="button" class="picker-item" key={s.stage} onClick={() => onDone({ id: uid(), kind: 'stage', title: `Пройти ступень «${s.name}» · ${skill.title}`, skillId: skill.id, stage: s.stage })}>
+            <button type="button" class="picker-item" key={s.stage} onClick={() => onDone({ id: uid(), kind: 'stage', title: `Пройти этап «${s.name}» · ${skill.title}`, skillId: skill.id, stage: s.stage })}>
               <span>{s.stage} · {s.name}</span><span class="muted small">{s.done} из {s.goals.length} целей</span>
             </button>
           ))}
-          {w.stagesOfSkill(skill.id).every((s) => s.complete) && <p class="muted small">Все ступени пройдены — добавь цели в навык.</p>}
+          {w.stagesOfSkill(skill.id).every((s) => s.complete) && <p class="muted small">Все этапы пройдены — добавь цели в навык.</p>}
         </div>
       )}
 
@@ -382,7 +382,7 @@ function StepBuilder({ kind, onDone }: { kind: DraftKind; onDone: (s: QuestStep 
         <div class="stack-4">
           {(w.goalsBySkill.get(skill.id) ?? []).filter((g) => !g.done).map((g) => (
             <button type="button" class="picker-item" key={g.id} onClick={() => onDone({ id: uid(), kind: 'goal', title: `Закрыть цель «${g.title}»`, skillId: skill.id, goalId: g.id })}>
-              <span>{g.title}</span><span class="muted small">ступень {g.stage}</span>
+              <span>{g.title}</span><span class="muted small">этап {g.stage}</span>
             </button>
           ))}
         </div>

@@ -128,7 +128,7 @@ function Preview({ template, plan, onBack, onClose }: { template: Template; plan
           const goals = plan.goals.map((g, i) => ({ g, i })).filter((x) => x.g.skillId === at.id);
           const on = goals.filter((x) => picked.has(x.i)).length;
           const sub = [
-            `${skill.stages.length} ${plural(skill.stages.length, 'ступень', 'ступени', 'ступеней')}`,
+            `${skill.stages.length} ${plural(skill.stages.length, 'этап', 'этапа', 'этапов')}`,
             skill.metric && `замер «${skill.metric.title}»`,
             skill.requires?.length && `после «${skill.requires.map((r) => titleByKey.get(r.skill)).join('», «')}»`,
           ].filter(Boolean).join(' · ');
@@ -153,7 +153,7 @@ function Preview({ template, plan, onBack, onClose }: { template: Template; plan
                     if (!list.length) return null;
                     return (
                       <section class="stack-4" key={st.stage}>
-                        <span class="ai-stage">Ступень {st.stage} · {stageName(st.stage)}{st.boss ? ' · контрольная' : ''}</span>
+                        <span class="ai-stage">Этап {st.stage} · {stageName(st.stage)}{st.boss ? ' · контрольный' : ''}</span>
                         {list.map(({ g, i }) => (
                           <button type="button" class={picked.has(i) ? 'ai-goal' : 'ai-goal off'} onClick={() => toggle(i)} aria-pressed={picked.has(i)} key={i}>
                             <Check done={picked.has(i)} />
