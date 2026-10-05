@@ -74,8 +74,8 @@ export function App() {
       <main>{page}</main>
       <nav class="bottom-nav" aria-label="Разделы">
         <a href="#/" class={tab === 'home' ? 'on' : ''} aria-current={tab === 'home' ? 'page' : undefined}><Icon name="user" size={24} /><span>Персонаж</span></a>
-        <a href="#/tree" class={tab === 'tree' ? 'on' : ''} aria-current={tab === 'tree' ? 'page' : undefined}><Icon name="tree" size={24} /><span>{derived.hasExp('next-action') ? 'Пути' : 'Дерево'}</span></a>
-        <button type="button" class="fab" aria-label="Новая запись" onClick={() => openEntry(screen === 'skill' && param ? { skillId: param } : {})}>
+        <a href="#/tree" class={tab === 'tree' ? 'on' : ''} aria-current={tab === 'tree' ? 'page' : undefined}><Icon name="tree" size={24} /><span>Дерево</span></a>
+        <button type="button" class="fab" aria-label="Новое действие" onClick={() => openEntry(screen === 'skill' && param ? { skillId: param } : {})}>
           <span><Icon name="plus" size={28} stroke={2.6} /></span>
         </button>
         <a href="#/quests" class={tab === 'quests' ? 'on' : ''} aria-current={tab === 'quests' ? 'page' : undefined}><Icon name="sword" size={24} /><span>Квесты</span></a>

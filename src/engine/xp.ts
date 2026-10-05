@@ -48,7 +48,7 @@ export interface XpContext {
   daysSinceLast?: number | null;
 }
 
-/** Через сколько дней без записей навык «ржавеет». */
+/** Через сколько дней без действий навык «ржавеет». */
 export const RUST_DAYS = 60;
 
 export interface XpFactor { label: string; mult: number }
@@ -62,7 +62,7 @@ export function calcXp(c: XpContext): { xp: number; base: number; factors: XpFac
   if (c.sameSkillEntriesToday >= REPEAT_FREE_PER_DAY) factors.push({ label: 'повтор', mult: 0.5 });
   if (c.hasPhoto) factors.push({ label: 'фото', mult: 1.1 });
   if (c.fixesError) factors.push({ label: 'исправление', mult: 1.5 });
-  if (c.isFocus) factors.push({ label: 'фокус', mult: 1.2 });
+  if (c.isFocus) factors.push({ label: 'активный навык', mult: 1.2 });
   if (c.daysSinceLast != null && c.daysSinceLast >= RUST_DAYS) factors.push({ label: 'возвращение', mult: 1.5 });
   const xp = Math.round(factors.reduce((acc, f) => acc * f.mult, base));
   return { xp, base, factors };

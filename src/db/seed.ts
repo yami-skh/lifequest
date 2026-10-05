@@ -53,8 +53,8 @@ async function addStarterQuestIn(createdAt: string) {
   if (!starterExists) await db.quests.add({
     id: uid(), title: 'Обустрой персонажа', kind: 'side', rewardXp: 200, since: localDate(), status: 'active', createdAt,
     steps: [
-      { id: uid(), kind: 'count', title: 'Сделать запись', rule: { target: 1 } },
-      { id: uid(), kind: 'auto', title: 'Отметить навык в фокус', key: 'focus' },
+      { id: uid(), kind: 'count', title: 'Записать действие', rule: { target: 1 } },
+      { id: uid(), kind: 'auto', title: 'Сделать навык активным', key: 'focus' },
       { id: uid(), kind: 'auto', title: 'Закрыть первую цель', key: 'goal' },
       { id: uid(), kind: 'auto', title: 'Сохранить резервную копию', key: 'backup' },
     ],

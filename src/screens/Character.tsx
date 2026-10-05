@@ -32,7 +32,7 @@ export function Character({ onAdd }: { onAdd: (p?: EntryPreset) => void }) {
             </span>
           </span>
         </div>
-        <div class={w.streak > 0 ? 'streak on' : 'streak'} title="Дней подряд с записью">
+        <div class={w.streak > 0 ? 'streak on' : 'streak'} title="Дней подряд с действием">
           <Icon name="flame" size={16} />
           <span>{w.streak}</span>
         </div>
@@ -66,13 +66,13 @@ export function Character({ onAdd }: { onAdd: (p?: EntryPreset) => void }) {
 
       {last ? (
         <section class="stack-8">
-          <SectionLabel right={<a href="#/journal" class="link small">Журнал →</a>}>Последняя запись</SectionLabel>
+          <SectionLabel right={<a href="#/journal" class="link small">Журнал →</a>}>Последнее действие</SectionLabel>
           <EntryCard entry={last} />
         </section>
       ) : (
         <button type="button" class="empty" onClick={() => onAdd()}>
           <Icon name="plus" size={28} stroke={2.4} />
-          <span class="strong">Сделай первую запись</span>
+          <span class="strong">Сделай первое действие</span>
           <span class="muted small">Что сегодня изучил или сделал? Выбери навык и получи XP.</span>
         </button>
       )}
@@ -123,7 +123,7 @@ function NextHome({ onAdd }: { onAdd: (p?: EntryPreset) => void }) {
       )}
       {w.focusSkills.length > 0 && (
         <section class="stack-8">
-          <SectionLabel right={<a href="#/tree" class="link small">Все пути →</a>}>Активные пути · ×1.2 XP</SectionLabel>
+          <SectionLabel right={<a href="#/tree" class="link small">Всё дерево →</a>}>Активные навыки · ×1.2 XP</SectionLabel>
           {w.focusSkills.map((n) => {
             const lv = w.skillLevelOf(n.id);
             const cur = w.currentStageOf(n.id);
@@ -183,13 +183,13 @@ function TodayCard({ onAdd }: { onAdd: () => void }) {
   if (hint?.kind === 'level') hintView = { href: `#/skill/${hint.node.id}`, icon: 'star', text: `${hint.node.title}: ещё ${hint.left} XP до ${hint.next} ур.` };
   else if (hint?.kind === 'goal') hintView = { href: `#/skill/${hint.node.id}`, icon: 'target', text: `«${hint.goal.title}» → ${hint.area.title} +${Math.max(1, Math.round(hint.delta))}%` };
   else if (hint?.kind === 'unlock') hintView = { href: `#/skill/${hint.reason.node.id}`, icon: 'lock', text: `${hint.node.title} скоро откроется: ${hint.reason.have} из ${hint.reason.need}` };
-  else if (hint) hintView = { href: `#/skill/${hint.node.id}`, icon: 'web', text: `${hint.node.title}: ${hint.days} дн. без записей, вернись +50%` };
+  else if (hint) hintView = { href: `#/skill/${hint.node.id}`, icon: 'web', text: `${hint.node.title}: ${hint.days} дн. без действий, вернись +50%` };
 
   return (
     <section class="today">
       <div class="spread">
         <span class="today-label">Сегодня</span>
-        {w.focusSkills.length > 0 ? <span class="muted small strong">фокус ×1.2 XP</span> : <a class="link small" href="#/tree">выбрать фокус</a>}
+        {w.focusSkills.length > 0 ? <span class="muted small strong">активные ×1.2 XP</span> : <a class="link small" href="#/tree">выбрать активные</a>}
       </div>
       {w.focusSkills.length > 0 && (
         <div class="focus-pills">

@@ -44,12 +44,12 @@ export interface AchievementDef {
 const flag = (b: boolean) => (b ? 1 : 0);
 
 export const ACHIEVEMENTS: AchievementDef[] = [
-  { id: 'first_step', title: 'Первый шаг', desc: 'Первая запись в журнале', icon: 'sprout', target: 1, value: (s) => s.entries },
-  { id: 'photo', title: 'Фотоотчёт', desc: 'Первая запись с фото', icon: 'camera', target: 1, value: (s) => s.photoEntries },
-  { id: 'week', title: 'Неделя дисциплины', desc: '7 дней подряд с записью', icon: 'calendar', target: 7, value: (s) => s.bestStreak, unit: 'дн.' },
-  { id: 'month', title: 'Месяц дисциплины', desc: '30 дней подряд с записью', icon: 'flame', target: 30, value: (s) => s.bestStreak, unit: 'дн.' },
-  { id: 'versatile', title: 'Разносторонний', desc: 'Записи во всех направлениях', icon: 'compass', target: 5, value: (s) => s.areasWithEntries },
-  { id: 'practitioner', title: 'Практик', desc: '1000 XP из записей «Практика»', icon: 'hammer', target: 1000, value: (s) => s.practiceXp, unit: 'XP' },
+  { id: 'first_step', title: 'Первый шаг', desc: 'Первое действие в журнале', icon: 'sprout', target: 1, value: (s) => s.entries },
+  { id: 'photo', title: 'Фотоотчёт', desc: 'Первое действие с фото', icon: 'camera', target: 1, value: (s) => s.photoEntries },
+  { id: 'week', title: 'Неделя дисциплины', desc: '7 дней подряд с действием', icon: 'calendar', target: 7, value: (s) => s.bestStreak, unit: 'дн.' },
+  { id: 'month', title: 'Месяц дисциплины', desc: '30 дней подряд с действием', icon: 'flame', target: 30, value: (s) => s.bestStreak, unit: 'дн.' },
+  { id: 'versatile', title: 'Разносторонний', desc: 'Действия во всех направлениях', icon: 'compass', target: 5, value: (s) => s.areasWithEntries },
+  { id: 'practitioner', title: 'Практик', desc: '1000 XP из действий «Практика»', icon: 'hammer', target: 1000, value: (s) => s.practiceXp, unit: 'XP' },
   { id: 'erudite', title: 'Эрудит', desc: 'Закрыто 100 целей', icon: 'book', target: 100, value: (s) => s.goalsDone },
   { id: 'gardener', title: 'Садовник', desc: 'Создано 25 навыков', icon: 'tree', target: 25, value: (s) => s.skills },
   { id: 'first_quest', title: 'Первый квест', desc: 'Завершён первый квест', icon: 'sword', target: 1, value: (s) => s.questsDone },
@@ -61,11 +61,11 @@ export const ACHIEVEMENTS: AchievementDef[] = [
   { id: 'level50', title: 'Уровень 50', desc: 'Персонаж 50 уровня', icon: 'star', target: 50, value: (s) => s.level, unit: 'ур.' },
   { id: 'fixer', title: 'Работа над ошибками', desc: 'Исправить 5 своих ошибок', icon: 'wrench', target: 5, value: (s) => s.fixedErrors },
   { id: 'milestone', title: 'Рубеж взят', desc: 'Достигнут первый рубеж', icon: 'target', target: 1, value: (s) => s.milestonesDone },
-  { id: 'mentor', title: 'Наставник', desc: '10 записей «Объяснил другому»', icon: 'voice', target: 10, value: (s) => s.teachEntries },
-  { id: 'owl', title: 'Сова', desc: '10 записей после полуночи', icon: 'moon', hidden: true, target: 10, value: (s) => s.nightEntries },
-  { id: 'early', title: 'Ранняя пташка', desc: '10 записей до 7 утра', icon: 'sun', hidden: true, target: 10, value: (s) => s.earlyEntries },
+  { id: 'mentor', title: 'Наставник', desc: '10 действий «Объяснил другому»', icon: 'voice', target: 10, value: (s) => s.teachEntries },
+  { id: 'owl', title: 'Сова', desc: '10 действий после полуночи', icon: 'moon', hidden: true, target: 10, value: (s) => s.nightEntries },
+  { id: 'early', title: 'Ранняя пташка', desc: '10 действий до 7 утра', icon: 'sun', hidden: true, target: 10, value: (s) => s.earlyEntries },
   { id: 'stubborn', title: 'Упрямый', desc: '3 неудачи подряд, потом успех', icon: 'repeat', hidden: true, target: 1, value: (s) => flag(s.stubborn) },
-  { id: 'wide', title: 'Всё и сразу', desc: '5 навыков из 3 направлений одной записью', icon: 'dice', hidden: true, target: 1, value: (s) => flag(s.wide) },
+  { id: 'wide', title: 'Всё и сразу', desc: '5 навыков из 3 направлений одним действием', icon: 'dice', hidden: true, target: 1, value: (s) => flag(s.wide) },
 ];
 
 export function evaluateAchievements(stats: Stats) {

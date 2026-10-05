@@ -20,8 +20,8 @@ export interface WeeklyTemplate {
 
 export const WEEKLY_TEMPLATES: WeeklyTemplate[] = [
   { id: 'w_workouts', title: '3 тренировки', hint: 'считается само по журналу', reward: 150, rule: { target: 3, type: 'workout' } },
-  { id: 'w_photo', title: 'Практика с фото', hint: 'одна запись «Практика» с фото', reward: 100, rule: { target: 1, type: 'practice', withPhoto: true } },
-  { id: 'w_areas', title: 'Три разных направления', hint: 'записи в трёх направлениях', reward: 150, rule: { target: 3, distinctAreas: true } },
+  { id: 'w_photo', title: 'Практика с фото', hint: 'одно действие «Практика» с фото', reward: 100, rule: { target: 1, type: 'practice', withPhoto: true } },
+  { id: 'w_areas', title: 'Три разных направления', hint: 'действия в трёх направлениях', reward: 150, rule: { target: 3, distinctAreas: true } },
 ];
 
 export interface EntryFacts { date: string; type: string; hasPhoto: boolean; skillIds: string[]; primaryId?: string; areaIds: string[] }

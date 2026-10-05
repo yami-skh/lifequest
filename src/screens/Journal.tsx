@@ -32,7 +32,7 @@ export function Journal() {
         ))}
         <button type="button" class={onlyFails ? 'chip big primary' : 'chip big'} onClick={() => setOnlyFails(!onlyFails)}>Ошибки</button>
       </div>
-      {groups.length === 0 && <p class="muted">Записей пока нет. Нажми ＋ внизу, чтобы добавить первую.</p>}
+      {groups.length === 0 && <p class="muted">Действий пока нет. Нажми ＋ внизу, чтобы добавить первое.</p>}
       {groups.map(([date, entries]) => (
         <section class="stack-10" key={date}>
           <SectionLabel right={<span class="muted small strong">+{entries.reduce((s, e) => s + (w.skillsOfEntry.get(e.id)?.find((x) => x.role === 'primary')?.xp ?? e.rewardXp ?? 0), 0)} XP</span>}>{humanDate(date)}</SectionLabel>

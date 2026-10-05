@@ -52,7 +52,7 @@ export function RequirementsSheet({ node, onClose }: { node: Node; onClose: () =
 
   return (
     <Sheet open onClose={onClose} title="Требования">
-      <p class="muted small">«{node.title}» откроется, когда выполнены <b>все</b> условия. Записывать опыт можно и до этого.</p>
+      <p class="muted small">«{node.title}» откроется, когда выполнены <b>все</b> условия. Записывать действия можно и до этого.</p>
 
       <div class="stack-8">
         {reqs.length === 0 && <p class="small fg-2">Условий нет — навык открыт сразу.</p>}

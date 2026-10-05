@@ -52,7 +52,7 @@ export function ReminderSettings() {
   return (
     <>
       <div class="menu-list">
-        <Switch on={p.day} title="Записать день" sub="если сегодня ещё нет записей" onClick={() => toggle('day')}>
+        <Switch on={p.day} title="Отметить день" sub="если сегодня ещё нет действий" onClick={() => toggle('day')}>
           <input class="time-chip" type="time" value={p.time} disabled={!p.day} aria-label="Время напоминания" onChange={(e) => e.currentTarget.value && setReminderPrefs({ time: e.currentTarget.value })} />
         </Switch>
         <Switch on={p.streak} title="Серия под угрозой" sub="в 21:00, если серия от 3 дней" onClick={() => toggle('streak')} />
@@ -77,7 +77,7 @@ export function ReminderPrompt() {
   };
   return (
     <Sheet open onClose={close} title="Включить напоминания?">
-      <p class="muted">Раз в вечер, только если за день нет записей, и в воскресенье — если недельный квест не закрыт. Android сейчас спросит разрешение — нажми «Разрешить».</p>
+      <p class="muted">Раз в вечер, только если за день нет действий, и в воскресенье — если недельный квест не закрыт. Android сейчас спросит разрешение — нажми «Разрешить».</p>
       <button type="button" class="btn primary" onClick={enable}>Включить</button>
       <button type="button" class="link small muted center" onClick={close}>Не сейчас</button>
     </Sheet>

@@ -63,7 +63,7 @@ let channelReady = false;
 export async function rescheduleReminders(w: Derived) {
   if (!(await notificationsAllowed())) return;
   if (!channelReady) {
-    await LocalNotifications.createChannel({ id: 'reminders', name: 'Напоминания', description: 'Записать день, серия, недельные квесты', importance: 4 }).catch(() => {});
+    await LocalNotifications.createChannel({ id: 'reminders', name: 'Напоминания', description: 'Отметить день, серия, недельные квесты', importance: 4 }).catch(() => {});
     channelReady = true;
   }
   const pending = await LocalNotifications.getPending();
@@ -78,7 +78,7 @@ export async function rescheduleReminders(w: Derived) {
 
   // Серия под угрозой: сегодня в 21:00, если серия от 3 дней и записи ещё нет.
   const streakToday = p.streak && !hasToday && streak >= 3 && at(today, '21:00') > now;
-  if (streakToday) list.push({ id: IDS.streak, title: `Серия ${streak} дней под угрозой`, body: 'Осталось 3 часа. Хватит одной короткой записи.', when: at(today, '21:00') });
+  if (streakToday) list.push({ id: IDS.streak, title: `Серия ${streak} дней под угрозой`, body: 'Осталось 3 часа. Хватит одного короткого действия.', when: at(today, '21:00') });
 
   // Записать день: на 7 дней вперёд; сегодня — только если записи нет (и не совпадает с «серией»).
   if (p.day) {
@@ -87,7 +87,7 @@ export async function rescheduleReminders(w: Derived) {
       const when = at(date, p.time);
       if (when <= now) continue;
       if (i === 0 && (hasToday || (streakToday && p.time === '21:00'))) continue;
-      list.push({ id: IDS.day + i, title: 'Сегодня ещё без записей', body: 'Что получилось за день? Одна запись — и серия продолжится.', when });
+      list.push({ id: IDS.day + i, title: 'Сегодня ещё без действий', body: 'Что получилось за день? Одно действие — и серия продолжится.', when });
     }
   }
 

@@ -147,8 +147,8 @@ export function EntrySheet({ preset, onClose }: { preset: EntryPreset; onClose: 
       }
       onClose();
     } catch (e) {
-      logError(e, 'Запись');
-      toast({ kind: 'info', title: 'Не удалось сохранить запись', sub: 'Попробуй ещё раз' });
+      logError(e, 'Действие');
+      toast({ kind: 'info', title: 'Не удалось сохранить действие', sub: 'Попробуй ещё раз' });
       setBusy(false);
     }
   };
@@ -157,8 +157,8 @@ export function EntrySheet({ preset, onClose }: { preset: EntryPreset; onClose: 
   const summary = [diffLabel, outcome === 'ok' ? 'получилось' : 'не получилось', skillIds.length > 1 ? `${skillIds.length} навыка` : null, fixesId ? 'исправляет ошибку' : null].filter(Boolean).join(' · ');
 
   return (
-    <Sheet open onClose={onClose} title={w.hasExp('next-action') ? 'Новое действие' : 'Новая запись'}>
-      <div class="type-row" role="radiogroup" aria-label="Тип записи">
+    <Sheet open onClose={onClose} title="Новое действие">
+      <div class="type-row" role="radiogroup" aria-label="Тип действия">
         {ENTRY_TYPES.map((t) => (
           <button type="button" key={t.id} role="radio" aria-checked={type === t.id} class={type === t.id ? 'chip big primary' : 'chip big'} onClick={() => setType(t.id)}>{t.label}</button>
         ))}
@@ -208,7 +208,7 @@ export function EntrySheet({ preset, onClose }: { preset: EntryPreset; onClose: 
             </>
           )}
           {preset.workout && sets === null && lastSets && <span class="muted small">Как в прошлый раз — поправь, если было иначе. Не нужны — убери «✕».</span>}
-          {!setsTouched && single === null && <span class="muted small">Подставлено как в прошлый раз — нажми на число, чтобы поправить. Не трогал — сохранится только запись.</span>}
+          {!setsTouched && single === null && <span class="muted small">Подставлено как в прошлый раз — нажми на число, чтобы поправить. Не трогал — сохранится только действие.</span>}
         </div>
       )}
 

@@ -9,7 +9,7 @@ export function FocusBlock() {
   const list = w.focusSkills;
   return (
     <section class="stack-10">
-      <SectionLabel right={<a class="link small" href="#/tree">{list.length ? 'Изменить' : 'Выбрать'}</a>}>В фокусе · ×1.2 XP</SectionLabel>
+      <SectionLabel right={<a class="link small" href="#/tree">{list.length ? 'Изменить' : 'Выбрать'}</a>}>Активные навыки · ×1.2 XP</SectionLabel>
       {list.length === 0 ? (
         <p class="muted small">Отметь до трёх навыков звёздочкой на их странице — они будут здесь и дадут больше XP.</p>
       ) : (
@@ -24,7 +24,7 @@ export function FocusBlock() {
                   <span class={fresh ? 't-lvl muted' : 't-lvl'}>{fresh ? '0' : lv.level}</span>
                 </Ring>
                 <span class="focus-title">{n.title}</span>
-                <span class="focus-sub">{fresh ? 'первая запись ×1.5' : lv.level >= 10 ? 'максимум' : `до ур. ${lv.level + 1} — ${lv.left} XP`}</span>
+                <span class="focus-sub">{fresh ? 'первое действие ×1.5' : lv.level >= 10 ? 'максимум' : `до ур. ${lv.level + 1} — ${lv.left} XP`}</span>
               </a>
             );
           })}
@@ -69,7 +69,7 @@ export function HintsBlock() {
         return (
           <a class="hint rust" href={`#/skill/${h.node.id}`} key="rust">
             <span class="hint-icon"><Icon name="web" size={18} stroke={1.8} /></span>
-            <span class="hint-text"><span class="strong">{h.node.title} зарос паутиной</span><span class="muted small">{h.days} дней без записей · вернись: +50% XP</span></span>
+            <span class="hint-text"><span class="strong">{h.node.title} зарос паутиной</span><span class="muted small">{h.days} дней без действий · вернись: +50% XP</span></span>
           </a>
         );
       })}

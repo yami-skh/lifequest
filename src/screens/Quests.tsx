@@ -199,7 +199,7 @@ export function QuestDetail({ id }: { id: string }) {
 
       <div class="notice">
         <Icon name="star" size={18} />
-        <span class="small">Ступень, цель и счётчик записей закрываются сами. «Свой шаг» — нажми на квадрат, когда сделал.</span>
+        <span class="small">Ступень, цель и счётчик действий закрываются сами. «Свой шаг» — нажми на квадрат, когда сделал.</span>
       </div>
 
       {q.status === 'active' ? (
@@ -226,7 +226,7 @@ export function QuestDetail({ id }: { id: string }) {
 }
 
 function stepKindLabel(s: QuestStep) {
-  return s.kind === 'stage' ? 'ступень навыка' : s.kind === 'goal' ? 'цель навыка' : s.kind === 'count' ? 'счётчик записей' : s.kind === 'auto' ? 'сам' : 'свой шаг';
+  return s.kind === 'stage' ? 'ступень навыка' : s.kind === 'goal' ? 'цель навыка' : s.kind === 'count' ? 'счётчик действий' : s.kind === 'auto' ? 'сам' : 'свой шаг';
 }
 
 type DraftKind = 'stage' | 'goal' | 'count' | 'custom';
@@ -279,7 +279,7 @@ function NewQuestSheet({ onClose }: { onClose: () => void }) {
           <div class="grid-2">
             <button type="button" class="pick" onClick={() => setAdding('stage')}>Ступень навыка</button>
             <button type="button" class="pick" onClick={() => setAdding('goal')}>Цель навыка</button>
-            <button type="button" class="pick" onClick={() => setAdding('count')}>Счётчик записей</button>
+            <button type="button" class="pick" onClick={() => setAdding('count')}>Счётчик действий</button>
             <button type="button" class="pick" onClick={() => setAdding('custom')}>Свой шаг</button>
           </div>
         </div>
@@ -352,7 +352,7 @@ function StepBuilder({ kind, onDone }: { kind: DraftKind; onDone: (s: QuestStep 
 
   return (
     <div class="new-req">
-      <span class="section-label">{kind === 'stage' ? 'Ступень навыка' : kind === 'goal' ? 'Цель навыка' : 'Счётчик записей'}</span>
+      <span class="section-label">{kind === 'stage' ? 'Ступень навыка' : kind === 'goal' ? 'Цель навыка' : 'Счётчик действий'}</span>
       {skill ? (
         <div class="chips">
           <span class="chip big primary"><span class="chip-btn">{skill.title}</span><button type="button" class="chip-x" aria-label="Другой навык" onClick={() => setSkillId(null)}><Icon name="x" size={14} stroke={3} /></button></span>
@@ -387,7 +387,7 @@ function StepBuilder({ kind, onDone }: { kind: DraftKind; onDone: (s: QuestStep 
           <div class="chips">
             {(['any', 'practice', 'workout', 'learn'] as const).map((t) => (
               <button type="button" key={t} class={type === t ? 'chip big primary' : 'chip big'} onClick={() => setType(t)}>
-                {t === 'any' ? 'любые записи' : t === 'practice' ? 'практика' : t === 'workout' ? 'тренировки' : 'изучил'}
+                {t === 'any' ? 'любые действия' : t === 'practice' ? 'практика' : t === 'workout' ? 'тренировки' : 'изучил'}
               </button>
             ))}
           </div>
@@ -397,7 +397,7 @@ function StepBuilder({ kind, onDone }: { kind: DraftKind; onDone: (s: QuestStep 
             <button type="button" class="btn ghost square" aria-label="Больше" onClick={() => setCount(Math.min(100, count + 1))}>+</button>
           </div>
           <button type="button" class="btn primary" onClick={() => {
-            const what = type === 'practice' ? 'практики' : type === 'workout' ? 'тренировки' : type === 'learn' ? 'записи «Изучил»' : 'записи';
+            const what = type === 'practice' ? 'практики' : type === 'workout' ? 'тренировки' : type === 'learn' ? 'действия «Изучил»' : 'действия';
             onDone({ id: uid(), kind: 'count', title: `${count} ${what}${skill ? ` по навыку «${skill.title}»` : ''}`, rule: { target: count, type: type === 'any' ? undefined : type, skillId: skill?.id } });
           }}>Добавить</button>
         </>

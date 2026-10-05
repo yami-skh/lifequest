@@ -125,11 +125,11 @@ export function Tree({ focusId }: { focusId?: string }) {
               ) : (
                 <span class="t-sub">
                   {rust !== null
-                    ? `${rust} дней без записей · вернись: +50%`
+                    ? `${rust} дней без действий · вернись: +50%`
                     : fresh
-                      ? 'не исследован · первая запись ×1.5'
+                      ? 'не исследован · первое действие ×1.5'
                       : stage && stages.length > 1
-                        ? `${n.focus ? 'в фокусе · ' : ''}ступень ${stage.stage} из ${stages.length}`
+                        ? `${n.focus ? 'активный · ' : ''}ступень ${stage.stage} из ${stages.length}`
                         : `${lv.name} · ${lv.xp} XP`}
                 </span>
               )}
@@ -246,7 +246,7 @@ export function Tree({ focusId }: { focusId?: string }) {
       <Confirm
         open={!!toDelete}
         title={`Удалить «${toDelete?.title}»?`}
-        text="Удалится всё, что внутри: ветки, навыки, цели и заметки. Записи журнала и заработанный XP персонажа останутся."
+        text="Удалится всё, что внутри: ветки, навыки, цели и заметки. Действия в журнале и заработанный XP персонажа останутся."
         action="Удалить"
         onConfirm={() => toDelete && deleteNode(toDelete.id)}
         onClose={() => setToDelete(null)}
