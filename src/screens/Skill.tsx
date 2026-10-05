@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'preact/hooks';
 import { SuggestInput } from '../components/SuggestInput';
+import { fx } from '../lib/fx';
 import { items } from '../engine/suggest';
 import { allPathGoals, goalIdeas } from '../data/suggest';
 import { useWorld } from '../db/world';
@@ -285,9 +286,15 @@ function SkillMenu({ id, onFocus, onReq, onClose }: { id: string; onFocus: () =>
 }
 
 function GoalRow({ g, editing }: { g: Goal; editing: boolean }) {
+  const anim = useWorld().hasExp('anim');
   return (
     <div class="goal-line">
-      <button type="button" class={g.done ? 'goal-row' : 'goal-row open'} onClick={async () => stagesToast(await toggleGoal(g.id))} aria-pressed={g.done}>
+      <button type="button" class={g.done ? 'goal-row' : 'goal-row open'} aria-pressed={g.done} onClick={async () => {
+        const stages = await toggleGoal(g.id);
+        // Цель сама по себе XP не даёт; пройденный ею этап — даёт (+100), это и летит к уровню.
+        if (anim && stages.length) fx({ kind: 'xp', amount: stages.length * STAGE_BONUS, badges: ['этап пройден'] });
+        stagesToast(stages);
+      }}>
         <Check done={g.done} />
         <span>{g.title}</span>
         <span class="goal-kind">{g.kind === 'practice' ? 'практика' : 'теория'}</span>

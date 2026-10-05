@@ -199,7 +199,11 @@ export function SectionLabel({ children, right }: { children: ComponentChildren;
 }
 
 export function Check({ done }: { done: boolean }) {
-  return <span class={done ? 'check on' : 'check'}>{done && <Icon name="check" size={16} stroke={3} />}</span>;
+  // «just» — только когда галочку поставили сейчас (было не отмечено): анимация штриха, а не при каждом показе списка.
+  const prev = useRef(done);
+  const just = done && !prev.current;
+  useEffect(() => { prev.current = done; }, [done]);
+  return <span class={done ? (just ? 'check on just' : 'check on') : 'check'}>{done && <Icon name="check" size={16} stroke={3} />}</span>;
 }
 
 export const pctText = (v: number | null | undefined) => (v === null || v === undefined ? '—' : `${Math.round(v)}%`);

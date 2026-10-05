@@ -24,6 +24,8 @@ import { EntrySheet, type EntryPreset } from './screens/EntrySheet';
 import { logError } from './lib/errorlog';
 import { Onboarding } from './components/Onboarding';
 import { Friends } from './screens/Friends';
+import { FxLayer } from './components/Fx';
+import { fx } from './lib/fx';
 
 export function App() {
   const [world, setWorld] = useState<World | null>(null);
@@ -86,6 +88,7 @@ export function App() {
       {entry && <EntrySheet preset={entry} onClose={() => setEntry(null)} />}
       <WhatsNew />
       <ReminderSync />
+      <FxLayer />
       <Toasts />
     </WorldContext.Provider>
   );
@@ -106,7 +109,9 @@ function useGameEvents(w: ReturnType<typeof derive> | null) {
   useEffect(() => {
     if (!w) return;
     if (prevLevel.current !== null && w.level.level > prevLevel.current) {
-      toast({ kind: 'level', title: `Уровень ${w.level.level}!`, sub: 'Персонаж стал сильнее' });
+      // Флаг anim: полноэкранный момент (components/Fx.tsx); после вылета XP — чтобы не перекрыть его.
+      if (w.hasExp('anim')) setTimeout(() => fx({ kind: 'level', level: w.level.level, left: w.level.left }), 900);
+      else toast({ kind: 'level', title: `Уровень ${w.level.level}!`, sub: 'Персонаж стал сильнее' });
     }
     prevLevel.current = w.level.level;
 

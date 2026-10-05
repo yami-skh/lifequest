@@ -15,6 +15,8 @@ import { stagesToast } from './Skill';
 import { BigNumber, lastSetsOf, metricToasts, recordHintFor, usesSets } from './Metrics';
 import { logError } from '../lib/errorlog';
 import { SuggestInput } from '../components/SuggestInput';
+import { fx } from '../lib/fx';
+import { STAGE_BONUS } from '../engine/stages';
 import { items } from '../engine/suggest';
 import { actionIdeas, allPathGoals, goalsFromPaths } from '../data/suggest';
 
@@ -152,7 +154,9 @@ export function EntrySheet({ preset, onClose }: { preset: EntryPreset; onClose: 
         outcome, failNote, fixesEntryId: outcome === 'ok' ? fixesId : undefined, photos,
         stepGoalIds: preset.goalId && primaryId === presetGoal?.skillId ? [preset.goalId] : undefined,
       });
-      toast({ kind: 'xp', title: `+${xp} XP`, sub: primary?.title });
+      // Анимации прогресса (флаг anim): «+N XP» летит к полоске уровня с множителями; иначе — как раньше, всплывашкой.
+      if (w.hasExp('anim')) fx({ kind: 'xp', amount: xp + stages.length * STAGE_BONUS, badges: (preview?.factors ?? []).map((f) => `×${f.mult} ${f.label}`) });
+      else toast({ kind: 'xp', title: `+${xp} XP`, sub: primary?.title });
       stagesToast(stages);
       if (metric && mInfo) {
         const withSets = usesSets(metric);

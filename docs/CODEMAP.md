@@ -6,8 +6,8 @@
 
 ## src
 
-- **App.tsx** (147)
-  *App:28, useGameEvents:95, Toasts:129
+- **App.tsx** (152)
+  *App:30, useGameEvents:98, Toasts:134
 
 ## src/components
 
@@ -17,6 +17,8 @@
   Thumb:12, *EntryCard:17
 - **FocusAndHints.tsx** (79) — Главный экран: «В фокусе» и «Ближайшее». ARCHITECTURE.md §16, идеи 1 и 5.
   *FocusBlock:7, *HintsBlock:37
+- **Fx.tsx** (57) — Слой анимаций прогресса: «+N XP» летит к полоске уровня; новый уровень — полноэкранный момент.
+  Fly:7, seq:8, *FxLayer:10
 - **Icon.tsx** (79) — Контурные иконки 24×24, цвет берут из currentColor.
   PATHS:3, *IconName:70, *Icon:72
 - **InstallCard.tsx** (46)
@@ -41,13 +43,13 @@
   SRC:8, Hl:10, *SuggestInput:17
 - **Templates.tsx** (252) — «Готовые пути» — шаблоны навыков (мастер-план §12, фаза 1). Макет: холст, страница «Шаблоны».
   Phase:16, goalsWord:18, skillsWord:19, *TemplatesSheet:21, AreaChip:40, Catalog:45, Preview:85, Paste:191
-- **ui.tsx** (206)
-  *ProgressBar:9, *LevelBadge:17, *Ring:28, *AreaTile:49, *TopBar:58, useSwipeClose:77, CLOSE_MS:132, reducedMotion:133, *Sheet:135, *Confirm:178, *SectionLabel:192, *Check:201, *pctText:205
+- **ui.tsx** (210)
+  *ProgressBar:9, *LevelBadge:17, *Ring:28, *AreaTile:49, *TopBar:58, useSwipeClose:77, CLOSE_MS:132, reducedMotion:133, *Sheet:135, *Confirm:178, *SectionLabel:192, *Check:201, *pctText:209
 
 ## src/data
 
-- **changelog.ts** (239) — Что нового в версиях — для пользователя, простыми словами. Новые версии — сверху.
-  *ChangeKind:4, *Change:5, *Release:6, *CHANGELOG:8, *SEEN_BEFORE_CHANGELOG:238
+- **changelog.ts** (249) — Что нового в версиях — для пользователя, простыми словами. Новые версии — сверху.
+  *ChangeKind:4, *Change:5, *Release:6, *CHANGELOG:8, *SEEN_BEFORE_CHANGELOG:248
 - **presets.test.ts** (40)
   AREAS:6
 - **presets.ts** (48) — Готовые навыки при ручном добавлении (мастер-план §12): навыки шаблонов, сгруппированные по направлениям,
@@ -81,8 +83,8 @@
 - **dates.ts** (55) — Даты храним как локальные YYYY-MM-DD.
   *localDate:3, *addDays:10, *daysBetween:16, MONTHS:22, *humanDate:24, *currentStreak:32, *bestStreak:43
 - **engine.test.ts** (244)
-- **experiments.ts** (27) — Флаг экспериментов: новый UX включается только у тех, кто сам включил эксперимент
-  *IS_BETA:7, *EXPERIMENTS:10, *hasExp:20, *toggleExp:23
+- **experiments.ts** (28) — Флаг экспериментов: новый UX включается только у тех, кто сам включил эксперимент
+  *IS_BETA:7, *EXPERIMENTS:10, *hasExp:21, *toggleExp:24
 - **friends.test.ts** (53)
   base:5
 - **friends.ts** (72) — Друзья: что уходит на сервер — карточка недели (docs/arch/11-friends.md). Чистая функция, без базы.
@@ -142,6 +144,8 @@
   *LoggedError:8, KEY:9, MAX:10, listeners:11, *getErrors:13, save:21, *logError:31, *clearErrors:44, *useErrors:46, *initErrorLog:56, *buildReport:61, *shareReport:73
 - **friends.ts** (101) — «Друзья»: ключ игрока и запросы к серверу (server/src/friends.ts, docs/arch/11-friends.md).
   *Player:10, *EMOJI:11, *FriendView:13, *FriendsError:21, call:25, randomSecret:41, *ensurePlayer:44, *prettyCode:55, *inviteLink:56, *listFriends:58, *addFriend:59, *removeFriend:60, *react:61, *newCode:64, *leave:72, *myCard:77, SENT_KEY:91, *pushCard:93
+- **fx.ts** (17) — Анимации реального прогресса (мастер-план «Анимации реального прогресса»; макет: холст, «Анимации прогресса»).
+  *FxEvent:5, Listener:9, listeners:10, *onFx:12, *fx:16
 - **gestures.ts** (106) — Жесты в дереве: удержание (быстрое меню) и свайп по строке навыка (вправо — действие, влево — меню).
   HOLD_MS:5, MOVE_CANCEL:6, SWIPE:7, G:9, g:10, suppressUntil:11, buzz:13, reset:21, *GestureOpts:27, *GestureHandlers:30, *gestures:40
 - **hscroll.ts** (44) — Горизонтальные ленты (.type-row в шторке «+», .chips.scroll-x) на ПК: пальцем они листаются сами,
@@ -180,8 +184,8 @@
   KIND:11, ORDER:16, fmtDate:18, changesWord:19, *WhatsNew:22, ChangeRow:60, *Changelog:70, ReleaseCard:85
 - **Character.tsx** (243) — Главный экран — всё важное примерно в один экран. Макет: холст, страница «Упрощение», экран 1.
   *Character:16, NextHome:85, WEEK_SHORT:172, TodayCard:175, *plural:236
-- **EntrySheet.tsx** (305) — «＋ Запись» — главный сценарий, цель 15 секунд. Макет: холст, страница «Упрощение», экраны 2–3.
-  *EntryPreset:23, LAST_TYPE:25, loadType:26, PhotoPreview:35, *EntrySheet:45, .setType:81, .choosePrimary:119, .addSecondary:128, .onFiles:135, .save:146
+- **EntrySheet.tsx** (309) — «＋ Запись» — главный сценарий, цель 15 секунд. Макет: холст, страница «Упрощение», экраны 2–3.
+  *EntryPreset:25, LAST_TYPE:27, loadType:28, PhotoPreview:37, *EntrySheet:47, .setType:83, .choosePrimary:121, .addSecondary:130, .onFiles:137, .save:148
 - **Friends.tsx** (354) — «Друзья» (эксперимент friends): напарники по коду, итоги недели и реакции. Макет: холст, страница «Друзья».
   MONTHS:24, short:25, weekLabel:26, sinceLabel:27, Load:29, useFriends:32, *Friends:54, FriendsMain:60, shareInvite:81, Invite:93, AddByCode:113, Privacy:145, Dots:151, Reactions:155, Avatar:177, FriendsList:182, FriendWeek:221, WeekBlock:255, ShareSettings:279, AddByLink:329
 - **Journal.tsx** (45)
@@ -194,8 +198,8 @@
   QUEST_SUGGEST:17, STEP_SUGGEST:18, KIND_TITLE:20, daysToMonday:22, *QuestCard:28, WeeklyRow:49, *Quests:70, *QuestDetail:154, stepKindLabel:234, DraftKind:238, NewQuestSheet:240, StepBuilder:319, *QuestsBlock:418
 - **Settings.tsx** (359) — Настройки: персонаж, тема, недельные квесты, резервная копия, о приложении, стереть данные.
   THEMES:23, *Toggle:29, Group:38, *Settings:47, AboutRow:162, hiddenThisSession:192, *UpdateCard:193, AiBlock:226, ChannelPicker:275, ErrorLogRow:322
-- **Skill.tsx** (447)
-  *stagesToast:26, Fold:29, word:30, *Skill:34, .toggle:64, .onFocus:66, FoldRow:201, WorkoutCard:215, SkillMenu:250, GoalRow:287, Goals:300, Notes:382, GalleryItem:422, FullPhoto:427, Gallery:437
+- **Skill.tsx** (454)
+  *stagesToast:27, Fold:30, word:31, *Skill:35, .toggle:65, .onFocus:67, FoldRow:202, WorkoutCard:216, SkillMenu:251, GoalRow:288, Goals:307, Notes:389, GalleryItem:429, FullPhoto:434, Gallery:444
 - **Tree.tsx** (697)
   Editor:27, loadExpanded:34, *Tree:42, .hideHoldHint:63, .openMenu:72, .setMode:85, .toggle:94, .skillCount:112, .skillsIn:115, .menuBtn:118, .renderChildren:125, .rowOf:137, .summaryOf:150, .headSummary:151, .renderSkillClear:158, .filtered:186, .filterChips:187, .renderNode:201, KIND_LABEL:400, MoveSheet:403, TreeHelp:449, NodeEditor:482, .has:602, .goalCount:605, .close:610, .submit:616
 
@@ -203,8 +207,8 @@
 
 - **base.css** (170) — Тёмная тема по макету: золото = XP, у направлений свои цвета.
   Тёмная тема по макету: золото = XP, у направлений свои цвета.:1, Светлая тема (макет: холст, «Настройки и обновления»). Соответствие цветов — tools/light_palette.py.:44, текст:108, раскладка:119, полоски:132, нижняя панель:140, всплывашки:148, Отклик на нажатие (план: анимируем прогресс, а нажатие — только короткой обратной связью).:160
-- **common.css** (106) — записи
-  записи:1, чипы:16, кнопки:26, поля:43, фото:53, шторка:65, закрытие шторки (Sheet → closing): уезжает вниз чуть быстрее, чем выезжает:73, Подсказки при вводе (components/SuggestInput.tsx).:96
+- **common.css** (148) — записи
+  записи:1, чипы:16, кнопки:26, поля:43, фото:53, шторка:65, закрытие шторки (Sheet → closing): уезжает вниз чуть быстрее, чем выезжает:73, Подсказки при вводе (components/SuggestInput.tsx).:96, Анимации прогресса (components/Fx.tsx, макет: холст, «Анимации прогресса»).:107, Галочка цели: рисуется штрихом и «щёлкает» — только в момент закрытия (класс just от Check).:143
 - **entry.css** (50) — шторка записи (0.5)
   шторка записи (0.5):1, подходы и клавиатура (0.5):16
 - **friends.css** (33) — «Друзья» (screens/Friends.tsx). Макет: холст, страница «Друзья».
