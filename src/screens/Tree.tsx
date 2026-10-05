@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'preact/hooks';
 import { useWorld } from '../db/world';
 import type { Node, NodeKind } from '../db/db';
-import { addNode, deleteNode, renameNode } from '../db/actions';
+import { addNode, addPresetSkill, deleteNode, renameNode } from '../db/actions';
 import { AREA_COLORS } from '../db/seed';
 import { AREA_ICONS } from '../db/db';
 import { go } from '../lib/router';
@@ -11,6 +11,8 @@ import { plural } from './Character';
 import { ac } from '../lib/theme';
 import { StarMap } from '../components/StarMap';
 import { TemplatesSheet } from '../components/Templates';
+import { presetsFor } from '../data/presets';
+import type { TplSkill } from '../engine/templates';
 
 type Editor =
   | { mode: 'menu'; node: Node }
@@ -36,7 +38,8 @@ export function Tree({ focusId }: { focusId?: string }) {
   const [editor, setEditor] = useState<Editor | null>(null);
   const [toDelete, setToDelete] = useState<Node | null>(null);
   const [tplOpen, setTplOpen] = useState(false);
-  const tpl = w.hasExp('templates');
+  // Готовые пути: за флагом, но новичку с почти пустым деревом — сразу (иначе после «пустого дерева» их не найти).
+  const tpl = w.hasExp('templates') || w.skills.length < 5;
   const [mode, setModeState] = useState<'list' | 'stars'>(() => {
     try {
       return localStorage.getItem('lq.treeView') === 'stars' ? 'stars' : 'list';
@@ -261,9 +264,12 @@ function NodeEditor({ editor, onClose, onDelete, onAdded, setEditor }: {
   onAdded: (parentId: string | null) => void;
   setEditor: (e: Editor) => void;
 }) {
+  const w = useWorld();
   const [title, setTitle] = useState('');
   const [color, setColor] = useState(AREA_COLORS[0]);
   const [icon, setIcon] = useState(AREA_ICONS[0]);
+  const [preset, setPreset] = useState<TplSkill | null>(null);
+  const [allPresets, setAllPresets] = useState(false);
 
   if (!editor) return null;
 
@@ -287,23 +293,76 @@ function NodeEditor({ editor, onClose, onDelete, onAdded, setEditor }: {
   }
 
   const isRename = editor.mode === 'rename';
+  // Готовые навыки (§12): по направлению, куда добавляем; за флагом «Готовые пути».
+  const area = editor.mode === 'add' && editor.parent ? w.areaOf(editor.parent.id) : undefined;
+  const presets = editor.mode === 'add' && editor.kind === 'skill' && editor.parent && area && w.hasExp('templates') ? presetsFor(area.title) : [];
+  const haveTitles = new Set(w.skills.map((n) => n.title.trim().toLowerCase()));
+  const has = (p: TplSkill) => haveTitles.has(p.title.trim().toLowerCase());
+  const sorted = [...presets.filter((p) => !has(p)), ...presets.filter(has)];
+  const shown = allPresets ? sorted : sorted.slice(0, 3);
+  const goalCount = (p: TplSkill) => p.stages.reduce((n, st) => n + st.goals.length, 0);
+  const close = () => {
+    setTitle('');
+    setPreset(null);
+    setAllPresets(false);
+    onClose();
+  };
   const submit = async (e: Event) => {
     e.preventDefault();
+    if (editor.mode === 'add' && preset && editor.parent) {
+      await addPresetSkill(editor.parent.id, preset);
+      onAdded(editor.parent.id);
+      close();
+      return;
+    }
     if (!title.trim()) return;
     if (editor.mode === 'rename') await renameNode(editor.node.id, title);
     else {
       await addNode(editor.parent?.id ?? null, editor.kind, title, editor.kind === 'area' ? color : undefined, editor.kind === 'area' ? icon : undefined);
       onAdded(editor.parent?.id ?? null);
     }
-    setTitle('');
-    onClose();
+    close();
   };
 
   return (
-    <Sheet open onClose={onClose} title={isRename ? 'Переименовать' : `Новое: ${KIND_LABEL[editor.kind]}`}>
+    <Sheet open onClose={close} title={isRename ? 'Переименовать' : presets.length ? 'Новый навык' : `Новое: ${KIND_LABEL[editor.kind]}`}>
       <form class="stack-12" onSubmit={submit}>
-        {!isRename && editor.parent && <p class="muted small">Внутри: {editor.parent.title}</p>}
-        <input id="node-title" class="input" placeholder="Название" value={title} onInput={(e) => setTitle(e.currentTarget.value)} autoFocus />
+        {!isRename && editor.parent && <p class="muted small">Внутри: {presets.length ? w.pathOf(editor.parent.id).map((n) => n.title).join(' › ') : editor.parent.title}</p>}
+        {presets.length > 0 && (
+          <div class="stack-8">
+            <span class="section-label">Готовые · {area!.title}</span>
+            {shown.map((p) => {
+              const exists = has(p);
+              const on = preset === p;
+              const n = goalCount(p);
+              return (
+                <button type="button" key={p.key} class={on ? 'preset on' : 'preset'} disabled={exists} aria-pressed={on}
+                  onClick={() => { setPreset(on ? null : p); setTitle(''); }}>
+                  <span class="preset-top">
+                    <span class="stack-4">
+                      <span class="strong">{p.title}</span>
+                      <span class="muted small">
+                        {p.stages.length} {plural(p.stages.length, 'ступень', 'ступени', 'ступеней')} · {n} {plural(n, 'цель', 'цели', 'целей')}{p.metric ? ` · замер «${p.metric.title}»` : ''}
+                      </span>
+                    </span>
+                    {exists ? <span class="tpl-have">уже есть</span> : <span class={on ? 'radio on' : 'radio'} />}
+                  </span>
+                  {on && (
+                    <span class="preset-stages">
+                      {p.stages.map((st) => (
+                        <span key={st.stage} class="small"><b class="tpl-gold">Ст. {st.stage}{st.boss ? ' · контрольная' : ''}</b> · {st.goals.map((g) => g.title).join(', ')}</span>
+                      ))}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+            {!allPresets && sorted.length > 3 && <button type="button" class="link small" onClick={() => setAllPresets(true)}>Ещё готовые для «{area!.title}» ▾</button>}
+            <span class="section-label">Или свой</span>
+          </div>
+        )}
+        <input id="node-title" class="input" placeholder={presets.length ? 'Название своего навыка' : 'Название'} value={title}
+          onInput={(e) => { setTitle(e.currentTarget.value); if (e.currentTarget.value) setPreset(null); }} autoFocus={!presets.length} />
         {!isRename && editor.kind === 'area' && (
           <div class="colors" role="radiogroup" aria-label="Цвет направления">
             {AREA_COLORS.map((c) => (
@@ -320,8 +379,10 @@ function NodeEditor({ editor, onClose, onDelete, onAdded, setEditor }: {
             ))}
           </div>
         )}
-        {!isRename && editor.kind === 'skill' && <p class="muted small">Цели навыка добавишь на его странице.</p>}
-        <button type="submit" class="btn primary" disabled={!title.trim()}>{isRename ? 'Сохранить' : 'Добавить'}</button>
+        {!isRename && editor.kind === 'skill' && !preset && <p class="muted small">Цели навыка добавишь на его странице.</p>}
+        <button type="submit" class="btn primary" disabled={!title.trim() && !preset}>
+          {isRename ? 'Сохранить' : preset ? `Добавить «${preset.title}» · ${goalCount(preset)} ${plural(goalCount(preset), 'цель', 'цели', 'целей')}` : title.trim() && presets.length ? `Добавить «${title.trim()}»` : 'Добавить'}
+        </button>
       </form>
     </Sheet>
   );

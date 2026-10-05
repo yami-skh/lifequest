@@ -1,113 +1,21 @@
-// Стартовый набор. ARCHITECTURE.md §13.
-import { AREA_ICON_BY_TITLE, db, nowIso, uid, type Goal, type Node } from './db';
+// Стартовое содержимое. ARCHITECTURE.md §13. Дерево новичок выбирает сам (шаблоны, components/Onboarding.tsx);
+// прежний стартовый набор (дерево брата) — в истории git, до 0.10.0-beta.6.
+import { db, nowIso, uid } from './db';
 import { localDate } from '../engine/dates';
-import type { GoalKind } from '../engine/progress';
-import { assignStages } from '../engine/stages';
-
-type G = [GoalKind, string];
-interface SeedNode {
-  title: string;
-  color?: string;
-  goals?: G[];
-  /** Название навыка-требования и минимальный прогресс. */
-  requires?: [string, number];
-  children?: SeedNode[];
-}
-
-const t = (s: string): G => ['theory', s];
-const p = (s: string): G => ['practice', s];
 
 export const AREA_COLORS = ['#7AA7FF', '#FF8A5B', '#4CC9A0', '#E08AE8', '#B9A4FF', '#F2C94C', '#5BC0EB', '#FF7A9C'];
 
-const TREE: SeedNode[] = [
-  {
-    title: 'Интеллект', color: '#7AA7FF', children: [
-      { title: 'Языки', children: [{ title: 'Английский', goals: [t('Времена: present, past, future'), t('500 самых частых слов'), p('Прочитать короткий рассказ без словаря'), p('5 минут разговора с носителем')] }] },
-      { title: 'Наука', children: [{ title: 'Основы электричества', goals: [t('Напряжение, ток, сопротивление'), t('Закон Ома'), t('Последовательное и параллельное соединение'), p('Решить 10 задач'), p('Собрать простую цепь')] }] },
-      { title: 'Чтение', children: [{ title: 'Книги', goals: [p('Прочитать первую книгу'), p('Прочитать 5 книг'), t('Вести заметки по прочитанному')] }] },
-    ],
-  },
-  {
-    title: 'Тело', color: '#FF8A5B', children: [
-      { title: 'Сила', children: [
-        { title: 'Жим лёжа', goals: [t('Техника жима и страховка'), p('Жим 60 кг'), p('Жим 80 кг')] },
-        { title: 'Подтягивания', goals: [p('5 подтягиваний подряд'), p('10 подтягиваний подряд'), p('15 подтягиваний подряд')] },
-      ] },
-      { title: 'Выносливость', children: [{ title: 'Бег', goals: [t('Пульсовые зоны'), p('3 км без остановки'), p('5 км без остановки')] }] },
-      { title: 'Восстановление', children: [{ title: 'Сон', goals: [t('Как работает сон'), p('7 дней подряд спать 8 часов')] }] },
-    ],
-  },
-  {
-    title: 'Практика', color: '#4CC9A0', children: [
-      { title: 'Кулинария', children: [
-        { title: 'Японская кухня', children: [
-          { title: 'Рамен', goals: [t('Устройство рамена'), t('Типы бульонов'), t('Тарэ и ароматическое масло'), t('Топпинги'), t('Виды лапши'), p('Приготовить шою-рамен'), p('Приготовить мисо-рамен'), p('Прозрачный бульон с нуля'), p('Сделать лапшу самому')] },
-          { title: 'Суши', requires: ['Работа с ножом', 40], goals: [t('Рис для суши'), p('Приготовить маки'), p('Приготовить нигири')] },
-        ] },
-        { title: 'Техника приготовления', children: [
-          { title: 'Работа с ножом', goals: [t('Виды ножей и заточка'), p('Нарезка жюльен'), p('Нарезка брюнуаз')] },
-        ] },
-      ] },
-      { title: 'Ремонт и инструменты', children: [{ title: 'Базовые инструменты', goals: [t('Отвёртки, биты, дрель'), p('Повесить полку'), p('Заменить розетку с выключенным автоматом')] }] },
-      { title: 'Финансовая грамотность', children: [{ title: 'Личный бюджет', goals: [t('Правило 50/30/20'), p('Месяц учёта расходов'), p('Отложить первую подушку')] }] },
-    ],
-  },
-  {
-    title: 'Творчество', color: '#E08AE8', children: [
-      { title: 'Рисование и дизайн', children: [{ title: 'Скетчинг', goals: [t('Перспектива: 1 и 2 точки'), t('Светотень'), p('30 скетчей'), p('Нарисовать свою комнату')] }] },
-      { title: 'Музыка', children: [] },
-      { title: 'Письмо', children: [{ title: 'Дневник', goals: [p('Писать 7 дней подряд'), p('Писать 30 дней подряд')] }] },
-    ],
-  },
-  {
-    title: 'Технологии', color: '#B9A4FF', children: [
-      { title: 'Компьютер и железо', children: [{ title: 'Сборка ПК', goals: [t('Комплектующие и совместимость'), t('BIOS и загрузка'), t('Охлаждение'), p('Собрать ПК самому')] }] },
-      { title: 'Программирование', children: [{ title: 'Python', goals: [t('Переменные, условия, циклы'), t('Функции'), p('Написать первую программу'), p('Сделать маленький проект')] }] },
-      { title: 'Интернет и безопасность', children: [{ title: 'Цифровая безопасность', goals: [t('Пароли и менеджер паролей'), t('Двухфакторная защита'), p('Включить 2FA на всех аккаунтах')] }] },
-    ],
-  },
-];
+/** Какой стартовый набор (замеры, квест) уже добавлен: profile.starterVersion. */
+const STARTER_VERSION = 1;
 
+/** Новая установка: только профиль. Путь человек выбирает сам на экране «Кем хочешь стать?» (components/Onboarding.tsx). */
 export async function seedIfEmpty() {
   if (await db.profile.get('me')) return;
-  const nodes: Node[] = [];
-  const goals: Goal[] = [];
-  const byTitle = new Map<string, string>();
-  const pending: [Node, [string, number]][] = [];
-  const createdAt = nowIso();
-
-  const walk = (list: SeedNode[], parentId: string | null) => {
-    list.forEach((s, order) => {
-      const kind = parentId === null ? 'area' : s.goals ? 'skill' : 'branch';
-      const node: Node = { id: uid(), parentId, kind, title: s.title, order, createdAt };
-      if (s.color) node.color = s.color;
-      if (kind === 'area' && AREA_ICON_BY_TITLE[s.title]) node.icon = AREA_ICON_BY_TITLE[s.title];
-      nodes.push(node);
-      byTitle.set(s.title, node.id);
-      if (s.requires) pending.push([node, s.requires]);
-      if (s.goals) {
-        const stages = assignStages(s.goals.map(([kind]) => ({ kind })));
-        s.goals.forEach(([gk, title], i) => goals.push({ id: uid(), skillId: node.id, kind: gk, title, done: false, stage: stages[i], order: i }));
-      }
-      if (s.children) walk(s.children, node.id);
-    });
-  };
-  walk(TREE, null);
-  for (const [node, [title, minProgress]] of pending) {
-    const id = byTitle.get(title);
-    if (id) node.requires = [{ nodeId: id, minProgress }];
-  }
-
-  await db.transaction('rw', db.profile, db.nodes, db.goals, async () => {
-    await db.nodes.bulkAdd(nodes);
-    await db.goals.bulkAdd(goals);
-    await db.profile.add({ id: 'me', name: 'mildyan', createdAt });
-  });
+  // Стартовые замеры v0.4 новичку не нужны — замеры приходят из выбранных шаблонов, привязанные к навыкам.
+  await db.profile.add({ id: 'me', name: 'Герой', createdAt: nowIso(), onboarding: true, starterVersion: STARTER_VERSION });
 }
 
 // --- стартовое содержимое v0.4: замеры и квест «Обустрой персонажа» ---
-
-const STARTER_VERSION = 1;
 
 const STARTER_METRICS: { title: string; unit: string; better: 'up' | 'down'; skill?: string; hasReps?: boolean }[] = [
   { title: 'Жим лёжа', unit: 'кг', better: 'up', skill: 'Жим лёжа', hasReps: true },
@@ -134,16 +42,24 @@ export async function ensureStarter() {
         })),
       );
     }
-    const starterExists = (await db.quests.toArray()).some((q) => q.title === 'Обустрой персонажа');
-    if (!starterExists) await db.quests.add({
-      id: uid(), title: 'Обустрой персонажа', kind: 'side', rewardXp: 200, since: localDate(), status: 'active', createdAt,
-      steps: [
-        { id: uid(), kind: 'count', title: 'Сделать запись', rule: { target: 1 } },
-        { id: uid(), kind: 'auto', title: 'Отметить навык в фокус', key: 'focus' },
-        { id: uid(), kind: 'auto', title: 'Закрыть первую цель', key: 'goal' },
-        { id: uid(), kind: 'auto', title: 'Сохранить резервную копию', key: 'backup' },
-      ],
-    });
+    await addStarterQuestIn(createdAt);
     await db.profile.update('me', { starterVersion: STARTER_VERSION });
   });
 }
+
+/** Квест «Обустрой персонажа», если его ещё нет. Вызывать внутри транзакции с db.quests. */
+async function addStarterQuestIn(createdAt: string) {
+  const starterExists = (await db.quests.toArray()).some((q) => q.title === 'Обустрой персонажа');
+  if (!starterExists) await db.quests.add({
+    id: uid(), title: 'Обустрой персонажа', kind: 'side', rewardXp: 200, since: localDate(), status: 'active', createdAt,
+    steps: [
+      { id: uid(), kind: 'count', title: 'Сделать запись', rule: { target: 1 } },
+      { id: uid(), kind: 'auto', title: 'Отметить навык в фокус', key: 'focus' },
+      { id: uid(), kind: 'auto', title: 'Закрыть первую цель', key: 'goal' },
+      { id: uid(), kind: 'auto', title: 'Сохранить резервную копию', key: 'backup' },
+    ],
+  });
+}
+
+/** После выбора пути на первом запуске: стартовый квест. */
+export const addStarterQuest = () => db.transaction('rw', db.quests, () => addStarterQuestIn(nowIso()));

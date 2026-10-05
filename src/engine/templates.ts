@@ -208,3 +208,16 @@ export function templateStats(t: Template) {
     metrics: skills.filter((x) => x.skill.metric).length,
   };
 }
+
+/** Несколько шаблонов подряд (первый запуск): каждый следующий видит то, что добавят предыдущие. */
+export function planImportMany(ts: Template[], have: { nodes: ExistingNode[]; goals: ExistingGoal[]; metrics: ExistingMetric[]; quests?: ExistingQuest[] }, newId: () => string): ImportPlan[] {
+  const acc = { nodes: [...have.nodes], goals: [...have.goals], metrics: [...have.metrics], quests: [...(have.quests ?? [])] };
+  return ts.map((t) => {
+    const plan = planImport(t, acc, newId);
+    acc.nodes.push(...plan.nodes);
+    acc.goals.push(...plan.goals);
+    acc.metrics.push(...plan.metrics);
+    if (plan.quest) acc.quests.push({ title: plan.quest.title });
+    return plan;
+  });
+}
