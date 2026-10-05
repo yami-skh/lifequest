@@ -276,6 +276,33 @@
       "x": 1410,
       "y": 0
     },
+    "NextEmpty.dc.html": {
+      "h": 700,
+      "page": "nextaction",
+      "radius": 28,
+      "title": "3 · Нет активных путей",
+      "w": 390,
+      "x": 900,
+      "y": 0
+    },
+    "NextEntry.dc.html": {
+      "h": 900,
+      "page": "nextaction",
+      "radius": 28,
+      "title": "2 · «Начать»: запись с целью",
+      "w": 390,
+      "x": 450,
+      "y": 0
+    },
+    "NextMain.dc.html": {
+      "h": 900,
+      "page": "nextaction",
+      "radius": 28,
+      "title": "1 · Главный",
+      "w": 390,
+      "x": 0,
+      "y": 0
+    },
     "NotifySettings.dc.html": {
       "h": 700,
       "page": "v09",
@@ -602,31 +629,13 @@
       "x": 0,
       "y": 0
     },
-    "NextMain.dc.html": {
-      "h": 900,
+    "NextVariants.dc.html": {
+      "h": 780,
       "page": "nextaction",
       "radius": 28,
-      "title": "1 · Главный",
+      "title": "4 · Варианты карточки",
       "w": 390,
-      "x": 0,
-      "y": 0
-    },
-    "NextEntry.dc.html": {
-      "h": 844,
-      "page": "nextaction",
-      "radius": 28,
-      "title": "2 · «Начать»: запись с целью",
-      "w": 390,
-      "x": 450,
-      "y": 0
-    },
-    "NextEmpty.dc.html": {
-      "h": 700,
-      "page": "nextaction",
-      "radius": 28,
-      "title": "3 · Нет активных путей",
-      "w": 390,
-      "x": 900,
+      "x": 1350,
       "y": 0
     }
   },
@@ -691,6 +700,14 @@
       "page": "metrics",
       "text": "Замеры и рубежи: вес, жим, подтягивания, сон",
       "w": 240,
+      "x": 0,
+      "y": -260
+    },
+    "nextactionTitle": {
+      "kind": "title1",
+      "maxW": 1720,
+      "page": "nextaction",
+      "text": "Фаза 2 · Следующее действие: главный → запись → нет активных путей → варианты",
       "x": 0,
       "y": -260
     },
@@ -801,14 +818,6 @@
       "w": 240,
       "x": 0,
       "y": -260
-    },
-    "nextactionTitle": {
-      "kind": "title1",
-      "maxW": 1720,
-      "page": "nextaction",
-      "text": "Фаза 2 · Следующее действие: главный → запись → нет активных путей",
-      "x": 0,
-      "y": -260
     }
   },
   "order": [
@@ -880,7 +889,8 @@
     "Onboarding.dc.html",
     "NextMain.dc.html",
     "NextEntry.dc.html",
-    "NextEmpty.dc.html"
+    "NextEmpty.dc.html",
+    "NextVariants.dc.html"
   ],
   "pages": [
     {
