@@ -700,6 +700,33 @@
       "w": 390,
       "x": 860,
       "y": 0
+    },
+    "HoldMenu.dc.html": {
+      "h": 900,
+      "page": "tree-hold",
+      "radius": 28,
+      "title": "1. Удержание навыка",
+      "w": 390,
+      "x": 0,
+      "y": 0
+    },
+    "HoldMove.dc.html": {
+      "h": 860,
+      "page": "tree-hold",
+      "radius": 28,
+      "title": "2. Перенести…",
+      "w": 390,
+      "x": 430,
+      "y": 0
+    },
+    "HoldBranch.dc.html": {
+      "h": 900,
+      "page": "tree-hold",
+      "radius": 28,
+      "title": "3. Ветка + подсказка новичку",
+      "w": 390,
+      "x": 860,
+      "y": 0
     }
   },
   "createdOnFiles": {
@@ -709,7 +736,7 @@
   "designSystems": [],
   "launch": {
     "view": "canvas",
-    "page": "tree-read"
+    "page": "tree-hold"
   },
   "notes": {
     "aiTitle": {
@@ -898,6 +925,14 @@
       "text": "Дерево: читаемость — главный счёт: этап; состояния с подписью, связи веток",
       "x": 0,
       "y": -260
+    },
+    "tree-holdTitle": {
+      "kind": "title1",
+      "maxW": 1720,
+      "page": "tree-hold",
+      "text": "Дерево: удержание — быстрые действия по долгому нажатию, перенос навыка",
+      "x": 0,
+      "y": -260
     }
   },
   "order": [
@@ -977,7 +1012,10 @@
     "FriendsPrivacy.dc.html",
     "TreeBefore.dc.html",
     "TreeAfter.dc.html",
-    "TreeLegend.dc.html"
+    "TreeLegend.dc.html",
+    "HoldMenu.dc.html",
+    "HoldMove.dc.html",
+    "HoldBranch.dc.html"
   ],
   "pages": [
     {
@@ -1059,6 +1097,10 @@
     {
       "id": "tree-read",
       "name": "Дерево: читаемость"
+    },
+    {
+      "id": "tree-hold",
+      "name": "Дерево: удержание"
     }
   ],
   "title": "LifeQuest — макет"
