@@ -185,7 +185,7 @@ export function StarMap() {
  * Холст — ровно до нижнего меню, чтобы страница не листалась (мастер-план §13).
  * Высоту шапки и меню не угадываем: меряем, где холст начинается и сколько отступа у <main> снизу.
  */
-function useSkyHeight(ref: { current: HTMLDivElement | null }) {
+export function useSkyHeight(ref: { current: HTMLDivElement | null }) {
   useLayoutEffect(() => {
     const fit = () => {
       const el = ref.current;

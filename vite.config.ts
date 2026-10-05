@@ -5,6 +5,10 @@ import { VitePWA } from 'vite-plugin-pwa';
 
 import pkg from './package.json' with { type: 'json' };
 
+// Стабильная живёт в корне сайта, бета — в папке beta/ на том же адресе. Service worker стабильной
+// управляет всем /lifequest/, поэтому без запрета подсовывал бете свою страницу — белый экран.
+const isBeta = pkg.version.includes('-beta.');
+
 export default defineConfig({
   base: './',
   define: { __APP_VERSION__: JSON.stringify(pkg.version) },
@@ -15,7 +19,7 @@ export default defineConfig({
       // Регистрируем сами в main.tsx: в APK service worker не нужен.
       injectRegister: false,
       // Новая версия включается сразу, даже если открыта страница старой сборки.
-      workbox: { skipWaiting: true, clientsClaim: true, globPatterns: ['**/*.{js,css,html,woff2,png,svg}'], globIgnores: ['bundle-*.zip'] },
+      workbox: { skipWaiting: true, clientsClaim: true, globPatterns: ['**/*.{js,css,html,woff2,png,svg}'], globIgnores: ['bundle-*.zip'], ...(isBeta ? {} : { navigateFallbackDenylist: [/\/beta\//] }) },
       includeAssets: ['icon.svg', 'apple-touch-icon.png'],
       manifest: {
         id: './',
