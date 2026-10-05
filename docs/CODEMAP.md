@@ -52,10 +52,10 @@
   T:6, P:7, sk:8, EXTRA:13, norm:29, *presetsFor:32
 - **templatePrompt.ts** (39) — Запрос для «любой нейросети»: она составляет путь в формате шаблона (engine/templates.ts).
   *TEMPLATE_PROMPT:4
-- **templates.test.ts** (45)
+- **templates.test.ts** (49)
   goalsOf:5
-- **templates.ts** (127) — Готовые шаблоны путей (мастер-план §12). Формат — engine/templates.ts.
-  T:5, P:6, sk:9, M:18, BODY:26, MIND:27, TECH:28, ART:29, MONEY:30, PEOPLE:31, CALM:32, *TEMPLATES:34
+- **templates.ts** (246) — Готовые шаблоны путей (мастер-план §12). Формат — engine/templates.ts.
+  T:5, P:6, sk:9, M:18, BODY:31, MIND:32, TECH:33, ART:34, MONEY:35, PEOPLE:36, CALM:37, HOME:38, WORK:39, ORDER:47, BASE:49, *TEMPLATES:242
 
 ## src/db
 

@@ -14,6 +14,10 @@ describe('готовые шаблоны', () => {
   it('уникальные id', () => {
     expect(new Set(TEMPLATES.map((t) => t.id)).size).toBe(TEMPLATES.length);
   });
+  it('каталог по популярности: «Старт» первым, самые частые цели — в первых пяти (их видно на первом запуске)', () => {
+    expect(TEMPLATES.slice(0, 5).map((t) => t.id)).toEqual(['start', 'strong-body', 'weight', 'health', 'calm']);
+    expect(TEMPLATES.length).toBe(18);
+  });
   it('практики не меньше теории (мастер-план §3: около 30/70)', () => {
     for (const t of TEMPLATES) {
       const goals = t.areas.flatMap((a) => a.branches.flatMap(goalsOf));
