@@ -36,8 +36,8 @@
 
 ## src/data
 
-- **changelog.ts** (161) — Что нового в версиях — для пользователя, простыми словами. Новые версии — сверху.
-  *ChangeKind:4, *Change:5, *Release:6, *CHANGELOG:8, *SEEN_BEFORE_CHANGELOG:160
+- **changelog.ts** (154) — Что нового в версиях — для пользователя, простыми словами. Новые версии — сверху.
+  *ChangeKind:4, *Change:5, *Release:6, *CHANGELOG:8, *SEEN_BEFORE_CHANGELOG:153
 
 ## src/db
 
