@@ -7,6 +7,13 @@ export interface Release { version: string; date: string; title?: string; change
 
 export const CHANGELOG: Release[] = [
   {
+    version: '0.10.0-beta.2',
+    date: '2026-10-05',
+    changes: [
+      { kind: 'new', title: 'Журнал ошибок', sub: 'Настройки → О приложении. Если что-то сломалось — «Отправить отчёт». Записи и фото в отчёт не попадают.' },
+    ],
+  },
+  {
     version: '0.10.0-beta.1',
     date: '2026-10-05',
     title: 'Первая бета',

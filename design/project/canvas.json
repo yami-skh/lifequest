@@ -129,6 +129,15 @@
       "x": 0,
       "y": 0
     },
+    "BackupSnapshot.dc.html": {
+      "h": 1120,
+      "page": "phase0",
+      "radius": 28,
+      "title": "Резервная копия + снимок",
+      "w": 390,
+      "x": 0,
+      "y": 0
+    },
     "Changelog.dc.html": {
       "h": 844,
       "page": "whatsnew",
@@ -521,13 +530,13 @@
       "x": 0,
       "y": 0
     },
-    "BackupSnapshot.dc.html": {
-      "h": 1120,
+    "ErrorLog.dc.html": {
+      "h": 844,
       "page": "phase0",
       "radius": 28,
-      "title": "Резервная копия + снимок",
+      "title": "Журнал ошибок",
       "w": 390,
-      "x": 0,
+      "x": 450,
       "y": 0
     }
   },
@@ -592,6 +601,14 @@
       "page": "metrics",
       "text": "Замеры и рубежи: вес, жим, подтягивания, сон",
       "w": 240,
+      "x": 0,
+      "y": -260
+    },
+    "phase0Title": {
+      "kind": "title1",
+      "maxW": 1720,
+      "page": "phase0",
+      "text": "Фаза 0: снимок перед восстановлением · журнал ошибок",
       "x": 0,
       "y": -260
     },
@@ -675,14 +692,6 @@
       "w": 240,
       "x": 0,
       "y": -260
-    },
-    "phase0Title": {
-      "kind": "title1",
-      "maxW": 1720,
-      "page": "phase0",
-      "text": "Фаза 0: снимок перед восстановлением",
-      "x": 0,
-      "y": -260
     }
   },
   "order": [
@@ -743,7 +752,8 @@
     "StarMap.dc.html",
     "NotifySettings.dc.html",
     "NotifyShade.dc.html",
-    "BackupSnapshot.dc.html"
+    "BackupSnapshot.dc.html",
+    "ErrorLog.dc.html"
   ],
   "pages": [
     {

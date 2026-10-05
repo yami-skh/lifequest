@@ -13,6 +13,7 @@ import { Check, SectionLabel, Sheet } from '../components/ui';
 import { SetsEditor } from '../components/SetsEditor';
 import { stagesToast } from './Skill';
 import { BigNumber, lastSetsOf, metricToasts, recordHintFor, usesSets } from './Metrics';
+import { logError } from '../lib/errorlog';
 
 /** workout: открыто кнопкой «Записать тренировку» — тип «Тренировка», подставленные подходы сохраняются как есть. */
 export interface EntryPreset { skillId?: string; fixesEntryId?: string; workout?: boolean }
@@ -142,7 +143,7 @@ export function EntrySheet({ preset, onClose }: { preset: EntryPreset; onClose: 
       }
       onClose();
     } catch (e) {
-      console.error(e);
+      logError(e, 'Запись');
       toast({ kind: 'info', title: 'Не удалось сохранить запись', sub: 'Попробуй ещё раз' });
       setBusy(false);
     }

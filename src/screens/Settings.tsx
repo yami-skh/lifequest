@@ -12,11 +12,13 @@ import { toast } from '../lib/toast';
 import { AiError, fetchQuota } from '../lib/ai';
 import { ReminderSettings, SoundSettings } from '../components/Reminders';
 import { WEEKLY_TEMPLATES } from '../engine/quests';
-import { humanDate } from '../engine/dates';
+import { humanDate, localDate } from '../engine/dates';
 import { type ThemePref, setThemePref, useThemePref } from '../lib/theme';
 import { checkForUpdate, installApk, useUpdate } from '../lib/update';
 import { Icon } from '../components/Icon';
-import { Confirm, ProgressBar, SectionLabel, TopBar } from '../components/ui';
+import { Confirm, ProgressBar, SectionLabel, Sheet, TopBar } from '../components/ui';
+import { logError } from '../lib/errorlog';
+import { clearErrors, shareReport, useErrors } from '../lib/errorlog';
 
 const THEMES: { id: ThemePref; label: string }[] = [
   { id: 'system', label: 'Как в системе' },
@@ -118,6 +120,7 @@ export function Settings() {
       <Group label="О приложении">
         <div class="menu-list">
           <AboutRow onSecret={() => setDev(true)} />
+          <ErrorLogRow />
           <a class="menu-row" href="#/changelog"><span class="menu-row-text"><span class="strong">Что нового</span></span><Icon name="right" size={16} stroke={2.4} /></a>
         </div>
       </Group>
@@ -291,7 +294,7 @@ function ChannelPicker() {
         await setChannel('stable');
       }
     } catch (e) {
-      console.error(e);
+      logError(e, 'Смена канала');
       toast({ kind: 'info', title: 'Не удалось сменить канал' });
     }
     setBusy(false);
@@ -305,5 +308,44 @@ function ChannelPicker() {
       </div>
       <span class="muted small">Бета — каждая новая сборка, может ломаться. Возврат на стабильную сначала сохраняет снимок данных.</span>
     </div>
+  );
+}
+
+/** «Журнал ошибок»: строка видна, только если ошибки есть. Макет: холст, «Фаза 0». */
+function ErrorLogRow() {
+  const errors = useErrors();
+  const [open, setOpen] = useState(false);
+  if (!errors.length) return null;
+  const weekAgo = Date.now() - 7 * 86400_000;
+  const week = errors.filter((e) => Date.parse(e.at) > weekAgo).length;
+  const when = (iso: string) => `${humanDate(localDate(new Date(iso))).toLowerCase()} ${new Date(iso).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })}`;
+  const send = async () => {
+    const r = await shareReport();
+    if (r === 'copied') toast({ kind: 'info', title: 'Отчёт скопирован', sub: 'Вставь его в сообщение' });
+  };
+  return (
+    <>
+      <button type="button" class="menu-row" onClick={() => setOpen(true)}>
+        <span class="menu-row-text"><span class="strong">Журнал ошибок</span></span>
+        <span class="err-count">{errors.length}</span>
+        <Icon name="right" size={16} stroke={2.4} />
+      </button>
+      {open && (
+        <Sheet open onClose={() => setOpen(false)} title="Журнал ошибок">
+          <span class="muted small err-sub">{week} за последние 7 дней · хранится на телефоне</span>
+          <div class="stack-8 err-list">
+            {errors.map((e, i) => (
+              <div class="err-item" key={i}>
+                <span class="spread small muted"><span>{e.where || '—'}</span><span>{when(e.at)}</span></span>
+                <span class="err-msg">{e.message}</span>
+              </div>
+            ))}
+          </div>
+          <div class="ai-privacy"><span>В отчёте — версия, канал, устройство и тексты ошибок. Записи, фото и заметки не попадают.</span></div>
+          <button type="button" class="btn primary" onClick={send}>Отправить отчёт</button>
+          <button type="button" class="link small muted err-clear" onClick={() => { clearErrors(); setOpen(false); }}>Очистить журнал</button>
+        </Sheet>
+      )}
+    </>
   );
 }

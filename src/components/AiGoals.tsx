@@ -8,6 +8,7 @@ import { AiError, type AiGoalsAnswer, askGoals, fetchQuota } from '../lib/ai';
 import { toast } from '../lib/toast';
 import { Icon } from './Icon';
 import { Check, Sheet } from './ui';
+import { logError } from '../lib/errorlog';
 
 const WISHES = ['больше практики', 'полегче', 'на неделю'];
 
@@ -55,6 +56,7 @@ function AiGoalsSheet({ skillId, onClose }: { skillId: string; onClose: () => vo
       setPicked(new Set(answer.stages.flatMap((s) => s.goals.map((_, i) => `${s.stage}:${i}`))));
       setPhase({ kind: 'preview', answer });
     } catch (e) {
+      if (!(e instanceof AiError) || e.code === 'network' || e.code === 'internal' || e.code === 'api') logError(e, 'AI-помощник');
       if (e instanceof AiError && e.remaining !== undefined) setRemaining(e.remaining);
       setPhase({ kind: 'error', message: e instanceof AiError ? e.message : 'Что-то пошло не так' });
     }

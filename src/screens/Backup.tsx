@@ -11,6 +11,7 @@ import { ensureStarter } from '../db/seed';
 import { Icon } from '../components/Icon';
 import { Sheet, TopBar } from '../components/ui';
 import { plural } from './Character';
+import { logError } from '../lib/errorlog';
 
 export function Backup() {
   const w = useWorld();
@@ -31,7 +32,7 @@ export function Backup() {
       if (r === 'shared') toast({ kind: 'info', title: 'Копия сохранена' });
       if (r === 'downloaded') toast({ kind: 'info', title: 'Копия скачана', sub: 'Файл в «Загрузках»' });
     } catch (e) {
-      console.error(e);
+      logError(e, 'Сохранение копии');
       toast({ kind: 'info', title: 'Не удалось сохранить копию', sub: 'Попробуй ещё раз' });
     }
     setBusy(false);
@@ -61,7 +62,7 @@ export function Backup() {
       toast({ kind: 'info', title: 'Данные восстановлены' });
       go('');
     } catch (e) {
-      console.error(e);
+      logError(e, 'Восстановление копии');
       toast({ kind: 'info', title: 'Не удалось восстановить', sub: 'Текущие данные не тронуты' });
     }
     setBusy(false);
@@ -214,7 +215,7 @@ function SnapshotCard() {
       toast({ kind: 'info', title: 'Данные возвращены', sub: `как было ${fmtWhen(snap.createdAt)}` });
       go('');
     } catch (e) {
-      console.error(e);
+      logError(e, 'Возврат из снимка');
       toast({ kind: 'info', title: 'Не удалось вернуть', sub: 'Текущие данные не тронуты' });
       setBusy(false);
     }

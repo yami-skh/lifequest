@@ -12,6 +12,7 @@ import { FileOpener } from '@capawesome-team/capacitor-file-opener';
 import { cmpVersion } from '../engine/version';
 import { getChannel } from './channel';
 import { toast } from './toast';
+import { logError } from './errorlog';
 
 export const SITE = 'https://yami-skh.github.io/lifequest/';
 /** Канал APK: стабильная — корень сайта, бета — папка beta/ (scripts/deploy.mjs --beta). */
@@ -74,7 +75,7 @@ export async function checkForUpdate(manual = false) {
     setState({ kind: 'web', version: remote.version });
     if (manual) toast({ kind: 'info', title: `Скачана версия ${remote.version}`, sub: 'Включится при следующем запуске' });
   } catch (e) {
-    console.error('update', e);
+    logError(e, 'Обновление');
     setState({ kind: 'idle' });
   }
 }
@@ -94,7 +95,7 @@ export async function installApk() {
     await FileOpener.openFile({ path: uri, mimeType: 'application/vnd.android.package-archive' });
     setState({ kind: 'apk', remote });
   } catch (e) {
-    console.error('apk', e);
+    logError(e, 'Скачивание APK');
     setState({ kind: 'error', remote });
   } finally {
     progress.remove();

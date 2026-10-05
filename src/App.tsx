@@ -21,6 +21,7 @@ import { MetricDetail, Metrics } from './screens/Metrics';
 import { completeQuest, maintainQuests } from './db/actions';
 import { localDate } from './engine/dates';
 import { EntrySheet, type EntryPreset } from './screens/EntrySheet';
+import { logError } from './lib/errorlog';
 
 export function App() {
   const [world, setWorld] = useState<World | null>(null);
@@ -28,7 +29,7 @@ export function App() {
   const route = useRoute();
 
   useEffect(() => {
-    const sub = liveQuery(loadWorld).subscribe({ next: setWorld, error: (e) => console.error(e) });
+    const sub = liveQuery(loadWorld).subscribe({ next: setWorld, error: (e) => logError(e, 'Загрузка данных') });
     return () => sub.unsubscribe();
   }, []);
 

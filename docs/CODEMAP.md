@@ -6,13 +6,13 @@
 
 ## src
 
-- **App.tsx** (133)
-  *App:25, useGameEvents:81, Toasts:115
+- **App.tsx** (134)
+  *App:26, useGameEvents:82, Toasts:116
 
 ## src/components
 
-- **AiGoals.tsx** (137) — «Предложить цели» — кнопка на навыке и шторка: запрос → ожидание → предпросмотр с галочками.
-  WISHES:12, *AiGoalsButton:15, Phase:27, AiGoalsSheet:29
+- **AiGoals.tsx** (139) — «Предложить цели» — кнопка на навыке и шторка: запрос → ожидание → предпросмотр с галочками.
+  WISHES:13, *AiGoalsButton:16, Phase:28, AiGoalsSheet:30
 - **EntryCard.tsx** (83)
   Thumb:12, *EntryCard:17
 - **FocusAndHints.tsx** (79) — Главный экран: «В фокусе» и «Ближайшее». ARCHITECTURE.md §16, идеи 1 и 5.
@@ -23,8 +23,8 @@
   HIDE_KEY:6, *InstallCard:9
 - **NumPad.tsx** (79) — Крупная цифровая клавиатура для весов, повторов и целей.
   *NumPadProps:7, parse:21, *fmtInput:22, *NumPad:24, *numFrom:75
-- **Reminders.tsx** (97) — Звуки и напоминания: блок настроек, окно «Включить напоминания?» и синхронизация расписания.
-  Switch:9, *SoundSettings:19, *ReminderSettings:35, *ReminderPrompt:67, *ReminderSync:87
+- **Reminders.tsx** (98) — Звуки и напоминания: блок настроек, окно «Включить напоминания?» и синхронизация расписания.
+  Switch:10, *SoundSettings:20, *ReminderSettings:36, *ReminderPrompt:68, *ReminderSync:88
 - **RequirementsSheet.tsx** (123) — Настройка требований навыка. ARCHITECTURE.md §16, идея 4.
   PRESETS:9, *RequirementsSheet:11
 - **SetsEditor.tsx** (106) — Тренировка подходами: «вес × повторы», + подход, «как в прошлый раз».
@@ -36,8 +36,8 @@
 
 ## src/data
 
-- **changelog.ts** (176) — Что нового в версиях — для пользователя, простыми словами. Новые версии — сверху.
-  *ChangeKind:4, *Change:5, *Release:6, *CHANGELOG:8, *SEEN_BEFORE_CHANGELOG:175
+- **changelog.ts** (183) — Что нового в версиях — для пользователя, простыми словами. Новые версии — сверху.
+  *ChangeKind:4, *Change:5, *Release:6, *CHANGELOG:8, *SEEN_BEFORE_CHANGELOG:182
 
 ## src/db
 
@@ -86,6 +86,8 @@
   FORMAT:11, BackupData:13, *BackupSummary:32, summarize:34, *currentSummary:41, buildZip:47, toBase64:71, *exportBackup:83, download:113, *ParsedBackup:123, *readBackup:126, *restoreBackup:150, *takeSnapshot:180, *restoreSnapshot:186
 - **channel.ts** (37) — Канал обновлений APK: «стабильная» (по умолчанию, у брата) или «бета» (каждая новая сборка).
   *Channel:9, KEY:10, *getChannel:12, *setChannel:25
+- **errorlog.ts** (90) — Журнал ошибок: 50 последних сбоев на устройстве. Наружу — только по кнопке «Отправить отчёт»,
+  *LoggedError:8, KEY:9, MAX:10, listeners:11, *getErrors:13, save:21, *logError:31, *clearErrors:44, *useErrors:46, *initErrorLog:56, *buildReport:61, *shareReport:73
 - **install.ts** (52) — Установка PWA: ловим событие beforeinstallprompt от Chrome и показываем свою кнопку.
   InstallPromptEvent:5, deferred:10, listeners:11, emit:12, *isStandalone:24, *isIos:28, *useInstall:30
 - **photo.ts** (72) — Сжатие фото перед сохранением: основное до 1600px, превью до 320px. ARCHITECTURE.md §9.
@@ -102,26 +104,26 @@
   *ThemePref:5, KEY:6, media:7, listeners:8, *getThemePref:10, apply:19, *setThemePref:25, *initTheme:35, *useThemePref:40, *ac:50
 - **toast.ts** (71) — Всплывашки: XP, новый уровень, достижения.
   *ToastKind:6, *Toast:7, MERGE_MS:10, LIFETIME:11, RANK:12, toasts:14, nextId:15, lastGame:16, timers:17, listeners:18, emit:19, schedule:21, *toast:30, *useToasts:61
-- **update.ts** (118) — Автообновление APK. Сайт обновляется сам (service worker), здесь — только приложение.
-  *SITE:16, channelSite:18, *Remote:19, *UpdateState:21, state:30, listeners:31, setState:32, *useUpdate:37, fetchRemote:46, *checkForUpdate:56, *installApk:83, *initUpdates:105
+- **update.ts** (119) — Автообновление APK. Сайт обновляется сам (service worker), здесь — только приложение.
+  *SITE:17, channelSite:19, *Remote:20, *UpdateState:22, state:31, listeners:32, setState:33, *useUpdate:38, fetchRemote:47, *checkForUpdate:57, *installApk:84, *initUpdates:106
 
 ## src
 
-- **main.tsx** (29)
-  start:16
+- **main.tsx** (31)
+  start:17
 
 ## src/screens
 
 - **Achievements.tsx** (61)
   *Achievements:6
-- **Backup.tsx** (250) — «Ещё» → «Резервная копия». Макет: холст, страница «Резервная копия».
-  *Backup:15, agoText:147, *BackupReminder:155, fmtWhen:197, SnapshotCard:200
+- **Backup.tsx** (251) — «Ещё» → «Резервная копия». Макет: холст, страница «Резервная копия».
+  *Backup:16, agoText:148, *BackupReminder:156, fmtWhen:198, SnapshotCard:201
 - **Changelog.tsx** (107) — «Что нового»: окно один раз после обновления и история версий в «Ещё». Макет: холст, страница «Что нового».
   KIND:11, ORDER:16, fmtDate:18, changesWord:19, *WhatsNew:22, ChangeRow:60, *Changelog:70, ReleaseCard:85
 - **Character.tsx** (151) — Главный экран — всё важное примерно в один экран. Макет: холст, страница «Упрощение», экран 1.
   *Character:14, WEEK_SHORT:80, TodayCard:83, *plural:144
-- **EntrySheet.tsx** (283) — «＋ Запись» — главный сценарий, цель 15 секунд. Макет: холст, страница «Упрощение», экраны 2–3.
-  *EntryPreset:18, LAST_TYPE:20, loadType:21, PhotoPreview:30, *EntrySheet:40, .setType:60, .choosePrimary:98, .addSecondary:107, .onFiles:114, .save:125
+- **EntrySheet.tsx** (284) — «＋ Запись» — главный сценарий, цель 15 секунд. Макет: холст, страница «Упрощение», экраны 2–3.
+  *EntryPreset:19, LAST_TYPE:21, loadType:22, PhotoPreview:31, *EntrySheet:41, .setType:61, .choosePrimary:99, .addSecondary:108, .onFiles:115, .save:126
 - **Journal.tsx** (45)
   *Journal:7
 - **Metrics.tsx** (485) — Замеры и рубежи. Макет: холст, страница «Замеры и рубежи». ARCHITECTURE.md §8.
@@ -130,8 +132,8 @@
   SOON:7, *More:15
 - **Quests.tsx** (447) — Квесты. Макет: холст, страница «Квесты». ARCHITECTURE.md §6.
   KIND_TITLE:14, daysToMonday:16, *QuestCard:22, WeeklyRow:43, *Quests:64, *QuestDetail:148, stepKindLabel:228, DraftKind:232, NewQuestSheet:234, StepBuilder:313, *QuestsBlock:412
-- **Settings.tsx** (310) — Настройки: персонаж, тема, недельные квесты, резервная копия, о приложении, стереть данные.
-  THEMES:21, Toggle:27, Group:36, *Settings:45, AboutRow:153, hiddenThisSession:183, *UpdateCard:184, AiBlock:217, ChannelPicker:266
+- **Settings.tsx** (352) — Настройки: персонаж, тема, недельные квесты, резервная копия, о приложении, стереть данные.
+  THEMES:23, Toggle:29, Group:38, *Settings:47, AboutRow:156, hiddenThisSession:186, *UpdateCard:187, AiBlock:220, ChannelPicker:269, ErrorLogRow:315
 - **Skill.tsx** (436)
   *stagesToast:23, Fold:26, word:27, *Skill:31, .toggle:61, .onFocus:63, FoldRow:193, WorkoutCard:207, SkillMenu:242, GoalRow:279, Goals:292, Notes:371, GalleryItem:411, FullPhoto:416, Gallery:426
 - **Tree.tsx** (313)
@@ -151,8 +153,8 @@
   Порядок важен: база → общие компоненты → экраны.:1
 - **metrics.css** (35) — замеры
   замеры:1
-- **more.css** (89) — резервная копия
-  резервная копия:1, «скоро» в «Ещё»:21, достижения:28, что нового:40, настройки, тема, обновление (0.7):60, звуки и напоминания (0.9):79, номер версии — скрытая кнопка «Эксперименты»:83, снимок перед восстановлением (фаза 0):86
+- **more.css** (97) — резервная копия
+  резервная копия:1, «скоро» в «Ещё»:21, достижения:28, что нового:40, настройки, тема, обновление (0.7):60, звуки и напоминания (0.9):79, номер версии — скрытая кнопка «Эксперименты»:83, снимок перед восстановлением (фаза 0):86, журнал ошибок (фаза 0):90
 - **quests.css** (34) — квесты
   квесты:1
 - **skill.css** (115) — навык

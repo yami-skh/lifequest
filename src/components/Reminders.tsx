@@ -5,6 +5,7 @@ import { useWorld } from '../db/world';
 import { getReminderPrefs, notificationsAllowed, remindersSupported, rescheduleReminders, setReminderPrefs, useReminderPrefs, type ReminderPrefs } from '../lib/reminders';
 import { play, setSoundPrefs, useSoundPrefs } from '../lib/sound';
 import { Sheet } from './ui';
+import { logError } from '../lib/errorlog';
 
 function Switch({ on, title, sub, onClick, children }: { on: boolean; title: string; sub: string; onClick: () => void; children?: preact.ComponentChildren }) {
   return (
@@ -89,7 +90,7 @@ export function ReminderSync() {
   const p = useReminderPrefs();
   useEffect(() => {
     if (!remindersSupported() || !getReminderPrefs().asked) return;
-    const t = setTimeout(() => rescheduleReminders(w).catch((e) => console.error('reminders', e)), 1500);
+    const t = setTimeout(() => rescheduleReminders(w).catch((e) => logError(e, 'Напоминания')), 1500);
     return () => clearTimeout(t);
   }, [w, p]);
   return null;

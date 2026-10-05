@@ -10,6 +10,7 @@ import { initTheme } from './lib/theme';
 import '@fontsource-variable/manrope';
 import '@fontsource-variable/unbounded';
 import './styles/index.css';
+import { initErrorLog } from './lib/errorlog';
 
 initTheme();
 
@@ -21,6 +22,7 @@ async function start() {
   // Сайт обновляется через service worker; APK — новой сборкой, кеш там только мешает.
   if (!Capacitor.isNativePlatform()) registerSW({ immediate: true });
   initBackButton();
+  initErrorLog();
   initUpdates();
   render(<App />, document.getElementById('app')!);
 }
