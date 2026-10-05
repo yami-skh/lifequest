@@ -91,7 +91,7 @@
 .sky-label { font-size: 10.5px; font-weight: 700; fill: #ECEDF1; font-family: var(--body); }
 .sky-label.fog { fill: #8B92A0; font-weight: 500; opacity: 0.75; }
 .sky-star { cursor: pointer; }
-.sky-legend { position: absolute; left: 0; right: 0; bottom: 84px; display: flex; justify-content: center; gap: 12px; font-size: 11px; color: #8B92A0; pointer-events: none; }
+.sky-legend { position: absolute; left: 0; right: 0; bottom: 84px; display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 12px; padding: 0 12px; font-size: 11px; color: #8B92A0; pointer-events: none; }
 .sky-legend .rust { color: #C98A5A; }
 .sky-card { position: absolute; left: 14px; right: 14px; bottom: 12px; display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 18px; background: #171A21; border: 1px solid #2A2F3B; color: #ECEDF1; }
 .sky-card-lvl { font-family: var(--display); font-weight: 700; color: #ECEDF1; }
@@ -159,3 +159,9 @@ main.no-nav { padding-bottom: calc(var(--safe-b) + 24px); }
 .onb-actions { display: flex; flex-direction: column; gap: 4px; margin-top: 8px; }
 .onb-empty { align-self: center; text-align: center; }
 .onb-card .check.on { background: var(--gold); border-color: var(--gold); color: var(--on-gold); }
+
+/* объёмное созвездие (components/StarMap3D.tsx) */
+.sky-canvas { width: 100%; height: 100%; display: block; touch-action: none; cursor: grab; user-select: none; }
+.sky-auto { position: absolute; top: 10px; right: 12px; min-height: 36px; padding: 0 12px; border-radius: 18px; border: 1px solid #2A2F3B; background: rgba(23, 26, 33, 0.8); color: #8B92A0; font-size: 12.5px; font-weight: 800; }
+.sky-auto.on { color: #F2B544; border-color: rgba(242, 181, 68, 0.45); }
+.sky-legend .done { color: #F2B544; }

@@ -34,7 +34,9 @@
 - **SetsEditor.tsx** (106) — Тренировка подходами: «вес × повторы», + подход, «как в прошлый раз».
   Field:9, *setsText:11, *SetsEditor:13
 - **StarMap.tsx** (203) — Созвездие навыков: второй вид дерева (§16, идея 11). Макет: холст, «Созвездие и напоминания».
-  Star:9, Cluster:10, View:11, RUST:13, *StarMap:15, .scale:67, .zoomAt:71, .onDown:77, .onMove:86, .onUp:102, .tap:106, useSkyHeight:188
+  Star:9, Cluster:10, View:11, RUST:13, *StarMap:15, .scale:67, .zoomAt:71, .onDown:77, .onMove:86, .onUp:102, .tap:106, *useSkyHeight:188
+- **StarMap3D.tsx** (389) — Объёмное созвездие (мастер-план §12, решения 05.10.2026; флаг stars-3d, только бета).
+  State:11, Star3:12, Area3:13, RUST:15, HOME:16, AUTO_KEY:17, FONT:18, loadAuto:20, *StarMap3D:28, .local:279, .onDown:283, .onMove:297, .onUp:320, .onWheel:342, .setAuto:347
 - **Templates.tsx** (252) — «Готовые пути» — шаблоны навыков (мастер-план §12, фаза 1). Макет: холст, страница «Шаблоны».
   Phase:16, goalsWord:18, skillsWord:19, *TemplatesSheet:21, AreaChip:40, Catalog:45, Preview:85, Paste:191
 - **ui.tsx** (133)
@@ -42,8 +44,8 @@
 
 ## src/data
 
-- **changelog.ts** (233) — Что нового в версиях — для пользователя, простыми словами. Новые версии — сверху.
-  *ChangeKind:4, *Change:5, *Release:6, *CHANGELOG:8, *SEEN_BEFORE_CHANGELOG:232
+- **changelog.ts** (241) — Что нового в версиях — для пользователя, простыми словами. Новые версии — сверху.
+  *ChangeKind:4, *Change:5, *Release:6, *CHANGELOG:8, *SEEN_BEFORE_CHANGELOG:240
 - **presets.test.ts** (40)
   AREAS:6
 - **presets.ts** (48) — Готовые навыки при ручном добавлении (мастер-план §12): навыки шаблонов, сгруппированные по направлениям,
@@ -75,8 +77,8 @@
 - **dates.ts** (55) — Даты храним как локальные YYYY-MM-DD.
   *localDate:3, *addDays:10, *daysBetween:16, MONTHS:22, *humanDate:24, *currentStreak:32, *bestStreak:43
 - **engine.test.ts** (242)
-- **experiments.ts** (18) — Флаг экспериментов: новый UX включается только у тех, кто сам включил эксперимент
-  *EXPERIMENTS:5, *hasExp:11, *toggleExp:14
+- **experiments.ts** (19) — Флаг экспериментов: новый UX включается только у тех, кто сам включил эксперимент
+  *EXPERIMENTS:5, *hasExp:12, *toggleExp:15
 - **levels.ts** (44) — Уровни персонажа и навыков. ARCHITECTURE.md §4.3–4.4.
   *xpToNext:3, *characterLevel:5, *SKILL_LEVELS:17, *skillLevel:31
 - **metrics.ts** (88) — Замеры, рекорды, прогноз рубежа. ARCHITECTURE.md §8.
@@ -89,6 +91,10 @@
   *GoalKind:3, *GOAL_WEIGHT:4, *GoalLike:6, *skillProgress:8, *NodeLike:19, *computeProgress:22
 - **quests.ts** (47) — Квесты: шаблоны недельных, прогресс шагов. ARCHITECTURE.md §6.
   *QUEST_STEP_XP:4, *weekStart:7, *WeeklyTemplate:13, *WEEKLY_TEMPLATES:21, *EntryFacts:27, *countProgress:30
+- **sky3d.test.ts** (44)
+  cam:4
+- **sky3d.ts** (90) — Объёмное созвездие (мастер-план §12, решения 05.10.2026): раскладка в пространстве, проекция, масштаб к точке.
+  *V3:4, *Camera:5, *Projected:6, *ZOOM_MIN:8, *ZOOM_MAX:9, *PITCH_MAX:10, *SKY_R:12, CAM_D:13, *spherePoints:16, *clusterPoints:28, *project:40, *clampZoom:59, *clampPitch:60, *zoomAt:63, *backgroundStars:70, *flashWaves:82
 - **snapshots.ts** (10) — Снимки данных перед восстановлением копии: сколько хранить и какие удалить. Чистые функции.
   *SNAPSHOT_KEEP:4, *snapshotsToPrune:7
 - **stages.ts** (51) — Ступени целей навыка. ARCHITECTURE.md §16, идея 2.
@@ -162,8 +168,8 @@
   THEMES:23, Toggle:29, Group:38, *Settings:47, AboutRow:156, hiddenThisSession:186, *UpdateCard:187, AiBlock:220, ChannelPicker:269, ErrorLogRow:315
 - **Skill.tsx** (436)
   *stagesToast:23, Fold:26, word:27, *Skill:31, .toggle:61, .onFocus:63, FoldRow:193, WorkoutCard:207, SkillMenu:242, GoalRow:279, Goals:292, Notes:371, GalleryItem:411, FullPhoto:416, Gallery:426
-- **Tree.tsx** (390)
-  Editor:17, loadExpanded:22, *Tree:30, .setMode:50, .toggle:59, .skillCount:77, .skillsIn:80, .menuBtn:83, .renderChildren:89, .renderNode:99, KIND_LABEL:258, NodeEditor:260
+- **Tree.tsx** (391)
+  Editor:18, loadExpanded:23, *Tree:31, .setMode:51, .toggle:60, .skillCount:78, .skillsIn:81, .menuBtn:84, .renderChildren:90, .renderNode:100, KIND_LABEL:259, NodeEditor:261
 
 ## src/styles
 
@@ -185,5 +191,5 @@
   квесты:1
 - **skill.css** (115) — навык
   навык:1, навык: фокус, требования, ступени:21, навык 0.6: шапка, тренировка, сворачиваемые блоки, меню ⋯:58, AI-помощник целей:93
-- **tree.css** (162) — дерево
-  дерево:1, дерево: направления-карточки, ветви-линии, навыки-узлы:20, вложенные ветки — короткий отступ, линия идёт от ромбика:38, туман: навык ещё не исследован:64, ржавчина: 60+ дней без записей:68, созвездие (0.9): небо всегда тёмное, в любой теме:87, готовые пути (шаблоны) — components/Templates.tsx:103, готовые навыки в «Новый навык» (data/presets.ts):141, первый запуск (components/Onboarding.tsx):151
+- **tree.css** (168) — дерево
+  дерево:1, дерево: направления-карточки, ветви-линии, навыки-узлы:20, вложенные ветки — короткий отступ, линия идёт от ромбика:38, туман: навык ещё не исследован:64, ржавчина: 60+ дней без записей:68, созвездие (0.9): небо всегда тёмное, в любой теме:87, готовые пути (шаблоны) — components/Templates.tsx:103, готовые навыки в «Новый навык» (data/presets.ts):141, первый запуск (components/Onboarding.tsx):151, объёмное созвездие (components/StarMap3D.tsx):163

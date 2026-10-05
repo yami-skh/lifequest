@@ -10,6 +10,7 @@ import { AreaTile, Confirm, Ring, Sheet, pctText } from '../components/ui';
 import { plural } from './Character';
 import { ac } from '../lib/theme';
 import { StarMap } from '../components/StarMap';
+import { StarMap3D } from '../components/StarMap3D';
 import { TemplatesSheet } from '../components/Templates';
 import { presetsFor } from '../data/presets';
 import type { TplSkill } from '../engine/templates';
@@ -207,7 +208,7 @@ export function Tree({ focusId }: { focusId?: string }) {
         <button type="button" role="tab" aria-selected={mode === 'stars'} class={mode === 'stars' ? 'on' : ''} onClick={() => setMode('stars')}>Созвездие</button>
       </div>
 
-      {mode === 'stars' ? <StarMap /> : <>
+      {mode === 'stars' ? (w.hasExp('stars-3d') ? <StarMap3D /> : <StarMap />) : <>
 
       <label class="search">
         <Icon name="search" size={18} />

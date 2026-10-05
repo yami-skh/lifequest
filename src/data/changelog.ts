@@ -7,6 +7,14 @@ export interface Release { version: string; date: string; title?: string; change
 
 export const CHANGELOG: Release[] = [
   {
+    version: '0.10.0-beta.9',
+    date: '2026-10-05',
+    changes: [
+      { kind: 'new', title: 'Созвездие в объёме (эксперимент)', sub: 'Дерево → «Созвездие»: один палец вращает, два — приближают, двойной тап — сброс. Закрытая ступень вспыхивает. Включается в «Экспериментах».' },
+      { kind: 'fix', title: 'Бета-сайт открывается', sub: 'Если открывал обычный сайт, бета показывала белый экран.' },
+    ],
+  },
+  {
     version: '0.10.0-beta.8',
     date: '2026-10-05',
     changes: [
