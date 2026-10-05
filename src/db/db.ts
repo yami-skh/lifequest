@@ -22,6 +22,8 @@ export interface Profile {
   seenVersion?: string;
   /** Код доступа к AI-помощнику (server/). Без кода кнопки «Предложить цели» нет. */
   aiCode?: string;
+  /** Включённые эксперименты (src/engine/experiments.ts). Нет поля — всё выключено. */
+  experiments?: string[];
 }
 
 export interface Requirement { nodeId: string; minProgress?: number; minLevel?: number }

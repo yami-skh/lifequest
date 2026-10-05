@@ -6,6 +6,7 @@ import { STAGE_BONUS, stagesOf } from '../engine/stages';
 import { calcXp, secondaryXp, xpContextFromHistory, type Difficulty, type EntryType } from '../engine/xp';
 import { localDate } from '../engine/dates';
 import type { GoalKind } from '../engine/progress';
+import { toggleExp } from '../engine/experiments';
 
 export interface PhotoDraft { blob: Blob; thumb: Blob; width: number; height: number }
 
@@ -189,6 +190,11 @@ export const deleteNote = (id: string) => db.notes.delete(id);
 
 // --- профиль ---
 
+/** Включить/выключить эксперимент у этого пользователя. */
+export async function toggleExperiment(name: string) {
+  const p = await db.profile.get('me');
+  await db.profile.update('me', { experiments: toggleExp(p?.experiments, name) });
+}
 export const setAiCode = (code: string) => db.profile.update('me', { aiCode: code.trim() || undefined });
 export const setSeenVersion = (v: string) => db.profile.update('me', { seenVersion: v });
 export const setName = (name: string) => db.profile.update('me', { name: name.trim() || 'mildyan' });

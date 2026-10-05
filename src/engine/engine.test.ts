@@ -7,6 +7,7 @@ import { assignStages, currentStage, stagesOf } from './stages';
 import { bestRepsAt, bestSet, bestValue, forecastDate, isRecord, milestoneProgress, reached, valueFromSets } from './metrics';
 import { countProgress, weekStart } from './quests';
 import { cmpVersion, unseenReleases } from './version';
+import { EXPERIMENTS, hasExp, toggleExp } from './experiments';
 
 describe('xp', () => {
   it('рамен из документа: практика, тяжело, впервые, с фото = 132', () => {
@@ -184,5 +185,24 @@ describe('версии', () => {
     const list = [{ version: '0.7.0' }, { version: '0.6.0' }, { version: '0.5.1' }, { version: '0.5.0' }];
     expect(unseenReleases(list, '0.5.0', '0.6.0').map((r) => r.version)).toEqual(['0.6.0', '0.5.1']);
     expect(unseenReleases(list, '0.6.0', '0.6.0')).toEqual([]);
+  });
+});
+
+describe('эксперименты', () => {
+  it('по умолчанию всё выключено', () => {
+    expect(hasExp(undefined, 'next-action')).toBe(false);
+    expect(hasExp([], 'next-action')).toBe(false);
+  });
+  it('включается только названный', () => {
+    expect(hasExp(['next-action'], 'next-action')).toBe(true);
+    expect(hasExp(['next-action'], 'other')).toBe(false);
+  });
+  it('переключение без повторов', () => {
+    expect(toggleExp(undefined, 'a')).toEqual(['a']);
+    expect(toggleExp(['a', 'b'], 'a')).toEqual(['b']);
+    expect(toggleExp(toggleExp(['b'], 'a'), 'a')).toEqual(['b']);
+  });
+  it('у известных экспериментов уникальные id', () => {
+    expect(new Set(EXPERIMENTS.map((e) => e.id)).size).toBe(EXPERIMENTS.length);
   });
 });

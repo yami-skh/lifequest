@@ -79,3 +79,6 @@
 /* звуки и напоминания (0.9) */
 .volume { width: 120px; accent-color: var(--gold); }
 .time-chip { min-height: 36px; padding: 0 8px; border-radius: 10px; border: 0; background: var(--surface-3); color: var(--fg); font-weight: 800; font-size: 14px; margin-right: 6px; }
+
+/* номер версии — скрытая кнопка «Эксперименты» */
+.version-tap { background: none; border: 0; padding: 0; color: inherit; text-align: left; font: inherit; font-weight: 800; }

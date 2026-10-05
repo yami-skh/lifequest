@@ -41,14 +41,14 @@
 
 ## src/db
 
-- **actions.ts** (368) — Все изменения данных.
-  *PhotoDraft:10, *EntryDraft:12, *primaryHistory:26, *saveEntry:33, *deleteEntry:80, *toggleGoal:92, *addGoal:99, *awardStages:108, *toggleFocus:132, *setRequirements:140, *deleteGoal:142, *addNode:146, *renameNode:158, *deleteNode:161, *addNote:179, *toggleNoteStudied:183, *deleteNote:188, *setAiCode:192, *setSeenVersion:193, *setName:194, *unlockAchievements:196, *resetAll:201, *createQuest:208, *toggleCustomStep:214, *abandonQuest:222, *deleteQuest:223, *completeQuest:226, *maintainQuests:240, *toggleWeeklyTemplate:265, *addMetric:280, *deleteMetric:285, bonus:294, *addMetricValue:305, *deleteMetricValue:347, *setMilestone:357, *removeMilestone:364, *fmtNum:367
-- **db.ts** (240) — Хранилище на устройстве. ARCHITECTURE.md §11.
-  *NodeKind:7, *Profile:9, *Requirement:27, *Node:29, *Goal:47, *Entry:59, *EntrySkill:76, *Photo:78, *Unlocked:80, *Note:82, *QuestKind:94, *CountRule:96, *QuestStep:106, *Quest:113, *Metric:132, *MetricValue:143, *Milestone:157, *AREA_ICON_BY_TITLE:172, *AREA_ICONS:176, LifeQuestDB:178, *db:231, *uid:234, *nowIso:239
+- **actions.ts** (374) — Все изменения данных.
+  *PhotoDraft:11, *EntryDraft:13, *primaryHistory:27, *saveEntry:34, *deleteEntry:81, *toggleGoal:93, *addGoal:100, *awardStages:109, *toggleFocus:133, *setRequirements:141, *deleteGoal:143, *addNode:147, *renameNode:159, *deleteNode:162, *addNote:180, *toggleNoteStudied:184, *deleteNote:189, *toggleExperiment:194, *setAiCode:198, *setSeenVersion:199, *setName:200, *unlockAchievements:202, *resetAll:207, *createQuest:214, *toggleCustomStep:220, *abandonQuest:228, *deleteQuest:229, *completeQuest:232, *maintainQuests:246, *toggleWeeklyTemplate:271, *addMetric:286, *deleteMetric:291, bonus:300, *addMetricValue:311, *deleteMetricValue:353, *setMilestone:363, *removeMilestone:370, *fmtNum:373
+- **db.ts** (242) — Хранилище на устройстве. ARCHITECTURE.md §11.
+  *NodeKind:7, *Profile:9, *Requirement:29, *Node:31, *Goal:49, *Entry:61, *EntrySkill:78, *Photo:80, *Unlocked:82, *Note:84, *QuestKind:96, *CountRule:98, *QuestStep:108, *Quest:115, *Metric:134, *MetricValue:145, *Milestone:159, *AREA_ICON_BY_TITLE:174, *AREA_ICONS:178, LifeQuestDB:180, *db:233, *uid:236, *nowIso:241
 - **seed.ts** (150) — Стартовый набор. ARCHITECTURE.md §13.
   G:7, SeedNode:8, t:17, p:18, *AREA_COLORS:20, TREE:22, *seedIfEmpty:71, STARTER_VERSION:110, STARTER_METRICS:112, *ensureStarter:121
-- **world.ts** (412) — Всё состояние разом и производные значения. Данных у одного человека немного,
-  *World:16, *loadWorld:30, *LockReason:47, *derive:58, .primaryOf:102, .subtreeXp:105, .areaOf:114, .pathOf:119, .skillLevelOf:140, .requirementsOf:143, .lockReasons:156, .stagesOfSkill:174, .openGoalsOf:177, .rustDays:189, .explored:195, .unlocksOf:200, .stepState:221, .questProgress:245, .metricInfo:259, .hints:277, .stats:317, *Derived:403, *WorldContext:405, *useWorld:407
+- **world.ts** (415) — Всё состояние разом и производные значения. Данных у одного человека немного,
+  *World:17, *loadWorld:31, *LockReason:48, *derive:59, .primaryOf:103, .subtreeXp:106, .areaOf:115, .pathOf:120, .skillLevelOf:141, .requirementsOf:144, .lockReasons:157, .stagesOfSkill:175, .openGoalsOf:178, .rustDays:190, .explored:196, .unlocksOf:201, .stepState:222, .questProgress:246, .metricInfo:260, .hints:278, .stats:318, *Derived:406, *WorldContext:408, *useWorld:410
 
 ## src/engine
 
@@ -56,7 +56,9 @@
   *Stats:3, *AchievementIcon:27, *AchievementDef:32, flag:44, *ACHIEVEMENTS:46, *evaluateAchievements:71
 - **dates.ts** (55) — Даты храним как локальные YYYY-MM-DD.
   *localDate:3, *addDays:10, *daysBetween:16, MONTHS:22, *humanDate:24, *currentStreak:32, *bestStreak:43
-- **engine.test.ts** (189)
+- **engine.test.ts** (209)
+- **experiments.ts** (17) — Флаг экспериментов: новый UX включается только у тех, кто сам включил эксперимент
+  *EXPERIMENTS:5, *hasExp:10, *toggleExp:13
 - **levels.ts** (44) — Уровни персонажа и навыков. ARCHITECTURE.md §4.3–4.4.
   *xpToNext:3, *characterLevel:5, *SKILL_LEVELS:17, *skillLevel:31
 - **metrics.ts** (88) — Замеры, рекорды, прогноз рубежа. ARCHITECTURE.md §8.
@@ -122,8 +124,8 @@
   SOON:7, *More:15
 - **Quests.tsx** (447) — Квесты. Макет: холст, страница «Квесты». ARCHITECTURE.md §6.
   KIND_TITLE:14, daysToMonday:16, *QuestCard:22, WeeklyRow:43, *Quests:64, *QuestDetail:148, stepKindLabel:228, DraftKind:232, NewQuestSheet:234, StepBuilder:313, *QuestsBlock:412
-- **Settings.tsx** (221) — Настройки: персонаж, тема, недельные квесты, резервная копия, о приложении, стереть данные.
-  THEMES:18, Toggle:24, Group:33, *Settings:42, AboutRow:121, hiddenThisSession:140, *UpdateCard:141, AiBlock:174
+- **Settings.tsx** (262) — Настройки: персонаж, тема, недельные квесты, резервная копия, о приложении, стереть данные.
+  THEMES:20, Toggle:26, Group:35, *Settings:44, AboutRow:151, hiddenThisSession:181, *UpdateCard:182, AiBlock:215
 - **Skill.tsx** (436)
   *stagesToast:23, Fold:26, word:27, *Skill:31, .toggle:61, .onFocus:63, FoldRow:193, WorkoutCard:207, SkillMenu:242, GoalRow:279, Goals:292, Notes:371, GalleryItem:411, FullPhoto:416, Gallery:426
 - **Tree.tsx** (313)
@@ -143,8 +145,8 @@
   Порядок важен: база → общие компоненты → экраны.:1
 - **metrics.css** (35) — замеры
   замеры:1
-- **more.css** (82) — резервная копия
-  резервная копия:1, «скоро» в «Ещё»:21, достижения:28, что нового:40, настройки, тема, обновление (0.7):60, звуки и напоминания (0.9):79
+- **more.css** (85) — резервная копия
+  резервная копия:1, «скоро» в «Ещё»:21, достижения:28, что нового:40, настройки, тема, обновление (0.7):60, звуки и напоминания (0.9):79, номер версии — скрытая кнопка «Эксперименты»:83
 - **quests.css** (34) — квесты
   квесты:1
 - **skill.css** (115) — навык

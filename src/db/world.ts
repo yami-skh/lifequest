@@ -12,6 +12,7 @@ import { daysBetween } from '../engine/dates';
 import { characterLevel, skillLevel } from '../engine/levels';
 import { bestStreak, currentStreak, localDate } from '../engine/dates';
 import type { Stats } from '../engine/achievements';
+import { hasExp } from '../engine/experiments';
 
 export interface World {
   profile: Profile | undefined;
@@ -397,6 +398,8 @@ export function derive(w: World) {
     metricInfo,
     metricsOfSkill: (id: string) => w.metrics.filter((m) => m.skillId === id),
     stats,
+    /** Включён ли эксперимент у этого пользователя: `w.hasExp('next-action')`. */
+    hasExp: (name: string) => hasExp(w.profile?.experiments, name),
   };
 }
 

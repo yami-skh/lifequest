@@ -5,7 +5,9 @@ import { useState } from 'preact/hooks';
 import { Capacitor } from '@capacitor/core';
 import { useWorld } from '../db/world';
 import { db } from '../db/db';
-import { resetAll, setAiCode, setName, toggleWeeklyTemplate } from '../db/actions';
+import { resetAll, setAiCode, setName, toggleExperiment, toggleWeeklyTemplate } from '../db/actions';
+import { EXPERIMENTS } from '../engine/experiments';
+import { toast } from '../lib/toast';
 import { AiError, fetchQuota } from '../lib/ai';
 import { ReminderSettings, SoundSettings } from '../components/Reminders';
 import { WEEKLY_TEMPLATES } from '../engine/quests';
@@ -47,6 +49,22 @@ export function Settings() {
   const theme = useThemePref();
   const off = new Set(p?.weeklyOff ?? []);
   const reminder = p?.backupReminder !== false;
+  // Скрытый раздел «Эксперименты»: 5 тапов по номеру версии. Видимость запоминается на устройстве.
+  const [dev, setDevState] = useState(() => {
+    try {
+      return localStorage.getItem('lq.dev') === '1';
+    } catch {
+      return false;
+    }
+  });
+  const setDev = (on: boolean) => {
+    setDevState(on);
+    try {
+      localStorage.setItem('lq.dev', on ? '1' : '0');
+    } catch {
+      /* не критично */
+    }
+  };
 
   return (
     <div class="page">
@@ -98,10 +116,22 @@ export function Settings() {
 
       <Group label="О приложении">
         <div class="menu-list">
-          <AboutRow />
+          <AboutRow onSecret={() => setDev(true)} />
           <a class="menu-row" href="#/changelog"><span class="menu-row-text"><span class="strong">Что нового</span></span><Icon name="right" size={16} stroke={2.4} /></a>
         </div>
       </Group>
+
+      {dev && (
+        <Group label="Эксперименты">
+          <div class="menu-list">
+            {EXPERIMENTS.map((e) => (
+              <Toggle key={e.id} on={w.hasExp(e.id)} title={e.title} sub={e.sub} onClick={() => toggleExperiment(e.id)} />
+            ))}
+          </div>
+          <span class="muted small">Незаконченные функции. Включаются только на этом устройстве, у других всё как было.</span>
+          <button type="button" class="link small muted" onClick={() => setDev(false)}>Скрыть раздел</button>
+        </Group>
+      )}
 
       <button type="button" class="btn ghost danger-text" onClick={() => setConfirmReset(true)}>Стереть все данные</button>
       <p class="muted small center">Всё хранится только на этом устройстве.</p>
@@ -118,8 +148,19 @@ export function Settings() {
   );
 }
 
-function AboutRow() {
+function AboutRow({ onSecret }: { onSecret: () => void }) {
   const u = useUpdate();
+  const [taps, setTaps] = useState<number[]>([]);
+  const tapVersion = () => {
+    const now = Date.now();
+    const recent = [...taps.filter((t) => now - t < 3000), now];
+    setTaps(recent);
+    if (recent.length >= 5) {
+      setTaps([]);
+      onSecret();
+      toast({ kind: 'info', title: 'Открыт раздел «Эксперименты»' });
+    }
+  };
   const native = Capacitor.isNativePlatform();
   const sub =
     !native ? 'сайт обновляется сам'
@@ -130,7 +171,7 @@ function AboutRow() {
               : 'обновляется сама';
   return (
     <div class="menu-row">
-      <span class="menu-row-text"><span class="strong">Версия {__APP_VERSION__}</span><span class={u.kind === 'latest' || !native ? 'small ok-text' : 'muted small'}>{sub}</span></span>
+      <span class="menu-row-text"><button type="button" class="version-tap strong" onClick={tapVersion}>Версия {__APP_VERSION__}</button><span class={u.kind === 'latest' || !native ? 'small ok-text' : 'muted small'}>{sub}</span></span>
       {native && <button type="button" class="link small" onClick={() => checkForUpdate(true)} disabled={u.kind === 'checking' || u.kind === 'downloading'}>Проверить</button>}
     </div>
   );
