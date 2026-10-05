@@ -7,6 +7,13 @@ export interface Release { version: string; date: string; title?: string; change
 
 export const CHANGELOG: Release[] = [
   {
+    version: '0.10.0-beta.10',
+    date: '2026-10-05',
+    changes: [
+      { kind: 'new', title: 'Имя при первом запуске', sub: 'Новичок сразу вводит имя персонажа. Пропустил — будет «Герой».' },
+    ],
+  },
+  {
     version: '0.10.0-beta.9',
     date: '2026-10-05',
     changes: [

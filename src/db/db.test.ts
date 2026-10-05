@@ -170,9 +170,10 @@ describe('шаблоны и первый запуск', () => {
     await ensureStarter();
     expect((await db.profile.get('me'))?.onboarding).toBe(true);
     expect(await db.metrics.count()).toBe(0);
-    await finishOnboarding([tpl('start'), tpl('strong-body')]);
+    await finishOnboarding([tpl('start'), tpl('strong-body')], '  Yami ');
     const w = await world();
     expect(w.profile?.onboarding).toBe(false);
+    expect(w.profile?.name).toBe('Yami');
     expect(w.skills).toHaveLength(11);
     expect(w.quests.map((q) => q.title)).toContain('Обустрой персонажа');
   });

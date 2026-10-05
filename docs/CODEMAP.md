@@ -25,7 +25,7 @@
   *NextActionCard:15, ChoosePath:71
 - **NumPad.tsx** (79) — Крупная цифровая клавиатура для весов, повторов и целей.
   *NumPadProps:7, parse:21, *fmtInput:22, *NumPad:24, *numFrom:75
-- **Onboarding.tsx** (87) — Первый запуск: «Кем хочешь стать?» — выбор готовых путей вместо общего стартового дерева.
+- **Onboarding.tsx** (93) — Первый запуск: «Кем хочешь стать?» — выбор готовых путей вместо общего стартового дерева.
   SHOWN:13, *Onboarding:15
 - **Reminders.tsx** (98) — Звуки и напоминания: блок настроек, окно «Включить напоминания?» и синхронизация расписания.
   Switch:10, *SoundSettings:20, *ReminderSettings:36, *ReminderPrompt:68, *ReminderSync:88
@@ -44,8 +44,8 @@
 
 ## src/data
 
-- **changelog.ts** (241) — Что нового в версиях — для пользователя, простыми словами. Новые версии — сверху.
-  *ChangeKind:4, *Change:5, *Release:6, *CHANGELOG:8, *SEEN_BEFORE_CHANGELOG:240
+- **changelog.ts** (248) — Что нового в версиях — для пользователя, простыми словами. Новые версии — сверху.
+  *ChangeKind:4, *Change:5, *Release:6, *CHANGELOG:8, *SEEN_BEFORE_CHANGELOG:247
 - **presets.test.ts** (40)
   AREAS:6
 - **presets.ts** (48) — Готовые навыки при ручном добавлении (мастер-план §12): навыки шаблонов, сгруппированные по направлениям,
@@ -59,9 +59,9 @@
 
 ## src/db
 
-- **actions.ts** (465) — Все изменения данных.
-  *PhotoDraft:13, *EntryDraft:15, *primaryHistory:31, *saveEntry:38, *deleteEntry:87, *toggleGoal:99, *addGoal:106, *awardStages:115, *toggleFocus:139, *setRequirements:147, *deleteGoal:149, *addNode:153, *renameNode:165, *deleteNode:168, *addNote:186, *toggleNoteStudied:190, *deleteNote:195, *toggleExperiment:200, *setAiCode:204, *setSeenVersion:205, *setName:206, *unlockAchievements:208, *resetAll:213, *createQuest:220, *toggleCustomStep:226, *abandonQuest:234, *deleteQuest:235, *completeQuest:238, *maintainQuests:252, *toggleWeeklyTemplate:277, *addMetric:292, *deleteMetric:297, bonus:306, *addMetricValue:317, *deleteMetricValue:359, *setMilestone:369, *removeMilestone:376, *fmtNum:379, *previewTemplate:384, *previewTemplates:389, freeAreaColor:395, *importTemplate:401, *finishOnboarding:444, *addPresetSkill:451
-- **db.test.ts** (214) — Тесты базы: действия (actions.ts) и производные значения (world.ts → derive) на настоящей Dexie
+- **actions.ts** (466) — Все изменения данных.
+  *PhotoDraft:13, *EntryDraft:15, *primaryHistory:31, *saveEntry:38, *deleteEntry:87, *toggleGoal:99, *addGoal:106, *awardStages:115, *toggleFocus:139, *setRequirements:147, *deleteGoal:149, *addNode:153, *renameNode:165, *deleteNode:168, *addNote:186, *toggleNoteStudied:190, *deleteNote:195, *toggleExperiment:200, *setAiCode:204, *setSeenVersion:205, *setName:206, *unlockAchievements:208, *resetAll:213, *createQuest:220, *toggleCustomStep:226, *abandonQuest:234, *deleteQuest:235, *completeQuest:238, *maintainQuests:252, *toggleWeeklyTemplate:277, *addMetric:292, *deleteMetric:297, bonus:306, *addMetricValue:317, *deleteMetricValue:359, *setMilestone:369, *removeMilestone:376, *fmtNum:379, *previewTemplate:384, *previewTemplates:389, freeAreaColor:395, *importTemplate:401, *finishOnboarding:444, *addPresetSkill:452
+- **db.test.ts** (215) — Тесты базы: действия (actions.ts) и производные значения (world.ts → derive) на настоящей Dexie
   world:23, skillWithGoals:26, draft:37, .tpl:145
 - **db.ts** (246) — Хранилище на устройстве. ARCHITECTURE.md §11.
   *NodeKind:7, *Profile:9, *Requirement:31, *Node:33, *Goal:51, *Entry:63, *EntrySkill:82, *Photo:84, *Unlocked:86, *Note:88, *QuestKind:100, *CountRule:102, *QuestStep:112, *Quest:119, *Metric:138, *MetricValue:149, *Milestone:163, *AREA_ICON_BY_TITLE:178, *AREA_ICONS:182, LifeQuestDB:184, *db:237, *uid:240, *nowIso:245
@@ -191,5 +191,5 @@
   квесты:1
 - **skill.css** (115) — навык
   навык:1, навык: фокус, требования, ступени:21, навык 0.6: шапка, тренировка, сворачиваемые блоки, меню ⋯:58, AI-помощник целей:93
-- **tree.css** (168) — дерево
+- **tree.css** (169) — дерево
   дерево:1, дерево: направления-карточки, ветви-линии, навыки-узлы:20, вложенные ветки — короткий отступ, линия идёт от ромбика:38, туман: навык ещё не исследован:64, ржавчина: 60+ дней без записей:68, созвездие (0.9): небо всегда тёмное, в любой теме:87, готовые пути (шаблоны) — components/Templates.tsx:103, готовые навыки в «Новый навык» (data/presets.ts):141, первый запуск (components/Onboarding.tsx):151, объёмное созвездие (components/StarMap3D.tsx):163
