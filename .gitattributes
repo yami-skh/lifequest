@@ -1,0 +1,17 @@
+# Переводы строк: в репозитории всегда LF, на Windows git отдаёт файлы с CRLF (как привычно редакторам).
+# Иначе правки с разных машин превращают весь файл в «изменён целиком».
+* text=auto
+
+# Скрипты Windows — только CRLF, скрипты Unix — только LF.
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+android/gradlew text eol=lf
+*.sh text eol=lf
+
+# Двоичные файлы — не трогать.
+*.png binary
+*.jpg binary
+*.jar binary
+*.woff2 binary
+*.zip binary
