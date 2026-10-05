@@ -7,6 +7,13 @@ export interface Release { version: string; date: string; title?: string; change
 
 export const CHANGELOG: Release[] = [
   {
+    version: '0.10.0-beta.4',
+    date: '2026-10-05',
+    changes: [
+      { kind: 'better', title: 'Готовые пути: без похожих целей', sub: '«Старт» и тематические пути совпадают по отжиманиям и сну — если взять оба, цели не повторяются.' },
+    ],
+  },
+  {
     version: '0.10.0-beta.3',
     date: '2026-10-05',
     changes: [
