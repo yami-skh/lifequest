@@ -49,6 +49,8 @@ export interface Node {
   focus?: boolean;
   /** Ступени, за которые уже начислен бонус. */
   stagesAwarded?: number[];
+  /** Навык в архиве: скрыт из дерева, выбора навыка и подсказок; цели, действия и XP сохранены. */
+  archived?: boolean;
   createdAt: string;
 }
 

@@ -44,8 +44,8 @@
 
 ## src/data
 
-- **changelog.ts** (215) — Что нового в версиях — для пользователя, простыми словами. Новые версии — сверху.
-  *ChangeKind:4, *Change:5, *Release:6, *CHANGELOG:8, *SEEN_BEFORE_CHANGELOG:214
+- **changelog.ts** (227) — Что нового в версиях — для пользователя, простыми словами. Новые версии — сверху.
+  *ChangeKind:4, *Change:5, *Release:6, *CHANGELOG:8, *SEEN_BEFORE_CHANGELOG:226
 - **presets.test.ts** (40)
   AREAS:6
 - **presets.ts** (48) — Готовые навыки при ручном добавлении (мастер-план §12): навыки шаблонов, сгруппированные по направлениям,
@@ -59,16 +59,16 @@
 
 ## src/db
 
-- **actions.ts** (469) — Все изменения данных.
-  *PhotoDraft:13, *EntryDraft:15, *primaryHistory:31, *saveEntry:38, *deleteEntry:87, *toggleGoal:99, *addGoal:106, *awardStages:115, *toggleFocus:139, *setRequirements:147, *deleteGoal:149, *addNode:153, *renameNode:165, *deleteNode:168, *addNote:186, *toggleNoteStudied:190, *deleteNote:195, *toggleExperiment:200, *setAiCode:204, *setSeenVersion:205, *setPlayer:207, *setFriendsShare:208, *setName:209, *unlockAchievements:211, *resetAll:216, *createQuest:223, *toggleCustomStep:229, *abandonQuest:237, *deleteQuest:238, *completeQuest:241, *maintainQuests:255, *toggleWeeklyTemplate:280, *addMetric:295, *deleteMetric:300, bonus:309, *addMetricValue:320, *deleteMetricValue:362, *setMilestone:372, *removeMilestone:379, *fmtNum:382, *previewTemplate:387, *previewTemplates:392, freeAreaColor:398, *importTemplate:404, *finishOnboarding:447, *addPresetSkill:455
-- **db.test.ts** (215) — Тесты базы: действия (actions.ts) и производные значения (world.ts → derive) на настоящей Dexie
+- **actions.ts** (502) — Все изменения данных.
+  *PhotoDraft:14, *EntryDraft:16, *primaryHistory:32, *saveEntry:39, *deleteEntry:88, *toggleGoal:100, *addGoal:107, *awardStages:116, *toggleFocus:140, *setRequirements:148, *deleteGoal:150, *addNode:154, *renameNode:166, *setAreaStyle:169, *moveNode:172, *moveOrder:185, *setArchived:198, *deleteNode:201, *addNote:219, *toggleNoteStudied:223, *deleteNote:228, *toggleExperiment:233, *setAiCode:237, *setSeenVersion:238, *setPlayer:240, *setFriendsShare:241, *setName:242, *unlockAchievements:244, *resetAll:249, *createQuest:256, *toggleCustomStep:262, *abandonQuest:270, *deleteQuest:271, *completeQuest:274, *maintainQuests:288, *toggleWeeklyTemplate:313, *addMetric:328, *deleteMetric:333, bonus:342, *addMetricValue:353, *deleteMetricValue:395, *setMilestone:405, *removeMilestone:412, *fmtNum:415, *previewTemplate:420, *previewTemplates:425, freeAreaColor:431, *importTemplate:437, *finishOnboarding:480, *addPresetSkill:488
+- **db.test.ts** (269) — Тесты базы: действия (actions.ts) и производные значения (world.ts → derive) на настоящей Dexie
   world:23, skillWithGoals:26, draft:37, .tpl:145
-- **db.ts** (250) — Хранилище на устройстве. ARCHITECTURE.md §11.
-  *NodeKind:7, *Profile:9, *Requirement:35, *Node:37, *Goal:55, *Entry:67, *EntrySkill:86, *Photo:88, *Unlocked:90, *Note:92, *QuestKind:104, *CountRule:106, *QuestStep:116, *Quest:123, *Metric:142, *MetricValue:153, *Milestone:167, *AREA_ICON_BY_TITLE:182, *AREA_ICONS:186, LifeQuestDB:188, *db:241, *uid:244, *nowIso:249
+- **db.ts** (252) — Хранилище на устройстве. ARCHITECTURE.md §11.
+  *NodeKind:7, *Profile:9, *Requirement:35, *Node:37, *Goal:57, *Entry:69, *EntrySkill:88, *Photo:90, *Unlocked:92, *Note:94, *QuestKind:106, *CountRule:108, *QuestStep:118, *Quest:125, *Metric:144, *MetricValue:155, *Milestone:169, *AREA_ICON_BY_TITLE:184, *AREA_ICONS:188, LifeQuestDB:190, *db:243, *uid:246, *nowIso:251
 - **seed.ts** (66) — Стартовое содержимое. ARCHITECTURE.md §13. Дерево новичок выбирает сам (шаблоны, components/Onboarding.tsx);
   *AREA_COLORS:6, STARTER_VERSION:9, *seedIfEmpty:12, STARTER_METRICS:20, *ensureStarter:29, addStarterQuestIn:51, *addStarterQuest:65
-- **world.ts** (421) — Всё состояние разом и производные значения. Данных у одного человека немного,
-  *World:18, *loadWorld:32, *LockReason:49, *derive:60, .primaryOf:104, .subtreeXp:107, .areaOf:116, .pathOf:121, .skillLevelOf:142, .requirementsOf:145, .lockReasons:158, .stagesOfSkill:176, .openGoalsOf:179, .rustDays:191, .explored:197, .naSkill:200, .unlocksOf:203, .stepState:224, .questProgress:248, .metricInfo:262, .hints:280, .stats:320, *Derived:412, *WorldContext:414, *useWorld:416
+- **world.ts** (426) — Всё состояние разом и производные значения. Данных у одного человека немного,
+  *World:18, *loadWorld:32, *LockReason:49, *derive:60, .primaryOf:106, .subtreeXp:109, .areaOf:118, .pathOf:123, .skillLevelOf:144, .requirementsOf:147, .lockReasons:160, .stagesOfSkill:179, .openGoalsOf:182, .rustDays:194, .explored:200, .naSkill:203, .unlocksOf:206, .stepState:227, .questProgress:251, .metricInfo:265, .hints:283, .stats:323, *Derived:417, *WorldContext:419, *useWorld:421
 
 ## src/engine
 
@@ -107,6 +107,10 @@
   tpl:4, n:21, id:22, empty:23
 - **templates.ts** (224) — Шаблон пути — единый JSON-формат для готовых шаблонов, ответа «любой нейросети» и будущего AI /path
   *TplGoalKind:4, *TplCheck:6, *TplGoal:8, *TplStage:9, *TplMetric:10, *TplSkill:11, *TplBranch:20, *TplArea:21, *TplCampaign:22, *Template:23, isStr:34, *validateTemplate:36, *ExistingNode:78, *ExistingGoal:79, *ExistingMetric:80, *ExistingQuest:81, *PlanNode:83, *PlanGoal:84, *PlanMetric:85, *ImportPlan:86, norm:97, *planImport:100, *parseTemplateText:177, *templateSkills:191, *templateStats:203, *planImportMany:213
+- **treeOps.test.ts** (55)
+  N:4, nodes:5
+- **treeOps.ts** (59) — Операции с деревом: куда можно перенести узел, порядок «выше/ниже», фильтры списка.
+  *TNode:5, *subtreeIds:8, *moveTargets:22, *reorder:41, *TreeFilter:50, *FILTERS:51, *matchesFilter:58
 - **treeRow.test.ts** (50)
   base:4
 - **treeRow.ts** (75) — Строка навыка в дереве (макет: холст, «Дерево: читаемость»). Главный счёт — этап:
@@ -130,6 +134,8 @@
   *LoggedError:8, KEY:9, MAX:10, listeners:11, *getErrors:13, save:21, *logError:31, *clearErrors:44, *useErrors:46, *initErrorLog:56, *buildReport:61, *shareReport:73
 - **friends.ts** (101) — «Друзья»: ключ игрока и запросы к серверу (server/src/friends.ts, docs/arch/11-friends.md).
   *Player:10, *EMOJI:11, *FriendView:13, *FriendsError:21, call:25, randomSecret:41, *ensurePlayer:44, *prettyCode:55, *inviteLink:56, *listFriends:58, *addFriend:59, *removeFriend:60, *react:61, *newCode:64, *leave:72, *myCard:77, SENT_KEY:91, *pushCard:93
+- **gestures.ts** (105) — Жесты в дереве: удержание (быстрое меню) и свайп по строке навыка (вправо — действие, влево — меню).
+  HOLD_MS:5, MOVE_CANCEL:6, SWIPE:7, G:9, g:10, suppressUntil:11, buzz:13, reset:21, *GestureOpts:27, *GestureHandlers:30, *gestures:40
 - **hscroll.ts** (44) — Горизонтальные ленты (.type-row в шторке «+», .chips.scroll-x) на ПК: пальцем они листаются сами,
   SEL:3, scrollable:5, *initHScroll:10
 - **install.ts** (52) — Установка PWA: ловим событие beforeinstallprompt от Chrome и показываем свою кнопку.
@@ -180,10 +186,10 @@
   KIND_TITLE:14, daysToMonday:16, *QuestCard:22, WeeklyRow:43, *Quests:64, *QuestDetail:148, stepKindLabel:228, DraftKind:232, NewQuestSheet:234, StepBuilder:313, *QuestsBlock:412
 - **Settings.tsx** (359) — Настройки: персонаж, тема, недельные квесты, резервная копия, о приложении, стереть данные.
   THEMES:23, *Toggle:29, Group:38, *Settings:47, AboutRow:162, hiddenThisSession:192, *UpdateCard:193, AiBlock:226, ChannelPicker:275, ErrorLogRow:322
-- **Skill.tsx** (436)
-  *stagesToast:23, Fold:26, word:27, *Skill:31, .toggle:61, .onFocus:63, FoldRow:193, WorkoutCard:207, SkillMenu:242, GoalRow:279, Goals:292, Notes:371, GalleryItem:411, FullPhoto:416, Gallery:426
-- **Tree.tsx** (478)
-  Editor:20, loadExpanded:25, *Tree:33, .setMode:54, .toggle:63, .skillCount:81, .skillsIn:84, .menuBtn:87, .renderChildren:93, .rowOf:105, .summaryOf:118, .headSummary:119, .renderSkillClear:126, .renderNode:148, KIND_LABEL:312, TreeHelp:315, NodeEditor:348
+- **Skill.tsx** (441)
+  *stagesToast:23, Fold:26, word:27, *Skill:31, .toggle:61, .onFocus:63, FoldRow:198, WorkoutCard:212, SkillMenu:247, GoalRow:284, Goals:297, Notes:376, GalleryItem:416, FullPhoto:421, Gallery:431
+- **Tree.tsx** (688)
+  Editor:24, loadExpanded:31, *Tree:39, .hideHoldHint:60, .openMenu:69, .setMode:82, .toggle:91, .skillCount:109, .skillsIn:112, .menuBtn:115, .renderChildren:121, .rowOf:133, .summaryOf:146, .headSummary:147, .renderSkillClear:154, .filtered:182, .filterChips:183, .renderNode:197, KIND_LABEL:396, MoveSheet:399, TreeHelp:445, NodeEditor:478, .has:598, .goalCount:601, .close:602, .submit:608
 
 ## src/styles
 
@@ -207,5 +213,5 @@
   квесты:1
 - **skill.css** (115) — навык
   навык:1, навык: фокус, требования, ступени:21, навык 0.6: шапка, тренировка, сворачиваемые блоки, меню ⋯:58, AI-помощник целей:93
-- **tree.css** (206) — дерево
-  дерево:1, дерево: направления-карточки, ветви-линии, навыки-узлы:20, вложенные ветки — короткий отступ, линия идёт от ромбика:38, туман: навык ещё не исследован:64, ржавчина: 60+ дней без записей:68, созвездие (0.9): небо всегда тёмное, в любой теме:87, готовые пути (шаблоны) — components/Templates.tsx:103, готовые навыки в «Новый навык» (data/presets.ts):141, первый запуск (components/Onboarding.tsx):151, объёмное созвездие (components/StarMap3D.tsx):163, «Понятное дерево» (эксперимент tree-clear): главный счёт — этап. Макет: холст, «Дерево: читаемость».:170, подсказка «?»: те же плитки вне дерева:201
+- **tree.css** (237) — дерево
+  дерево:1, дерево: направления-карточки, ветви-линии, навыки-узлы:20, вложенные ветки — короткий отступ, линия идёт от ромбика:38, туман: навык ещё не исследован:64, ржавчина: 60+ дней без записей:68, созвездие (0.9): небо всегда тёмное, в любой теме:87, готовые пути (шаблоны) — components/Templates.tsx:103, готовые навыки в «Новый навык» (data/presets.ts):141, первый запуск (components/Onboarding.tsx):151, объёмное созвездие (components/StarMap3D.tsx):163, «Понятное дерево» (эксперимент tree-clear): главный счёт — этап. Макет: холст, «Дерево: читаемость».:170, подсказка «?»: те же плитки вне дерева:201, Удержание и свайп (lib/gestures.ts). Макет: холст, «Дерево: удержание».:207

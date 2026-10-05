@@ -5,7 +5,7 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import { db } from './db';
 import {
   addGoal, addNode, addPresetSkill, completeQuest, createQuest, deleteEntry, deleteNode, finishOnboarding,
-  importTemplate, previewTemplate, saveEntry, toggleFocus, toggleGoal, type EntryDraft,
+  importTemplate, moveNode, moveOrder, previewTemplate, saveEntry, setArchived, toggleFocus, toggleGoal, type EntryDraft,
 } from './actions';
 import { ensureStarter, seedIfEmpty } from './seed';
 import { derive, loadWorld } from './world';
@@ -210,5 +210,60 @@ describe('следующее действие (derive)', () => {
     const w = await world();
     expect(w.nextActions()).toEqual([]);
     expect(w.suggestPaths().map((x) => x.skillId)).toEqual([skill.id]);
+  });
+});
+
+describe('дерево: перенос, порядок, архив', () => {
+  it('перенос навыка в другую ветку: цели, XP и требования остаются с ним, ставится в конец', async () => {
+    const { area, skill, goals } = await skillWithGoals();
+    const zal = await addNode(area.id, 'branch', 'Зал');
+    await addNode(zal.id, 'skill', 'Жим');
+    const pull = await addNode(area.id, 'skill', 'Подтягивания');
+    await db.nodes.update(pull.id, { requires: [{ nodeId: skill.id, minLevel: 1 }] });
+    await saveEntry(draft(skill.id, { closeGoalIds: [goals[0].id] }));
+    const xpBefore = (await world()).xpBySkill.get(skill.id);
+    await moveNode(skill.id, zal.id);
+    const w = await world();
+    expect(w.nodeById.get(skill.id)!.parentId).toBe(zal.id);
+    expect(w.children.get(zal.id)!.map((n) => n.title)).toEqual(['Жим', 'Отжимания']);
+    expect(w.xpBySkill.get(skill.id)).toBe(xpBefore);
+    expect(w.goalsBySkill.get(skill.id)).toHaveLength(3);
+    expect(w.requirementsOf(w.nodeById.get(pull.id)!)[0].node.id).toBe(skill.id);
+  });
+  it('ветку нельзя перенести внутрь самой себя; в навык — нельзя', async () => {
+    const { area, branch, skill } = await skillWithGoals();
+    const inner = await addNode(branch.id, 'branch', 'Внутри');
+    await expect(moveNode(branch.id, inner.id)).rejects.toThrow();
+    await expect(moveNode(branch.id, skill.id)).rejects.toThrow();
+    await moveNode(branch.id, area.id); // уже там — ничего не меняется
+    expect((await db.nodes.get(branch.id))!.parentId).toBe(area.id);
+  });
+  it('выше / ниже меняет порядок соседей; у края — false', async () => {
+    const { branch } = await skillWithGoals();
+    await addNode(branch.id, 'skill', 'Жим');
+    await addNode(branch.id, 'skill', 'Присед');
+    const kids = await db.nodes.where('parentId').equals(branch.id).toArray();
+    const zhim = kids.find((n) => n.title === 'Жим')!;
+    expect(await moveOrder(zhim.id, -1)).toBe(true);
+    expect((await world()).children.get(branch.id)!.map((n) => n.title)).toEqual(['Жим', 'Отжимания', 'Присед']);
+    expect(await moveOrder(zhim.id, -1)).toBe(false);
+  });
+  it('архив: навык пропадает из дерева и списков, перестаёт быть активным; XP персонажа сохраняется; возврат', async () => {
+    const { branch, skill } = await skillWithGoals();
+    await saveEntry(draft(skill.id));
+    await toggleFocus(skill.id);
+    const total = (await world()).totalXp;
+    await setArchived(skill.id, true);
+    let w = await world();
+    expect(w.skills.map((n) => n.id)).not.toContain(skill.id);
+    expect(w.children.get(branch.id) ?? []).toEqual([]);
+    expect(w.archived.map((n) => n.id)).toEqual([skill.id]);
+    expect(w.focusSkills).toEqual([]);
+    expect(w.recentSkills.map((n) => n.id)).not.toContain(skill.id);
+    expect(w.totalXp).toBe(total);
+    await setArchived(skill.id, false);
+    w = await world();
+    expect(w.children.get(branch.id)!.map((n) => n.id)).toEqual([skill.id]);
+    expect(w.archived).toEqual([]);
   });
 });

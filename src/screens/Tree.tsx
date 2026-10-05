@@ -2,7 +2,7 @@ import type { ComponentChildren } from 'preact';
 import { useMemo, useState } from 'preact/hooks';
 import { useWorld } from '../db/world';
 import type { Node, NodeKind } from '../db/db';
-import { addNode, addPresetSkill, deleteNode, renameNode } from '../db/actions';
+import { addNode, addPresetSkill, deleteNode, moveNode, moveOrder, renameNode, setArchived, setAreaStyle, toggleFocus } from '../db/actions';
 import { AREA_COLORS } from '../db/seed';
 import { AREA_ICONS } from '../db/db';
 import { go } from '../lib/router';
@@ -16,11 +16,17 @@ import { TemplatesSheet } from '../components/Templates';
 import { presetsFor } from '../data/presets';
 import type { TplSkill } from '../engine/templates';
 import { areaSummary, skillRow } from '../engine/treeRow';
+import { FILTERS, matchesFilter, moveTargets, type TreeFilter } from '../engine/treeOps';
+import { gestures } from '../lib/gestures';
+import { toast } from '../lib/toast';
+import type { EntryPreset } from './EntrySheet';
 
 type Editor =
   | { mode: 'menu'; node: Node }
   | { mode: 'add'; parent: Node | null; kind: NodeKind }
-  | { mode: 'rename'; node: Node };
+  | { mode: 'rename'; node: Node }
+  | { mode: 'move'; node: Node }
+  | { mode: 'style'; node: Node };
 
 const loadExpanded = (): string[] => {
   try {
@@ -30,7 +36,7 @@ const loadExpanded = (): string[] => {
   }
 };
 
-export function Tree({ focusId }: { focusId?: string }) {
+export function Tree({ focusId, onAdd }: { focusId?: string; onAdd?: (p: EntryPreset) => void }) {
   const w = useWorld();
   const [expanded, setExpanded] = useState<Set<string>>(() => {
     const s = new Set(loadExpanded());
@@ -42,6 +48,28 @@ export function Tree({ focusId }: { focusId?: string }) {
   const [toDelete, setToDelete] = useState<Node | null>(null);
   const [tplOpen, setTplOpen] = useState(false);
   const [help, setHelp] = useState(false);
+  const [filter, setFilter] = useState<TreeFilter | null>(null);
+  const [archiveOpen, setArchiveOpen] = useState(false);
+  const [holdHint, setHoldHint] = useState(() => {
+    try {
+      return localStorage.getItem('lq.holdHint') !== 'seen';
+    } catch {
+      return false;
+    }
+  });
+  const hideHoldHint = () => {
+    setHoldHint(false);
+    try {
+      localStorage.setItem('lq.holdHint', 'seen');
+    } catch {
+      /* не критично */
+    }
+  };
+  /** Удержание: быстрое меню (макет «Дерево: удержание»). Первое удержание прячет совет. */
+  const openMenu = (n: Node) => {
+    hideHoldHint();
+    setEditor({ mode: 'menu', node: n });
+  };
   // Готовые пути: за флагом, но новичку с почти пустым деревом — сразу (иначе после «пустого дерева» их не найти).
   const tpl = w.hasExp('templates') || w.skills.length < 5;
   const [mode, setModeState] = useState<'list' | 'stars'>(() => {
@@ -74,7 +102,7 @@ export function Tree({ focusId }: { focusId?: string }) {
 
   const found = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return q ? w.nodes.filter((n) => n.title.toLowerCase().includes(q)) : null;
+    return q ? w.nodes.filter((n) => !n.archived && n.title.toLowerCase().includes(q)) : null;
   }, [query, w.nodes]);
 
   /** Сколько навыков внутри узла. */
@@ -132,7 +160,10 @@ export function Tree({ focusId }: { focusId?: string }) {
       : <Icon name="sprout" size={16} />;
     return (
       <div class={`t-item t2-skill ${v.state}`} key={n.id}>
-        <a class="t2-card" href={`#/skill/${n.id}`}>
+        <span class="t2-swipe">
+        <span class="t2-swipe-hint add"><Icon name="plus" size={18} stroke={2.6} />действие</span>
+        <span class="t2-swipe-hint menu">меню<Icon name="dots" size={18} stroke={3} /></span>
+        <a class="t2-card" href={`#/skill/${n.id}`} {...gestures({ onHold: () => openMenu(n), onSwipeRight: onAdd && v.state !== 'locked' ? () => onAdd({ skillId: n.id }) : undefined, onSwipeLeft: () => openMenu(n) })}>
           <span class="t2-tile">{tile}</span>
           <span class="t2-body">
             <span class="t2-top"><span class="t2-title">{n.title}</span><span class="t2-right">{v.right}</span></span>
@@ -140,7 +171,25 @@ export function Tree({ focusId }: { focusId?: string }) {
             {v.line && <span class="t2-line">{v.state === 'final' && <Icon name="sword" size={13} />}{v.line}</span>}
           </span>
         </a>
+        </span>
         {menuBtn(n)}
+      </div>
+    );
+  };
+
+  // Фильтры — только когда навыков много (иначе это шум; дерево — карта, а не таблица).
+  const FILTER_FROM = 8;
+  const filtered = () => (filter ? w.skills.filter((s) => matchesFilter(filter, rowOf(s).state)) : []);
+  const filterChips = () => {
+    if (w.skills.length < FILTER_FROM) return null;
+    const states = w.skills.map((s) => rowOf(s).state);
+    const chips = FILTERS.map((f) => ({ ...f, n: states.filter((s) => matchesFilter(f.id, s)).length })).filter((f) => f.n > 0);
+    return (
+      <div class="chips scroll-x t2-filters" role="group" aria-label="Показать">
+        <button type="button" class={filter ? 'chip big' : 'chip big primary'} aria-pressed={!filter} onClick={() => setFilter(null)}>Все</button>
+        {chips.map((f) => (
+          <button type="button" key={f.id} class={filter === f.id ? 'chip big primary' : 'chip big'} aria-pressed={filter === f.id} onClick={() => setFilter(filter === f.id ? null : f.id)}>{f.label} {f.n}</button>
+        ))}
       </div>
     );
   };
@@ -196,7 +245,7 @@ export function Tree({ focusId }: { focusId?: string }) {
       return (
         <div class="t-item t-branch" key={n.id}>
           <div class="t-branch-row">
-            <button type="button" class="t-branch-btn" onClick={() => toggle(n.id)} aria-expanded={open}>
+            <button type="button" class="t-branch-btn" onClick={() => toggle(n.id)} aria-expanded={open} {...(clear ? gestures({ onHold: () => openMenu(n) }) : {})}>
               <span class={open ? 't-diamond open' : 't-diamond'} />
               <span class="t-branch-title">{n.title}</span>
               <span class="t-sub">{clear ? (count ? `· ${count} ${plural(count, 'навык', 'навыка', 'навыков')}` : 'пусто') : count ? `${pctText(p)} · ${count} нав.` : 'пусто'}</span>
@@ -214,7 +263,7 @@ export function Tree({ focusId }: { focusId?: string }) {
     return (
       <section class={open ? 't-area open' : 't-area'} key={n.id} style={{ '--c': ac(n.color) ?? 'var(--muted)' }}>
         <div class="t-area-head">
-          <button type="button" class="t-area-btn" onClick={() => toggle(n.id)} aria-expanded={open}>
+          <button type="button" class="t-area-btn" onClick={() => toggle(n.id)} aria-expanded={open} {...(clear ? gestures({ onHold: () => openMenu(n) }) : {})}>
             <AreaTile node={n} size={44} />
             <span class="t-area-text">
               <span class="t-area-title">{n.title}</span>
@@ -285,6 +334,41 @@ export function Tree({ focusId }: { focusId?: string }) {
           ))}
           {found.length === 0 && <p class="muted">Ничего не нашлось.</p>}
         </div>
+      ) : clear ? (
+        <>
+          {holdHint && w.skills.length > 0 && (
+            <div class="t2-hint"><Icon name="spark" size={18} /><span><b>Совет:</b> удержи навык или ветку — откроются быстрые действия. Свайп по навыку вправо — новое действие.</span>
+              <button type="button" class="icon-btn" aria-label="Скрыть совет" onClick={hideHoldHint}><Icon name="x" size={18} /></button></div>
+          )}
+          {filterChips()}
+          {filter ? (
+            <div class="t-tree t2-filtered">
+              {filtered().map((n) => (
+                <div class="stack-4" key={n.id} style={{ '--c': ac(w.areaOf(n.id)?.color) ?? 'var(--muted)' }}>
+                  <span class="muted small t2-path">{w.pathOf(n.id).slice(0, -1).map((x) => x.title).join(' › ')}</span>
+                  {renderSkillClear(n)}
+                </div>
+              ))}
+              {filtered().length === 0 && <p class="muted">Таких навыков нет.</p>}
+            </div>
+          ) : (
+            <div class="t-tree">{w.areas.map(renderNode)}</div>
+          )}
+          {w.archived.length > 0 && (
+            <section class="stack-8 t2-archive">
+              <button type="button" class="section-label t2-archive-btn" aria-expanded={archiveOpen} onClick={() => setArchiveOpen(!archiveOpen)}>
+                <span>Архив · {w.archived.length}</span><Icon name={archiveOpen ? 'up' : 'down'} size={16} />
+              </button>
+              {archiveOpen && w.archived.map((n) => (
+                <div class="t2-arch-row" key={n.id}>
+                  <a class="stack-4 t2-arch-text" href={`#/skill/${n.id}`}><span class="strong">{n.title}</span><span class="muted small">{w.pathOf(n.id).slice(0, -1).map((x) => x.title).join(' › ')} · {w.xpBySkill.get(n.id) ?? 0} XP</span></a>
+                  <button type="button" class="btn ghost small" onClick={async () => { await setArchived(n.id, false); toast({ kind: 'info', title: `«${n.title}» вернулся в дерево` }); }}>Вернуть</button>
+                </div>
+              ))}
+              {archiveOpen && <span class="muted small">Навыки в архиве не видны в дереве и при выборе навыка. Цели, действия и XP сохранены.</span>}
+            </section>
+          )}
+        </>
       ) : (
         <div class="t-tree">{w.areas.map(renderNode)}</div>
       )}
@@ -295,7 +379,7 @@ export function Tree({ focusId }: { focusId?: string }) {
 
       <NodeEditor editor={editor} onClose={() => setEditor(null)} onDelete={(n) => { setEditor(null); setToDelete(n); }} onAdded={(parentId) => {
         if (parentId && !expanded.has(parentId)) toggle(parentId);
-      }} setEditor={setEditor} />
+      }} setEditor={setEditor} onAdd={onAdd} />
 
       <Confirm
         open={!!toDelete}
@@ -310,6 +394,52 @@ export function Tree({ focusId }: { focusId?: string }) {
 }
 
 const KIND_LABEL: Record<NodeKind, string> = { area: 'направление', branch: 'ветку', skill: 'навык' };
+
+/** «Перенести…»: куда — любое направление или ветка (кроме себя и своих потомков). Макет: HoldMove. */
+function MoveSheet({ node, onClose, onMoved }: { node: Node; onClose: () => void; onMoved: (parentId: string | null) => void }) {
+  const w = useWorld();
+  const [q, setQ] = useState('');
+  const [to, setTo] = useState<string | null>(null);
+  const targets = moveTargets(w.nodes.filter((n) => !n.archived), node.id);
+  const shown = q.trim() ? targets.filter((t) => t.path.toLowerCase().includes(q.trim().toLowerCase())) : targets;
+  const dest = targets.find((t) => t.id === to);
+  const move = async () => {
+    if (!to) return;
+    try {
+      await moveNode(node.id, to);
+      onMoved(to);
+      onClose();
+      toast({ kind: 'info', title: `«${node.title}» → ${dest?.path}` });
+    } catch (e) {
+      toast({ kind: 'info', title: e instanceof Error ? e.message : 'Не получилось перенести' });
+    }
+  };
+  return (
+    <Sheet open onClose={onClose} title={`Перенести «${node.title}»`}>
+      <span class="muted small">Выбери направление или ветку.</span>
+      {targets.length > 8 && (
+        <label class="search">
+          <Icon name="search" size={18} />
+          <input placeholder="Найти ветку" value={q} onInput={(e) => setQ(e.currentTarget.value)} aria-label="Найти ветку" />
+        </label>
+      )}
+      <div class="stack-4 t2-move" role="radiogroup" aria-label="Куда перенести">
+        {shown.map((t) => (
+          <button type="button" key={t.id} role="radio" aria-checked={to === t.id} disabled={t.current}
+            class={`t2-dest${to === t.id ? ' on' : ''}${t.depth === 0 ? ' area' : ''}`} style={{ paddingLeft: `${12 + t.depth * 18}px` }}
+            onClick={() => setTo(t.id)}>
+            <span class={to === t.id ? 'radio on' : 'radio'} />
+            <span class="t2-dest-title">{t.path.split(' › ').pop()}</span>
+            {t.current && <span class="muted small">сейчас тут</span>}
+          </button>
+        ))}
+        {shown.length === 0 && <p class="muted">Ничего не нашлось.</p>}
+      </div>
+      <div class="ai-privacy"><Icon name="repeat" size={18} /><span>{node.kind === 'skill' ? 'Переедут цели, этапы, замеры, действия и XP.' : 'Ветка переедет со всем, что внутри.'} Требования других навыков к нему сохранятся.</span></div>
+      <button type="button" class="btn primary" disabled={!to} onClick={move}>{dest ? `Перенести в «${dest.path}»` : 'Выбери, куда'}</button>
+    </Sheet>
+  );
+}
 
 /** «Как читать дерево» — словами плана (путь, этап, цель, уровень), без формул. Макет: TreeLegend. */
 function TreeHelp({ onClose }: { onClose: () => void }) {
@@ -345,12 +475,13 @@ function TreeHelp({ onClose }: { onClose: () => void }) {
   );
 }
 
-function NodeEditor({ editor, onClose, onDelete, onAdded, setEditor }: {
+function NodeEditor({ editor, onClose, onDelete, onAdded, setEditor, onAdd }: {
   editor: Editor | null;
   onClose: () => void;
   onDelete: (n: Node) => void;
   onAdded: (parentId: string | null) => void;
   setEditor: (e: Editor) => void;
+  onAdd?: (p: EntryPreset) => void;
 }) {
   const w = useWorld();
   const [title, setTitle] = useState('');
@@ -360,6 +491,85 @@ function NodeEditor({ editor, onClose, onDelete, onAdded, setEditor }: {
   const [allPresets, setAllPresets] = useState(false);
 
   if (!editor) return null;
+
+  if (editor.mode === 'move') return <MoveSheet node={editor.node} onClose={onClose} onMoved={onAdded} />;
+
+  // Быстрое меню «Понятного дерева» (удержание, свайп влево, «···»). Макет: «Дерево: удержание».
+  if (editor.mode === 'menu' && w.hasExp('tree-clear')) {
+    const n = editor.node;
+    const where = w.pathOf(n.id).slice(0, -1).map((x) => x.title).join(' › ');
+    const focusCount = w.focusSkills.length;
+    const locked = n.kind === 'skill' && w.lockReasons(n).length > 0;
+    const order = async (dir: -1 | 1) => {
+      if (!(await moveOrder(n.id, dir))) toast({ kind: 'info', title: dir < 0 ? 'Выше некуда' : 'Ниже некуда' });
+    };
+    return (
+      <Sheet open onClose={onClose} title={n.title}>
+        {where && <span class="muted small t2-menu-where">{where}</span>}
+        <div class="stack-8">
+          {n.kind === 'skill' && onAdd && !locked && (
+            <button type="button" class="btn primary" onClick={() => { onClose(); onAdd({ skillId: n.id }); }}><Icon name="plus" size={18} stroke={2.6} />Действие по навыку</button>
+          )}
+          {n.kind !== 'skill' && (
+            <>
+              <button type="button" class="menu-item" onClick={() => { setTitle(''); setEditor({ mode: 'add', parent: n, kind: 'skill' }); }}><Icon name="plus" />Добавить навык</button>
+              <button type="button" class="menu-item" onClick={() => { setTitle(''); setEditor({ mode: 'add', parent: n, kind: 'branch' }); }}><Icon name="tree" />Добавить ветку внутрь</button>
+            </>
+          )}
+          {n.kind === 'skill' && (
+            <button type="button" class="menu-item" onClick={async () => {
+              const ok = await toggleFocus(n.id);
+              if (!ok) toast({ kind: 'info', title: 'Активных уже 3', sub: 'Сначала убери один из активных' });
+              else onClose();
+            }}>
+              <Icon name="star" />{n.focus ? 'Убрать из активных' : 'Сделать активным'}<span class="menu-meta">{focusCount} из 3</span>
+            </button>
+          )}
+          {n.kind !== 'area' && <button type="button" class="menu-item" onClick={() => setEditor({ mode: 'move', node: n })}><Icon name="repeat" />Перенести…</button>}
+          <div class="row-2">
+            <button type="button" class="menu-item" onClick={() => order(-1)}><Icon name="up" />Выше</button>
+            <button type="button" class="menu-item" onClick={() => order(1)}><Icon name="down" />Ниже</button>
+          </div>
+          {n.kind === 'area' && (
+            <button type="button" class="menu-item" onClick={() => { setColor(n.color ?? AREA_COLORS[0]); setIcon(n.icon ?? AREA_ICONS[0]); setEditor({ mode: 'style', node: n }); }}><Icon name="brush" />Цвет и иконка</button>
+          )}
+          {n.kind === 'skill' && <a class="menu-item" href={`#/skill/${n.id}`} onClick={onClose}><Icon name="right" />Открыть навык</a>}
+          <button type="button" class="menu-item" onClick={() => { setTitle(n.title); setEditor({ mode: 'rename', node: n }); }}><Icon name="edit" />Переименовать</button>
+          {n.kind === 'skill' && (
+            <button type="button" class="menu-item" onClick={async () => {
+              await setArchived(n.id, true);
+              onClose();
+              toast({ kind: 'info', title: `«${n.title}» в архиве`, sub: 'Дерево → Архив внизу. Цели и XP сохранены.' });
+            }}><Icon name="download" />В архив</button>
+          )}
+          <button type="button" class="menu-item danger-text" onClick={() => onDelete(n)}><Icon name="trash" />Удалить</button>
+        </div>
+      </Sheet>
+    );
+  }
+
+  if (editor.mode === 'style') {
+    const n = editor.node;
+    return (
+      <Sheet open onClose={onClose} title={`Цвет и иконка: ${n.title}`}>
+        <div class="stack-12">
+          <div class="colors" role="radiogroup" aria-label="Цвет направления">
+            {AREA_COLORS.map((c) => (
+              <button type="button" key={c} role="radio" aria-checked={color === c} aria-label={c} class={color === c ? 'color on' : 'color'} style={{ background: c }} onClick={() => setColor(c)} />
+            ))}
+          </div>
+          <div class="icons" role="radiogroup" aria-label="Иконка направления">
+            {AREA_ICONS.map((ic) => (
+              <button type="button" key={ic} role="radio" aria-checked={icon === ic} aria-label={ic} class={icon === ic ? 'icon-pick on' : 'icon-pick'} style={{ color }} onClick={() => setIcon(ic)}>
+                <Icon name={ic} size={22} />
+              </button>
+            ))}
+          </div>
+          <button type="button" class="btn primary" onClick={async () => { await setAreaStyle(n.id, color, icon); onClose(); }}>Сохранить</button>
+        </div>
+      </Sheet>
+    );
+  }
 
   if (editor.mode === 'menu') {
     const n = editor.node;

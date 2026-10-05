@@ -60,7 +60,9 @@ export interface LockReason {
 export function derive(w: World) {
   const nodeById = new Map(w.nodes.map((n) => [n.id, n]));
   const children = new Map<string | null, Node[]>();
+  // Архивные навыки не попадают ни в дерево, ни в списки навыков; XP их действий персонажу остаётся (считается по entrySkills).
   for (const n of w.nodes) {
+    if (n.archived) continue;
     const list = children.get(n.parentId) ?? [];
     list.push(n);
     children.set(n.parentId, list);
@@ -157,13 +159,14 @@ export function derive(w: World) {
 
   const lockReasons = (n: Node): LockReason[] => requirementsOf(n).filter((r) => !r.met);
 
-  const skills = w.nodes.filter((n) => n.kind === 'skill').sort((a, b) => a.title.localeCompare(b.title));
+  const skills = w.nodes.filter((n) => n.kind === 'skill' && !n.archived).sort((a, b) => a.title.localeCompare(b.title));
+  const archived = w.nodes.filter((n) => n.kind === 'skill' && n.archived).sort((a, b) => a.title.localeCompare(b.title));
 
   const recentSkills: Node[] = [];
   for (const e of w.entries) {
     const id = primaryOf(e.id);
     const n = id ? nodeById.get(id) : undefined;
-    if (n && !recentSkills.includes(n)) recentSkills.push(n);
+    if (n && !n.archived && !recentSkills.includes(n)) recentSkills.push(n);
     if (recentSkills.length >= 6) break;
   }
 
@@ -386,6 +389,8 @@ export function derive(w: World) {
     lockReasons,
     requirementsOf,
     skills,
+    /** Навыки в архиве (Дерево → «Архив»). */
+    archived,
     recentSkills,
     streak: currentStreak(dates, today),
     stagesOfSkill,

@@ -7,6 +7,7 @@ import { calcXp, secondaryXp, xpContextFromHistory, type Difficulty, type EntryT
 import { localDate } from '../engine/dates';
 import type { GoalKind } from '../engine/progress';
 import { toggleExp } from '../engine/experiments';
+import { reorder, subtreeIds } from '../engine/treeOps';
 import { planImport, type ImportPlan, type Template, type TplSkill } from '../engine/templates';
 import { AREA_COLORS, addStarterQuest } from './seed';
 
@@ -163,6 +164,38 @@ export async function addNode(parentId: string | null, kind: NodeKind, title: st
 }
 
 export const renameNode = (id: string, title: string) => db.nodes.update(id, { title: title.trim() });
+
+/** Цвет и иконка направления после создания. */
+export const setAreaStyle = (id: string, color: string, icon: string) => db.nodes.update(id, { color, icon });
+
+/** Перенести узел (навык или ветку) в другое направление/ветку — в конец. id не меняется: цели, действия, XP, требования и замеры остаются с ним. */
+export async function moveNode(id: string, parentId: string) {
+  await db.transaction('rw', db.nodes, async () => {
+    const all = await db.nodes.toArray();
+    const node = all.find((n) => n.id === id);
+    if (!node || node.kind === 'area' || node.parentId === parentId) return;
+    if (subtreeIds(all, id).has(parentId)) throw new Error('Нельзя перенести ветку внутрь самой себя');
+    const target = all.find((n) => n.id === parentId);
+    if (!target || target.kind === 'skill') throw new Error('Переносить можно только в направление или ветку');
+    await db.nodes.update(id, { parentId, order: all.filter((n) => n.parentId === parentId).length });
+  });
+}
+
+/** «Выше» / «Ниже» среди соседей. false — двигать некуда. */
+export async function moveOrder(id: string, dir: -1 | 1) {
+  const node = await db.nodes.get(id);
+  if (!node) return false;
+  const siblings = node.parentId ? await db.nodes.where('parentId').equals(node.parentId).toArray() : await db.nodes.where('kind').equals('area').toArray();
+  const plan = reorder(siblings.filter((n) => !n.archived), id, dir);
+  if (!plan) return false;
+  await db.transaction('rw', db.nodes, async () => {
+    for (const p of plan) await db.nodes.update(p.id, { order: p.order });
+  });
+  return true;
+}
+
+/** Навык в архив / из архива. В архиве он перестаёт быть активным. */
+export const setArchived = (id: string, archived: boolean) => db.nodes.update(id, archived ? { archived: true, focus: false } : { archived: false });
 
 /** Удаляет узел с поддеревом и целями. Записи журнала и XP персонажа остаются. */
 export async function deleteNode(id: string) {

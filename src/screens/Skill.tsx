@@ -1,7 +1,7 @@
 import { useState } from 'preact/hooks';
 import { useWorld } from '../db/world';
 import type { Goal } from '../db/db';
-import { addGoal, addNote, deleteGoal, deleteNote, fmtNum, renameNode, toggleFocus, toggleGoal, toggleNoteStudied } from '../db/actions';
+import { addGoal, addNote, deleteGoal, deleteNote, fmtNum, renameNode, setArchived, toggleFocus, toggleGoal, toggleNoteStudied } from '../db/actions';
 import type { GoalKind } from '../engine/progress';
 import { humanDate } from '../engine/dates';
 import { STAGE_BONUS, stageName } from '../engine/stages';
@@ -82,6 +82,11 @@ export function Skill({ id, onAdd }: { id: string; onAdd: (p: EntryPreset) => vo
           </>
         }
       />
+
+      {node.archived && (
+        <div class="notice"><Icon name="download" size={18} /><span class="small" style={{ flex: 1 }}>Навык в архиве: его нет в дереве и при выборе навыка. Цели и XP сохранены.</span>
+          <button type="button" class="link small" onClick={() => setArchived(id, false)}>Вернуть</button></div>
+      )}
 
       <div class="skill-title" style={{ '--c': color }}>
         <Ring pct={lv.pct} size={56} stroke={5} color="var(--c)"><span class="skill-lvl">{lv.level}</span></Ring>

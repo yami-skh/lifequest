@@ -54,7 +54,7 @@ export function App() {
   }
 
   let page;
-  if (screen === 'tree') page = <Tree focusId={param} key={param ?? 'tree'} />;
+  if (screen === 'tree') page = <Tree focusId={param} key={param ?? 'tree'} onAdd={openEntry} />;
   else if (screen === 'skill' && param) page = <Skill id={param} onAdd={openEntry} key={param} />;
   else if (screen === 'journal') page = <Journal />;
   else if (screen === 'more') page = <More />;
