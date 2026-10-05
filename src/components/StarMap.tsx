@@ -1,7 +1,7 @@
 // Созвездие навыков: второй вид дерева (§16, идея 11). Макет: холст, «Созвездие и напоминания».
 // Направления — созвездия по кругу, навыки — звёзды вокруг (крупнее = выше уровень, пунктир = не начат, рыжая = ржавчина).
 // Небо всегда тёмное, в любой теме. Сдвиг — пальцем, приближение — двумя пальцами или колёсиком.
-import { useMemo, useRef, useState } from 'preact/hooks';
+import { useLayoutEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { useWorld } from '../db/world';
 import type { Node } from '../db/db';
 import { Ring } from './ui';
@@ -15,6 +15,8 @@ const RUST = '#C98A5A';
 export function StarMap() {
   const w = useWorld();
   const [selected, setSelected] = useState<string | null>(null);
+  const skyRef = useRef<HTMLDivElement>(null);
+  useSkyHeight(skyRef);
 
   const clusters = useMemo<Cluster[]>(() => {
     const areas = w.areas;
@@ -114,7 +116,7 @@ export function StarMap() {
   }, [fit]);
 
   return (
-    <div class="sky">
+    <div class="sky" ref={skyRef}>
       <svg
         ref={svgRef}
         class="sky-svg"
@@ -177,4 +179,24 @@ export function StarMap() {
       )}
     </div>
   );
+}
+
+/**
+ * Холст — ровно до нижнего меню, чтобы страница не листалась (мастер-план §13).
+ * Высоту шапки и меню не угадываем: меряем, где холст начинается и сколько отступа у <main> снизу.
+ */
+function useSkyHeight(ref: { current: HTMLDivElement | null }) {
+  useLayoutEffect(() => {
+    const fit = () => {
+      const el = ref.current;
+      if (!el) return;
+      const top = el.getBoundingClientRect().top + window.scrollY;
+      const main = el.closest('main');
+      const below = main ? parseFloat(getComputedStyle(main).paddingBottom) || 0 : 0;
+      el.style.height = `${Math.max(320, Math.floor(window.innerHeight - top - below))}px`;
+    };
+    fit();
+    window.addEventListener('resize', fit);
+    return () => window.removeEventListener('resize', fit);
+  }, []);
 }

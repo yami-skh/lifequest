@@ -29,8 +29,8 @@
   PRESETS:9, *RequirementsSheet:11
 - **SetsEditor.tsx** (106) — Тренировка подходами: «вес × повторы», + подход, «как в прошлый раз».
   Field:9, *setsText:11, *SetsEditor:13
-- **StarMap.tsx** (181) — Созвездие навыков: второй вид дерева (§16, идея 11). Макет: холст, «Созвездие и напоминания».
-  Star:9, Cluster:10, View:11, RUST:13, *StarMap:15, .scale:65, .zoomAt:69, .onDown:75, .onMove:84, .onUp:100, .tap:104
+- **StarMap.tsx** (203) — Созвездие навыков: второй вид дерева (§16, идея 11). Макет: холст, «Созвездие и напоминания».
+  Star:9, Cluster:10, View:11, RUST:13, *StarMap:15, .scale:67, .zoomAt:71, .onDown:77, .onMove:86, .onUp:102, .tap:106, useSkyHeight:188
 - **Templates.tsx** (252) — «Готовые пути» — шаблоны навыков (мастер-план §12, фаза 1). Макет: холст, страница «Шаблоны».
   Phase:16, goalsWord:18, skillsWord:19, *TemplatesSheet:21, AreaChip:40, Catalog:45, Preview:85, Paste:191
 - **ui.tsx** (133)
@@ -38,8 +38,8 @@
 
 ## src/data
 
-- **changelog.ts** (197) — Что нового в версиях — для пользователя, простыми словами. Новые версии — сверху.
-  *ChangeKind:4, *Change:5, *Release:6, *CHANGELOG:8, *SEEN_BEFORE_CHANGELOG:196
+- **changelog.ts** (204) — Что нового в версиях — для пользователя, простыми словами. Новые версии — сверху.
+  *ChangeKind:4, *Change:5, *Release:6, *CHANGELOG:8, *SEEN_BEFORE_CHANGELOG:203
 - **templatePrompt.ts** (39) — Запрос для «любой нейросети»: она составляет путь в формате шаблона (engine/templates.ts).
   *TEMPLATE_PROMPT:4
 - **templates.test.ts** (45)
