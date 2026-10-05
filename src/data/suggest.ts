@@ -4,6 +4,7 @@
 // Плюс «твоё» (прошлые записи, существующие названия) — добавляется в местах ввода из useWorld().
 import type { TplBranch } from '../engine/templates';
 import { TEMPLATES } from './templates';
+import { MORE_ACTIONS, MORE_GOALS, MORE_GOAL_BY_SKILL, MORE_SKILLS } from './suggestMore';
 
 const uniq = (xs: string[]) => [...new Map(xs.map((x) => [x.toLowerCase().replace(/ё/g, 'е').trim(), x.trim()])).values()];
 
@@ -150,7 +151,7 @@ const GOAL_EXTRA: Record<string, string[]> = {
   'уверенность в себе': ['Сказать «нет» без оправданий 3 раза', 'Выступить на встрече', 'Попросить о помощи', 'Сделать то, что давно откладывал из страха'],
   минимализм: ['Разобрать гардероб', 'Отдать или продать 30 вещей', 'Месяц без импульсивных покупок', 'Каждая вещь на своём месте'],
 };
-export const skillIdeas = () => uniq([...tplSkills.map((s) => s.title), ...SKILL_EXTRA]);
+export const skillIdeas = () => uniq([...tplSkills.map((s) => s.title), ...SKILL_EXTRA, ...MORE_SKILLS]);
 export const skillIdeasFor = (area?: string) => uniq([...tplSkills.filter((s) => s.area === area).map((s) => s.title), ...skillIdeas()]);
 
 // ---------- цели ----------
@@ -168,8 +169,8 @@ const GOAL_GENERIC = [
   'Записать 10 главных выводов', 'Вести дневник прогресса 14 дней', 'Поставить личный рекорд', 'Сделать то, что месяц назад было не по силам',
 ];
 export const goalIdeas = (skillTitle: string) =>
-  uniq([...goalsFromPaths(skillTitle), ...(GOAL_EXTRA[skillTitle.toLowerCase().replace(/ё/g, 'е').trim()] ?? []), ...GOAL_GENERIC.map((g) => g.replace('{}', skillTitle))]);
-export const allPathGoals = () => uniq([...tplSkills.flatMap((s) => s.goals), ...Object.values(GOAL_EXTRA).flat()]);
+  uniq([...goalsFromPaths(skillTitle), ...(GOAL_EXTRA[skillTitle.toLowerCase().replace(/ё/g, 'е').trim()] ?? []), ...(MORE_GOAL_BY_SKILL[skillTitle.toLowerCase().replace(/ё/g, 'е').trim()] ?? []), ...GOAL_GENERIC.map((g) => g.replace('{}', skillTitle))]);
+export const allPathGoals = () => uniq([...tplSkills.flatMap((s) => s.goals), ...Object.values(GOAL_EXTRA).flat(), ...MORE_GOALS]);
 
 // ---------- действия («Что сделал») по типу ----------
 const ACTIONS: Record<string, string[]> = {
@@ -269,7 +270,7 @@ const ACTIONS: Record<string, string[]> = {
   course: ['Прошёл урок курса', 'Прошёл модуль курса', 'Сдал домашнее задание', 'Прочитал книгу до конца', 'Сдал тест курса', 'Закончил курс'],
   teach: ['Объяснил тему другу', 'Помог разобраться коллеге', 'Провёл мини-урок', 'Написал разбор для других', 'Ответил на вопросы новичка'],
 };
-export const actionIdeas = (type: string) => uniq([...(ACTIONS[type] ?? []), ...Object.values(ACTIONS).flat()]);
+export const actionIdeas = (type: string) => uniq([...(ACTIONS[type] ?? []), ...(MORE_ACTIONS[type] ?? []), ...Object.values(ACTIONS).flat(), ...Object.values(MORE_ACTIONS).flat()]);
 
 // ---------- замеры ----------
 export const METRIC_IDEAS = uniq([

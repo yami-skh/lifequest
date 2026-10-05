@@ -28,10 +28,10 @@ describe('подсказки при вводе', () => {
 });
 
 describe('запас подсказок «много вариантов»', () => {
-  it('объёмы: навыков, действий и целей по 400+, направлений и замеров 25+', () => {
-    expect(skillIdeas().length).toBeGreaterThanOrEqual(400);
-    expect(actionIdeas('workout').length).toBeGreaterThanOrEqual(400);
-    expect(allPathGoals().length).toBeGreaterThanOrEqual(400);
+  it('объёмы: навыков, действий и целей по 800+, направлений и замеров 25+', () => {
+    expect(skillIdeas().length).toBeGreaterThanOrEqual(800);
+    expect(actionIdeas('workout').length).toBeGreaterThanOrEqual(800);
+    expect(allPathGoals().length).toBeGreaterThanOrEqual(800);
     expect(AREA_IDEAS.length).toBeGreaterThanOrEqual(25);
     expect(METRIC_IDEAS.length).toBeGreaterThanOrEqual(25);
   });

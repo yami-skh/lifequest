@@ -54,8 +54,10 @@
   AREAS:6
 - **presets.ts** (48) — Готовые навыки при ручном добавлении (мастер-план §12): навыки шаблонов, сгруппированные по направлениям,
   T:6, P:7, sk:8, EXTRA:13, norm:29, *presetsFor:32
-- **suggest.ts** (292) — Запас подсказок при вводе (макет: холст, «Подсказки при вводе»). Источники: 18 путей (data/templates.ts)
-  uniq:8, tplSkills:11, tplBranches:12, *AREA_IDEAS:25, BRANCH_EXTRA:32, *branchIdeas:45, SKILL_EXTRA:48, GOAL_EXTRA:113, *skillIdeas:153, *skillIdeasFor:154, *goalsFromPaths:158, GOAL_GENERIC:163, *goalIdeas:170, *allPathGoals:172, ACTIONS:175, *actionIdeas:272, *METRIC_IDEAS:275, *QUEST_IDEAS:284, *STEP_IDEAS:291
+- **suggest.ts** (293) — Запас подсказок при вводе (макет: холст, «Подсказки при вводе»). Источники: 18 путей (data/templates.ts)
+  uniq:9, tplSkills:12, tplBranches:13, *AREA_IDEAS:26, BRANCH_EXTRA:33, *branchIdeas:46, SKILL_EXTRA:49, GOAL_EXTRA:114, *skillIdeas:154, *skillIdeasFor:155, *goalsFromPaths:159, GOAL_GENERIC:164, *goalIdeas:171, *allPathGoals:173, ACTIONS:176, *actionIdeas:273, *METRIC_IDEAS:276, *QUEST_IDEAS:285, *STEP_IDEAS:292
+- **suggestMore.ts** (147) — Расширенный запас подсказок (до 800+ навыков, действий и целей). Подключается в data/suggest.ts.
+  langs:5, Lang:6, instruments:7, codeLangs:8, cuisines:9, crafts:10, *MORE_SKILLS:13, strength:65, cardio:77, timed:83, *MORE_ACTIONS:87, *MORE_GOAL_BY_SKILL:111, numeric:124, runs:128, *MORE_GOALS:129
 - **templatePrompt.ts** (39) — Запрос для «любой нейросети»: она составляет путь в формате шаблона (engine/templates.ts).
   *TEMPLATE_PROMPT:4
 - **templates.test.ts** (49)
