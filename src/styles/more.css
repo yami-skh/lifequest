@@ -75,3 +75,7 @@
 .update-head { display: flex; gap: 12px; align-items: flex-start; }
 .update-icon { width: 40px; height: 40px; border-radius: 12px; background: var(--green); color: var(--bg); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .update-btn { background: var(--green); color: var(--bg); min-height: 48px; }
+
+/* звуки и напоминания (0.9) */
+.volume { width: 120px; accent-color: var(--gold); }
+.time-chip { min-height: 36px; padding: 0 8px; border-radius: 10px; border: 0; background: var(--surface-3); color: var(--fg); font-weight: 800; font-size: 14px; margin-right: 6px; }

@@ -1,7 +1,7 @@
 {
   "name": "lifequest",
   "private": true,
-  "version": "0.8.1",
+  "version": "0.9.1",
   "type": "module",
   "scripts": {
     "dev": "vite --host",
@@ -21,6 +21,7 @@
     "@capacitor/core": "^8.5.2",
     "@capacitor/file-transfer": "^2.0.6",
     "@capacitor/filesystem": "^8.1.4",
+    "@capacitor/local-notifications": "^8.3.1",
     "@capacitor/share": "^8.0.3",
     "@capawesome-team/capacitor-file-opener": "^8.0.5",
     "@capgo/capacitor-updater": "^8.52.1",
@@ -39,5 +40,5 @@
     "vite-plugin-pwa": "^2.0.0",
     "vitest": "^5.0.3"
   },
-  "nativeVersion": "0.7.2"
+  "nativeVersion": "0.9.0"
 }

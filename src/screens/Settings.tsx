@@ -7,6 +7,7 @@ import { useWorld } from '../db/world';
 import { db } from '../db/db';
 import { resetAll, setAiCode, setName, toggleWeeklyTemplate } from '../db/actions';
 import { AiError, fetchQuota } from '../lib/ai';
+import { ReminderSettings, SoundSettings } from '../components/Reminders';
 import { WEEKLY_TEMPLATES } from '../engine/quests';
 import { humanDate } from '../engine/dates';
 import { type ThemePref, setThemePref, useThemePref } from '../lib/theme';
@@ -87,8 +88,12 @@ export function Settings() {
         <AiBlock />
       </Group>
 
-      <Group label="Звуки и напоминания">
-        <div class="menu-list soon-box"><div class="menu-row"><span class="menu-row-text">Звуки за XP, напоминание записать день</span><span class="soon-tag">скоро</span></div></div>
+      <Group label="Звуки">
+        <SoundSettings />
+      </Group>
+
+      <Group label="Напоминания">
+        <ReminderSettings />
       </Group>
 
       <Group label="О приложении">

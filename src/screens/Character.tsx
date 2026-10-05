@@ -6,6 +6,7 @@ import { EntryCard } from '../components/EntryCard';
 import { InstallCard } from '../components/InstallCard';
 import { BackupReminder } from './Backup';
 import { UpdateCard } from './Settings';
+import { ReminderPrompt } from '../components/Reminders';
 import { weekStart } from '../engine/quests';
 import { localDate } from '../engine/dates';
 import { ac } from '../lib/theme';
@@ -39,6 +40,7 @@ export function Character({ onAdd }: { onAdd: () => void }) {
       <UpdateCard fallback={<InstallCard fallback={<BackupReminder />} />} />
 
       <TodayCard onAdd={onAdd} />
+      <ReminderPrompt />
 
       <section class="stack-8">
         <SectionLabel right={strongest && <span class="muted small strong">сильнее: {strongest.title}</span>}>Направления</SectionLabel>

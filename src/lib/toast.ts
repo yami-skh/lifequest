@@ -1,6 +1,7 @@
 // Всплывашки: XP, новый уровень, достижения.
 // События, пришедшие почти одновременно (запись → рекорд → ступень → уровень), склеиваются в одну.
 import { useEffect, useState } from 'preact/hooks';
+import { buzz, play } from './sound';
 
 export type ToastKind = 'xp' | 'level' | 'achievement' | 'info';
 export interface Toast { id: number; kind: ToastKind; title: string; sub?: string; lines: string[] }
@@ -34,11 +35,14 @@ export function toast(t: { kind: ToastKind; title: string; sub?: string }) {
   if (target) {
     // Дописываем строкой; карточка становится «важнее», если пришёл уровень или достижение.
     target.lines = [...target.lines, t.sub ? `${t.title} · ${t.sub}` : t.title];
-    if (RANK[t.kind] > RANK[target.kind]) target.kind = t.kind;
+    if (RANK[t.kind] > RANK[target.kind]) {
+      target.kind = t.kind;
+      play(t.kind === 'level' ? 'level' : 'record');
+    }
     toasts = [...toasts];
     lastGame = { id: target.id, at: now };
     schedule(target.id, LIFETIME[target.kind] + 1000);
-    navigator.vibrate?.([40, 60, 40]);
+    buzz([40, 60, 40]);
     emit();
     return;
   }
@@ -47,7 +51,8 @@ export function toast(t: { kind: ToastKind; title: string; sub?: string }) {
   toasts = [...toasts, item];
   if (game) {
     lastGame = { id: item.id, at: now };
-    navigator.vibrate?.(t.kind === 'xp' ? 30 : [40, 60, 40]);
+    buzz(t.kind === 'xp' ? 30 : [40, 60, 40]);
+    play(t.kind === 'xp' ? 'xp' : t.kind === 'level' ? 'level' : 'record');
   }
   schedule(item.id, LIFETIME[t.kind]);
   emit();

@@ -9,6 +9,7 @@ import { Icon } from '../components/Icon';
 import { AreaTile, Confirm, Ring, Sheet, pctText } from '../components/ui';
 import { plural } from './Character';
 import { ac } from '../lib/theme';
+import { StarMap } from '../components/StarMap';
 
 type Editor =
   | { mode: 'menu'; node: Node }
@@ -33,6 +34,21 @@ export function Tree({ focusId }: { focusId?: string }) {
   const [query, setQuery] = useState('');
   const [editor, setEditor] = useState<Editor | null>(null);
   const [toDelete, setToDelete] = useState<Node | null>(null);
+  const [mode, setModeState] = useState<'list' | 'stars'>(() => {
+    try {
+      return localStorage.getItem('lq.treeView') === 'stars' ? 'stars' : 'list';
+    } catch {
+      return 'list';
+    }
+  });
+  const setMode = (m: 'list' | 'stars') => {
+    setModeState(m);
+    try {
+      localStorage.setItem('lq.treeView', m);
+    } catch {
+      /* не критично */
+    }
+  };
 
   const toggle = (id: string) => {
     const s = new Set(expanded);
@@ -169,6 +185,13 @@ export function Tree({ focusId }: { focusId?: string }) {
         <button type="button" class="icon-btn round" aria-label="Добавить направление" onClick={() => setEditor({ mode: 'add', parent: null, kind: 'area' })}><Icon name="plus" size={20} stroke={2.4} /></button>
       </div>
 
+      <div class="segmented" role="tablist" aria-label="Вид дерева">
+        <button type="button" role="tab" aria-selected={mode === 'list'} class={mode === 'list' ? 'on' : ''} onClick={() => setMode('list')}>Список</button>
+        <button type="button" role="tab" aria-selected={mode === 'stars'} class={mode === 'stars' ? 'on' : ''} onClick={() => setMode('stars')}>Созвездие</button>
+      </div>
+
+      {mode === 'stars' ? <StarMap /> : <>
+
       <label class="search">
         <Icon name="search" size={18} />
         <input id="tree-search" placeholder="Найти навык" value={query} onInput={(e) => setQuery(e.currentTarget.value)} aria-label="Найти навык" />
@@ -195,6 +218,7 @@ export function Tree({ focusId }: { focusId?: string }) {
       ) : (
         <div class="t-tree">{w.areas.map(renderNode)}</div>
       )}
+      </>}
 
       <NodeEditor editor={editor} onClose={() => setEditor(null)} onDelete={(n) => { setEditor(null); setToDelete(n); }} onAdded={(parentId) => {
         if (parentId && !expanded.has(parentId)) toggle(parentId);

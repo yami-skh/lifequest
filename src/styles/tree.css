@@ -83,3 +83,18 @@
 .icon-pick { height: 48px; border-radius: 12px; border: 2px solid transparent; background: var(--surface-2); display: flex; align-items: center; justify-content: center; }
 .icon-pick.on { border-color: currentColor; }
 
+
+/* созвездие (0.9): небо всегда тёмное, в любой теме */
+.sky { position: relative; height: calc(100dvh - 230px - var(--safe-b)); min-height: 380px; margin: 0 -18px; overflow: hidden; background: radial-gradient(ellipse at 50% 40%, #151A2B, #07080B 75%); color: #ECEDF1; }
+.sky-svg { width: 100%; height: 100%; display: block; touch-action: none; cursor: grab; user-select: none; }
+.sky-area { font-size: 11px; font-weight: 800; letter-spacing: 0.8px; font-family: var(--body); }
+.sky-label { font-size: 10.5px; font-weight: 700; fill: #ECEDF1; font-family: var(--body); }
+.sky-label.fog { fill: #8B92A0; font-weight: 500; opacity: 0.75; }
+.sky-star { cursor: pointer; }
+.sky-legend { position: absolute; left: 0; right: 0; bottom: 84px; display: flex; justify-content: center; gap: 12px; font-size: 11px; color: #8B92A0; pointer-events: none; }
+.sky-legend .rust { color: #C98A5A; }
+.sky-card { position: absolute; left: 14px; right: 14px; bottom: 12px; display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 18px; background: #171A21; border: 1px solid #2A2F3B; color: #ECEDF1; }
+.sky-card-lvl { font-family: var(--display); font-weight: 700; color: #ECEDF1; }
+.sky-card-text { flex: 1; min-width: 0; }
+.sky-card-sub { color: #A3A9B6; }
+.sky-card-open { font-weight: 800; color: #F2B544; font-size: 14px; }

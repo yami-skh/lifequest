@@ -13,6 +13,7 @@ import { Journal } from './screens/Journal';
 import { More } from './screens/More';
 import { Changelog, WhatsNew } from './screens/Changelog';
 import { Settings } from './screens/Settings';
+import { ReminderSync } from './components/Reminders';
 import { Achievements } from './screens/Achievements';
 import { Backup } from './screens/Backup';
 import { QuestDetail, Quests } from './screens/Quests';
@@ -70,6 +71,7 @@ export function App() {
       </nav>
       {entry && <EntrySheet preset={entry} onClose={() => setEntry(null)} />}
       <WhatsNew />
+      <ReminderSync />
       <Toasts />
     </WorldContext.Provider>
   );
