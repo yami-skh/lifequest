@@ -44,7 +44,7 @@
   *TEMPLATE_PROMPT:4
 - **templates.test.ts** (45)
   goalsOf:5
-- **templates.ts** (127) — Готовые шаблоны путей (мастер-план §12). Формат — engine/templates.ts. ЧЕРНОВИК: содержание на согласовании.
+- **templates.ts** (127) — Готовые шаблоны путей (мастер-план §12). Формат — engine/templates.ts.
   T:5, P:6, sk:9, M:18, BODY:26, MIND:27, TECH:28, ART:29, MONEY:30, PEOPLE:31, CALM:32, *TEMPLATES:34
 
 ## src/db
