@@ -673,6 +673,33 @@
       "w": 390,
       "x": 1290,
       "y": 0
+    },
+    "TreeBefore.dc.html": {
+      "h": 860,
+      "page": "tree-read",
+      "radius": 28,
+      "title": "1. Было",
+      "w": 390,
+      "x": 0,
+      "y": 0
+    },
+    "TreeAfter.dc.html": {
+      "h": 1180,
+      "page": "tree-read",
+      "radius": 28,
+      "title": "2. Стало",
+      "w": 390,
+      "x": 430,
+      "y": 0
+    },
+    "TreeLegend.dc.html": {
+      "h": 900,
+      "page": "tree-read",
+      "radius": 28,
+      "title": "3. Подсказка «?»",
+      "w": 390,
+      "x": 860,
+      "y": 0
     }
   },
   "createdOnFiles": {
@@ -682,7 +709,7 @@
   "designSystems": [],
   "launch": {
     "view": "canvas",
-    "page": "friends"
+    "page": "tree-read"
   },
   "notes": {
     "aiTitle": {
@@ -863,6 +890,14 @@
       "text": "Друзья: напарники по коду, без регистрации (ступень 1 — анонимный ключ)",
       "x": 0,
       "y": -260
+    },
+    "tree-readTitle": {
+      "kind": "title1",
+      "maxW": 1720,
+      "page": "tree-read",
+      "text": "Дерево: читаемость — один язык прогресса, состояния с подписью, связи веток (RPG без лишнего)",
+      "x": 0,
+      "y": -260
     }
   },
   "order": [
@@ -939,7 +974,10 @@
     "FriendsInvite.dc.html",
     "FriendsList.dc.html",
     "FriendWeek.dc.html",
-    "FriendsPrivacy.dc.html"
+    "FriendsPrivacy.dc.html",
+    "TreeBefore.dc.html",
+    "TreeAfter.dc.html",
+    "TreeLegend.dc.html"
   ],
   "pages": [
     {
@@ -1017,6 +1055,10 @@
     {
       "id": "friends",
       "name": "Друзья"
+    },
+    {
+      "id": "tree-read",
+      "name": "Дерево: читаемость"
     }
   ],
   "title": "LifeQuest — макет"
