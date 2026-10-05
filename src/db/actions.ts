@@ -1,5 +1,5 @@
 // Все изменения данных.
-import { AREA_ICONS, AREA_ICON_BY_TITLE, db, nowIso, uid, type Entry, type Metric, type Milestone, type Node, type NodeKind, type Quest, type Requirement } from './db';
+import { AREA_ICONS, AREA_ICON_BY_TITLE, db, nowIso, uid, type Entry, type Metric, type Milestone, type Node, type NodeKind, type Profile, type Quest, type Requirement } from './db';
 import { WEEKLY_TEMPLATES, weekStart } from '../engine/quests';
 import { MILESTONE_XP, RECORD_XP, bestRepsAt, isRecord, reached, valueFromSets, type WorkSet } from '../engine/metrics';
 import { STAGE_BONUS, stagesOf } from '../engine/stages';
@@ -203,6 +203,9 @@ export async function toggleExperiment(name: string) {
 }
 export const setAiCode = (code: string) => db.profile.update('me', { aiCode: code.trim() || undefined });
 export const setSeenVersion = (v: string) => db.profile.update('me', { seenVersion: v });
+/** Ключ игрока для «Друзей» (lib/friends.ts). undefined — вышел из друзей. */
+export const setPlayer = (player: Profile['player']) => db.profile.update('me', { player });
+export const setFriendsShare = (friendsShare: NonNullable<Profile['friendsShare']>) => db.profile.update('me', { friendsShare });
 export const setName = (name: string) => db.profile.update('me', { name: name.trim() || 'Герой' });
 
 export async function unlockAchievements(ids: string[]) {

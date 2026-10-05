@@ -23,6 +23,7 @@ import { localDate } from './engine/dates';
 import { EntrySheet, type EntryPreset } from './screens/EntrySheet';
 import { logError } from './lib/errorlog';
 import { Onboarding } from './components/Onboarding';
+import { Friends } from './screens/Friends';
 
 export function App() {
   const [world, setWorld] = useState<World | null>(null);
@@ -65,9 +66,10 @@ export function App() {
   else if (screen === 'quests') page = <Quests />;
   else if (screen === 'metrics' && param) page = <MetricDetail id={param} key={param} />;
   else if (screen === 'metrics') page = <Metrics />;
+  else if (screen === 'friends') page = <Friends sub={param} arg={route[2]} key={route.join('/')} />;
   else page = <Character onAdd={(p) => openEntry(p)} />;
 
-  const tab = screen === 'tree' || screen === 'skill' ? 'tree' : screen === 'quests' ? 'quests' : ['more', 'achievements', 'backup', 'metrics', 'journal', 'changelog', 'settings'].includes(screen) ? 'more' : 'home';
+  const tab = screen === 'tree' || screen === 'skill' ? 'tree' : screen === 'quests' ? 'quests' : ['more', 'achievements', 'backup', 'metrics', 'journal', 'changelog', 'settings', 'friends'].includes(screen) ? 'more' : 'home';
 
   return (
     <WorldContext.Provider value={derived}>

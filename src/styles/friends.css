@@ -1,0 +1,32 @@
+/* «Друзья» (screens/Friends.tsx). Макет: холст, страница «Друзья». */
+.section-label.gold { color: var(--gold); }
+.fr-code-card { align-items: stretch; }
+.fr-code { font-family: Unbounded, sans-serif; font-size: 26px; font-weight: 700; letter-spacing: 3px; text-align: center; padding: 6px 0; }
+.fr-input { letter-spacing: 2px; font-weight: 700; text-transform: uppercase; }
+.fr-err { color: var(--red); }
+.fr-danger { color: var(--red); align-self: center; text-align: center; }
+
+.fr-card { color: var(--fg); text-decoration: none; }
+.fr-head { display: flex; align-items: center; gap: 12px; }
+.fr-head > svg { color: var(--muted-2); }
+.fr-who { flex: 1; }
+.fr-ava { position: relative; width: 44px; height: 44px; border-radius: 14px; background: color-mix(in srgb, var(--gold) 16%, var(--surface-2)); color: var(--gold); display: flex; align-items: center; justify-content: center; font-family: Unbounded, sans-serif; font-weight: 700; font-size: 18px; flex-shrink: 0; }
+.fr-lvl { position: absolute; right: -6px; bottom: -6px; padding: 1px 5px; border-radius: 8px; background: var(--gold); color: var(--on-gold); font-family: Manrope, sans-serif; font-size: 10px; font-weight: 800; }
+.fr-week { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.fr-dots { display: flex; gap: 4px; }
+.fr-dots > span { width: 16px; height: 6px; border-radius: 3px; background: var(--line); }
+.fr-dots > span.on { background: var(--gold); }
+
+.fr-reacts { display: flex; gap: 6px; flex-wrap: wrap; }
+.fr-react { min-width: 48px; min-height: 40px; padding: 0 12px; border-radius: 99px; background: var(--surface-2); border: 1px solid var(--line); font-size: 17px; }
+.fr-react.on { background: color-mix(in srgb, var(--gold) 18%, var(--surface-2)); border-color: var(--gold); }
+
+.fr-more { display: flex; align-items: center; gap: 12px; color: var(--fg); text-decoration: none; border-style: dashed; border-color: var(--line-2); }
+.fr-plus { width: 36px; height: 36px; border-radius: 12px; background: var(--surface-2); color: var(--gold); display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 800; }
+
+.fr-stats { display: flex; gap: 8px; }
+.fr-stats > span { flex: 1; background: var(--surface-2); border-radius: 14px; padding: 12px 6px; display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center; }
+.fr-stats b { font-family: Unbounded, sans-serif; font-size: 20px; }
+.fr-stats small { font-size: 11.5px; color: var(--muted); font-weight: 700; }
+.fr-area { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 12px; background: var(--surface-2); }
+.fr-area .strong { flex: 1; }

@@ -26,7 +26,7 @@ const THEMES: { id: ThemePref; label: string }[] = [
   { id: 'light', label: 'Светлая' },
 ];
 
-function Toggle({ on, title, sub, onClick }: { on: boolean; title: string; sub?: string; onClick: () => void }) {
+export function Toggle({ on, title, sub, onClick }: { on: boolean; title: string; sub?: string; onClick: () => void }) {
   return (
     <button type="button" class="menu-row" role="switch" aria-checked={on} onClick={onClick}>
       <span class="menu-row-text"><span class="strong">{title}</span>{sub && <span class="muted small">{sub}</span>}</span>

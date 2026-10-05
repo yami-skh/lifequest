@@ -4,10 +4,12 @@
 //
 // POST /goals  { code, skill: { title, path[], level, levelName, goals[] }, wish? }  →  { stages, comment, remaining }
 // GET  /quota?code=…  →  { remaining } — сколько запросов осталось сегодня (для подписи в приложении).
+// Друзья (friends.ts, docs/arch/11-friends.md): /player, /friends, /card, /reaction — база D1 (binding DB).
 // Секреты: ANTHROPIC_API_KEY, INVITE_CODES ("код1,код2"). Переменные: MODEL, EFFORT, LIMIT_PER_CODE, LIMIT_TOTAL.
 import Anthropic from '@anthropic-ai/sdk';
 import { betaZodOutputFormat } from '@anthropic-ai/sdk/helpers/beta/zod';
 import { z } from 'zod';
+import { FriendsError, d1, handleFriends } from './friends';
 
 export interface Env {
   ANTHROPIC_API_KEY: string;
@@ -17,6 +19,7 @@ export interface Env {
   LIMIT_PER_CODE?: string;
   LIMIT_TOTAL?: string;
   USAGE: KVNamespace;
+  DB?: D1Database;
 }
 
 const ALLOWED_ORIGINS = ['https://yami-skh.github.io', 'https://localhost', 'http://localhost:5173'];
@@ -101,7 +104,7 @@ export const MODELS: Record<string, { effort: boolean; fallbacks: boolean }> = {
 // ---- HTTP ----
 function cors(origin: string | null): Record<string, string> {
   const allow = origin && ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
-  return { 'Access-Control-Allow-Origin': allow, 'Access-Control-Allow-Methods': 'GET, POST, OPTIONS', 'Access-Control-Allow-Headers': 'Content-Type', Vary: 'Origin' };
+  return { 'Access-Control-Allow-Origin': allow, 'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS', 'Access-Control-Allow-Headers': 'Content-Type, Authorization', Vary: 'Origin' };
 }
 const json = (body: unknown, status: number, origin: string | null) =>
   new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json; charset=utf-8', ...cors(origin) } });
@@ -111,6 +114,17 @@ export default {
     const origin = req.headers.get('Origin');
     if (req.method === 'OPTIONS') return new Response(null, { status: 204, headers: cors(origin) });
     const url = new URL(req.url);
+
+    if (/^\/(player|friends|card|reaction)(\/|$)/.test(url.pathname)) {
+      if (!env.DB) return json({ error: 'off', message: 'Друзья на сервере ещё не включены' }, 503, origin);
+      try {
+        const r = await handleFriends(d1(env.DB), req, url.pathname);
+        if (r) return json(r.body, r.status, origin);
+      } catch (e) {
+        if (e instanceof FriendsError) return json({ error: e.code, message: e.message }, e.status, origin);
+        return json({ error: 'internal', message: 'Ошибка сервера, попробуй позже' }, 500, origin);
+      }
+    }
     // Терпимо к тому, как вставили секрет: кавычки, пробелы, переносы, невидимые символы.
     const codes = (env.INVITE_CODES ?? '').replace(/[﻿​"'`]/g, '').split(/[,;\s]+/).filter(Boolean);
 

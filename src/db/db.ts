@@ -26,6 +26,10 @@ export interface Profile {
   experiments?: string[];
   /** Новая установка: путь ещё не выбран — показать экран «Кем хочешь стать?» (components/Onboarding.tsx). */
   onboarding?: boolean;
+  /** «Друзья» (docs/arch/11-friends.md): анонимный ключ игрока. Секрет — только тут и в резервной копии. */
+  player?: { id: string; secret: string; code: string };
+  /** Что видят друзья; нет поля — DEFAULT_SHARE (engine/friends.ts). */
+  friendsShare?: { week: boolean; areas: boolean; skills: boolean };
 }
 
 export interface Requirement { nodeId: string; minProgress?: number; minLevel?: number }

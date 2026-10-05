@@ -14,7 +14,9 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
+      # Зависимости сервера — до проверки: тесты друзей (server/src/*.test.ts) идут в общем vitest.
+      - run: npm ci --prefix server
       - run: npm run check
-      - name: Сервер AI — типы
+      - name: Сервер — типы
         working-directory: server
-        run: npm ci && npx tsc --noEmit
+        run: npx tsc --noEmit
