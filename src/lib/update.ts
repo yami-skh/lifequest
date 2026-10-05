@@ -10,11 +10,11 @@ import { Directory, Filesystem } from '@capacitor/filesystem';
 import { FileTransfer } from '@capacitor/file-transfer';
 import { FileOpener } from '@capawesome-team/capacitor-file-opener';
 import { cmpVersion } from '../engine/version';
-import { getChannel } from './channel';
+import { SITE, getChannel } from './channel';
 import { toast } from './toast';
 import { logError } from './errorlog';
 
-export const SITE = 'https://yami-skh.github.io/lifequest/';
+export { SITE };
 /** Канал APK: стабильная — корень сайта, бета — папка beta/ (scripts/deploy.mjs --beta). */
 const channelSite = () => (getChannel() === 'beta' ? `${SITE}beta/` : SITE);
 export interface Remote { version: string; native: string; bundle: string; checksum: string; apk: string }

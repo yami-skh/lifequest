@@ -290,12 +290,13 @@ function ChannelPicker() {
         toast({ kind: 'info', title: 'Канал: бета', sub: 'Обновления придут при следующей проверке' });
         checkForUpdate(true);
       } else {
-        // Снимок данных, откат к сборке из APK и перезапуск — дальше обновится до стабильной.
+        // Снимок данных, скачать стабильную и сразу включить — приложение перезапустится уже на ней.
+        toast({ kind: 'info', title: 'Переходим на стабильную', sub: 'Скачиваю сборку, приложение перезапустится' });
         await setChannel('stable');
       }
     } catch (e) {
       logError(e, 'Смена канала');
-      toast({ kind: 'info', title: 'Не удалось сменить канал' });
+      toast({ kind: 'info', title: 'Не удалось сменить канал', sub: e instanceof Error ? e.message : undefined });
     }
     setBusy(false);
   };
