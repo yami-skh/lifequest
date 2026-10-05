@@ -197,6 +197,8 @@ describe('эксперименты', () => {
   it('включается только названный', () => {
     expect(hasExp(['next-action'], 'next-action')).toBe(true);
     expect(hasExp(['next-action'], 'other')).toBe(false);
+    // В бете включено всё, даже без списка.
+    expect(hasExp(undefined, 'friends', true)).toBe(true);
   });
   it('переключение без повторов', () => {
     expect(toggleExp(undefined, 'a')).toEqual(['a']);

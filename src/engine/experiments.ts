@@ -1,5 +1,10 @@
 // Флаг экспериментов: новый UX включается только у тех, кто сам включил эксперимент
 // (скрытый раздел «Настроек», 5 тапов по номеру версии). У брата по умолчанию всё выключено.
+// В бете (версия X.Y.Z-beta.N) включено всё сразу — переключателей там нет.
+import { isBeta } from './version';
+
+/** Эта сборка — бета. */
+export const IS_BETA = typeof __APP_VERSION__ === 'string' && isBeta(__APP_VERSION__);
 
 /** Известные эксперименты: id → что включает. Новый UX за флагом добавлять сюда. */
 export const EXPERIMENTS: { id: string; title: string; sub: string }[] = [
@@ -9,8 +14,8 @@ export const EXPERIMENTS: { id: string; title: string; sub: string }[] = [
   { id: 'templates', title: 'Готовые пути', sub: 'шаблоны навыков в Дереве и свой шаблон от нейросети (фаза 1)' },
 ];
 
-/** Включён ли эксперимент. Список берётся из profile.experiments. */
-export const hasExp = (experiments: readonly string[] | undefined, name: string) => !!experiments?.includes(name);
+/** Включён ли эксперимент. Список берётся из profile.experiments; в бете (beta = true) — всё включено. */
+export const hasExp = (experiments: readonly string[] | undefined, name: string, beta = false) => beta || !!experiments?.includes(name);
 
 /** Переключить эксперимент в списке (без повторов). */
 export function toggleExp(experiments: readonly string[] | undefined, name: string): string[] {

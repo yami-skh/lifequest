@@ -312,7 +312,8 @@ function ShareSettings() {
         onConfirm={async () => {
           try {
             await leave(player!);
-            await toggleExperiment('friends');
+            // Только выключить, если был включён (в бете флагов нет — переключение включило бы его).
+            if (w.profile?.experiments?.includes('friends')) await toggleExperiment('friends');
             toast({ kind: 'info', title: 'Данные удалены с сервера' });
             go('more');
           } catch (e) {

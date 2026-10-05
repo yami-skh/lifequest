@@ -6,7 +6,7 @@ import { Capacitor } from '@capacitor/core';
 import { useWorld } from '../db/world';
 import { db } from '../db/db';
 import { resetAll, setAiCode, setName, toggleExperiment, toggleWeeklyTemplate } from '../db/actions';
-import { EXPERIMENTS } from '../engine/experiments';
+import { EXPERIMENTS, IS_BETA } from '../engine/experiments';
 import { getChannel, setChannel, type Channel } from '../lib/channel';
 import { toast } from '../lib/toast';
 import { AiError, fetchQuota } from '../lib/ai';
@@ -126,13 +126,19 @@ export function Settings() {
       </Group>
 
       {dev && (
-        <Group label="Эксперименты">
-          <div class="menu-list">
-            {EXPERIMENTS.map((e) => (
-              <Toggle key={e.id} on={w.hasExp(e.id)} title={e.title} sub={e.sub} onClick={() => toggleExperiment(e.id)} />
-            ))}
-          </div>
-          <span class="muted small">Незаконченные функции. Включаются только на этом устройстве, у других всё как было.</span>
+        <Group label={IS_BETA ? 'Бета' : 'Эксперименты'}>
+          {IS_BETA ? (
+            <span class="muted small">В бете все новые функции включены сразу: {EXPERIMENTS.map((e) => e.title).join(', ')}.</span>
+          ) : (
+            <>
+              <div class="menu-list">
+                {EXPERIMENTS.map((e) => (
+                  <Toggle key={e.id} on={w.hasExp(e.id)} title={e.title} sub={e.sub} onClick={() => toggleExperiment(e.id)} />
+                ))}
+              </div>
+              <span class="muted small">Незаконченные функции. Включаются только на этом устройстве, у других всё как было.</span>
+            </>
+          )}
           <ChannelPicker />
           <button type="button" class="link small muted" onClick={() => setDev(false)}>Скрыть раздел</button>
         </Group>

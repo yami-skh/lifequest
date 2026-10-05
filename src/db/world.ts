@@ -12,7 +12,7 @@ import { daysBetween } from '../engine/dates';
 import { characterLevel, skillLevel } from '../engine/levels';
 import { bestStreak, currentStreak, localDate } from '../engine/dates';
 import type { Stats } from '../engine/achievements';
-import { hasExp } from '../engine/experiments';
+import { IS_BETA, hasExp } from '../engine/experiments';
 import { nextActions, suggestPaths, type NASkill } from '../engine/nextAction';
 
 export interface World {
@@ -405,7 +405,7 @@ export function derive(w: World) {
     nextActions: () => nextActions(focusSkills.map(naSkill), w.entries),
     /** Нет активных путей: навыки, где ближе всего к следующей ступени. */
     suggestPaths: () => suggestPaths(skills.filter((n) => !n.focus).map(naSkill)),
-    hasExp: (name: string) => hasExp(w.profile?.experiments, name),
+    hasExp: (name: string) => hasExp(w.profile?.experiments, name, IS_BETA),
   };
 }
 

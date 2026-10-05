@@ -44,8 +44,8 @@
 
 ## src/data
 
-- **changelog.ts** (197) — Что нового в версиях — для пользователя, простыми словами. Новые версии — сверху.
-  *ChangeKind:4, *Change:5, *Release:6, *CHANGELOG:8, *SEEN_BEFORE_CHANGELOG:196
+- **changelog.ts** (205) — Что нового в версиях — для пользователя, простыми словами. Новые версии — сверху.
+  *ChangeKind:4, *Change:5, *Release:6, *CHANGELOG:8, *SEEN_BEFORE_CHANGELOG:204
 - **presets.test.ts** (40)
   AREAS:6
 - **presets.ts** (48) — Готовые навыки при ручном добавлении (мастер-план §12): навыки шаблонов, сгруппированные по направлениям,
@@ -76,9 +76,9 @@
   *Stats:3, *AchievementIcon:27, *AchievementDef:32, flag:44, *ACHIEVEMENTS:46, *evaluateAchievements:71
 - **dates.ts** (55) — Даты храним как локальные YYYY-MM-DD.
   *localDate:3, *addDays:10, *daysBetween:16, MONTHS:22, *humanDate:24, *currentStreak:32, *bestStreak:43
-- **engine.test.ts** (242)
-- **experiments.ts** (20) — Флаг экспериментов: новый UX включается только у тех, кто сам включил эксперимент
-  *EXPERIMENTS:5, *hasExp:13, *toggleExp:16
+- **engine.test.ts** (244)
+- **experiments.ts** (25) — Флаг экспериментов: новый UX включается только у тех, кто сам включил эксперимент
+  *IS_BETA:7, *EXPERIMENTS:10, *hasExp:18, *toggleExp:21
 - **friends.test.ts** (53)
   base:5
 - **friends.ts** (72) — Друзья: что уходит на сервер — карточка недели (docs/arch/11-friends.md). Чистая функция, без базы.
@@ -164,8 +164,8 @@
   *Character:16, NextHome:85, WEEK_SHORT:172, TodayCard:175, *plural:236
 - **EntrySheet.tsx** (288) — «＋ Запись» — главный сценарий, цель 15 секунд. Макет: холст, страница «Упрощение», экраны 2–3.
   *EntryPreset:20, LAST_TYPE:22, loadType:23, PhotoPreview:32, *EntrySheet:42, .setType:64, .choosePrimary:102, .addSecondary:111, .onFiles:118, .save:129
-- **Friends.tsx** (353) — «Друзья» (эксперимент friends): напарники по коду, итоги недели и реакции. Макет: холст, страница «Друзья».
-  MONTHS:24, short:25, weekLabel:26, sinceLabel:27, Load:29, useFriends:32, *Friends:54, FriendsMain:60, shareInvite:81, Invite:93, AddByCode:113, Privacy:145, Dots:151, Reactions:155, Avatar:177, FriendsList:182, FriendWeek:221, WeekBlock:255, ShareSettings:279, AddByLink:328
+- **Friends.tsx** (354) — «Друзья» (эксперимент friends): напарники по коду, итоги недели и реакции. Макет: холст, страница «Друзья».
+  MONTHS:24, short:25, weekLabel:26, sinceLabel:27, Load:29, useFriends:32, *Friends:54, FriendsMain:60, shareInvite:81, Invite:93, AddByCode:113, Privacy:145, Dots:151, Reactions:155, Avatar:177, FriendsList:182, FriendWeek:221, WeekBlock:255, ShareSettings:279, AddByLink:329
 - **Journal.tsx** (45)
   *Journal:7
 - **Metrics.tsx** (485) — Замеры и рубежи. Макет: холст, страница «Замеры и рубежи». ARCHITECTURE.md §8.
@@ -174,8 +174,8 @@
   SOON:7, *More:15
 - **Quests.tsx** (447) — Квесты. Макет: холст, страница «Квесты». ARCHITECTURE.md §6.
   KIND_TITLE:14, daysToMonday:16, *QuestCard:22, WeeklyRow:43, *Quests:64, *QuestDetail:148, stepKindLabel:228, DraftKind:232, NewQuestSheet:234, StepBuilder:313, *QuestsBlock:412
-- **Settings.tsx** (353) — Настройки: персонаж, тема, недельные квесты, резервная копия, о приложении, стереть данные.
-  THEMES:23, *Toggle:29, Group:38, *Settings:47, AboutRow:156, hiddenThisSession:186, *UpdateCard:187, AiBlock:220, ChannelPicker:269, ErrorLogRow:316
+- **Settings.tsx** (359) — Настройки: персонаж, тема, недельные квесты, резервная копия, о приложении, стереть данные.
+  THEMES:23, *Toggle:29, Group:38, *Settings:47, AboutRow:162, hiddenThisSession:192, *UpdateCard:193, AiBlock:226, ChannelPicker:275, ErrorLogRow:322
 - **Skill.tsx** (436)
   *stagesToast:23, Fold:26, word:27, *Skill:31, .toggle:61, .onFocus:63, FoldRow:193, WorkoutCard:207, SkillMenu:242, GoalRow:279, Goals:292, Notes:371, GalleryItem:411, FullPhoto:416, Gallery:426
 - **Tree.tsx** (391)
