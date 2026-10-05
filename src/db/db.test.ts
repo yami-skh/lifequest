@@ -1,0 +1,191 @@
+// Тесты базы: действия (actions.ts) и производные значения (world.ts → derive) на настоящей Dexie
+// поверх fake-indexeddb (мастер-план §8: покрыть до логики «Следующего действия»).
+import 'fake-indexeddb/auto';
+import { beforeEach, describe, expect, it } from 'vitest';
+import { db } from './db';
+import {
+  addGoal, addNode, addPresetSkill, completeQuest, createQuest, deleteEntry, deleteNode, finishOnboarding,
+  importTemplate, previewTemplate, saveEntry, toggleFocus, toggleGoal, type EntryDraft,
+} from './actions';
+import { ensureStarter, seedIfEmpty } from './seed';
+import { derive, loadWorld } from './world';
+import { STAGE_BONUS } from '../engine/stages';
+import { secondaryXp } from '../engine/xp';
+import { TEMPLATES } from '../data/templates';
+import { presetsFor } from '../data/presets';
+
+beforeEach(async () => {
+  await db.delete();
+  await db.open();
+  await db.profile.add({ id: 'me', name: 'Тест', createdAt: new Date().toISOString(), starterVersion: 1 });
+});
+
+const world = async () => derive(await loadWorld());
+
+/** Тело › Сила › Отжимания с целями: ступень 1 — две, ступень 2 — одна. */
+async function skillWithGoals() {
+  const area = await addNode(null, 'area', 'Тело', '#FF8A5B');
+  const branch = await addNode(area.id, 'branch', 'Сила');
+  const skill = await addNode(branch.id, 'skill', 'Отжимания');
+  await addGoal(skill.id, 'theory', 'Техника', 1);
+  await addGoal(skill.id, 'practice', '20 подряд', 1);
+  await addGoal(skill.id, 'practice', '50 подряд', 2);
+  const goals = await db.goals.where('skillId').equals(skill.id).sortBy('order');
+  return { area, branch, skill, goals };
+}
+
+const draft = (primaryId: string, extra: Partial<EntryDraft> = {}): EntryDraft => ({
+  type: 'practice', text: 'тренировка', difficulty: 2, primaryId, secondaryIds: [], closeGoalIds: [], outcome: 'ok', photos: [], ...extra,
+});
+
+describe('запись (saveEntry)', () => {
+  it('начисляет XP основному навыку и половину — сопутствующему, закрывает цели', async () => {
+    const { skill, goals } = await skillWithGoals();
+    const other = await addNode(null, 'skill', 'Бег');
+    const r = await saveEntry(draft(skill.id, { secondaryIds: [other.id], closeGoalIds: [goals[1].id] }));
+    expect(r.xp).toBeGreaterThan(0);
+    const w = await world();
+    expect(w.xpBySkill.get(other.id)).toBe(secondaryXp(r.xp));
+    expect(w.totalXp).toBe(r.xp);
+    expect(w.goalsBySkill.get(skill.id)!.find((g) => g.id === goals[1].id)!.done).toBe(true);
+  });
+
+  it('закрытая ступень даёт бонус один раз, даже если цель сняли и закрыли снова', async () => {
+    const { skill, goals } = await skillWithGoals();
+    const r = await saveEntry(draft(skill.id, { closeGoalIds: [goals[0].id, goals[1].id] }));
+    expect(r.stages).toEqual(['Новичок']);
+    await toggleGoal(goals[1].id);
+    expect(await toggleGoal(goals[1].id)).toEqual([]);
+    const bonuses = (await db.entries.toArray()).filter((e) => e.type === 'bonus');
+    expect(bonuses).toHaveLength(1);
+    const w = await world();
+    expect(w.xpBySkill.get(skill.id)).toBe(r.xp + STAGE_BONUS);
+  });
+
+  it('удаление записи убирает её XP', async () => {
+    const { skill } = await skillWithGoals();
+    const r = await saveEntry(draft(skill.id));
+    await deleteEntry(r.entry.id);
+    expect((await world()).totalXp).toBe(0);
+  });
+});
+
+describe('ступени и прогресс (derive)', () => {
+  it('текущая ступень — первая открытая незакрытая; цели следующей не предлагаются', async () => {
+    const { skill, goals } = await skillWithGoals();
+    let w = await world();
+    expect(w.currentStageOf(skill.id)?.stage).toBe(1);
+    expect(w.openGoalsOf(skill.id).map((g) => g.title)).toEqual(['Техника', '20 подряд']);
+    await toggleGoal(goals[0].id);
+    await toggleGoal(goals[1].id);
+    w = await world();
+    expect(w.currentStageOf(skill.id)?.stage).toBe(2);
+    expect(w.openGoalsOf(skill.id).map((g) => g.title)).toEqual(['50 подряд']);
+  });
+
+  it('XP навыка поднимается до ветки и направления', async () => {
+    const { area, branch, skill } = await skillWithGoals();
+    const r = await saveEntry(draft(skill.id));
+    const w = await world();
+    expect(w.xpByNode.get(branch.id)).toBe(r.xp);
+    expect(w.xpByNode.get(area.id)).toBe(r.xp);
+    expect(w.areaOf(skill.id)?.id).toBe(area.id);
+    expect(w.pathOf(skill.id).map((n) => n.title)).toEqual(['Тело', 'Сила', 'Отжимания']);
+  });
+
+  it('требование по прогрессу: закрыто, пока другой навык не дорос', async () => {
+    const { skill, goals } = await skillWithGoals();
+    const pull = await addNode(null, 'skill', 'Подтягивания');
+    await db.nodes.update(pull.id, { requires: [{ nodeId: skill.id, minProgress: 50 }] });
+    let w = await world();
+    expect(w.lockReasons(w.nodeById.get(pull.id)!)).toHaveLength(1);
+    // Техника (×1) + 20 подряд (×2) = 3 из 5 весов = 60%.
+    await toggleGoal(goals[0].id);
+    await toggleGoal(goals[1].id);
+    w = await world();
+    expect(w.lockReasons(w.nodeById.get(pull.id)!)).toEqual([]);
+  });
+
+  it('серия считает сегодняшнюю запись, бонусы — нет', async () => {
+    const { skill, goals } = await skillWithGoals();
+    await toggleGoal(goals[0].id);
+    await toggleGoal(goals[1].id); // бонус за ступень — не действие
+    expect((await world()).streak).toBe(0);
+    await saveEntry(draft(skill.id));
+    expect((await world()).streak).toBe(1);
+  });
+});
+
+describe('фокус, удаление, квесты', () => {
+  it('в фокусе не больше трёх навыков', async () => {
+    const ids = await Promise.all(['a', 'b', 'c', 'd'].map(async (t) => (await addNode(null, 'skill', t)).id));
+    for (const id of ids.slice(0, 3)) expect(await toggleFocus(id)).toBe(true);
+    expect(await toggleFocus(ids[3])).toBe(false);
+    expect((await world()).focusSkills).toHaveLength(3);
+  });
+
+  it('удаление ветки убирает навыки и цели, но XP персонажа остаётся', async () => {
+    const { branch, skill } = await skillWithGoals();
+    const r = await saveEntry(draft(skill.id));
+    await deleteNode(branch.id);
+    expect(await db.nodes.get(skill.id)).toBeUndefined();
+    expect(await db.goals.where('skillId').equals(skill.id).count()).toBe(0);
+    expect((await world()).totalXp).toBe(r.xp);
+  });
+
+  it('квест без навыка: награда персонажу, один раз', async () => {
+    const q = await createQuest({ title: 'Тест', kind: 'side', rewardXp: 150, steps: [{ id: 's', kind: 'custom', title: 'шаг', done: true }] });
+    expect(await completeQuest(q.id)).not.toBeNull();
+    expect(await completeQuest(q.id)).toBeNull();
+    expect((await world()).totalXp).toBe(150);
+  });
+});
+
+describe('шаблоны и первый запуск', () => {
+  const tpl = (id: string) => TEMPLATES.find((t) => t.id === id)!;
+
+  it('импорт дважды не дублирует ничего', async () => {
+    await importTemplate(await previewTemplate(tpl('strong-body')));
+    const counts = async () => [await db.nodes.count(), await db.goals.count(), await db.metrics.count(), await db.quests.count()];
+    const once = await counts();
+    const again = await previewTemplate(tpl('strong-body'));
+    expect([again.nodes.length, again.goals.length, again.metrics.length, again.quest]).toEqual([0, 0, 0, undefined]);
+    await importTemplate(again);
+    expect(await counts()).toEqual(once);
+  });
+
+  it('требования и кампания шаблона ведут на созданные навыки', async () => {
+    await importTemplate(await previewTemplate(tpl('strong-body')));
+    const w = await world();
+    const pull = w.skills.find((s) => s.title === 'Подтягивания')!;
+    expect(w.nodeById.get(pull.requires![0].nodeId)?.title).toBe('Отжимания');
+    const quest = (await db.quests.toArray()).find((q) => q.title === tpl('strong-body').campaign!.title)!;
+    for (const s of quest.steps) expect('skillId' in s && w.nodeById.has(s.skillId)).toBe(true);
+  });
+
+  it('новая установка: экран выбора, без старых стартовых замеров; после выбора — пути и стартовый квест', async () => {
+    await db.delete();
+    await db.open();
+    await seedIfEmpty();
+    await ensureStarter();
+    expect((await db.profile.get('me'))?.onboarding).toBe(true);
+    expect(await db.metrics.count()).toBe(0);
+    await finishOnboarding([tpl('start'), tpl('strong-body')]);
+    const w = await world();
+    expect(w.profile?.onboarding).toBe(false);
+    expect(w.skills).toHaveLength(11);
+    expect(w.quests.map((q) => q.title)).toContain('Обустрой персонажа');
+  });
+
+  it('готовый навык: цели по ступеням и замер, замер не дублируется', async () => {
+    const { branch } = await skillWithGoals();
+    const pull = presetsFor('Тело').find((s) => s.title === 'Подтягивания')!;
+    await addPresetSkill(branch.id, pull);
+    await addPresetSkill(branch.id, pull);
+    const w = await world();
+    const added = w.skills.filter((s) => s.title === 'Подтягивания');
+    expect(added).toHaveLength(2);
+    expect(w.stagesOfSkill(added[0].id).map((s) => s.goals.length)).toEqual(pull.stages.map((s) => s.goals.length));
+    expect(w.metrics.filter((m) => m.title === 'Подтягивания')).toHaveLength(1);
+  });
+});

@@ -57,6 +57,8 @@
 
 - **actions.ts** (461) — Все изменения данных.
   *PhotoDraft:13, *EntryDraft:15, *primaryHistory:29, *saveEntry:36, *deleteEntry:83, *toggleGoal:95, *addGoal:102, *awardStages:111, *toggleFocus:135, *setRequirements:143, *deleteGoal:145, *addNode:149, *renameNode:161, *deleteNode:164, *addNote:182, *toggleNoteStudied:186, *deleteNote:191, *toggleExperiment:196, *setAiCode:200, *setSeenVersion:201, *setName:202, *unlockAchievements:204, *resetAll:209, *createQuest:216, *toggleCustomStep:222, *abandonQuest:230, *deleteQuest:231, *completeQuest:234, *maintainQuests:248, *toggleWeeklyTemplate:273, *addMetric:288, *deleteMetric:293, bonus:302, *addMetricValue:313, *deleteMetricValue:355, *setMilestone:365, *removeMilestone:372, *fmtNum:375, *previewTemplate:380, *previewTemplates:385, freeAreaColor:391, *importTemplate:397, *finishOnboarding:440, *addPresetSkill:447
+- **db.test.ts** (192) — Тесты базы: действия (actions.ts) и производные значения (world.ts → derive) на настоящей Dexie
+  world:23, skillWithGoals:26, draft:37, .tpl:145
 - **db.ts** (244) — Хранилище на устройстве. ARCHITECTURE.md §11.
   *NodeKind:7, *Profile:9, *Requirement:31, *Node:33, *Goal:51, *Entry:63, *EntrySkill:80, *Photo:82, *Unlocked:84, *Note:86, *QuestKind:98, *CountRule:100, *QuestStep:110, *Quest:117, *Metric:136, *MetricValue:147, *Milestone:161, *AREA_ICON_BY_TITLE:176, *AREA_ICONS:180, LifeQuestDB:182, *db:235, *uid:238, *nowIso:243
 - **seed.ts** (66) — Стартовое содержимое. ARCHITECTURE.md §13. Дерево новичок выбирает сам (шаблоны, components/Onboarding.tsx);
