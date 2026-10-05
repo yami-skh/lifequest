@@ -188,7 +188,9 @@ export function Tree({ focusId, onAdd }: { focusId?: string; onAdd?: (p: EntryPr
   const filterChips = () => {
     if (w.skills.length < FILTER_FROM) return null;
     const states = w.skills.map((s) => rowOf(s).state);
-    const chips = FILTERS.map((f) => ({ ...f, n: states.filter((s) => matchesFilter(f.id, s)).length })).filter((f) => f.n > 0);
+    // Только фильтры, которые правда сужают список: «Не начаты 8» из 8 — бесполезен.
+    const chips = FILTERS.map((f) => ({ ...f, n: states.filter((s) => matchesFilter(f.id, s)).length })).filter((f) => f.n > 0 && f.n < states.length);
+    if (!chips.length) return null;
     return (
       <div class="chips scroll-x t2-filters" role="group" aria-label="Показать">
         <button type="button" class={filter ? 'chip big' : 'chip big primary'} aria-pressed={!filter} onClick={() => setFilter(null)}>Все</button>

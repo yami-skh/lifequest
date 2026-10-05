@@ -7,6 +7,17 @@ export interface Release { version: string; date: string; title?: string; change
 
 export const CHANGELOG: Release[] = [
   {
+    version: '0.10.1-beta.10',
+    date: '2026-10-06',
+    title: 'Удобнее с первого запуска',
+    changes: [
+      { kind: 'better', title: '«Начать» видно сразу', sub: 'На первом запуске кнопка внизу экрана — не нужно листать все пути. После — сразу на главный, где понятно, что делать.' },
+      { kind: 'better', title: 'Один активный навык — выбран сам', sub: 'В «+ Новое действие» он уже отмечен: на одно нажатие меньше.' },
+      { kind: 'better', title: 'У нового навыка цели открыты', sub: 'Сразу видно, с чего начать.' },
+      { kind: 'better', title: 'Фильтры дерева — только полезные', sub: 'Если фильтр не сужает список, его нет.' },
+    ],
+  },
+  {
     version: '0.10.1-beta.9',
     date: '2026-10-06',
     changes: [

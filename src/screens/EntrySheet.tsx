@@ -51,7 +51,9 @@ export function EntrySheet({ preset, onClose }: { preset: EntryPreset; onClose: 
   const [type, setTypeState] = useState<EntryType>(() => (preset.workout ? 'workout' : presetGoal ? (presetGoal.kind === 'theory' ? 'learn' : 'practice') : loadType()));
   const [text, setText] = useState('');
   const [difficulty, setDifficulty] = useState<Difficulty>(1);
-  const [skillIds, setSkillIds] = useState<string[]>(preset.skillId ? [preset.skillId] : []);
+  // Активный навык один — он и выбран сразу (минус одно нажатие в самом частом действии). Несколько — не угадываем.
+  const [skillIds, setSkillIds] = useState<string[]>(() =>
+    preset.skillId ? [preset.skillId] : w.hasExp('compact') && w.focusSkills.length === 1 ? [w.focusSkills[0].id] : []);
   const [closeGoals, setCloseGoals] = useState<string[]>(preset.goalId && preset.closeGoal ? [preset.goalId] : []);
   const [outcome, setOutcome] = useState<'ok' | 'fail'>('ok');
   const [failNote, setFailNote] = useState('');

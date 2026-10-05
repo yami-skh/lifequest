@@ -35,7 +35,8 @@ export function Onboarding() {
     setBusy(true);
     try {
       await finishOnboarding(list, name);
-      go(list.length ? 'tree' : '');
+      // На главный: там «Следующее действие» сразу говорит, что делать (выбрать активные навыки). В дереве новичок терялся.
+      go('');
     } catch (e) {
       logError(e, 'Первый запуск');
       setBusy(false);

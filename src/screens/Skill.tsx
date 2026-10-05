@@ -34,7 +34,8 @@ const word = (n: number, one: string, few: string, many: string) =>
 /** Страница навыка. Макет: холст, страница «Навык проще» (тренировочный / обычный / меню ⋯). */
 export function Skill({ id, onAdd }: { id: string; onAdd: (p: EntryPreset) => void }) {
   const w = useWorld();
-  const [fold, setFold] = useState<Fold | null>(null);
+  // Новый навык (действий ещё нет) — сразу открыты цели: это главное, что делать. Дальше — как было (всё свёрнуто).
+  const [fold, setFold] = useState<Fold | null>(() => ((w.entriesBySkill.get(id)?.length ?? 0) === 0 && (w.goalsBySkill.get(id)?.length ?? 0) > 0 ? 'goals' : null));
   const [menu, setMenu] = useState(false);
   const [reqOpen, setReqOpen] = useState(false);
   const node = w.nodeById.get(id);

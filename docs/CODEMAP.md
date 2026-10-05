@@ -27,7 +27,7 @@
   *NextActionCard:15, ChoosePath:71
 - **NumPad.tsx** (79) — Крупная цифровая клавиатура для весов, повторов и целей.
   *NumPadProps:7, parse:21, *fmtInput:22, *NumPad:24, *numFrom:75
-- **Onboarding.tsx** (93) — Первый запуск: «Кем хочешь стать?» — выбор готовых путей вместо общего стартового дерева.
+- **Onboarding.tsx** (94) — Первый запуск: «Кем хочешь стать?» — выбор готовых путей вместо общего стартового дерева.
   SHOWN:13, *Onboarding:15
 - **Reminders.tsx** (98) — Звуки и напоминания: блок настроек, окно «Включить напоминания?» и синхронизация расписания.
   Switch:10, *SoundSettings:20, *ReminderSettings:36, *ReminderPrompt:68, *ReminderSync:88
@@ -48,8 +48,8 @@
 
 ## src/data
 
-- **changelog.ts** (281) — Что нового в версиях — для пользователя, простыми словами. Новые версии — сверху.
-  *ChangeKind:4, *Change:5, *Release:6, *CHANGELOG:8, *SEEN_BEFORE_CHANGELOG:280
+- **changelog.ts** (292) — Что нового в версиях — для пользователя, простыми словами. Новые версии — сверху.
+  *ChangeKind:4, *Change:5, *Release:6, *CHANGELOG:8, *SEEN_BEFORE_CHANGELOG:291
 - **presets.test.ts** (40)
   AREAS:6
 - **presets.ts** (48) — Готовые навыки при ручном добавлении (мастер-план §12): навыки шаблонов, сгруппированные по направлениям,
@@ -186,8 +186,8 @@
   KIND:11, ORDER:16, fmtDate:18, changesWord:19, *WhatsNew:22, ChangeRow:60, *Changelog:70, ReleaseCard:85
 - **Character.tsx** (243) — Главный экран — всё важное примерно в один экран. Макет: холст, страница «Упрощение», экран 1.
   *Character:16, NextHome:85, WEEK_SHORT:172, TodayCard:175, *plural:236
-- **EntrySheet.tsx** (315) — «＋ Запись» — главный сценарий, цель 15 секунд. Макет: холст, страница «Упрощение», экраны 2–3.
-  *EntryPreset:25, LAST_TYPE:27, loadType:28, PhotoPreview:37, *EntrySheet:47, .setType:84, .choosePrimary:122, .addSecondary:131, .onFiles:138, .save:149
+- **EntrySheet.tsx** (317) — «＋ Запись» — главный сценарий, цель 15 секунд. Макет: холст, страница «Упрощение», экраны 2–3.
+  *EntryPreset:25, LAST_TYPE:27, loadType:28, PhotoPreview:37, *EntrySheet:47, .setType:86, .choosePrimary:124, .addSecondary:133, .onFiles:140, .save:151
 - **Friends.tsx** (364) — «Друзья» (эксперимент friends): напарники по коду, итоги недели и реакции. Макет: холст, страница «Друзья».
   MONTHS:24, short:25, weekLabel:26, sinceLabel:27, Load:29, useFriends:32, *Friends:64, FriendsMain:70, shareInvite:91, Invite:103, AddByCode:123, Privacy:155, Dots:161, Reactions:165, Avatar:187, FriendsList:192, FriendWeek:231, WeekBlock:265, ShareSettings:289, AddByLink:339
 - **Journal.tsx** (44)
@@ -200,10 +200,10 @@
   QUEST_SUGGEST:17, STEP_SUGGEST:18, KIND_TITLE:20, daysToMonday:22, *QuestCard:28, WeeklyRow:49, *Quests:70, *QuestDetail:154, stepKindLabel:234, DraftKind:238, NewQuestSheet:240, StepBuilder:319, *QuestsBlock:418
 - **Settings.tsx** (359) — Настройки: персонаж, тема, недельные квесты, резервная копия, о приложении, стереть данные.
   THEMES:23, *Toggle:29, Group:38, *Settings:47, AboutRow:162, hiddenThisSession:192, *UpdateCard:193, AiBlock:226, ChannelPicker:275, ErrorLogRow:322
-- **Skill.tsx** (454)
-  *stagesToast:27, Fold:30, word:31, *Skill:35, .toggle:65, .onFocus:67, FoldRow:202, WorkoutCard:216, SkillMenu:251, GoalRow:288, Goals:307, Notes:389, GalleryItem:429, FullPhoto:434, Gallery:444
-- **Tree.tsx** (698)
-  Editor:27, loadExpanded:34, *Tree:42, .hideHoldHint:63, .openMenu:72, .setMode:85, .toggle:94, .skillCount:112, .skillsIn:115, .menuBtn:118, .renderChildren:125, .rowOf:137, .summaryOf:151, .headSummary:152, .renderSkillClear:159, .filtered:187, .filterChips:188, .renderNode:202, KIND_LABEL:401, MoveSheet:404, TreeHelp:450, NodeEditor:483, .has:603, .goalCount:606, .close:611, .submit:617
+- **Skill.tsx** (455)
+  *stagesToast:27, Fold:30, word:31, *Skill:35, .toggle:66, .onFocus:68, FoldRow:203, WorkoutCard:217, SkillMenu:252, GoalRow:289, Goals:308, Notes:390, GalleryItem:430, FullPhoto:435, Gallery:445
+- **Tree.tsx** (700)
+  Editor:27, loadExpanded:34, *Tree:42, .hideHoldHint:63, .openMenu:72, .setMode:85, .toggle:94, .skillCount:112, .skillsIn:115, .menuBtn:118, .renderChildren:125, .rowOf:137, .summaryOf:151, .headSummary:152, .renderSkillClear:159, .filtered:187, .filterChips:188, .renderNode:204, KIND_LABEL:403, MoveSheet:406, TreeHelp:452, NodeEditor:485, .has:605, .goalCount:608, .close:613, .submit:619
 
 ## src/styles
 
@@ -227,5 +227,5 @@
   квесты:1
 - **skill.css** (115) — навык
   навык:1, навык: фокус, требования, ступени:21, навык 0.6: шапка, тренировка, сворачиваемые блоки, меню ⋯:58, AI-помощник целей:93
-- **tree.css** (237) — дерево
-  дерево:1, дерево: направления-карточки, ветви-линии, навыки-узлы:20, вложенные ветки — короткий отступ, линия идёт от ромбика:38, туман: навык ещё не исследован:64, ржавчина: 60+ дней без записей:68, созвездие (0.9): небо всегда тёмное, в любой теме:87, готовые пути (шаблоны) — components/Templates.tsx:103, готовые навыки в «Новый навык» (data/presets.ts):141, первый запуск (components/Onboarding.tsx):151, объёмное созвездие (components/StarMap3D.tsx):163, «Понятное дерево» (эксперимент tree-clear): главный счёт — этап. Макет: холст, «Дерево: читаемость».:170, подсказка «?»: те же плитки вне дерева:201, Удержание и свайп (lib/gestures.ts). Макет: холст, «Дерево: удержание».:207
+- **tree.css** (238) — дерево
+  дерево:1, дерево: направления-карточки, ветви-линии, навыки-узлы:20, вложенные ветки — короткий отступ, линия идёт от ромбика:38, туман: навык ещё не исследован:64, ржавчина: 60+ дней без записей:68, созвездие (0.9): небо всегда тёмное, в любой теме:87, готовые пути (шаблоны) — components/Templates.tsx:103, готовые навыки в «Новый навык» (data/presets.ts):141, первый запуск (components/Onboarding.tsx):151, «Начать» видно сразу, без пролистывания всех путей: блок прилипает к низу экрана.:159, объёмное созвездие (components/StarMap3D.tsx):164, «Понятное дерево» (эксперимент tree-clear): главный счёт — этап. Макет: холст, «Дерево: читаемость».:171, подсказка «?»: те же плитки вне дерева:202, Удержание и свайп (lib/gestures.ts). Макет: холст, «Дерево: удержание».:208
