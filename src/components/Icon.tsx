@@ -61,6 +61,10 @@ const PATHS: Record<string, string> = {
   spark: 'M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8zM19 15l.9 2.6 2.6.9-2.6.9L19 22l-.9-2.6-2.6-.9 2.6-.9z',
   undo: 'M9 14L4 9l5-5M4 9h11a5 5 0 0 1 0 10h-3',
   download: 'M12 4v11M7 10l5 5 5-5M5 20h14',
+  grid: 'M4 5h7v6H4zM13 5h7v6h-7zM4 13h7v6H4zM13 13h7v6h-7z',
+  clipboard: 'M9 4h6v3H9zM7 6H5v14h14V6h-2',
+  file: 'M14 3H6v18h12V7zM14 3v4h4',
+  flag: 'M5 21V4M5 4h11l-2 4 2 4H5',
 };
 
 export type IconName = keyof typeof PATHS | string;

@@ -1,5 +1,5 @@
 // Все изменения данных.
-import { db, nowIso, uid, type Entry, type Metric, type Milestone, type Node, type NodeKind, type Quest, type Requirement } from './db';
+import { AREA_ICONS, AREA_ICON_BY_TITLE, db, nowIso, uid, type Entry, type Metric, type Milestone, type Node, type NodeKind, type Quest, type Requirement } from './db';
 import { WEEKLY_TEMPLATES, weekStart } from '../engine/quests';
 import { MILESTONE_XP, RECORD_XP, bestRepsAt, isRecord, reached, valueFromSets, type WorkSet } from '../engine/metrics';
 import { STAGE_BONUS, stagesOf } from '../engine/stages';
@@ -8,6 +8,7 @@ import { localDate } from '../engine/dates';
 import type { GoalKind } from '../engine/progress';
 import { toggleExp } from '../engine/experiments';
 import { planImport, type ImportPlan, type Template } from '../engine/templates';
+import { AREA_COLORS } from './seed';
 
 export interface PhotoDraft { blob: Blob; thumb: Blob; width: number; height: number }
 
@@ -377,8 +378,19 @@ export const fmtNum = (n: number) => (Math.round(n * 10) / 10).toString().replac
 
 /** План импорта по текущим данным: показать «добавится N, уже есть M» до записи. */
 export async function previewTemplate(t: Template): Promise<ImportPlan> {
+  return (await previewTemplates([t]))[0];
+}
+
+/** Планы сразу для нескольких шаблонов (каталог: «есть 3 из 8»), данные читаются один раз. */
+export async function previewTemplates(ts: Template[]): Promise<ImportPlan[]> {
   const [nodes, goals, metrics, quests] = await Promise.all([db.nodes.toArray(), db.goals.toArray(), db.metrics.toArray(), db.quests.toArray()]);
-  return planImport(t, { nodes, goals, metrics, quests }, uid);
+  return ts.map((t) => planImport(t, { nodes, goals, metrics, quests }, uid));
+}
+
+/** Цвет для нового направления без цвета (шаблон от нейросети): первый ещё не занятый. */
+async function freeAreaColor() {
+  const used = new Set((await db.nodes.where('kind').equals('area').toArray()).map((n) => n.color));
+  return AREA_COLORS.find((c) => !used.has(c)) ?? AREA_COLORS[used.size % AREA_COLORS.length];
 }
 
 /** Добавить шаблон в дерево одной транзакцией. Существующее не меняется. */
@@ -397,8 +409,12 @@ export async function importTemplate(plan: ImportPlan) {
     };
     for (const n of plan.nodes) {
       const node: Node = { id: n.id, parentId: n.parentId, kind: n.kind, title: n.title, order: await nextOrder(n.parentId), createdAt: now };
-      if (n.color) node.color = n.color;
-      if (n.icon) node.icon = n.icon;
+      // Шаблон может прийти от нейросети: цвет и иконку берём только знакомые.
+      if (n.kind === 'area') {
+        node.color = n.color && /^#[0-9a-f]{6}$/i.test(n.color) ? n.color : await freeAreaColor();
+        const icon = n.icon && AREA_ICONS.includes(n.icon) ? n.icon : AREA_ICON_BY_TITLE[n.title];
+        if (icon) node.icon = icon;
+      }
       if (n.requires?.length) node.requires = n.requires;
       await db.nodes.add(node);
     }

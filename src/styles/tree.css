@@ -98,3 +98,42 @@
 .sky-card-text { flex: 1; min-width: 0; }
 .sky-card-sub { color: #A3A9B6; }
 .sky-card-open { font-weight: 800; color: #F2B544; font-size: 14px; }
+
+
+/* готовые пути (шаблоны) — components/Templates.tsx */
+.tree-head-btns { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
+.tpl-open { background: var(--gold-bg); border: 1px solid var(--gold-line); color: var(--gold); }
+.tpl-hint { display: flex; flex-direction: column; gap: 6px; padding: 14px; border-radius: 18px; background: var(--surface); border: 1px dashed var(--line-2); text-align: left; color: var(--fg); width: 100%; }
+.tpl-hint .muted { font-size: 13px; }
+.tpl-hint .tpl-go { color: var(--gold); font-weight: 800; font-size: 13.5px; }
+.tpl-lead { margin-top: -6px; }
+.tpl-card { display: flex; align-items: center; gap: 10px; width: 100%; padding: 12px 12px 12px 14px; border-radius: 16px; background: var(--surface-2); border: 1px solid var(--line); color: var(--fg); text-align: left; }
+.tpl-card > svg { color: var(--muted); flex-shrink: 0; }
+.tpl-card-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 5px; }
+.tpl-card-top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.tpl-card-title { font-family: var(--display); font-size: 14.5px; font-weight: 700; }
+.tpl-have { font-size: 11.5px; font-weight: 700; color: var(--green); white-space: nowrap; }
+.tpl-desc { font-size: 12.5px; color: var(--fg-2); }
+.tpl-chips { display: flex; flex-wrap: wrap; gap: 4px; }
+.tpl-chip { font-size: 11.5px; font-weight: 700; border-radius: 8px; padding: 3px 8px; }
+.tpl-gold { color: var(--gold); }
+.tpl-dashed { border-style: dashed; border-color: var(--line-2); background: none; }
+.tpl-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.tpl-stats > div { display: flex; flex-direction: column; padding: 8px 10px; border-radius: 12px; background: var(--surface-2); }
+.tpl-stats b { font-family: var(--display); font-size: 18px; }
+.tpl-stats span { font-size: 11.5px; color: var(--muted); font-weight: 600; }
+.notice.ok { background: color-mix(in srgb, var(--green) 12%, transparent); border: 0; color: var(--green-fg); padding: 10px 12px; }
+.tpl-skill { display: flex; align-items: center; gap: 12px; width: 100%; padding: 10px 12px; border-radius: 14px; background: var(--surface-2); border: 0; color: var(--fg); text-align: left; }
+.tpl-skill:disabled { opacity: 0.7; }
+.tpl-bar { width: 6px; align-self: stretch; border-radius: 3px; background: var(--c); flex-shrink: 0; }
+.tpl-skill-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.tpl-new { font-size: 11.5px; font-weight: 800; color: var(--on-gold); background: var(--gold); border-radius: 6px; padding: 2px 6px; flex-shrink: 0; }
+.tpl-plus { font-size: 11.5px; font-weight: 700; color: var(--green); white-space: nowrap; flex-shrink: 0; }
+.tpl-goals { padding: 4px 4px 4px 18px; display: flex; flex-direction: column; gap: 4px; }
+.tpl-camp { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 14px; border: 1px solid var(--gold-line); }
+.tpl-camp > svg { color: var(--gold); flex-shrink: 0; }
+.tpl-text { font-family: ui-monospace, monospace; font-size: 12px; line-height: 1.5; }
+.tpl-text.bad { border-color: var(--red); }
+.tpl-inline { display: inline; padding: 0; font-size: inherit; }
+.sheet-back { margin-left: -8px; }
+.sheet-head-l { display: flex; align-items: center; gap: 4px; min-width: 0; }

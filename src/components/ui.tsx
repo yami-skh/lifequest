@@ -70,7 +70,7 @@ export function TopBar({ title, crumbs, right }: { title?: string; crumbs?: stri
   );
 }
 
-export function Sheet({ open, onClose, title, children }: { open: boolean; onClose: () => void; title: string; children: ComponentChildren }) {
+export function Sheet({ open, onClose, onBack, title, children }: { open: boolean; onClose: () => void; onBack?: () => void; title: string; children: ComponentChildren }) {
   useBackClose(open, onClose);
   useEffect(() => {
     if (!open) return;
@@ -86,7 +86,12 @@ export function Sheet({ open, onClose, title, children }: { open: boolean; onClo
       <div class="sheet" role="dialog" aria-modal="true" aria-label={title}>
         <div class="sheet-handle" />
         <div class="sheet-head">
-          <h2 class="sheet-title">{title}</h2>
+          {onBack ? (
+            <div class="sheet-head-l">
+              <button type="button" class="icon-btn sheet-back" aria-label="Назад" onClick={onBack}><Icon name="back" /></button>
+              <h2 class="sheet-title">{title}</h2>
+            </div>
+          ) : <h2 class="sheet-title">{title}</h2>}
           <button type="button" class="icon-btn round" aria-label="Закрыть" onClick={onClose}>
             <Icon name="x" size={20} stroke={2.4} />
           </button>

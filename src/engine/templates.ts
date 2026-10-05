@@ -88,6 +88,8 @@ export interface ImportPlan {
   goals: PlanGoal[];
   metrics: PlanMetric[];
   quest?: { title: string; rewardXp: number; steps: { title: string; skillId: string; stage: number }[] };
+  /** Навыки шаблона по порядку: куда легли и новые ли (для предпросмотра). */
+  skills: { key: string; id: string; isNew: boolean }[];
   /** Сколько уже было и пропущено (для предпросмотра «добавится 12 целей, 3 уже есть»). */
   skipped: { nodes: number; goals: number; metrics: number; quest: boolean };
 }
@@ -96,7 +98,7 @@ const norm = (s: string) => s.trim().toLowerCase().replace(/ё/g, 'е');
 
 /** Чистая функция: ничего не пишет. newId — генератор id для новых узлов. */
 export function planImport(t: Template, have: { nodes: ExistingNode[]; goals: ExistingGoal[]; metrics: ExistingMetric[]; quests?: ExistingQuest[] }, newId: () => string): ImportPlan {
-  const plan: ImportPlan = { nodes: [], goals: [], metrics: [], skipped: { nodes: 0, goals: 0, metrics: 0, quest: false } };
+  const plan: ImportPlan = { nodes: [], goals: [], metrics: [], skills: [], skipped: { nodes: 0, goals: 0, metrics: 0, quest: false } };
   const all: ExistingNode[] = [...have.nodes];
   const skillIds = new Map<string, string>();
   const goalSet = new Set(have.goals.map((g) => `${g.skillId}|${norm(g.title)}`));
@@ -118,8 +120,10 @@ export function planImport(t: Template, have: { nodes: ExistingNode[]; goals: Ex
   const walk = (b: TplBranch, parentId: string) => {
     const branchId = ensure(parentId, 'branch', b.title);
     for (const s of b.skills ?? []) {
+      const before = plan.nodes.length;
       const id = ensure(branchId, 'skill', s.title);
       skillIds.set(s.key, id);
+      plan.skills.push({ key: s.key, id, isNew: plan.nodes.length > before });
       for (const st of s.stages) {
         for (const g of st.goals) {
           const k = `${id}|${norm(g.title)}`;
@@ -165,4 +169,42 @@ export function planImport(t: Template, have: { nodes: ExistingNode[]; goals: Ex
     };
   }
   return plan;
+}
+
+// ---------- для экранов: разбор вставленного текста, подсчёт ----------
+
+/** Текст от нейросети или из файла → шаблон. Нейросети оборачивают JSON в ```json и пишут пояснения — берём от первой { до последней }. */
+export function parseTemplateText(text: string): { ok: true; template: Template } | { ok: false; errors: string[] } {
+  const from = text.indexOf('{');
+  const to = text.lastIndexOf('}');
+  if (from < 0 || to <= from) return { ok: false, errors: ['Не нашёл шаблон: нужен текст в фигурных скобках { … }'] };
+  let data: unknown;
+  try {
+    data = JSON.parse(text.slice(from, to + 1));
+  } catch {
+    return { ok: false, errors: ['Текст обрезан или в нём ошибка — скопируй ответ целиком'] };
+  }
+  return validateTemplate(data);
+}
+
+/** Все навыки шаблона с путём (направление › ветка …), по порядку. */
+export function templateSkills(t: Template): { skill: TplSkill; area: TplArea; path: string[] }[] {
+  const out: { skill: TplSkill; area: TplArea; path: string[] }[] = [];
+  const walk = (a: TplArea, b: TplBranch, path: string[]) => {
+    const here = [...path, b.title];
+    for (const s of b.skills ?? []) out.push({ skill: s, area: a, path: here });
+    for (const sub of b.branches ?? []) walk(a, sub, here);
+  };
+  for (const a of t.areas) for (const b of a.branches) walk(a, b, [a.title]);
+  return out;
+}
+
+/** Сколько всего в шаблоне: для карточки каталога. */
+export function templateStats(t: Template) {
+  const skills = templateSkills(t);
+  return {
+    skills: skills.length,
+    goals: skills.reduce((n, x) => n + x.skill.stages.reduce((m, st) => m + st.goals.length, 0), 0),
+    metrics: skills.filter((x) => x.skill.metric).length,
+  };
 }
