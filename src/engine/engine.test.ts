@@ -6,7 +6,7 @@ import { bestStreak, currentStreak } from './dates';
 import { assignStages, currentStage, stagesOf } from './stages';
 import { bestRepsAt, bestSet, bestValue, forecastDate, isRecord, milestoneProgress, reached, valueFromSets } from './metrics';
 import { countProgress, weekStart } from './quests';
-import { cmpVersion, unseenReleases } from './version';
+import { androidVersionCode, cmpVersion, isBeta, stableOf, unseenReleases } from './version';
 import { EXPERIMENTS, hasExp, toggleExp } from './experiments';
 import { SNAPSHOT_KEEP, snapshotsToPrune } from './snapshots';
 
@@ -217,5 +217,25 @@ describe('снимки перед восстановлением', () => {
   });
   it('удаляются самые старые, порядок входа не важен', () => {
     expect(snapshotsToPrune([s('e', 5), s('a', 1), s('c', 3), s('b', 2), s('d', 4)]).sort()).toEqual(['a', 'b']);
+  });
+});
+
+describe('бета-версии', () => {
+  it('бета старше своей стабильной и новее предыдущей', () => {
+    expect(cmpVersion('0.10.0-beta.1', '0.10.0')).toBeLessThan(0);
+    expect(cmpVersion('0.10.0-beta.1', '0.9.9')).toBeGreaterThan(0);
+    expect(cmpVersion('0.10.0-beta.2', '0.10.0-beta.1')).toBeGreaterThan(0);
+    expect(cmpVersion('0.10.0-beta.2', '0.10.0-beta.2')).toBe(0);
+  });
+  it('код версии Android растёт и у беты меньше, чем у стабильной', () => {
+    const order = ['0.9.0', '0.9.2', '0.10.0-beta.1', '0.10.0-beta.2', '0.10.0', '0.10.1-beta.1', '1.0.0'];
+    const codes = order.map(androidVersionCode);
+    expect([...codes].sort((a, b) => a - b)).toEqual(codes);
+    expect(androidVersionCode('0.9.2')).toBeGreaterThan(902); // больше старой схемы — APK встанет поверх
+  });
+  it('распознаёт бету и её стабильную', () => {
+    expect(isBeta('0.10.0-beta.3')).toBe(true);
+    expect(isBeta('0.10.0')).toBe(false);
+    expect(stableOf('0.10.0-beta.3')).toBe('0.10.0');
   });
 });

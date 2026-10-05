@@ -10,9 +10,12 @@ import { Directory, Filesystem } from '@capacitor/filesystem';
 import { FileTransfer } from '@capacitor/file-transfer';
 import { FileOpener } from '@capawesome-team/capacitor-file-opener';
 import { cmpVersion } from '../engine/version';
+import { getChannel } from './channel';
 import { toast } from './toast';
 
 export const SITE = 'https://yami-skh.github.io/lifequest/';
+/** Канал APK: стабильная — корень сайта, бета — папка beta/ (scripts/deploy.mjs --beta). */
+const channelSite = () => (getChannel() === 'beta' ? `${SITE}beta/` : SITE);
 export interface Remote { version: string; native: string; bundle: string; checksum: string; apk: string }
 
 export type UpdateState =
@@ -42,7 +45,7 @@ export function useUpdate() {
 
 async function fetchRemote(): Promise<Remote | null> {
   try {
-    const r = await fetch(`${SITE}version.json?t=${Date.now()}`, { cache: 'no-store' });
+    const r = await fetch(`${channelSite()}version.json?t=${Date.now()}`, { cache: 'no-store' });
     return r.ok ? ((await r.json()) as Remote) : null;
   } catch {
     return null;
@@ -66,7 +69,7 @@ export async function checkForUpdate(manual = false) {
     return setState({ kind: 'latest' });
   }
   try {
-    const bundle = await CapacitorUpdater.download({ url: new URL(remote.bundle, SITE).href, version: remote.version, checksum: remote.checksum });
+    const bundle = await CapacitorUpdater.download({ url: new URL(remote.bundle, channelSite()).href, version: remote.version, checksum: remote.checksum });
     await CapacitorUpdater.next({ id: bundle.id });
     setState({ kind: 'web', version: remote.version });
     if (manual) toast({ kind: 'info', title: `Скачана версия ${remote.version}`, sub: 'Включится при следующем запуске' });

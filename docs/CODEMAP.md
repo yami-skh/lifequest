@@ -36,8 +36,8 @@
 
 ## src/data
 
-- **changelog.ts** (161) — Что нового в версиях — для пользователя, простыми словами. Новые версии — сверху.
-  *ChangeKind:4, *Change:5, *Release:6, *CHANGELOG:8, *SEEN_BEFORE_CHANGELOG:160
+- **changelog.ts** (168) — Что нового в версиях — для пользователя, простыми словами. Новые версии — сверху.
+  *ChangeKind:4, *Change:5, *Release:6, *CHANGELOG:8, *SEEN_BEFORE_CHANGELOG:167
 
 ## src/db
 
@@ -56,7 +56,7 @@
   *Stats:3, *AchievementIcon:27, *AchievementDef:32, flag:44, *ACHIEVEMENTS:46, *evaluateAchievements:71
 - **dates.ts** (55) — Даты храним как локальные YYYY-MM-DD.
   *localDate:3, *addDays:10, *daysBetween:16, MONTHS:22, *humanDate:24, *currentStreak:32, *bestStreak:43
-- **engine.test.ts** (222)
+- **engine.test.ts** (242)
 - **experiments.ts** (17) — Флаг экспериментов: новый UX включается только у тех, кто сам включил эксперимент
   *EXPERIMENTS:5, *hasExp:10, *toggleExp:13
 - **levels.ts** (44) — Уровни персонажа и навыков. ARCHITECTURE.md §4.3–4.4.
@@ -71,8 +71,8 @@
   *SNAPSHOT_KEEP:4, *snapshotsToPrune:7
 - **stages.ts** (51) — Ступени целей навыка. ARCHITECTURE.md §16, идея 2.
   *STAGE_NAMES:4, *stageName:5, *STAGE_BONUS:7, *StagedGoal:9, *StageInfo:11, *stagesOf:21, *currentStage:34, *assignStages:40
-- **version.ts** (17) — Сравнение версий «0.5.1» и выбор того, что показать в «Что нового».
-  *cmpVersion:3, *unseenReleases:14
+- **version.ts** (41) — Версии «0.9.2» и бета «0.10.0-beta.1»: сравнение, код версии Android, выбор того, что показать в «Что нового».
+  *Version:3, *parseVersion:5, *cmpVersion:13, *androidVersionCode:28, *isBeta:33, *stableOf:35, *unseenReleases:38
 - **xp.ts** (87) — Начисление XP за запись журнала. ARCHITECTURE.md §4.1–4.2.
   *EntryType:4, *Difficulty:5, *ENTRY_TYPES:7, *ENTRY_TYPE_LABEL:16, *BASE_XP:21, *DIFFICULTIES:25, *REPEAT_FREE_PER_DAY:32, *SECONDARY_SHARE:34, *XpContext:36, *RUST_DAYS:52, *XpFactor:54, *calcXp:56, *secondaryXp:71, *xpContextFromHistory:74
 
@@ -82,8 +82,10 @@
   *AI_URL:6, *AiGoal:8, *AiStage:9, *AiGoalsAnswer:10, *AiSkillInput:11, *AiError:19, call:25, *askGoals:37, *fetchQuota:40
 - **backButton.ts** (60) — Системная кнопка «Назад» в APK: закрывает верхнее открытое (клавиатура, шторка, фото),
   stack:9, *useBackClose:12, EXIT_MS:26, exitArmedAt:27, *closeTop:30, *handleBack:37, *initBackButton:49
-- **backup.ts** (187) — Резервная копия: всё в один .zip — data.json + фото. ARCHITECTURE.md §12.
-  FORMAT:11, BackupData:13, *BackupSummary:32, summarize:34, *currentSummary:41, buildZip:47, toBase64:71, *exportBackup:83, download:113, *ParsedBackup:123, *readBackup:126, *restoreBackup:150, *restoreSnapshot:181
+- **backup.ts** (192) — Резервная копия: всё в один .zip — data.json + фото. ARCHITECTURE.md §12.
+  FORMAT:11, BackupData:13, *BackupSummary:32, summarize:34, *currentSummary:41, buildZip:47, toBase64:71, *exportBackup:83, download:113, *ParsedBackup:123, *readBackup:126, *restoreBackup:150, *takeSnapshot:180, *restoreSnapshot:186
+- **channel.ts** (37) — Канал обновлений APK: «стабильная» (по умолчанию, у брата) или «бета» (каждая новая сборка).
+  *Channel:9, KEY:10, *getChannel:12, *setChannel:25
 - **install.ts** (52) — Установка PWA: ловим событие beforeinstallprompt от Chrome и показываем свою кнопку.
   InstallPromptEvent:5, deferred:10, listeners:11, emit:12, *isStandalone:24, *isIos:28, *useInstall:30
 - **photo.ts** (72) — Сжатие фото перед сохранением: основное до 1600px, превью до 320px. ARCHITECTURE.md §9.
@@ -100,8 +102,8 @@
   *ThemePref:5, KEY:6, media:7, listeners:8, *getThemePref:10, apply:19, *setThemePref:25, *initTheme:35, *useThemePref:40, *ac:50
 - **toast.ts** (71) — Всплывашки: XP, новый уровень, достижения.
   *ToastKind:6, *Toast:7, MERGE_MS:10, LIFETIME:11, RANK:12, toasts:14, nextId:15, lastGame:16, timers:17, listeners:18, emit:19, schedule:21, *toast:30, *useToasts:61
-- **update.ts** (115) — Автообновление APK. Сайт обновляется сам (service worker), здесь — только приложение.
-  *SITE:15, *Remote:16, *UpdateState:18, state:27, listeners:28, setState:29, *useUpdate:34, fetchRemote:43, *checkForUpdate:53, *installApk:80, *initUpdates:102
+- **update.ts** (118) — Автообновление APK. Сайт обновляется сам (service worker), здесь — только приложение.
+  *SITE:16, channelSite:18, *Remote:19, *UpdateState:21, state:30, listeners:31, setState:32, *useUpdate:37, fetchRemote:46, *checkForUpdate:56, *installApk:83, *initUpdates:105
 
 ## src
 
@@ -128,8 +130,8 @@
   SOON:7, *More:15
 - **Quests.tsx** (447) — Квесты. Макет: холст, страница «Квесты». ARCHITECTURE.md §6.
   KIND_TITLE:14, daysToMonday:16, *QuestCard:22, WeeklyRow:43, *Quests:64, *QuestDetail:148, stepKindLabel:228, DraftKind:232, NewQuestSheet:234, StepBuilder:313, *QuestsBlock:412
-- **Settings.tsx** (262) — Настройки: персонаж, тема, недельные квесты, резервная копия, о приложении, стереть данные.
-  THEMES:20, Toggle:26, Group:35, *Settings:44, AboutRow:151, hiddenThisSession:181, *UpdateCard:182, AiBlock:215
+- **Settings.tsx** (310) — Настройки: персонаж, тема, недельные квесты, резервная копия, о приложении, стереть данные.
+  THEMES:21, Toggle:27, Group:36, *Settings:45, AboutRow:153, hiddenThisSession:183, *UpdateCard:184, AiBlock:217, ChannelPicker:266
 - **Skill.tsx** (436)
   *stagesToast:23, Fold:26, word:27, *Skill:31, .toggle:61, .onFocus:63, FoldRow:193, WorkoutCard:207, SkillMenu:242, GoalRow:279, Goals:292, Notes:371, GalleryItem:411, FullPhoto:416, Gallery:426
 - **Tree.tsx** (313)

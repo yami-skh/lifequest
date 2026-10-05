@@ -225,7 +225,7 @@ function SnapshotCard() {
         <span class="backup-icon gold"><Icon name="undo" size={22} stroke={2.2} /></span>
         <span class="stack-4">
           <span class="strong">Вернуть как было</span>
-          <span class="muted small">{snap.reason === 'before-undo' ? 'Снимок перед возвратом' : 'Снимок перед восстановлением'} · {fmtWhen(snap.createdAt)}</span>
+          <span class="muted small">{snap.reason === 'before-undo' ? 'Снимок перед возвратом' : snap.reason === 'before-channel' ? 'Снимок перед сменой канала' : 'Снимок перед восстановлением'} · {fmtWhen(snap.createdAt)}</span>
         </span>
       </div>
       <div class="chips">

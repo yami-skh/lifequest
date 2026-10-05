@@ -14,9 +14,12 @@ const env = {
 const run = (cmd, cwd = '.') => execSync(cmd, { stdio: 'inherit', cwd, env });
 
 const { version } = JSON.parse(readFileSync('package.json', 'utf8'));
-const [major, minor, patch] = version.split('.').map(Number);
+// Как androidVersionCode в src/engine/version.ts: бета меньше своей стабильной, всё растёт.
+const [core, pre] = version.split('-');
+const [major, minor, patch] = core.split('.').map(Number);
+const betaN = pre?.match(/^beta\.(\d+)$/)?.[1];
 // versionCode должен расти с каждой версией, иначе Android не поставит обновление поверх.
-const code = major * 10000 + minor * 100 + patch;
+const code = (major * 10000 + minor * 100 + patch) * 100 + (betaN === undefined ? 99 : Math.min(Number(betaN), 98));
 
 run('npm test');
 run('npm run build');

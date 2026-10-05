@@ -148,8 +148,7 @@ export async function readBackup(file: File): Promise<ParsedBackup> {
  * Сначала сам сохраняет снимок текущих данных; если снимок не удался — ничего не трогает.
  */
 export async function restoreBackup({ data, zip }: ParsedBackup, opts: { reason?: SnapshotReason; keepBackupMark?: boolean } = {}) {
-  const [{ blob }, summary] = await Promise.all([buildZip(false), currentSummary()]);
-  await saveSnapshot(blob, opts.reason ?? 'before-restore', summary);
+  await takeSnapshot(opts.reason ?? 'before-restore');
 
   const photos: Photo[] = [];
   for (const meta of data.photos) {
@@ -175,6 +174,12 @@ export async function restoreBackup({ data, zip }: ParsedBackup, opts: { reason?
     await db.metricValues.bulkAdd(data.metricValues ?? []);
     await db.milestones.bulkAdd(data.milestones ?? []);
   });
+}
+
+/** Сохранить снимок текущих данных (перед восстановлением, сменой канала и т. п.). */
+export async function takeSnapshot(reason: SnapshotReason) {
+  const [{ blob }, summary] = await Promise.all([buildZip(false), currentSummary()]);
+  return saveSnapshot(blob, reason, summary);
 }
 
 /** Вернуть данные из снимка. Текущие данные перед этим тоже сохраняются снимком — можно вернуться обратно. */

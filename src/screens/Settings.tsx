@@ -7,6 +7,7 @@ import { useWorld } from '../db/world';
 import { db } from '../db/db';
 import { resetAll, setAiCode, setName, toggleExperiment, toggleWeeklyTemplate } from '../db/actions';
 import { EXPERIMENTS } from '../engine/experiments';
+import { getChannel, setChannel, type Channel } from '../lib/channel';
 import { toast } from '../lib/toast';
 import { AiError, fetchQuota } from '../lib/ai';
 import { ReminderSettings, SoundSettings } from '../components/Reminders';
@@ -129,6 +130,7 @@ export function Settings() {
             ))}
           </div>
           <span class="muted small">Незаконченные функции. Включаются только на этом устройстве, у других всё как было.</span>
+          <ChannelPicker />
           <button type="button" class="link small muted" onClick={() => setDev(false)}>Скрыть раздел</button>
         </Group>
       )}
@@ -256,6 +258,52 @@ function AiBlock() {
       </form>
       {status && <span class={status.ok ? 'small ok-text ai-status' : 'small danger-text ai-status'}>{status.text}</span>}
       {!saved && <span class="muted small ai-status">Без кода кнопки нет — приложение работает как раньше.</span>}
+    </div>
+  );
+}
+
+/** Канал обновлений: APK — переключатель; сайт — ссылка на другой адрес (у сайтов общие данные). */
+function ChannelPicker() {
+  const [ch, setCh] = useState<Channel>(getChannel);
+  const [busy, setBusy] = useState(false);
+  if (!Capacitor.isNativePlatform()) {
+    const beta = ch === 'beta';
+    return (
+      <div class="menu-list">
+        <a class="menu-row" href={beta ? '../' : 'beta/'}>
+          <span class="menu-row-text"><span class="strong">Канал: {beta ? 'бета' : 'стабильная'}</span><span class="muted small">{beta ? 'перейти на стабильный сайт' : 'открыть сайт беты — каждая новая сборка'}</span></span>
+          <Icon name="right" size={16} stroke={2.4} />
+        </a>
+      </div>
+    );
+  }
+  const pick = async (next: Channel) => {
+    if (next === ch || busy) return;
+    setBusy(true);
+    try {
+      if (next === 'beta') {
+        await setChannel('beta');
+        setCh('beta');
+        toast({ kind: 'info', title: 'Канал: бета', sub: 'Обновления придут при следующей проверке' });
+        checkForUpdate(true);
+      } else {
+        // Снимок данных, откат к сборке из APK и перезапуск — дальше обновится до стабильной.
+        await setChannel('stable');
+      }
+    } catch (e) {
+      console.error(e);
+      toast({ kind: 'info', title: 'Не удалось сменить канал' });
+    }
+    setBusy(false);
+  };
+  return (
+    <div class="stack-8">
+      <span class="small strong">Канал обновлений</span>
+      <div class="segmented" role="radiogroup" aria-label="Канал обновлений">
+        <button type="button" role="radio" aria-checked={ch === 'stable'} class={ch === 'stable' ? 'on' : ''} disabled={busy} onClick={() => pick('stable')}>Стабильная</button>
+        <button type="button" role="radio" aria-checked={ch === 'beta'} class={ch === 'beta' ? 'on' : ''} disabled={busy} onClick={() => pick('beta')}>Бета</button>
+      </div>
+      <span class="muted small">Бета — каждая новая сборка, может ломаться. Возврат на стабильную сначала сохраняет снимок данных.</span>
     </div>
   );
 }

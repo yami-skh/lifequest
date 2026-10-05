@@ -3,7 +3,7 @@
 import Dexie, { type Table } from 'dexie';
 import { snapshotsToPrune } from '../engine/snapshots';
 
-export type SnapshotReason = 'before-restore' | 'before-undo';
+export type SnapshotReason = 'before-restore' | 'before-undo' | 'before-channel';
 export interface SnapshotSummary { level: number; entries: number; photos: number }
 export interface Snapshot { id: string; createdAt: string; reason: SnapshotReason; version: string; summary: SnapshotSummary; blob: Blob }
 

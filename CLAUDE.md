@@ -29,9 +29,13 @@ RPG-трекер саморазвития. Сейчас обкатка — по�
 - `npm run deploy` — тесты, сборка, публикация на https://yami-skh.github.io/lifequest/ (ветка `gh-pages`; Actions не используются — у токена нет scope `workflow`).
 - `npm run apk` → `D:/Android/release/LifeQuest-<version>.apk`; `npm run release` — публикует его в GitHub Releases (публично; ключ подписи не публикуется). Ключ `D:/Android/keys/` — **не терять**. JDK/SDK/Gradle в `D:/Android/`. Эмулятор: AVD `LifeQuest` (Pixel 7, Android 15) в `D:/Android/avd` — запускать с `ANDROID_AVD_HOME=D:/Android/avd`.
 
-**Выпуск версии** (APK обновляется сам — `src/lib/update.ts`, `version.json` на сайте):
-- Обычный (только веб-код): поднять `version` → дописать `src/data/changelog.ts` → `npm run check` → `npm run deploy` → commit + push. Приложение у брата скачает архив само и включит при сворачивании/перезапуске.
-- Нативный (новый плагин Capacitor, правка `android/`, `capacitor.config.ts`): ещё и `nativeVersion` = `version` в package.json → `npm run apk` → `npm run release` (APK в GitHub Releases) → `deploy`. У брата появится карточка «Доступна версия» и APK поставится из приложения.
+**Выпуск версии — два канала** (APK обновляется сам — `src/lib/update.ts`; канал — `src/lib/channel.ts`):
+- **Бета** (сначала всё сюда): версия `0.10.0-beta.N` → запись в `src/data/changelog.ts` → `npm run check` → `npm run deploy:beta` → commit + push. Сайт: …/lifequest/beta/, APK с каналом «Бета» (скрытый раздел «Эксперименты») скачает сам. Брат не получает.
+- **Стабильная**: после 3–7 дней в бете без критических багов и чек-листа (мастер-план §8) → `npm run promote` (версия → `0.10.0`, записи «Что нового» бет сливаются — проверить вручную, выкладка в корень) → commit + push. Брат получает.
+- **Нативные изменения** (плагин Capacitor, `android/`, `capacitor.config.ts`): `nativeVersion` = `version` → `npm run apk` → `npm run release` (бета — пре-релиз, «последний» не меняется) → deploy соответствующего канала.
+- Код версии Android: `androidVersionCode` в `engine/version.ts` (повторён в `scripts/apk.mjs`): бета меньше своей стабильной.
+- Схему базы (Dexie) менять только в бете и держать там дольше: стабильная не откроет базу, обновлённую бетой. Возврат APK на стабильную — через снимок данных (`setChannel('stable')`).
+- `scripts/deploy.mjs` берёт текущую ветку gh-pages и меняет только свой канал (бета — папка `beta/`).
 - После выпуска: обновить «Статус» и `docs/project-map.html`, переопубликовать карту.
 
 ## Флаг экспериментов
@@ -62,7 +66,7 @@ RPG-трекер саморазвития. Сейчас обкатка — по�
 - Карта и роудмап: https://claude.ai/artifact/F2EFLi3nU41LJs4wQzrBUo (исходник `docs/project-map.html`)
 - Репозиторий: github.com/yami-skh/lifequest (публичный)
 
-## Статус (0.9.2)
+## Статус (0.9.3)
 
 - Готово: v1.0 шаги 1–8 (запись, журнал, дерево, фото, квесты, замеры и рубежи, резервная копия) + §16 (фокус, ступени, требования, «Ближайшее», ржавчина, туман) + 0.5 «Упрощение» (компактный главный, подходы с клавиатурой, рубежи по повторам, склеенные всплывашки) + 0.5.1 кнопка «Назад» в APK (`lib/backButton.ts`, `useBackClose` для оверлеев) + 0.6.0 «Навык проще» (подходы/рекорд/рубеж на странице навыка, «Записать тренировку» сохраняет подставленные подходы — `EntryPreset.workout`, меню ⋯) и «Что нового» (`src/data/changelog.ts`, `profile.seenVersion`) + 0.7 «Настройки» (`screens/Settings.tsx`), светлая тема (`lib/theme.ts`, `[data-theme='light']` в base.css, цвета направлений — через `ac()`), автообновление APK (`lib/update.ts`, плагин capgo без их серверов), шрифты встроены (@fontsource-variable). Проверено на эмуляторе: «Назад», новый APK из приложения, тихое обновление веб-части. + 0.8 AI-помощник целей (Claude через `server/`), проверен настоящим запросом и кодом из APK. + 0.9 созвездие навыков (`components/StarMap.tsx`, вид «Созвездие» в Дереве), напоминания (`lib/reminders.ts`, локальные уведомления, нужен APK 0.9.0; неточные будильники — без экрана точных будильников), звуки наград (`lib/sound.ts`, Web Audio).
 - Сейчас: обкатка у брата — камера, «Поделиться», перенос данных в APK на реальном телефоне не проверены.
