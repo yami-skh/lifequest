@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Шаблоны: вход</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Unbounded:wght@500;700&amp;display=swap" rel="stylesheet">
+<style>body{margin:0}</style>
+</helmet>
+<div style="width: 390px; height: 300px; box-sizing: border-box; background: #0E1015; color: #ECEDF1; font-family: Manrope, sans-serif; padding: 24px 18px; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; justify-content: space-between; align-items: center">
+<div style="font-family: Unbounded, sans-serif; font-size: 22px; font-weight: 700">Дерево навыков</div>
+<div style="display: flex; gap: 8px">
+<span style="height: 40px; padding: 0 14px; border-radius: 20px; background: rgba(242,181,68,0.14); border: 1px solid rgba(242,181,68,0.5); color: #F2B544; display: flex; align-items: center; gap: 6px; font-weight: 800; font-size: 13.5px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h7v6H4zM13 5h7v6h-7zM4 13h7v6H4zM13 13h7v6h-7z"/></svg>Шаблоны</span>
+<span style="width: 40px; height: 40px; border-radius: 20px; background: #1E222B; display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+</div></div>
+<div style="background: #171A21; border: 1px dashed #3A404D; border-radius: 18px; padding: 14px; display: flex; flex-direction: column; gap: 6px">
+<span style="font-weight: 800; font-size: 14.5px">Не знаешь, с чего начать?</span>
+<span style="font-size: 13px; color: #A3A9B6">Возьми готовый путь: навыки, цели по ступеням и замеры уже расписаны.</span>
+<span style="font-weight: 800; font-size: 13.5px; color: #F2B544">Выбрать шаблон →</span>
+</div>
+<span style="font-size: 12px; color: #6B7280">Карточка — только если в дереве меньше 5 навыков. Всё — за флагом эксперимента «templates».</span>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":300}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

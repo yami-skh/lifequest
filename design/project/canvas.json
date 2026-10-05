@@ -538,6 +538,42 @@
       "w": 390,
       "x": 450,
       "y": 0
+    },
+    "TplEntry.dc.html": {
+      "h": 300,
+      "page": "templates",
+      "radius": 28,
+      "title": "1 · Вход: Дерево",
+      "w": 390,
+      "x": 0,
+      "y": 0
+    },
+    "TplCatalog.dc.html": {
+      "h": 844,
+      "page": "templates",
+      "radius": 28,
+      "title": "2 · Каталог",
+      "w": 390,
+      "x": 450,
+      "y": 0
+    },
+    "TplPreview.dc.html": {
+      "h": 844,
+      "page": "templates",
+      "radius": 28,
+      "title": "3 · Что добавится",
+      "w": 390,
+      "x": 900,
+      "y": 0
+    },
+    "TplPaste.dc.html": {
+      "h": 844,
+      "page": "templates",
+      "radius": 28,
+      "title": "4 · Свой шаблон (с ошибкой)",
+      "w": 390,
+      "x": 1350,
+      "y": 0
     }
   },
   "createdOnFiles": {
@@ -547,7 +583,7 @@
   "designSystems": [],
   "launch": {
     "view": "canvas",
-    "page": "phase0"
+    "page": "templates"
   },
   "notes": {
     "aiTitle": {
@@ -692,6 +728,14 @@
       "w": 240,
       "x": 0,
       "y": -260
+    },
+    "templatesTitle": {
+      "kind": "title1",
+      "maxW": 1720,
+      "page": "templates",
+      "text": "Фаза 1 · Готовые пути: вход → каталог → предпросмотр → свой шаблон",
+      "x": 0,
+      "y": -260
     }
   },
   "order": [
@@ -753,7 +797,11 @@
     "NotifySettings.dc.html",
     "NotifyShade.dc.html",
     "BackupSnapshot.dc.html",
-    "ErrorLog.dc.html"
+    "ErrorLog.dc.html",
+    "TplEntry.dc.html",
+    "TplCatalog.dc.html",
+    "TplPreview.dc.html",
+    "TplPaste.dc.html"
   ],
   "pages": [
     {
@@ -815,6 +863,10 @@
     {
       "id": "phase0",
       "name": "Фаза 0"
+    },
+    {
+      "id": "templates",
+      "name": "Шаблоны"
     }
   ],
   "title": "LifeQuest — макет"
