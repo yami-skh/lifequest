@@ -21,6 +21,8 @@
   PATHS:3, *IconName:70, *Icon:72
 - **InstallCard.tsx** (46)
   HIDE_KEY:6, *InstallCard:9
+- **NextAction.tsx** (103) — «Следующее действие» на главном (мастер-план §3, фаза 2, флаг next-action).
+  *NextActionCard:15, ChoosePath:71
 - **NumPad.tsx** (79) — Крупная цифровая клавиатура для весов, повторов и целей.
   *NumPadProps:7, parse:21, *fmtInput:22, *NumPad:24, *numFrom:75
 - **Onboarding.tsx** (87) — Первый запуск: «Кем хочешь стать?» — выбор готовых путей вместо общего стартового дерева.
@@ -40,8 +42,8 @@
 
 ## src/data
 
-- **changelog.ts** (212) — Что нового в версиях — для пользователя, простыми словами. Новые версии — сверху.
-  *ChangeKind:4, *Change:5, *Release:6, *CHANGELOG:8, *SEEN_BEFORE_CHANGELOG:211
+- **changelog.ts** (219) — Что нового в версиях — для пользователя, простыми словами. Новые версии — сверху.
+  *ChangeKind:4, *Change:5, *Release:6, *CHANGELOG:8, *SEEN_BEFORE_CHANGELOG:218
 - **presets.test.ts** (40)
   AREAS:6
 - **presets.ts** (48) — Готовые навыки при ручном добавлении (мастер-план §12): навыки шаблонов, сгруппированные по направлениям,
@@ -55,16 +57,16 @@
 
 ## src/db
 
-- **actions.ts** (461) — Все изменения данных.
-  *PhotoDraft:13, *EntryDraft:15, *primaryHistory:29, *saveEntry:36, *deleteEntry:83, *toggleGoal:95, *addGoal:102, *awardStages:111, *toggleFocus:135, *setRequirements:143, *deleteGoal:145, *addNode:149, *renameNode:161, *deleteNode:164, *addNote:182, *toggleNoteStudied:186, *deleteNote:191, *toggleExperiment:196, *setAiCode:200, *setSeenVersion:201, *setName:202, *unlockAchievements:204, *resetAll:209, *createQuest:216, *toggleCustomStep:222, *abandonQuest:230, *deleteQuest:231, *completeQuest:234, *maintainQuests:248, *toggleWeeklyTemplate:273, *addMetric:288, *deleteMetric:293, bonus:302, *addMetricValue:313, *deleteMetricValue:355, *setMilestone:365, *removeMilestone:372, *fmtNum:375, *previewTemplate:380, *previewTemplates:385, freeAreaColor:391, *importTemplate:397, *finishOnboarding:440, *addPresetSkill:447
-- **db.test.ts** (192) — Тесты базы: действия (actions.ts) и производные значения (world.ts → derive) на настоящей Dexie
+- **actions.ts** (465) — Все изменения данных.
+  *PhotoDraft:13, *EntryDraft:15, *primaryHistory:31, *saveEntry:38, *deleteEntry:87, *toggleGoal:99, *addGoal:106, *awardStages:115, *toggleFocus:139, *setRequirements:147, *deleteGoal:149, *addNode:153, *renameNode:165, *deleteNode:168, *addNote:186, *toggleNoteStudied:190, *deleteNote:195, *toggleExperiment:200, *setAiCode:204, *setSeenVersion:205, *setName:206, *unlockAchievements:208, *resetAll:213, *createQuest:220, *toggleCustomStep:226, *abandonQuest:234, *deleteQuest:235, *completeQuest:238, *maintainQuests:252, *toggleWeeklyTemplate:277, *addMetric:292, *deleteMetric:297, bonus:306, *addMetricValue:317, *deleteMetricValue:359, *setMilestone:369, *removeMilestone:376, *fmtNum:379, *previewTemplate:384, *previewTemplates:389, freeAreaColor:395, *importTemplate:401, *finishOnboarding:444, *addPresetSkill:451
+- **db.test.ts** (214) — Тесты базы: действия (actions.ts) и производные значения (world.ts → derive) на настоящей Dexie
   world:23, skillWithGoals:26, draft:37, .tpl:145
-- **db.ts** (244) — Хранилище на устройстве. ARCHITECTURE.md §11.
-  *NodeKind:7, *Profile:9, *Requirement:31, *Node:33, *Goal:51, *Entry:63, *EntrySkill:80, *Photo:82, *Unlocked:84, *Note:86, *QuestKind:98, *CountRule:100, *QuestStep:110, *Quest:117, *Metric:136, *MetricValue:147, *Milestone:161, *AREA_ICON_BY_TITLE:176, *AREA_ICONS:180, LifeQuestDB:182, *db:235, *uid:238, *nowIso:243
+- **db.ts** (246) — Хранилище на устройстве. ARCHITECTURE.md §11.
+  *NodeKind:7, *Profile:9, *Requirement:31, *Node:33, *Goal:51, *Entry:63, *EntrySkill:82, *Photo:84, *Unlocked:86, *Note:88, *QuestKind:100, *CountRule:102, *QuestStep:112, *Quest:119, *Metric:138, *MetricValue:149, *Milestone:163, *AREA_ICON_BY_TITLE:178, *AREA_ICONS:182, LifeQuestDB:184, *db:237, *uid:240, *nowIso:245
 - **seed.ts** (66) — Стартовое содержимое. ARCHITECTURE.md §13. Дерево новичок выбирает сам (шаблоны, components/Onboarding.tsx);
   *AREA_COLORS:6, STARTER_VERSION:9, *seedIfEmpty:12, STARTER_METRICS:20, *ensureStarter:29, addStarterQuestIn:51, *addStarterQuest:65
-- **world.ts** (415) — Всё состояние разом и производные значения. Данных у одного человека немного,
-  *World:17, *loadWorld:31, *LockReason:48, *derive:59, .primaryOf:103, .subtreeXp:106, .areaOf:115, .pathOf:120, .skillLevelOf:141, .requirementsOf:144, .lockReasons:157, .stagesOfSkill:175, .openGoalsOf:178, .rustDays:190, .explored:196, .unlocksOf:201, .stepState:222, .questProgress:246, .metricInfo:260, .hints:278, .stats:318, *Derived:406, *WorldContext:408, *useWorld:410
+- **world.ts** (421) — Всё состояние разом и производные значения. Данных у одного человека немного,
+  *World:18, *loadWorld:32, *LockReason:49, *derive:60, .primaryOf:104, .subtreeXp:107, .areaOf:116, .pathOf:121, .skillLevelOf:142, .requirementsOf:145, .lockReasons:158, .stagesOfSkill:176, .openGoalsOf:179, .rustDays:191, .explored:197, .naSkill:200, .unlocksOf:203, .stepState:224, .questProgress:248, .metricInfo:262, .hints:280, .stats:320, *Derived:412, *WorldContext:414, *useWorld:416
 
 ## src/engine
 
@@ -79,6 +81,10 @@
   *xpToNext:3, *characterLevel:5, *SKILL_LEVELS:17, *skillLevel:31
 - **metrics.ts** (88) — Замеры, рекорды, прогноз рубежа. ARCHITECTURE.md §8.
   *RECORD_XP:4, *MILESTONE_XP:5, *ValueLike:7, *WorkSet:10, *bestSet:16, *valueFromSets:26, *bestRepsAt:33, *bestValue:43, *isRecord:53, *reached:60, *milestoneProgress:63, *forecastDate:72
+- **nextAction.test.ts** (45)
+  g:4, sk:5
+- **nextAction.ts** (56) — «Следующее действие» (мастер-план §3, фаза 2): что делать сейчас — вычисляется, не хранится.
+  *NAGoal:7, *NASkill:8, *NAEntry:9, *NextAction:11, *nextActions:21, *suggestPaths:40, *agoText:52
 - **progress.ts** (44) — Одна полоска прогресса. ARCHITECTURE.md §3.
   *GoalKind:3, *GOAL_WEIGHT:4, *GoalLike:6, *skillProgress:8, *NodeLike:19, *computeProgress:22
 - **quests.ts** (47) — Квесты: шаблоны недельных, прогресс шагов. ARCHITECTURE.md §6.
@@ -140,10 +146,10 @@
   *Backup:16, agoText:148, *BackupReminder:156, fmtWhen:198, SnapshotCard:201
 - **Changelog.tsx** (107) — «Что нового»: окно один раз после обновления и история версий в «Ещё». Макет: холст, страница «Что нового».
   KIND:11, ORDER:16, fmtDate:18, changesWord:19, *WhatsNew:22, ChangeRow:60, *Changelog:70, ReleaseCard:85
-- **Character.tsx** (151) — Главный экран — всё важное примерно в один экран. Макет: холст, страница «Упрощение», экран 1.
-  *Character:14, WEEK_SHORT:80, TodayCard:83, *plural:144
-- **EntrySheet.tsx** (284) — «＋ Запись» — главный сценарий, цель 15 секунд. Макет: холст, страница «Упрощение», экраны 2–3.
-  *EntryPreset:19, LAST_TYPE:21, loadType:22, PhotoPreview:31, *EntrySheet:41, .setType:61, .choosePrimary:99, .addSecondary:108, .onFiles:115, .save:126
+- **Character.tsx** (243) — Главный экран — всё важное примерно в один экран. Макет: холст, страница «Упрощение», экран 1.
+  *Character:16, NextHome:85, WEEK_SHORT:172, TodayCard:175, *plural:236
+- **EntrySheet.tsx** (288) — «＋ Запись» — главный сценарий, цель 15 секунд. Макет: холст, страница «Упрощение», экраны 2–3.
+  *EntryPreset:20, LAST_TYPE:22, loadType:23, PhotoPreview:32, *EntrySheet:42, .setType:64, .choosePrimary:102, .addSecondary:111, .onFiles:118, .save:129
 - **Journal.tsx** (45)
   *Journal:7
 - **Metrics.tsx** (485) — Замеры и рубежи. Макет: холст, страница «Замеры и рубежи». ARCHITECTURE.md §8.
@@ -167,8 +173,8 @@
   записи:1, чипы:16, кнопки:26, поля:43, фото:53, шторка:65
 - **entry.css** (50) — шторка записи (0.5)
   шторка записи (0.5):1, подходы и клавиатура (0.5):16
-- **home.css** (60) — главный: фокус и подсказки
-  главный: фокус и подсказки:1, установка:13, персонаж:17, главный, компактный (0.5):31
+- **home.css** (88) — главный: фокус и подсказки
+  главный: фокус и подсказки:1, установка:13, персонаж:17, главный, компактный (0.5):31, «Следующее действие» и главный фазы 2 (флаг next-action) — components/NextAction.tsx, Character.tsx NextHome:61
 - **index.css** (11) — Порядок важен: база → общие компоненты → экраны.
   Порядок важен: база → общие компоненты → экраны.:1
 - **metrics.css** (35) — замеры

@@ -57,3 +57,31 @@
 .area-cell.more { align-items: center; justify-content: center; border: 1px dashed var(--line-2); background: transparent; color: var(--muted); font-size: 13px; font-weight: 700; }
 .toast-line { font-size: 12.5px; font-weight: 700; opacity: 0.85; }
 
+
+/* «Следующее действие» и главный фазы 2 (флаг next-action) — components/NextAction.tsx, Character.tsx NextHome */
+.na-card { display: flex; flex-direction: column; gap: 12px; padding: 16px; border-radius: 20px; background: linear-gradient(160deg, var(--gold-bg-2), var(--surface) 60%); border: 1px solid var(--gold); }
+.na-card.na-empty { background: var(--surface); border: 1px dashed var(--line-2); }
+.na-label { font-size: 12px; font-weight: 800; letter-spacing: 0.6px; color: var(--gold); text-transform: uppercase; }
+.na-other { display: inline-flex; align-items: center; gap: 2px; min-height: 36px; padding: 0 8px; margin: -8px -8px -8px 0; border: 0; background: none; color: var(--fg-2); font-size: 12.5px; font-weight: 800; }
+.na-skill { font-size: 12.5px; font-weight: 800; }
+.na-goal { font-family: var(--display); font-size: 18px; font-weight: 700; line-height: 1.3; overflow-wrap: anywhere; }
+.na-card.na-empty .na-goal { font-size: 17px; }
+.na-sub { font-size: 13px; color: var(--fg-2); }
+.na-steps { display: flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--muted); font-weight: 700; }
+.na-steps.on { color: var(--green-fg); }
+.na-steps.on::before { content: ''; width: 6px; height: 6px; border-radius: 3px; background: var(--green); flex-shrink: 0; }
+.na-done { background: var(--surface-2); color: var(--green-fg); border: 1px solid var(--green); }
+.na-path { display: flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 12px; border-radius: 12px; background: var(--surface-2); }
+.na-path-title { flex: 1; min-width: 0; }
+.na-all { align-self: center; text-align: center; }
+.nh-tile { display: flex; flex-direction: column; padding: 10px 12px; border-radius: 14px; background: var(--surface); }
+.nh-tile span { font-size: 11.5px; color: var(--muted); font-weight: 700; }
+.nh-tile b { font-family: var(--display); font-size: 18px; }
+.nh-streak { color: var(--orange); }
+.nh-quest { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 14px; border: 1px solid var(--gold-line); color: var(--fg); text-decoration: none; }
+.nh-quest > svg { color: var(--gold); flex-shrink: 0; }
+.nh-quest-body { flex: 1; min-width: 0; }
+.nh-path, .nh-recent { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 12px; background: var(--surface); color: var(--fg); text-decoration: none; }
+.nh-path-body { flex: 1; min-width: 0; }
+.nh-xp { font-weight: 800; color: var(--gold); }
+.na-card .row-2 .btn { font-size: 14px; padding-left: 8px; padding-right: 8px; white-space: nowrap; }

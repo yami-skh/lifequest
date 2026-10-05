@@ -189,3 +189,25 @@ describe('шаблоны и первый запуск', () => {
     expect(w.metrics.filter((m) => m.title === 'Подтягивания')).toHaveLength(1);
   });
 });
+
+describe('следующее действие (derive)', () => {
+  it('«Сделал шаг» считается по цели, «Цель выполнена» закрывает её и двигает дальше', async () => {
+    const { skill, goals } = await skillWithGoals();
+    await toggleFocus(skill.id);
+    let [a] = (await world()).nextActions();
+    expect(a.kind === 'goal' && [a.goal.id, a.steps, a.left]).toEqual([goals[0].id, 0, 2]);
+    await saveEntry(draft(skill.id, { stepGoalIds: [goals[0].id] }));
+    [a] = (await world()).nextActions();
+    expect(a.kind === 'goal' && a.steps).toBe(1);
+    await saveEntry(draft(skill.id, { stepGoalIds: [goals[0].id], closeGoalIds: [goals[0].id] }));
+    expect((await db.entries.toArray()).filter((e) => e.stepGoalIds).length).toBe(1);
+    [a] = (await world()).nextActions();
+    expect(a.kind === 'goal' && [a.goal.id, a.left]).toEqual([goals[1].id, 1]);
+  });
+  it('нет активных путей — предложения из навыков с целями', async () => {
+    const { skill } = await skillWithGoals();
+    const w = await world();
+    expect(w.nextActions()).toEqual([]);
+    expect(w.suggestPaths().map((x) => x.skillId)).toEqual([skill.id]);
+  });
+});

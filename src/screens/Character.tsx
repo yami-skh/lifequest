@@ -10,8 +10,10 @@ import { ReminderPrompt } from '../components/Reminders';
 import { weekStart } from '../engine/quests';
 import { localDate } from '../engine/dates';
 import { ac } from '../lib/theme';
+import { NextActionCard } from '../components/NextAction';
+import type { EntryPreset } from './EntrySheet';
 
-export function Character({ onAdd }: { onAdd: () => void }) {
+export function Character({ onAdd }: { onAdd: (p?: EntryPreset) => void }) {
   const w = useWorld();
   const lvl = w.level;
   const strongest = w.totalXp > 0 ? [...w.areas].sort((a, b) => (w.xpByNode.get(b.id) ?? 0) - (w.xpByNode.get(a.id) ?? 0))[0] : undefined;
@@ -39,7 +41,8 @@ export function Character({ onAdd }: { onAdd: () => void }) {
       {/* Один баннер за раз: обновление, потом «Установи», потом напоминание о копии. */}
       <UpdateCard fallback={<InstallCard fallback={<BackupReminder />} />} />
 
-      <TodayCard onAdd={onAdd} />
+      {w.hasExp('next-action') ? <NextHome onAdd={onAdd} /> : <>
+      <TodayCard onAdd={() => onAdd()} />
       <ReminderPrompt />
 
       <section class="stack-8">
@@ -67,13 +70,102 @@ export function Character({ onAdd }: { onAdd: () => void }) {
           <EntryCard entry={last} />
         </section>
       ) : (
-        <button type="button" class="empty" onClick={onAdd}>
+        <button type="button" class="empty" onClick={() => onAdd()}>
           <Icon name="plus" size={28} stroke={2.4} />
           <span class="strong">Сделай первую запись</span>
           <span class="muted small">Что сегодня изучил или сделал? Выбери навык и получи XP.</span>
         </button>
       )}
+      </>}
     </div>
+  );
+}
+
+/** Главный по фазе 2 (флаг next-action): «Что мне делать сейчас?». Макет: холст, «Следующее действие», экран 1. */
+function NextHome({ onAdd }: { onAdd: (p?: EntryPreset) => void }) {
+  const w = useWorld();
+  const today = localDate();
+  const todayXp = w.entries.filter((e) => e.date === today).reduce((sum, e) => sum + (w.skillsOfEntry.get(e.id)?.find((x) => x.role === 'primary')?.xp ?? 0), 0);
+  const week = weekStart(today);
+  const mainQ = w.quests.find((q) => q.status === 'active' && q.kind === 'main') ?? w.quests.find((q) => q.status === 'active' && q.kind === 'side');
+  const weekly = w.quests.filter((q) => q.kind === 'weekly' && q.week === week && (q.status === 'active' || q.status === 'done'));
+  const recent = w.entries.filter((e) => e.type !== 'bonus').slice(0, 3);
+
+  return (
+    <>
+      <NextActionCard onAdd={onAdd} />
+      <ReminderPrompt />
+      <div class="row-2">
+        <div class="nh-tile"><span>Сегодня</span><b>+{todayXp} XP</b></div>
+        <div class="nh-tile"><span>Серия</span><b class="nh-streak">{w.streak} {plural(w.streak, 'день', 'дня', 'дней')}</b></div>
+      </div>
+      {(mainQ || weekly.length > 0) && (
+        <a class="nh-quest" href={mainQ ? `#/quests/${mainQ.id}` : '#/quests'}>
+          <Icon name="flag" size={18} stroke={2.2} />
+          <span class="stack-4 nh-quest-body">
+            {mainQ && (() => {
+              const p = w.questProgress(mainQ);
+              return (
+                <>
+                  <span class="spread small strong"><span>{mainQ.title}</span><span class="muted">{p.done}/{p.total} · +{mainQ.rewardXp}</span></span>
+                  <ProgressBar pct={p.pct} color="var(--gold)" height={5} />
+                </>
+              );
+            })()}
+            {weekly.length > 0 && (
+              <span class="muted small">Неделя: {weekly.map((q) => {
+                const st = w.questProgress(q).steps[0];
+                return `${WEEK_SHORT[q.template ?? ''] ?? q.title} ${q.status === 'done' ? '✓' : `${st?.have ?? 0}/${st?.target ?? 1}`}`;
+              }).join(' · ')}</span>
+            )}
+          </span>
+        </a>
+      )}
+      {w.focusSkills.length > 0 && (
+        <section class="stack-8">
+          <SectionLabel right={<a href="#/tree" class="link small">Все пути →</a>}>Активные пути · ×1.2 XP</SectionLabel>
+          {w.focusSkills.map((n) => {
+            const lv = w.skillLevelOf(n.id);
+            const cur = w.currentStageOf(n.id);
+            const left = cur ? cur.goals.length - cur.done : 0;
+            const color = ac(w.areaOf(n.id)?.color) ?? 'var(--gold)';
+            return (
+              <a class="nh-path" href={`#/skill/${n.id}`} key={n.id}>
+                <Ring pct={lv.pct} size={30} stroke={3} color={color}><span class="pill-lvl">{lv.level}</span></Ring>
+                <span class="stack-4 nh-path-body">
+                  <span class="spread"><span class="strong">{n.title}</span><span class="muted small strong">{cur ? `ступень ${cur.stage} · ${left} ${plural(left, 'цель', 'цели', 'целей')}` : 'всё пройдено'}</span></span>
+                  <ProgressBar pct={w.progress.get(n.id) ?? 0} color={color} height={5} />
+                </span>
+              </a>
+            );
+          })}
+        </section>
+      )}
+      {recent.length > 0 ? (
+        <section class="stack-8">
+          <SectionLabel right={<a href="#/journal" class="link small">Журнал →</a>}>Последние действия</SectionLabel>
+          {recent.map((e) => {
+            const es = w.skillsOfEntry.get(e.id)?.find((x) => x.role === 'primary');
+            const skill = es ? w.nodeById.get(es.skillId) : undefined;
+            return (
+              <a class="nh-recent" href="#/journal" key={e.id}>
+                <span class="stack-4 nh-path-body">
+                  <span class="strong">{e.text || skill?.title || 'Действие'}</span>
+                  <span class="muted small">{skill?.title ?? ''}{e.date === today ? ' · сегодня' : ''}</span>
+                </span>
+                <span class="nh-xp">+{es?.xp ?? 0}</span>
+              </a>
+            );
+          })}
+        </section>
+      ) : (
+        <button type="button" class="empty" onClick={() => onAdd()}>
+          <Icon name="plus" size={28} stroke={2.4} />
+          <span class="strong">Сделай первое действие</span>
+          <span class="muted small">Что сегодня изучил или сделал? Выбери навык и получи XP.</span>
+        </button>
+      )}
+    </>
   );
 }
 

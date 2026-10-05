@@ -13,6 +13,7 @@ import { characterLevel, skillLevel } from '../engine/levels';
 import { bestStreak, currentStreak, localDate } from '../engine/dates';
 import type { Stats } from '../engine/achievements';
 import { hasExp } from '../engine/experiments';
+import { nextActions, suggestPaths, type NASkill } from '../engine/nextAction';
 
 export interface World {
   profile: Profile | undefined;
@@ -196,6 +197,7 @@ export function derive(w: World) {
   const explored = (id: string) => (xpBySkill.get(id) ?? 0) > 0;
 
   const focusSkills = skills.filter((s) => s.focus);
+  const naSkill = (n: Node): NASkill => ({ id: n.id, locked: lockReasons(n).length > 0, goals: goalsBySkill.get(n.id) ?? [] });
 
   /** Какие навыки открывает данный узел своим прогрессом. */
   const unlocksOf = (id: string) => w.nodes.filter((n) => n.requires?.some((r) => r.nodeId === id));
@@ -399,6 +401,10 @@ export function derive(w: World) {
     metricsOfSkill: (id: string) => w.metrics.filter((m) => m.skillId === id),
     stats,
     /** Включён ли эксперимент у этого пользователя: `w.hasExp('next-action')`. */
+    /** «Следующее действие» по активным путям (engine/nextAction.ts). */
+    nextActions: () => nextActions(focusSkills.map(naSkill), w.entries),
+    /** Нет активных путей: навыки, где ближе всего к следующей ступени. */
+    suggestPaths: () => suggestPaths(skills.filter((n) => !n.focus).map(naSkill)),
     hasExp: (name: string) => hasExp(w.profile?.experiments, name),
   };
 }

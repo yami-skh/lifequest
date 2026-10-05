@@ -74,6 +74,8 @@ export interface Entry {
   photoIds: string[];
   /** XP бонуса, не привязанного к навыку (квест без навыка). */
   rewardXp?: number;
+  /** «Сделал шаг» (Следующее действие): цели, над которыми работал, не закрывая. Для «3 действия по этой цели». */
+  stepGoalIds?: string[];
   createdAt: string;
 }
 
