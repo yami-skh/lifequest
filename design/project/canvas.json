@@ -12,6 +12,69 @@
       "x": 2350,
       "y": 0
     },
+    "AiAsk.dc.html": {
+      "h": 844,
+      "page": "ai",
+      "radius": 28,
+      "title": "Запрос",
+      "w": 390,
+      "x": 450,
+      "y": 0
+    },
+    "AiCopy.dc.html": {
+      "h": 844,
+      "page": "aicopy",
+      "radius": 28,
+      "title": "Шаги: скопировать → открыть → вставить",
+      "w": 390,
+      "x": 0,
+      "y": 0
+    },
+    "AiPaste.dc.html": {
+      "h": 844,
+      "page": "aicopy",
+      "radius": 28,
+      "title": "Если ответ не тот",
+      "w": 390,
+      "x": 450,
+      "y": 0
+    },
+    "AiPreview.dc.html": {
+      "h": 844,
+      "page": "aicopy",
+      "radius": 28,
+      "title": "Предложенные цели (как раньше)",
+      "w": 390,
+      "x": 900,
+      "y": 0
+    },
+    "AiSettings.dc.html": {
+      "h": 420,
+      "page": "ai",
+      "radius": 28,
+      "title": "Настройки: код",
+      "w": 390,
+      "x": 1350,
+      "y": 0
+    },
+    "AiSettingsAny.dc.html": {
+      "h": 400,
+      "page": "aicopy",
+      "radius": 28,
+      "title": "Настройки",
+      "w": 390,
+      "x": 1350,
+      "y": 0
+    },
+    "AiSkill.dc.html": {
+      "h": 844,
+      "page": "ai",
+      "radius": 28,
+      "title": "Кнопка на навыке",
+      "w": 390,
+      "x": 0,
+      "y": 0
+    },
     "AtlusLevelUp.dc.html": {
       "h": 844,
       "page": "atelier",
@@ -64,6 +127,15 @@
       "title": "1 · Ещё → Резервная копия",
       "w": 390,
       "x": 0,
+      "y": 0
+    },
+    "Changelog.dc.html": {
+      "h": 844,
+      "page": "whatsnew",
+      "radius": 28,
+      "title": "Ещё → Что нового",
+      "w": 390,
+      "x": 450,
       "y": 0
     },
     "Entry.dc.html": {
@@ -122,6 +194,15 @@
       "x": 0,
       "y": 0
     },
+    "MainLight.dc.html": {
+      "h": 900,
+      "page": "settings",
+      "radius": 28,
+      "title": "Главный · светлая",
+      "w": 390,
+      "x": 900,
+      "y": 0
+    },
     "Metric.dc.html": {
       "h": 1020,
       "is_interactive": true,
@@ -177,6 +258,24 @@
       "x": 1410,
       "y": 0
     },
+    "NotifySettings.dc.html": {
+      "h": 700,
+      "page": "v09",
+      "radius": 28,
+      "title": "Настройки: звуки и напоминания",
+      "w": 390,
+      "x": 450,
+      "y": 0
+    },
+    "NotifyShade.dc.html": {
+      "h": 844,
+      "page": "v09",
+      "radius": 28,
+      "title": "Уведомления и разрешение",
+      "w": 390,
+      "x": 900,
+      "y": 0
+    },
     "QuestCreate.dc.html": {
       "h": 1120,
       "page": "quests",
@@ -213,6 +312,60 @@
       "x": 1410,
       "y": 0
     },
+    "Settings.dc.html": {
+      "h": 1240,
+      "page": "settings",
+      "radius": 28,
+      "title": "Настройки · тёмная",
+      "w": 390,
+      "x": 0,
+      "y": 0
+    },
+    "SettingsLight.dc.html": {
+      "h": 1240,
+      "page": "settings",
+      "radius": 28,
+      "title": "Настройки · светлая",
+      "w": 390,
+      "x": 450,
+      "y": 0
+    },
+    "SimpleEntry.dc.html": {
+      "h": 844,
+      "page": "simplify",
+      "radius": 28,
+      "title": "2 · Запись: главное сверху, остальное в «Подробнее»",
+      "w": 390,
+      "x": 470,
+      "y": 0
+    },
+    "SimpleMain.dc.html": {
+      "h": 900,
+      "page": "simplify",
+      "radius": 28,
+      "title": "1 · Главный: всё в один экран",
+      "w": 390,
+      "x": 0,
+      "y": 0
+    },
+    "SimpleMilestone.dc.html": {
+      "h": 844,
+      "page": "simplify",
+      "radius": 28,
+      "title": "4 · Рубеж: вес или повторы",
+      "w": 390,
+      "x": 1410,
+      "y": 0
+    },
+    "SimpleSets.dc.html": {
+      "h": 1000,
+      "page": "simplify",
+      "radius": 28,
+      "title": "3 · Тренировка подходами + цифровая клавиатура",
+      "w": 390,
+      "x": 940,
+      "y": 0
+    },
     "Skill.dc.html": {
       "h": 1060,
       "is_interactive": true,
@@ -221,6 +374,42 @@
       "title": "Навык: Рамен",
       "w": 390,
       "x": 1410,
+      "y": 0
+    },
+    "SkillMenu.dc.html": {
+      "h": 844,
+      "page": "skillsimple",
+      "radius": 28,
+      "title": "Меню ⋯",
+      "w": 390,
+      "x": 900,
+      "y": 0
+    },
+    "SkillPlain.dc.html": {
+      "h": 844,
+      "page": "skillsimple",
+      "radius": 28,
+      "title": "Обычный навык",
+      "w": 390,
+      "x": 450,
+      "y": 0
+    },
+    "SkillWorkout.dc.html": {
+      "h": 844,
+      "page": "skillsimple",
+      "radius": 28,
+      "title": "Тренировочный навык",
+      "w": 390,
+      "x": 0,
+      "y": 0
+    },
+    "StarMap.dc.html": {
+      "h": 844,
+      "page": "v09",
+      "radius": 28,
+      "title": "Созвездие",
+      "w": 390,
+      "x": 0,
       "y": 0
     },
     "StyleBento.dc.html": {
@@ -305,112 +494,13 @@
       "x": 940,
       "y": 0
     },
-    "SimpleMain.dc.html": {
-      "h": 900,
-      "page": "simplify",
-      "radius": 28,
-      "title": "1 · Главный: всё в один экран",
-      "w": 390,
-      "x": 0,
-      "y": 0
-    },
-    "SimpleEntry.dc.html": {
-      "h": 844,
-      "page": "simplify",
-      "radius": 28,
-      "title": "2 · Запись: главное сверху, остальное в «Подробнее»",
-      "w": 390,
-      "x": 470,
-      "y": 0
-    },
-    "SimpleSets.dc.html": {
-      "h": 1000,
-      "page": "simplify",
-      "radius": 28,
-      "title": "3 · Тренировка подходами + цифровая клавиатура",
-      "w": 390,
-      "x": 940,
-      "y": 0
-    },
-    "SimpleMilestone.dc.html": {
-      "h": 844,
-      "page": "simplify",
-      "radius": 28,
-      "title": "4 · Рубеж: вес или повторы",
-      "w": 390,
-      "x": 1410,
-      "y": 0
-    },
-    "WhatsNew.dc.html": {
-      "h": 844,
-      "page": "whatsnew",
-      "radius": 28,
-      "title": "После обновления (один раз)",
-      "w": 390,
-      "x": 0,
-      "y": 0
-    },
-    "Changelog.dc.html": {
-      "h": 844,
-      "page": "whatsnew",
-      "radius": 28,
-      "title": "Ещё → Что нового",
-      "w": 390,
-      "x": 450,
-      "y": 0
-    },
-    "SkillWorkout.dc.html": {
-      "h": 844,
-      "page": "skillsimple",
-      "radius": 28,
-      "title": "Тренировочный навык",
-      "w": 390,
-      "x": 0,
-      "y": 0
-    },
-    "SkillPlain.dc.html": {
-      "h": 844,
-      "page": "skillsimple",
-      "radius": 28,
-      "title": "Обычный навык",
-      "w": 390,
-      "x": 450,
-      "y": 0
-    },
-    "SkillMenu.dc.html": {
-      "h": 844,
-      "page": "skillsimple",
-      "radius": 28,
-      "title": "Меню ⋯",
-      "w": 390,
-      "x": 900,
-      "y": 0
-    },
-    "Settings.dc.html": {
-      "h": 1240,
-      "page": "settings",
-      "radius": 28,
-      "title": "Настройки · тёмная",
-      "w": 390,
-      "x": 0,
-      "y": 0
-    },
-    "SettingsLight.dc.html": {
-      "h": 1240,
-      "page": "settings",
-      "radius": 28,
-      "title": "Настройки · светлая",
-      "w": 390,
-      "x": 450,
-      "y": 0
-    },
-    "MainLight.dc.html": {
+    "UpdateProgress.dc.html": {
       "h": 900,
       "page": "settings",
       "radius": 28,
-      "title": "Главный · светлая",
+      "title": "Скачивание",
       "w": 390,
-      "x": 900,
+      "x": 1800,
       "y": 0
     },
     "UpdateReady.dc.html": {
@@ -422,103 +512,22 @@
       "x": 1350,
       "y": 0
     },
-    "UpdateProgress.dc.html": {
-      "h": 900,
-      "page": "settings",
-      "radius": 28,
-      "title": "Скачивание",
-      "w": 390,
-      "x": 1800,
-      "y": 0
-    },
-    "AiSkill.dc.html": {
+    "WhatsNew.dc.html": {
       "h": 844,
-      "page": "ai",
+      "page": "whatsnew",
       "radius": 28,
-      "title": "Кнопка на навыке",
+      "title": "После обновления (один раз)",
       "w": 390,
       "x": 0,
       "y": 0
     },
-    "AiAsk.dc.html": {
-      "h": 844,
-      "page": "ai",
+    "BackupSnapshot.dc.html": {
+      "h": 1120,
+      "page": "phase0",
       "radius": 28,
-      "title": "Запрос",
-      "w": 390,
-      "x": 450,
-      "y": 0
-    },
-    "AiPreview.dc.html": {
-      "h": 844,
-      "page": "aicopy",
-      "radius": 28,
-      "title": "Предложенные цели (как раньше)",
-      "w": 390,
-      "x": 900,
-      "y": 0
-    },
-    "AiSettings.dc.html": {
-      "h": 420,
-      "page": "ai",
-      "radius": 28,
-      "title": "Настройки: код",
-      "w": 390,
-      "x": 1350,
-      "y": 0
-    },
-    "AiCopy.dc.html": {
-      "h": 844,
-      "page": "aicopy",
-      "radius": 28,
-      "title": "Шаги: скопировать → открыть → вставить",
+      "title": "Резервная копия + снимок",
       "w": 390,
       "x": 0,
-      "y": 0
-    },
-    "AiPaste.dc.html": {
-      "h": 844,
-      "page": "aicopy",
-      "radius": 28,
-      "title": "Если ответ не тот",
-      "w": 390,
-      "x": 450,
-      "y": 0
-    },
-    "AiSettingsAny.dc.html": {
-      "h": 400,
-      "page": "aicopy",
-      "radius": 28,
-      "title": "Настройки",
-      "w": 390,
-      "x": 1350,
-      "y": 0
-    },
-    "StarMap.dc.html": {
-      "h": 844,
-      "page": "v09",
-      "radius": 28,
-      "title": "Созвездие",
-      "w": 390,
-      "x": 0,
-      "y": 0
-    },
-    "NotifySettings.dc.html": {
-      "h": 700,
-      "page": "v09",
-      "radius": 28,
-      "title": "Настройки: звуки и напоминания",
-      "w": 390,
-      "x": 450,
-      "y": 0
-    },
-    "NotifyShade.dc.html": {
-      "h": 844,
-      "page": "v09",
-      "radius": 28,
-      "title": "Уведомления и разрешение",
-      "w": 390,
-      "x": 900,
       "y": 0
     }
   },
@@ -529,9 +538,27 @@
   "designSystems": [],
   "launch": {
     "view": "canvas",
-    "page": "v09"
+    "page": "phase0"
   },
   "notes": {
+    "aiTitle": {
+      "kind": "title1",
+      "maxW": 1720,
+      "page": "ai",
+      "text": "AI-помощник целей: кнопка, запрос, предпросмотр, код доступа",
+      "w": 240,
+      "x": 0,
+      "y": -260
+    },
+    "aicopyTitle": {
+      "kind": "title1",
+      "maxW": 1720,
+      "page": "aicopy",
+      "text": "AI-помощник через копирование: подходит любая нейросеть",
+      "w": 240,
+      "x": 0,
+      "y": -260
+    },
     "atelierTitle": {
       "kind": "title1",
       "maxW": 1250,
@@ -586,6 +613,33 @@
       "x": 0,
       "y": -260
     },
+    "settingsTitle": {
+      "kind": "title1",
+      "maxW": 1720,
+      "page": "settings",
+      "text": "Настройки, светлая тема и обновление приложения",
+      "w": 240,
+      "x": 0,
+      "y": -260
+    },
+    "simplifyTitle": {
+      "kind": "title1",
+      "maxW": 1720,
+      "page": "simplify",
+      "text": "Упрощение: главный, запись, подходы, рубеж",
+      "w": 240,
+      "x": 0,
+      "y": -260
+    },
+    "skillsimpleTitle": {
+      "kind": "title1",
+      "maxW": 1720,
+      "page": "skillsimple",
+      "text": "Страница навыка: проще (тренировка, обычный, меню ⋯)",
+      "w": 240,
+      "x": 0,
+      "y": -260
+    },
     "stylesTitle": {
       "kind": "title1",
       "maxW": 1800,
@@ -604,11 +658,12 @@
       "x": 0,
       "y": -260
     },
-    "simplifyTitle": {
+    "v09Title": {
       "kind": "title1",
       "maxW": 1720,
-      "page": "simplify",
-      "text": "Упрощение: главный, запись, подходы, рубеж",
+      "page": "v09",
+      "text": "Созвездие навыков · звуки и напоминания",
+      "w": 240,
       "x": 0,
       "y": -260
     },
@@ -617,46 +672,15 @@
       "maxW": 1720,
       "page": "whatsnew",
       "text": "Что нового: окно после обновления и история версий",
+      "w": 240,
       "x": 0,
       "y": -260
     },
-    "skillsimpleTitle": {
+    "phase0Title": {
       "kind": "title1",
       "maxW": 1720,
-      "page": "skillsimple",
-      "text": "Страница навыка: проще (тренировка, обычный, меню ⋯)",
-      "x": 0,
-      "y": -260
-    },
-    "settingsTitle": {
-      "kind": "title1",
-      "maxW": 1720,
-      "page": "settings",
-      "text": "Настройки, светлая тема и обновление приложения",
-      "x": 0,
-      "y": -260
-    },
-    "aiTitle": {
-      "kind": "title1",
-      "maxW": 1720,
-      "page": "ai",
-      "text": "AI-помощник целей: кнопка, запрос, предпросмотр, код доступа",
-      "x": 0,
-      "y": -260
-    },
-    "aicopyTitle": {
-      "kind": "title1",
-      "maxW": 1720,
-      "page": "aicopy",
-      "text": "AI-помощник через копирование: подходит любая нейросеть",
-      "x": 0,
-      "y": -260
-    },
-    "v09Title": {
-      "kind": "title1",
-      "maxW": 1720,
-      "page": "v09",
-      "text": "Созвездие навыков · звуки и напоминания",
+      "page": "phase0",
+      "text": "Фаза 0: снимок перед восстановлением",
       "x": 0,
       "y": -260
     }
@@ -718,7 +742,8 @@
     "AiSettingsAny.dc.html",
     "StarMap.dc.html",
     "NotifySettings.dc.html",
-    "NotifyShade.dc.html"
+    "NotifyShade.dc.html",
+    "BackupSnapshot.dc.html"
   ],
   "pages": [
     {
@@ -776,6 +801,10 @@
     {
       "id": "v09",
       "name": "Созвездие и напоминания"
+    },
+    {
+      "id": "phase0",
+      "name": "Фаза 0"
     }
   ],
   "title": "LifeQuest — макет"

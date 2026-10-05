@@ -6,6 +6,7 @@ import { Share } from '@capacitor/share';
 import { db, nowIso, type Entry, type EntrySkill, type Goal, type Metric, type MetricValue, type Milestone, type Node, type Note, type Photo, type Profile, type Quest, type Unlocked } from '../db/db';
 import { characterLevel } from '../engine/levels';
 import { localDate } from '../engine/dates';
+import { getSnapshot, saveSnapshot, type SnapshotReason } from './snapshots';
 
 const FORMAT = 1;
 
@@ -42,7 +43,8 @@ export async function currentSummary(): Promise<BackupSummary> {
   return summarize(entries, entrySkills, photos);
 }
 
-async function buildZip() {
+/** markBackup=false — для снимка: отметка «копия сделана» не меняется. */
+async function buildZip(markBackup = true) {
   const [profile, nodes, goals, entries, entrySkills, unlocked, notes, photos, quests, metrics, metricValues, milestones] = await Promise.all([
     db.profile.get('me'), db.nodes.toArray(), db.goals.toArray(), db.entries.toArray(),
     db.entrySkills.toArray(), db.unlocked.toArray(), db.notes.toArray(), db.photos.toArray(),
@@ -51,7 +53,7 @@ async function buildZip() {
   const exportedAt = nowIso();
   const data: BackupData = {
     app: 'lifequest', format: FORMAT, exportedAt,
-    profile: profile ? { ...profile, lastBackupAt: exportedAt } : profile,
+    profile: profile && markBackup ? { ...profile, lastBackupAt: exportedAt } : profile,
     nodes, goals, entries, entrySkills, unlocked, notes, quests, metrics, metricValues, milestones,
     photos: photos.map(({ blob: _b, thumb: _t, ...meta }) => meta),
   };
@@ -141,8 +143,14 @@ export async function readBackup(file: File): Promise<ParsedBackup> {
   return { data, zip, fileName: file.name, summary: summarize(data.entries, data.entrySkills, data.photos.length, data.exportedAt.slice(0, 10)) };
 }
 
-/** Полностью заменяет данные на устройстве данными из копии. */
-export async function restoreBackup({ data, zip }: ParsedBackup) {
+/**
+ * Полностью заменяет данные на устройстве данными из копии.
+ * Сначала сам сохраняет снимок текущих данных; если снимок не удался — ничего не трогает.
+ */
+export async function restoreBackup({ data, zip }: ParsedBackup, opts: { reason?: SnapshotReason; keepBackupMark?: boolean } = {}) {
+  const [{ blob }, summary] = await Promise.all([buildZip(false), currentSummary()]);
+  await saveSnapshot(blob, opts.reason ?? 'before-restore', summary);
+
   const photos: Photo[] = [];
   for (const meta of data.photos) {
     const main = zip.file(`photos/${meta.id}.jpg`);
@@ -154,7 +162,7 @@ export async function restoreBackup({ data, zip }: ParsedBackup) {
   const tables = [db.profile, db.nodes, db.goals, db.entries, db.entrySkills, db.unlocked, db.notes, db.photos, db.quests, db.metrics, db.metricValues, db.milestones];
   await db.transaction('rw', tables, async () => {
     await Promise.all(tables.map((t) => t.clear()));
-    if (data.profile) await db.profile.add({ ...data.profile, lastBackupAt: data.exportedAt });
+    if (data.profile) await db.profile.add(opts.keepBackupMark ? data.profile : { ...data.profile, lastBackupAt: data.exportedAt });
     await db.nodes.bulkAdd(data.nodes);
     await db.goals.bulkAdd(data.goals);
     await db.entries.bulkAdd(data.entries);
@@ -167,4 +175,12 @@ export async function restoreBackup({ data, zip }: ParsedBackup) {
     await db.metricValues.bulkAdd(data.metricValues ?? []);
     await db.milestones.bulkAdd(data.milestones ?? []);
   });
+}
+
+/** Вернуть данные из снимка. Текущие данные перед этим тоже сохраняются снимком — можно вернуться обратно. */
+export async function restoreSnapshot(id: string) {
+  const snap = await getSnapshot(id);
+  if (!snap) throw new Error('Снимок не найден');
+  const parsed = await readBackup(new File([snap.blob], 'snapshot.zip', { type: 'application/zip' }));
+  await restoreBackup(parsed, { reason: 'before-undo', keepBackupMark: true });
 }

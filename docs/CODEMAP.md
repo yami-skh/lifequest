@@ -56,7 +56,7 @@
   *Stats:3, *AchievementIcon:27, *AchievementDef:32, flag:44, *ACHIEVEMENTS:46, *evaluateAchievements:71
 - **dates.ts** (55) — Даты храним как локальные YYYY-MM-DD.
   *localDate:3, *addDays:10, *daysBetween:16, MONTHS:22, *humanDate:24, *currentStreak:32, *bestStreak:43
-- **engine.test.ts** (209)
+- **engine.test.ts** (222)
 - **experiments.ts** (17) — Флаг экспериментов: новый UX включается только у тех, кто сам включил эксперимент
   *EXPERIMENTS:5, *hasExp:10, *toggleExp:13
 - **levels.ts** (44) — Уровни персонажа и навыков. ARCHITECTURE.md §4.3–4.4.
@@ -67,6 +67,8 @@
   *GoalKind:3, *GOAL_WEIGHT:4, *GoalLike:6, *skillProgress:8, *NodeLike:19, *computeProgress:22
 - **quests.ts** (47) — Квесты: шаблоны недельных, прогресс шагов. ARCHITECTURE.md §6.
   *QUEST_STEP_XP:4, *weekStart:7, *WeeklyTemplate:13, *WEEKLY_TEMPLATES:21, *EntryFacts:27, *countProgress:30
+- **snapshots.ts** (10) — Снимки данных перед восстановлением копии: сколько хранить и какие удалить. Чистые функции.
+  *SNAPSHOT_KEEP:4, *snapshotsToPrune:7
 - **stages.ts** (51) — Ступени целей навыка. ARCHITECTURE.md §16, идея 2.
   *STAGE_NAMES:4, *stageName:5, *STAGE_BONUS:7, *StagedGoal:9, *StageInfo:11, *stagesOf:21, *currentStage:34, *assignStages:40
 - **version.ts** (17) — Сравнение версий «0.5.1» и выбор того, что показать в «Что нового».
@@ -80,8 +82,8 @@
   *AI_URL:6, *AiGoal:8, *AiStage:9, *AiGoalsAnswer:10, *AiSkillInput:11, *AiError:19, call:25, *askGoals:37, *fetchQuota:40
 - **backButton.ts** (60) — Системная кнопка «Назад» в APK: закрывает верхнее открытое (клавиатура, шторка, фото),
   stack:9, *useBackClose:12, EXIT_MS:26, exitArmedAt:27, *closeTop:30, *handleBack:37, *initBackButton:49
-- **backup.ts** (171) — Резервная копия: всё в один .zip — data.json + фото. ARCHITECTURE.md §12.
-  FORMAT:10, BackupData:12, *BackupSummary:31, summarize:33, *currentSummary:40, buildZip:45, toBase64:69, *exportBackup:81, download:111, *ParsedBackup:121, *readBackup:124, *restoreBackup:145
+- **backup.ts** (187) — Резервная копия: всё в один .zip — data.json + фото. ARCHITECTURE.md §12.
+  FORMAT:11, BackupData:13, *BackupSummary:32, summarize:34, *currentSummary:41, buildZip:47, toBase64:71, *exportBackup:83, download:113, *ParsedBackup:123, *readBackup:126, *restoreBackup:150, *restoreSnapshot:181
 - **install.ts** (52) — Установка PWA: ловим событие beforeinstallprompt от Chrome и показываем свою кнопку.
   InstallPromptEvent:5, deferred:10, listeners:11, emit:12, *isStandalone:24, *isIos:28, *useInstall:30
 - **photo.ts** (72) — Сжатие фото перед сохранением: основное до 1600px, превью до 320px. ARCHITECTURE.md §9.
@@ -90,6 +92,8 @@
   *ReminderPrefs:11, KEY:12, DEFAULTS:13, listeners:14, *remindersSupported:15, *getReminderPrefs:17, *setReminderPrefs:25, *useReminderPrefs:35, *notificationsAllowed:45, at:52, IDS:59, channelReady:60, *rescheduleReminders:63
 - **router.ts** (27) — Простой роутер на hash: работает на GitHub Pages без настройки сервера.
   parse:4, *useRoute:6, *go:19, *back:23
+- **snapshots.ts** (31) — Хранилище снимков: отдельная база IndexedDB, чтобы очистка основной базы при восстановлении её не трогала.
+  *SnapshotReason:6, *SnapshotSummary:7, *Snapshot:8, SnapshotDB:10, sdb:17, *saveSnapshot:20, *listSnapshots:29, *getSnapshot:30
 - **sound.ts** (74) — Звуки наград — генерируются Web Audio, без файлов. Настройки — на устройстве (localStorage).
   *SoundPrefs:4, KEY:5, DEFAULTS:6, listeners:7, *getSoundPrefs:9, *setSoundPrefs:17, *useSoundPrefs:27, *SoundKind:36, MELODY:38, ctx:44, *play:46, *buzz:71
 - **theme.ts** (51) — Тема оформления: «как в системе» (по умолчанию), тёмная или светлая. Выбор — на устройстве (localStorage),

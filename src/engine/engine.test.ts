@@ -8,6 +8,7 @@ import { bestRepsAt, bestSet, bestValue, forecastDate, isRecord, milestoneProgre
 import { countProgress, weekStart } from './quests';
 import { cmpVersion, unseenReleases } from './version';
 import { EXPERIMENTS, hasExp, toggleExp } from './experiments';
+import { SNAPSHOT_KEEP, snapshotsToPrune } from './snapshots';
 
 describe('xp', () => {
   it('рамен из документа: практика, тяжело, впервые, с фото = 132', () => {
@@ -204,5 +205,17 @@ describe('эксперименты', () => {
   });
   it('у известных экспериментов уникальные id', () => {
     expect(new Set(EXPERIMENTS.map((e) => e.id)).size).toBe(EXPERIMENTS.length);
+  });
+});
+
+describe('снимки перед восстановлением', () => {
+  const s = (id: string, day: number) => ({ id, createdAt: `2026-10-${String(day).padStart(2, '0')}T10:00:00Z` });
+  it('хранятся 3 последних', () => {
+    expect(SNAPSHOT_KEEP).toBe(3);
+    expect(snapshotsToPrune([s('a', 1), s('b', 2), s('c', 3)])).toEqual([]);
+    expect(snapshotsToPrune([s('a', 1), s('d', 4), s('b', 2), s('c', 3)])).toEqual(['a']);
+  });
+  it('удаляются самые старые, порядок входа не важен', () => {
+    expect(snapshotsToPrune([s('e', 5), s('a', 1), s('c', 3), s('b', 2), s('d', 4)]).sort()).toEqual(['a', 'b']);
   });
 });
