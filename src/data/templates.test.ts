@@ -16,7 +16,7 @@ describe('готовые шаблоны', () => {
   });
   it('каталог по популярности: «Старт» первым, самые частые цели — в первых пяти (их видно на первом запуске)', () => {
     expect(TEMPLATES.slice(0, 5).map((t) => t.id)).toEqual(['start', 'strong-body', 'weight', 'health', 'calm']);
-    expect(TEMPLATES.length).toBe(18);
+    expect(TEMPLATES.length).toBe(22);
   });
   it('практики не меньше теории (мастер-план §3: около 30/70)', () => {
     for (const t of TEMPLATES) {

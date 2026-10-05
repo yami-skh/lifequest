@@ -46,8 +46,8 @@
 
 ## src/data
 
-- **changelog.ts** (227) — Что нового в версиях — для пользователя, простыми словами. Новые версии — сверху.
-  *ChangeKind:4, *Change:5, *Release:6, *CHANGELOG:8, *SEEN_BEFORE_CHANGELOG:226
+- **changelog.ts** (239) — Что нового в версиях — для пользователя, простыми словами. Новые версии — сверху.
+  *ChangeKind:4, *Change:5, *Release:6, *CHANGELOG:8, *SEEN_BEFORE_CHANGELOG:238
 - **presets.test.ts** (40)
   AREAS:6
 - **presets.ts** (48) — Готовые навыки при ручном добавлении (мастер-план §12): навыки шаблонов, сгруппированные по направлениям,
@@ -58,8 +58,8 @@
   *TEMPLATE_PROMPT:4
 - **templates.test.ts** (49)
   goalsOf:5
-- **templates.ts** (246) — Готовые шаблоны путей (мастер-план §12). Формат — engine/templates.ts.
-  T:5, P:6, sk:9, M:18, BODY:31, MIND:32, TECH:33, ART:34, MONEY:35, PEOPLE:36, CALM:37, HOME:38, WORK:39, ORDER:47, BASE:49, *TEMPLATES:242
+- **templates.ts** (295) — Готовые шаблоны путей (мастер-план §12). Формат — engine/templates.ts.
+  T:5, P:6, sk:9, M:18, BODY:31, MIND:32, TECH:33, ART:34, MONEY:35, PEOPLE:36, CALM:37, HOME:38, WORK:39, ORDER:47, GAMES:50, BASE:52, *TEMPLATES:291
 
 ## src/db
 
