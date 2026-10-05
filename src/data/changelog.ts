@@ -7,6 +7,13 @@ export interface Release { version: string; date: string; title?: string; change
 
 export const CHANGELOG: Release[] = [
   {
+    version: '0.10.0-beta.5',
+    date: '2026-10-05',
+    changes: [
+      { kind: 'fix', title: 'Созвездие помещается в экран', sub: 'Страница больше не листается, заголовок не уезжает под строку состояния.' },
+    ],
+  },
+  {
     version: '0.10.0-beta.4',
     date: '2026-10-05',
     changes: [
