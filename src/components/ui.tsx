@@ -159,6 +159,29 @@ export function Sheet({ open, onClose, onBack, title, children, class: cls, tall
   };
   useBackClose(open, requestClose);
   useSwipeClose(sheetRef, open, onClose);
+  // Поле в фокусе — всегда над закреплённой кнопкой: клавиатура сжимает шторку, а прокрутка сама к полю не едет
+  // (поле оказывалось под «Добавить»). Отступ под кнопку — scroll-padding-bottom у .sheet.
+  useEffect(() => {
+    const el = sheetRef.current;
+    if (!open || !el) return;
+    let t = 0;
+    const reveal = () => {
+      clearTimeout(t);
+      t = window.setTimeout(() => {
+        const a = document.activeElement as HTMLElement | null;
+        if (a && el.contains(a) && a.matches('input, textarea')) a.scrollIntoView({ block: 'nearest' });
+      }, 80);
+    };
+    el.addEventListener('focusin', reveal);
+    window.visualViewport?.addEventListener('resize', reveal);
+    window.addEventListener('resize', reveal);
+    return () => {
+      clearTimeout(t);
+      el.removeEventListener('focusin', reveal);
+      window.visualViewport?.removeEventListener('resize', reveal);
+      window.removeEventListener('resize', reveal);
+    };
+  }, [open]);
   useEffect(() => {
     if (!open) return;
     const prev = document.body.style.overflow;
