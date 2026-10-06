@@ -1,0 +1,1 @@
+import{r as e}from"./index-C3b0mM83.js";var t=class t extends e{async openFile(e){if(!e.blob)throw Error(t.ERROR_BLOB_MISSING);let n=URL.createObjectURL(e.blob);window.open(n,`_blank`)}};t.ERROR_BLOB_MISSING=`blob must be provided.`;export{t as FileOpenerWeb};

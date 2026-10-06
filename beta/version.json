@@ -1,0 +1,7 @@
+{
+  "version": "0.10.1-beta.12",
+  "native": "0.9.0",
+  "bundle": "bundle-0.10.1-beta.12.zip",
+  "checksum": "2bf87a506596463fdf4df4e8ed5fbf7b9dbdc2ee9b88366badfd80e389343eea",
+  "apk": "https://github.com/yami-skh/lifequest/releases/download/v0.9.0/LifeQuest-0.9.0.apk"
+}
