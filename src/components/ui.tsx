@@ -169,7 +169,8 @@ export function Sheet({ open, onClose, onBack, title, children, class: cls, tall
       clearTimeout(t);
       t = window.setTimeout(() => {
         const a = document.activeElement as HTMLElement | null;
-        if (a && el.contains(a) && a.matches('input, textarea')) a.scrollIntoView({ block: 'nearest' });
+        // Поле со своими кнопками (свой шаг квеста: «Отмена»/«Добавить») — показываем весь блок, а не только поле.
+        if (a && el.contains(a) && a.matches('input, textarea')) (a.closest('.new-req') ?? a).scrollIntoView({ block: 'nearest' });
       }, 80);
     };
     el.addEventListener('focusin', reveal);

@@ -56,18 +56,25 @@ export function SuggestInput({ id, value, onValue, items, exclude, placeholder, 
       // Граница снизу — ближайшая кнопка подтверждения под полем («Сохранить», «Добавить»): список её не закрывает.
       const stops = sheet ? [...sheet.querySelectorAll('.save-zone, .btn.primary')].map((el) => el.getBoundingClientRect().top).filter((t) => t > r.bottom) : [];
       const bottom = Math.min(vh, stops.length ? Math.min(...stops) : box ? box.bottom : vh) - 8;
-      const top = (box ? Math.max(box.top + 50, 0) : 8);
+      // Сверху — не выше шапки шторки (она закреплена, список не должен её закрывать).
+      const head = sheet?.querySelector('.sheet-head')?.getBoundingClientRect();
+      const top = head ? Math.max(head.bottom + 4, 0) : box ? Math.max(box.top + 50, 0) : 8;
       const below = bottom - r.bottom - 4;
       const above = r.top - top - 4;
       const up = below < 150 && above > below;
-      setPlace({ up, max: Math.max(96, Math.min(232, up ? above : below)) });
+      const max = Math.round(Math.max(96, Math.min(232, up ? above : below)));
+      setPlace((p) => (p.up === up && p.max === max ? p : { up, max }));
     };
     measure();
+    // Шторка доезжает до поля уже после открытия списка (ui.tsx, Sheet) — место пересчитываем и при прокрутке.
+    const sheet = inputRef.current?.closest('.sheet');
     window.visualViewport?.addEventListener('resize', measure);
     addEventListener('resize', measure);
+    sheet?.addEventListener('scroll', measure, { passive: true });
     return () => {
       window.visualViewport?.removeEventListener('resize', measure);
       removeEventListener('resize', measure);
+      sheet?.removeEventListener('scroll', measure);
     };
   }, [shown, value]);
   return (

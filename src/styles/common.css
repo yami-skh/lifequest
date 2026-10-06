@@ -95,7 +95,9 @@ textarea { resize: vertical; line-height: 1.4; }
 
 
 /* Подсказки при вводе (components/SuggestInput.tsx). */
-.sg { position: relative; display: flex; flex-direction: column; flex: 1; min-width: 0; }
+.sg { position: relative; display: flex; flex-direction: column; min-width: 0; }
+/* Тянется только в строке «поле + кнопка»; в колонке формы (шторка постоянной высоты) — не раздувается. */
+.input-row > .sg, .text-row > .sg { flex: 1; }
 /* Всплывающий список поверх содержимого: шторка не растёт, список листается сам (и не утаскивает шторку). */
 .sg-list { position: absolute; top: calc(100% + 4px); left: 0; right: 0; z-index: 20; list-style: none; margin: 0; padding: 0; border-radius: 14px; background: var(--surface-2); border: 1px solid var(--line-2); box-shadow: 0 14px 30px rgba(0, 0, 0, 0.5); max-height: min(232px, 34vh); overflow-y: auto; overscroll-behavior: contain; touch-action: pan-y; -webkit-overflow-scrolling: touch; }
 .sg-list li { display: flex; align-items: center; gap: 10px; min-height: 44px; padding: 8px 14px; cursor: pointer; }
@@ -152,13 +154,19 @@ textarea { resize: vertical; line-height: 1.4; }
 .sg-list.up { top: auto; bottom: calc(100% + 4px); box-shadow: 0 -14px 30px rgba(0, 0, 0, 0.5); }
 
 /* Подсказки без ползунка: видимой полосы нет, о продолжении говорит мягкое затухание внизу. */
-.sg-list { scrollbar-width: none; padding-bottom: 22px; mask-image: linear-gradient(to bottom, #000 calc(100% - 30px), transparent); -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 30px), transparent); }
+.sg-list { scrollbar-width: none; padding-bottom: 22px; }
+/* Затухание внизу — в цвет самого списка (не прозрачность: сквозь неё просвечивали кнопки формы под списком). */
+.sg-list::after { content: ''; display: block; position: sticky; bottom: -22px; height: 30px; margin-top: -30px; background: linear-gradient(color-mix(in srgb, var(--surface-2) 0%, transparent), var(--surface-2)); pointer-events: none; }
 .sg-list::-webkit-scrollbar { display: none; }
 /* Кнопка подтверждения в шторках прилипает к низу — видна и с открытой клавиатурой (как «Сохранить» в «Новом действии»).
    Кольцо цвета шторки прячет то, что проезжает под кнопкой при прокрутке. */
 .sheet > .btn.primary:last-child, .sheet > form:last-child > .btn.primary:last-child {
   position: sticky; bottom: calc(6px + var(--safe-b)); z-index: 3; box-shadow: 0 0 0 10px var(--surface), 0 34px 0 22px var(--surface), 0 -18px 18px -4px var(--surface);
+  margin-top: auto;
 }
+/* У шторки с полем постоянная высота (ui.tsx): форма тянется на неё, кнопка — внизу, а между полем и кнопкой
+   остаётся место для списка подсказок (иначе он открывался вверх крошечным и закрывал заголовок). */
+.sheet > form:last-child { flex: 1 0 auto; }
 /* Неактивная прилипшая кнопка — не полупрозрачная (иначе сквозь неё и её подложку видно то, что под ней), а приглушённая. */
 .sheet > .btn.primary:last-child:disabled, .sheet > form:last-child > .btn.primary:last-child:disabled {
   opacity: 1; background: color-mix(in srgb, var(--gold) 35%, var(--surface-2)); color: color-mix(in srgb, var(--fg) 70%, transparent);
